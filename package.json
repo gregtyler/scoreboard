@@ -1,0 +1,22 @@
+{
+  "name": "scoring",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "node build.js",
+    "start": "SERVE=1 npm run build",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "@vue/compiler-sfc": "^3.2.24",
+    "esbuild": "^0.13.9",
+    "esbuild-vue": "^1.0.0"
+  },
+  "dependencies": {
+    "vue": "^2.6.14"
+  }
+}
