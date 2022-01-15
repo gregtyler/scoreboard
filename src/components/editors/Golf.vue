@@ -38,6 +38,7 @@
           :key="id"
           v-model="currentScores[id]"
           @focus="selectAll"
+          inputmode="numeric"
         />
         <button class="c-row__cell c-row__cell--button">⮐</button>
       </div>
