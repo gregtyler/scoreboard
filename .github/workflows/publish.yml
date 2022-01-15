@@ -1,0 +1,23 @@
+name: Publish to GitHub Pages
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+  publish-gh-pages:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2.4.0
+      - uses: actions/setup-node@v2.5.1
+        with:
+          node-version: 16
+
+      - name: Build
+        run: npm install && npm run build
+
+      - name: Deploy
+        uses: peaceiris/actions-gh-pages@v3.8.0
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: ./public
