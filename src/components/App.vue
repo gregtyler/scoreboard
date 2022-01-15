@@ -67,7 +67,7 @@ export default {
 
     return {
       boards: data.boards.map(parseBoard).sort((a, b) => b.updated - a.updated),
-      activeId: "kwz57u3m",
+      activeId: null,
       boardTypes,
     };
   },
@@ -89,7 +89,8 @@ export default {
       this.boards.unshift({
         id: Date.now().toString(36),
         type: e.type,
-        data: "",
+        players: {},
+        rounds: [],
         created: Date.now(),
         updated: Date.now(),
       });

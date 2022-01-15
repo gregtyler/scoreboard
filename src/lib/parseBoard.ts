@@ -32,5 +32,9 @@ export default function parseBoard(board: SerializedBoard): Board {
     }
   });
 
+  if (rounds[rounds.length - 1].events.length === 0) {
+    rounds.splice(rounds.length - 1, 1);
+  }
+
   return { ...restOfBoard, players, rounds };
 }

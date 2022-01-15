@@ -14,10 +14,12 @@ export default function serializeBoard(board: Board): SerializedBoard {
       ),
       "---",
     ]),
-  ];
+  ].flat();
 
   // Remove trailing '---'
-  data.splice(data.length - 1, 1);
+  if (data[data.length -1].match(/^-{3,}$/)) {
+    data.splice(data.length - 1, 1);
+  }
 
-  return { ...restOfBoard, data: data.flat().join("\n") };
+  return { ...restOfBoard, data: data.join("\n") };
 }
