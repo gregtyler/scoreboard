@@ -5,7 +5,7 @@
 <script>
 export default {
   props: {
-    date: Date,
+    date: Number,
     dateStyle: {
       type: String,
       default: "medium",

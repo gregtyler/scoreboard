@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <div v-if="activeId" class="c-canvas">
-      <board-info :board="activeBoard"></board-info>
+      <board-info :board="activeBoard" @save="(e) => save()"></board-info>
     </div>
     <div v-else class="c-canvas c-card__list">
       <card>
@@ -21,13 +21,24 @@
     </div>
     <div class="c-footer">
       <menu class="c-footer__nav">
-        <li><button class="c-footer__button">Settings</button></li>
-        <li>
-          <button class="c-footer__button" @click="(e) => (activeId = null)">
+        <li class="c-footer__nav-item">
+          <button class="c-footer__button c-footer__button--disabled">
+            Settings
+          </button>
+        </li>
+        <li class="c-footer__nav-item">
+          <button
+            class="c-footer__button c-footer__button--active"
+            @click="(e) => (activeId = null)"
+          >
             Scores
           </button>
         </li>
-        <li><button class="c-footer__button">Rules</button></li>
+        <li class="c-footer__nav-item">
+          <button class="c-footer__button c-footer__button--disabled">
+            Rules
+          </button>
+        </li>
       </menu>
     </div>
   </div>
@@ -40,6 +51,7 @@ import Card from "./Card.vue";
 import DateString from "./DateString.vue";
 import DraftEditor from "./DraftEditor.vue";
 import parseBoard from "../lib/parseBoard";
+import serializeBoard from "../lib/serializeBoard";
 
 export default {
   components: {
@@ -69,7 +81,7 @@ export default {
       localStorage.setItem(
         "data",
         JSON.stringify({
-          boards: this.boards,
+          boards: this.boards.map(serializeBoard),
         })
       );
     },
@@ -110,7 +122,9 @@ body {
   font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: blue;
+  color: #57452b;
+  font-weight: 300;
+  background-color: #efedea;
 }
 
 .c-canvas {
@@ -128,12 +142,31 @@ body {
   justify-content: center;
   margin: 0;
   padding: 0;
+  background-color: hsla(0, 0%, 0%, 0.05);
   box-shadow: 0 0 10px -3px hsla(0, 0%, 0%, 0.4);
   list-style: none;
 }
 
+.c-footer__nav-item {
+  flex: 1;
+}
+
 .c-footer__button {
-  padding: 0.5rem;
-  margin: 0.5rem;
+  width: 100%;
+  padding: 1rem;
+  border: none;
+  background-color: inherit;
+  font-family: inherit;
+  font-size: inherit;
+  cursor: pointer;
+}
+
+.c-footer__button--disabled {
+  cursor: not-allowed;
+}
+
+.c-footer__button--active {
+  background-color: hsla(0, 0%, 100%, 0.5);
+  font-weight: bold;
 }
 </style>

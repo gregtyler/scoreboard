@@ -1,27 +1,36 @@
-export default function parseBoard(board: SerializedBoard) {
+import { Board, SerializedBoard, Round } from "./types";
+
+export default function parseBoard(board: SerializedBoard): Board {
   const { data, ...restOfBoard } = board;
-  const players = [];
-  const events = [];
+  const players = {};
+  const rounds = [];
   let headerFinished = false;
   let a;
 
-  data.split("\n").forEach((line) => {
+  let round: Round = { events: [] };
+  rounds.push(round);
+
+  data.split("\n").forEach((line, index, arr) => {
     if (typeof line === "undefined") {
       return;
     }
 
     if (line.match(/^[=]{3,}$/)) {
       headerFinished = true;
-    } else if ((a = line.match(/^@(.+?)$/))) {
-      players.push(a[1].trim());
-    } else if ((a = line.match(/^(\+|-)(\d+) (\d)$/))) {
-      events.push({
-        dir: a[1],
-        amount: a[2],
+    } else if ((a = line.match(/^@(.+):(.+)$/))) {
+      players[a[1]] = a[2];
+    } else if ((a = line.match(/^-{3,}$/))) {
+      if (index !== arr.length - 1) {
+        round = { events: [] };
+        rounds.push(round);
+      }
+    } else if ((a = line.match(/^(\+|-)(\d+) (.+)$/))) {
+      round.events.push({
+        amount: (a[1] === "-" ? -1 : 1) * parseInt(a[2], 10),
         playerId: a[3],
       });
     }
   });
 
-  return { ...restOfBoard, players, events };
+  return { ...restOfBoard, players, rounds };
 }

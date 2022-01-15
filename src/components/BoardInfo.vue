@@ -26,24 +26,24 @@
       </div>
     </div>
 
-    {{ board.players.join(",") }}
-    <ol>
-      <li v-for="(event, key) in board.events" :key="key">
-        {{ event.dir }}{{ event.amount }} for {{ board.players[event.playerId] }}
-      </li>
-    </ol>
-
-    <EditorGolf v-if="type === 'golf9'" />
+    <editor-golf
+      v-if="board.type === 'golf9'"
+      :players="board.players"
+      :rounds="board.rounds"
+      @change="save"
+    />
   </div>
 </template>
 
 <script>
 import boardTypes from "../data/boardTypes";
 import DateString from "./DateString.vue";
+import EditorGolf from "./editors/Golf.vue";
 
 export default {
   components: {
     DateString,
+    EditorGolf,
   },
   props: {
     board: Object,
@@ -51,10 +51,21 @@ export default {
   data: () => ({
     boardTypes,
   }),
+  methods: {
+    save() {
+      this.$emit("save");
+    },
+  },
 };
 </script>
 
 <style type="text/css">
+.c-board {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
 .c-board__header {
   display: flex;
   align-items: center;
@@ -71,6 +82,7 @@ export default {
   display: grid;
   grid-template-columns: 1fr 1fr;
   border: 1px solid #ccc;
+  background-color: hsla(0, 0%, 0%, 0.05);
 }
 
 .c-board__meta-item {
