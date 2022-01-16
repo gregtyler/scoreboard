@@ -9,3 +9,14 @@ new Vue({
   },
   components: { App },
 });
+
+/** Service worker **/
+if ("serviceWorker" in navigator) {
+  navigator.serviceWorker.register("./sw.js").then((reg) => {
+    reg.addEventListener("updatefound", function () {
+      console.log(
+        "A new version of this application is availalllble. Refresh to update."
+      );
+    });
+  });
+}

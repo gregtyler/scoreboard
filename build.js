@@ -1,12 +1,12 @@
 const vuePlugin = require("esbuild-vue");
 
 const config = {
-  entryPoints: ["src/index.ts"],
+  entryPoints: ["src/index.ts", "src/sw.ts"],
   bundle: true,
   minify: true,
   sourcemap: true,
   target: ["chrome61", "firefox60", "safari11", "edge18", "es2019"],
-  outfile: "public/bundle.js",
+  outdir: "public",
   plugins: [vuePlugin()],
 };
 
