@@ -13,7 +13,9 @@
         @click="(e) => (activeId = board.id)"
         clickable
       >
-        <strong>{{ boardTypes[board.type] }}</strong>
+        <strong style="font-weight: bold">{{ boardTypes[board.type] }}</strong>
+        <button @click.stop="(e) => editBoardName(board.id)">🖋</button>
+        <button @click.stop="(e) => deleteBoard(board.id)">❌</button>
         <div style="float: right">
           <date-string :date="board.updated" />
         </div>
@@ -94,6 +96,14 @@ export default {
         created: Date.now(),
         updated: Date.now(),
       });
+
+      this.save();
+    },
+    deleteBoard(id) {
+      if (confirm("Are you sure you want to delete this board?")) {
+        const index = this.boards.findIndex((b) => b.id === id);
+        this.boards.splice(index, 1);
+      }
 
       this.save();
     },
