@@ -14,7 +14,6 @@
         clickable
       >
         <strong style="font-weight: bold">{{ boardTypes[board.type] }}</strong>
-        <button @click.stop="(e) => editBoardName(board.id)">🖋</button>
         <button @click.stop="(e) => deleteBoard(board.id)">❌</button>
         <div style="float: right">
           <date-string :date="board.updated" />

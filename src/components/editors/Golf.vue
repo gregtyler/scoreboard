@@ -9,7 +9,7 @@
         @change="(e) => changePlayer(id, e.currentTarget.value)"
       />
       <button class="c-row__cell c-row__cell--button" @click="addPlayer">
-        ➕
+        👤
       </button>
     </div>
 
@@ -17,21 +17,34 @@
       <template v-for="(round, key) in rounds" class="scoreboard__entry">
         <li :key="`round-${key}`"><hr class="scoreboard__round" /></li>
         <li :key="`score-${key}`" class="c-row">
-          <div
-            v-for="score in roundScores(round)"
-            class="c-row__cell"
-            :key="`score-${key}-${score.playerId}`"
-          >
-            <span class="scoreboard__running-total">{{ score.running }}</span>
-            ({{ score.value }})
-          </div>
-          <span class="c-row__cell c-row__cell--filler"></span>
+          <template v-for="score in roundScores(round)">
+            <div class="c-row__cell" :key="`score-${key}-${score.playerId}`">
+              <span class="scoreboard__running-total">{{ score.running }}</span>
+              ({{ score.value }})
+            </div>
+            <div
+              class="c-row__cell c-row__cell--center"
+              v-if="score.diff"
+              :key="`score-diff-${key}-${score.playerId}`"
+            >
+              <span class="scoreboard__diff">
+                {{ score.diff }}
+              </span>
+            </div>
+          </template>
         </li>
       </template>
     </ol>
 
     <form @submit.prevent="addScore">
       <div class="c-row">
+        <button
+          class="c-row__cell c-row__cell--button"
+          @click.prevent="undo"
+          type="button"
+        >
+          ⏪
+        </button>
         <input
           class="c-row__cell c-row__cell--input"
           v-for="(name, id) in players"
@@ -40,7 +53,7 @@
           @focus="selectAll"
           inputmode="numeric"
         />
-        <button class="c-row__cell c-row__cell--button">⮐</button>
+        <button class="c-row__cell c-row__cell--button">▶️</button>
       </div>
     </form>
   </div>
@@ -80,6 +93,19 @@ export default {
             : 0) + event.amount;
       });
 
+      if (Object.keys(scores).length === 2) {
+        const diff =
+          scores[Object.keys(scores)[1]].running -
+          scores[Object.keys(scores)[0]].running;
+
+        scores[Object.keys(scores)[0]].diff =
+          diff > 0
+            ? `‹ ${Math.abs(diff)}`
+            : diff < 0
+            ? `${Math.abs(diff)} ›`
+            : `=`;
+      }
+
       return scores;
     },
     selectAll(e) {
@@ -117,6 +143,13 @@ export default {
       for (let id in this.players) {
         this.$set(this.currentScores, id, 0);
       }
+    },
+    undo() {
+      const lastRound = this.rounds.pop();
+
+      lastRound.events.forEach((event) => {
+        this.$set(this.currentScores, event.playerId, event.amount);
+      });
     },
   },
   data: () => ({
@@ -164,8 +197,7 @@ export default {
   border-left: solid 1px hsla(0, 0%, 0%, 0.3);
 }
 
-.c-row__cell--button,
-.c-row__cell--filler {
+.c-row__cell--button {
   min-width: 50px;
   flex-grow: 0;
 }
@@ -173,6 +205,12 @@ export default {
 .c-row__cell--button {
   background-color: hsla(0, 0%, 100%, 0.4);
   cursor: pointer;
+}
+
+.c-row__cell--center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .scoreboard {
@@ -211,5 +249,14 @@ export default {
 .scoreboard__running-total {
   font-size: 1.6rem;
   font-weight: bold;
+}
+
+.scoreboard__diff {
+  padding: 0 0.5rem;
+  border-radius: 1em;
+  background-color: #57452b;
+  color: #efedea;
+  font-weight: bold;
+  text-align: center;
 }
 </style>
