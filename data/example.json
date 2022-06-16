@@ -1,0 +1,30 @@
+{
+  "_id": "3cc7249f-6d05-485a-9892-6e8d8f42bf4e",
+  "title": "Parks - 13th June 2022 in Wildcat",
+  "labels": ["competitive", "interrupted"],
+  "game": {
+    "name": "Parks"
+  },
+  "location": {
+    "_id": "7f088186-075c-46c0-a4c2-448e9395abd7"
+  },
+  "players": [
+    {
+      "name": "Greg",
+      "colour": "blue"
+    },
+    {
+      "_id": "6f088186-075c-46c0-a4c2-448e9395abd7",
+      "colour": "red"
+    }
+  ],
+  "rounds": [
+    {
+      "label": "Final score",
+      "scores": [
+        { "player": 0, "score": 45 },
+        { "player": 1, "score": 47 }
+      ]
+    }
+  ]
+}

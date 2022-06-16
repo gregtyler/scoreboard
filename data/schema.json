@@ -1,0 +1,185 @@
+{
+  "$id": "https://gregtyler.co.uk/scoring.schema.json",
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "_id",
+    "title",
+    "game",
+    "players",
+    "rounds"
+  ],
+  "properties": {
+    "_id": {
+      "type": "string",
+      "format": "uuid"
+    },
+    "title": {
+      "type": "string"
+    },
+    "labels": {
+      "type": "array",
+      "items": {
+        "type": "string"
+      }
+    },
+    "game": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "_id"
+          ],
+          "properties": {
+            "_id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/game"
+        }
+      ]
+    },
+    "location": {
+      "oneOf": [
+        {
+          "type": "object",
+          "required": [
+            "_id"
+          ],
+          "properties": {
+            "_id": {
+              "type": "string",
+              "format": "uuid"
+            }
+          }
+        },
+        {
+          "$ref": "#/definitions/location"
+        }
+      ]
+    },
+    "players": {
+      "type": "array",
+      "items": {
+        "allOf": [
+          {
+            "oneOf": [
+              {
+                "type": "object",
+                "required": [
+                  "_id"
+                ],
+                "properties": {
+                  "_id": {
+                    "type": "string",
+                    "format": "uuid"
+                  }
+                }
+              },
+              {
+                "$ref": "#/definitions/player"
+              }
+            ]
+          },
+          {
+           	"type": "object",
+            "required": ["colour"],
+            "properties": {
+              "colour": {
+                "type": "string"
+              }
+            }
+          }
+        ]
+      }
+    },
+    "rounds": {
+      "type": "array",
+      "items": {
+        "$ref": "#/definitions/round"
+      }
+    }
+  },
+  "definitions": {
+    "location": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "game": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "player": {
+      "type": "object",
+      "required": [
+        "name"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "format": "uuid"
+        },
+        "name": {
+          "type": "string"
+        }
+      }
+    },
+    "round": {
+      "type": "object",
+      "required": [
+        "scores"
+      ],
+      "properties": {
+        "label": {
+          "type": "string"
+        },
+        "scores": {
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/playerScore"
+          }
+        }
+      }
+    },
+    "playerScore": {
+      "type": "object",
+      "required": [
+        "player",
+        "score"
+      ],
+      "properties": {
+        "player": {
+          "type": "number"
+        },
+        "score": {
+          "type": "number"
+        }
+      }
+    }
+  }
+}

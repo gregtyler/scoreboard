@@ -1,14 +1,9 @@
-import Vue from "vue/dist/vue.runtime.common.dev.js";
-import App from "./components/App.vue";
+import {StrictMode} from 'react';
+import ReactDOM from 'react-dom/client';
+import App from './components/App';
 
-/* eslint-disable no-new */
-new Vue({
-  el: "#app",
-  render: function (h) {
-    return h("App");
-  },
-  components: { App },
-});
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<StrictMode><App></App></StrictMode>);
 
 /** Service worker **/
 if ("serviceWorker" in navigator) {

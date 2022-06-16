@@ -1,3 +1,5 @@
+// declare var self: ServiceWorkerGlobalScope;
+
 self.addEventListener("install", function (e) {
   e.waitUntil(
     caches.open("scoreboard").then(function (cache) {
