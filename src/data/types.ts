@@ -29,7 +29,9 @@ export type Player = {
 export type Session = {
   _id: string;
   title: string;
-  labels: string[];
+  start: string;
+  end?: string;
+  labels?: string[];
   game: Game | Reference;
   location: Location | Reference;
   players: (Player | Reference)[];

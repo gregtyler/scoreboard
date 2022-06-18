@@ -1,6 +1,6 @@
 import { useState } from "react";
 import migrations from "./migrations";
-import { Game, Location, Player, State } from "./types";
+import { Game, Location, Player, Session, State } from "./types";
 
 const KEY = "SCOREBOARD";
 const CURRENT_VERSION = migrations.length - 1;
@@ -49,6 +49,7 @@ interface DBTypeMap {
   games: Game[];
   players: Player[];
   locations: Location[];
+  sessions: Session[];
 }
 
 export function useDB<K extends keyof DBTypeMap>(
