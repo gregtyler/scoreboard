@@ -1,12 +1,17 @@
 import { HTMLAttributes } from "react";
+import AppBar from "./navigation/AppBar";
 
-const FullPageError = ({
-  title,
-  children,
-  ...props
-}: HTMLAttributes<HTMLDivElement>) => (
+interface Props extends HTMLAttributes<HTMLDivElement> {
+  backTo?: string;
+}
+
+const FullPageError = ({ title, children, backTo, ...props }: Props) => (
   <div {...props}>
-    <h1 className="display-medium">{title || "An error occurred"}</h1>
+    <AppBar
+      variant="large"
+      title={title || "An error occurred"}
+      backTo={backTo}
+    ></AppBar>
     {children}
   </div>
 );

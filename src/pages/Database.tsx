@@ -9,17 +9,19 @@ import AppBar from "../components/navigation/AppBar";
 import { useDB } from "../data/db";
 
 const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
-  const [locations] = useDB("locations");
-  const [players] = useDB("players");
+  const [locations, setLocations] = useDB("locations");
+  const [players, setPlayers] = useDB("players");
   const navigate = useNavigate();
 
   function addPlayer() {
     const id = uuidv4();
+    setPlayers([...players, { _id: id, name: "" }]);
     navigate(`/players/${id}`);
   }
 
   function addLocation() {
     const id = uuidv4();
+    setLocations([...locations, { _id: id, name: "" }]);
     navigate(`/locations/${id}`);
   }
 
@@ -54,7 +56,7 @@ const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
           <Card
             key={location._id}
             buttons={
-              <Link to={`/players/${location._id}`}>
+              <Link to={`/locations/${location._id}`}>
                 <IconButton icon="edit"></IconButton>
               </Link>
             }

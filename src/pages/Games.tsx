@@ -9,11 +9,12 @@ import AppBar from "../components/navigation/AppBar";
 import { useDB } from "../data/db";
 
 const Games = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
-  const [games] = useDB("games");
+  const [games, setGames] = useDB("games");
   const navigate = useNavigate();
 
   function addGame() {
     const id = uuidv4();
+    setGames([...games, { _id: id, name: "" }]);
     navigate(`/games/${id}`);
   }
 

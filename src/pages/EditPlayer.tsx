@@ -6,59 +6,52 @@ import FullPageError from "../components/FullPageError";
 import TopAppBar from "../components/navigation/AppBar";
 import { useDB } from "../data/db";
 
-const EditGame = ({ ...props }: FormHTMLAttributes<HTMLFormElement>) => {
+const EditPlayer = ({ ...props }: FormHTMLAttributes<HTMLFormElement>) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [games, setGames] = useDB("games");
-  const game = games.find((x) => x._id === id);
+  const [players, setPlayers] = useDB("players");
+  const player = players.find((x) => x._id === id);
 
-  if (typeof game === "undefined") {
+  if (typeof player === "undefined") {
     return (
-      <FullPageError backTo="/games">
-        <p>Game not found</p>
+      <FullPageError backTo="/database">
+        <p>Player not found</p>
       </FullPageError>
     );
   }
 
-  const [name, setName] = useState(game.name);
-  const [image, setImage] = useState(game.image);
+  const [name, setName] = useState(player.name);
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    setGames(
-      games.map((x) =>
+    setPlayers(
+      players.map((x) =>
         x._id === id
           ? {
               ...x,
               name: name,
-              image: image,
             }
           : x
       )
     );
 
-    navigate("/games");
+    navigate("/database");
   };
 
   return (
     <form onSubmit={handleSubmit} {...props}>
-      <TopAppBar variant="small" title="Edit game" backTo="/games"></TopAppBar>
+      <TopAppBar
+        variant="small"
+        title="Edit player"
+        backTo="/database"
+      ></TopAppBar>
 
       <TextField
         label="Name"
         value={name}
         onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-      ></TextField>
-
-      <TextField
-        label="Image"
-        value={image}
-        supportText="Enter a URL to an image"
-        onChange={(e: ChangeEvent<HTMLInputElement>) =>
-          setImage(e.target.value)
-        }
       ></TextField>
 
       <div style={{ textAlign: "right" }}>
@@ -70,4 +63,4 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLFormElement>) => {
   );
 };
 
-export default EditGame;
+export default EditPlayer;

@@ -5,6 +5,8 @@ import Sessions from "../pages/Sessions";
 import Database from "../pages/Database";
 import EditGame from "../pages/EditGame";
 import FullPageError from "./FullPageError";
+import EditPlayer from "../pages/EditPlayer";
+import EditLocation from "../pages/EditLocation";
 
 const App = () => {
   return (
@@ -14,6 +16,8 @@ const App = () => {
         <Route path="/games" element={<Games></Games>} />
         <Route path="/games/:id" element={<EditGame></EditGame>} />
         <Route path="/database" element={<Database></Database>} />
+        <Route path="/players/:id" element={<EditPlayer></EditPlayer>} />
+        <Route path="/locations/:id" element={<EditLocation></EditLocation>} />
         <Route
           path="*"
           element={
