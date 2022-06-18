@@ -5,8 +5,10 @@ import Button from "../components/button/Button";
 import IconButton from "../components/button/IconButton";
 import Card from "../components/card/Card";
 import CardGrid from "../components/card/CardGrid";
+import Icon from "../components/Icon";
 import AppBar from "../components/navigation/AppBar";
 import { useDB } from "../data/db";
+import Page from "./Page";
 
 const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
   const [locations, setLocations] = useDB("locations");
@@ -27,49 +29,56 @@ const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
 
   return (
     <div {...props}>
-      <AppBar variant="large" title="Database"></AppBar>
+      <AppBar variant="center" title="Database"></AppBar>
+      <Page>
+        <h2 className="headline-small">Players</h2>
+        <CardGrid>
+          {players.map((player) => (
+            <Card
+              key={player._id}
+              buttons={
+                <Link to={`/players/${player._id}`}>
+                  <IconButton icon="edit"></IconButton>
+                </Link>
+              }
+            >
+              <div className="body-large">{player.name}</div>
+            </Card>
+          ))}
+        </CardGrid>
+        <div style={{ textAlign: "center" }}>
+          <Button icon="add" onClick={addPlayer}>
+            Add new player
+          </Button>
+        </div>
 
-      <h2 className="headline-small">Players</h2>
-      <CardGrid>
-        {players.map((player) => (
-          <Card
-            key={player._id}
-            buttons={
-              <Link to={`/players/${player._id}`}>
-                <IconButton icon="edit"></IconButton>
-              </Link>
-            }
-          >
-            <div className="body-large">{player.name}</div>
-          </Card>
-        ))}
-      </CardGrid>
-      <div style={{ textAlign: "center" }}>
-        <Button icon="add" onClick={addPlayer}>
-          Add new player
-        </Button>
-      </div>
-
-      <h2 className="headline-small">Locations</h2>
-      <CardGrid>
-        {locations.map((location) => (
-          <Card
-            key={location._id}
-            buttons={
-              <Link to={`/locations/${location._id}`}>
-                <IconButton icon="edit"></IconButton>
-              </Link>
-            }
-          >
-            <div className="body-large">{location.name}</div>
-          </Card>
-        ))}
-      </CardGrid>
-      <div style={{ textAlign: "center" }}>
-        <Button icon="add" onClick={addLocation}>
-          Add new location
-        </Button>
-      </div>
+        <h2 className="headline-small">Locations</h2>
+        <CardGrid>
+          {locations.map((location) => (
+            <Card
+              key={location._id}
+              buttons={
+                <Link to={`/locations/${location._id}`}>
+                  <IconButton icon="edit"></IconButton>
+                </Link>
+              }
+            >
+              <div
+                className="body-large"
+                style={{ display: "flex", alignItems: "center" }}
+              >
+                {location.icon && <Icon>{location.icon}</Icon>}&nbsp;
+                {location.name}
+              </div>
+            </Card>
+          ))}
+        </CardGrid>
+        <div style={{ textAlign: "center" }}>
+          <Button icon="add" onClick={addLocation}>
+            Add new location
+          </Button>
+        </div>
+      </Page>
     </div>
   );
 };

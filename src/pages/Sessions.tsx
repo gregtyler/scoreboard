@@ -2,6 +2,7 @@ import { useDB } from "../data/db";
 import { v4 as uuidv4 } from "uuid";
 import { ChangeEvent, useState, HTMLAttributes } from "react";
 import FAB from "../components/button/FAB";
+import Page from "./Page";
 
 const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
   const [games, setGames] = useDB("games");
@@ -16,7 +17,7 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
   };
 
   return (
-    <div {...props}>
+    <Page {...props}>
       <p>You have {games.length} games:</p>
 
       <ul>
@@ -30,7 +31,7 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
       <input type="text" value={newGameName} onChange={handleChange} />
       <button onClick={addGame}>Add</button>
       <FAB icon="group_add" onClick={() => console.log("hi")}></FAB>
-    </div>
+    </Page>
   );
 };
 

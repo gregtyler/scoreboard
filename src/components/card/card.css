@@ -34,5 +34,5 @@
 
 .c-card-grid {
   display: grid;
-  grid-gap: 8px;
+  grid-gap: 16px;
 }

@@ -18,6 +18,7 @@ export type Game = {
 export type Location = {
   _id: string;
   name: string;
+  icon?: string;
 };
 
 export type Player = {

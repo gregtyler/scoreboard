@@ -1,4 +1,4 @@
-import { HTMLAttributes } from "react";
+import { HTMLAttributes, ReactNode } from "react";
 import { Link } from "react-router-dom";
 import IconButton from "../button/IconButton";
 import "./navigation.css";
@@ -6,10 +6,18 @@ import "./navigation.css";
 interface Props extends HTMLAttributes<HTMLDivElement> {
   variant: "center" | "small" | "medium" | "large";
   backTo?: string;
+  actions?: ReactNode;
 }
 
-const AppBar = ({ title, backTo, variant, className, ...props }: Props) => (
-  <div className={`c-app-bar ${className}`} {...props}>
+const AppBar = ({
+  actions,
+  backTo,
+  title,
+  variant,
+  className,
+  ...props
+}: Props) => (
+  <div className={`c-app-bar ${className ?? ""}`} {...props}>
     <div className="c-app-bar__strip">
       {backTo && (
         <Link to={backTo}>
@@ -25,6 +33,7 @@ const AppBar = ({ title, backTo, variant, className, ...props }: Props) => (
           {title}
         </h1>
       )}
+      {actions}
     </div>
 
     {(variant === "medium" || variant === "large") && (

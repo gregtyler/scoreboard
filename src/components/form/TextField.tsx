@@ -1,14 +1,17 @@
 import { InputHTMLAttributes } from "react";
+import Icon from "../Icon";
 import "./form.css";
 
 interface Props extends InputHTMLAttributes<HTMLInputElement> {
   label: string;
+  leadIcon?: string;
   supportText?: string;
 }
 
 const TextField = ({
   className,
   label,
+  leadIcon,
   value,
   supportText,
   ...props
@@ -28,6 +31,7 @@ const TextField = ({
         >
           {label}
         </label>
+        {leadIcon && <Icon>{leadIcon}</Icon>}
         <input
           id={id}
           value={value}

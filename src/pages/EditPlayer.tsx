@@ -1,12 +1,20 @@
-import { ChangeEvent, FormEvent, FormHTMLAttributes, useState } from "react";
+import {
+  ChangeEvent,
+  FormEvent,
+  FormHTMLAttributes,
+  MouseEvent,
+  useState,
+} from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../components/button/Button";
+import IconButton from "../components/button/IconButton";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
 import TopAppBar from "../components/navigation/AppBar";
 import { useDB } from "../data/db";
+import Page from "./Page";
 
-const EditPlayer = ({ ...props }: FormHTMLAttributes<HTMLFormElement>) => {
+const EditPlayer = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
@@ -31,7 +39,7 @@ const EditPlayer = ({ ...props }: FormHTMLAttributes<HTMLFormElement>) => {
         x._id === id
           ? {
               ...x,
-              name: name,
+              name,
             }
           : x
       )
@@ -40,26 +48,39 @@ const EditPlayer = ({ ...props }: FormHTMLAttributes<HTMLFormElement>) => {
     navigate("/database");
   };
 
+  const handleDelete = (e: MouseEvent<Element>) => {
+    e.preventDefault();
+
+    setPlayers(players.filter((x) => x._id !== id));
+    navigate("/database");
+  };
+
   return (
-    <form onSubmit={handleSubmit} {...props}>
+    <div {...props}>
       <TopAppBar
         variant="small"
         title="Edit player"
         backTo="/database"
+        actions={<IconButton icon="delete" onClick={handleDelete}></IconButton>}
       ></TopAppBar>
+      <Page>
+        <form onSubmit={handleSubmit}>
+          <TextField
+            label="Name"
+            value={name}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setName(e.target.value)
+            }
+          ></TextField>
 
-      <TextField
-        label="Name"
-        value={name}
-        onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
-      ></TextField>
-
-      <div style={{ textAlign: "right" }}>
-        <Button variant="filled" type="submit">
-          Save
-        </Button>
-      </div>
-    </form>
+          <div style={{ textAlign: "right" }}>
+            <Button variant="filled" type="submit">
+              Save
+            </Button>
+          </div>
+        </form>
+      </Page>
+    </div>
   );
 };
 

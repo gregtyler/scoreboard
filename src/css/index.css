@@ -8,7 +8,6 @@
 body {
   height: 100vh;
   margin: 0;
-  padding: 1rem;
   background-color: var(--md-sys-color-background);
   color: var(--md-sys-color-on-background);
   font-family: Roboto;
@@ -37,4 +36,9 @@ h6 {
 a {
   color: inherit;
   text-decoration: none;
+}
+
+.o-canvas {
+  padding-left: 16px;
+  padding-right: 16px;
 }
