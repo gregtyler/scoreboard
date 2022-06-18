@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "build": "esbuild ./src/index.tsx --bundle --minify --sourcemap --inject:./react-shim.js --define:process.env.NODE_ENV=\\\"development\\\"",
+    "build": "esbuild ./src/index.tsx --bundle --sourcemap --inject:./react-shim.js --define:process.env.NODE_ENV=\\\"development\\\"",
+    "build:prod": "npm run build --minify --sourcemap --inject:./react-shim.js --define:process.env.NODE_ENV=\\\"production\\\"",
     "start": "npm run build -- --outfile=public/bundle.js --servedir=public",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -20,6 +21,7 @@
   "dependencies": {
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
+    "react-router-dom": "^6.3.0",
     "uuid": "^8.3.2"
   }
 }
