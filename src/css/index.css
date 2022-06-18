@@ -1,0 +1,40 @@
+@import "./colors.css";
+@import "./fonts.css";
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  height: 100vh;
+  margin: 0;
+  padding: 1rem;
+  background-color: var(--md-sys-color-background);
+  color: var(--md-sys-color-on-background);
+  font-family: Roboto;
+}
+
+.material-theme {
+  --md-sys-elevation-1: 0 1px 3px var(--md-sys-color-shadow);
+  --md-sys-elevation-2: 0 2px 3px var(--md-sys-color-shadow);
+  --md-sys-elevation-3: 0 3px 3px var(--md-sys-color-shadow);
+
+  --md-sys-state-hover-state-layer-opacity: 0.08;
+  --md-sys-state-focus-state-layer-opacity: 0.12;
+  --md-sys-state-pressed-state-layer-opacity: 0.12;
+  --md-sys-state-dragged-state-layer-opacity: 0.16;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  margin: 0;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
+}

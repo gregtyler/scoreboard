@@ -1,6 +1,6 @@
 import { useState } from "react";
 import migrations from "./migrations";
-import { Game, State } from "./types";
+import { Game, Location, Player, State } from "./types";
 
 const KEY = "SCOREBOARD";
 const CURRENT_VERSION = migrations.length - 1;
@@ -47,14 +47,14 @@ const state = getStateFromStorage();
 
 interface DBTypeMap {
   games: Game[];
+  players: Player[];
+  locations: Location[];
 }
 
 export function useDB<K extends keyof DBTypeMap>(
-  key: string
+  key: K
 ): [DBTypeMap[K], (val: DBTypeMap[K]) => void] {
-  const [value, setValue] = useState<DBTypeMap[K]>(() => {
-    return state[key];
-  });
+  const [value, setValue] = useState<DBTypeMap[K]>(state[key]);
 
   const setValueValidated = (val: DBTypeMap[K]): void => {
     const newState = {
@@ -66,6 +66,7 @@ export function useDB<K extends keyof DBTypeMap>(
       return;
     }
 
+    state[key] = val;
     setValue(val);
     localStorage.setItem(
       KEY,

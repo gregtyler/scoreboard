@@ -1,0 +1,91 @@
+.c-navigation-tray {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: space-evenly;
+  align-items: center;
+  background-color: var(--md-sys-color-surface-2);
+}
+
+.c-navigation-tray__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  flex-grow: 1;
+  padding: 12px 0 16px 0;
+  color: var(--md-sys-color-on-secondary-container);
+  font-size: var(--md-sys-typescale-label-medium-size);
+  text-decoration: none;
+}
+
+.c-navigation-tray__item--active {
+  font-weight: bolder;
+}
+
+.c-navigation-tray__icon {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 64px;
+  height: 32px;
+  margin-bottom: 4px;
+  border-radius: 16px;
+  font-size: var(--md-sys-typescale-label-small-size);
+  transform: translateZ(0);
+}
+
+.c-navigation-tray__icon::after {
+  content: "";
+  border-radius: inherit;
+  height: 100%;
+  position: absolute;
+  width: 100%;
+  z-index: -1;
+  opacity: 0;
+  background-color: var(--md-sys-color-on-surface);
+}
+
+.c-navigation-tray__item--active .c-navigation-tray__icon::after {
+  background-color: var(--md-sys-color-on-surface-variant);
+}
+
+.c-navigation-tray__item--active .c-navigation-tray__icon {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.c-navigation-tray__item:hover .c-navigation-tray__icon::after {
+  opacity: var(--md-sys-state-hover-state-layer-opacity);
+}
+
+.c-navigation-tray__item:active .c-navigation-tray__icon::after {
+  opacity: var(--md-sys-state-focus-state-layer-opacity);
+}
+
+.c-app-bar {
+  background-color: var(--md-sys-color-surface);
+  color: var(--md-sys-color-on-surface);
+}
+
+.c-app-bar__strip {
+  position: sticky;
+  display: flex;
+  align-items: center;
+}
+
+.c-app-bar__title {
+  flex-grow: 1;
+  font-family: var(--md-sys-typescale-headline5-font);
+  font-weight: var(--md-sys-typescale-headline5-weight);
+  font-size: var(--md-sys-typescale-headline5-size);
+  line-height: var(--md-sys-typescale-headline5-line-height);
+  letter-spacing: var(--md-sys-typescale-headline5-tracking);
+}
+
+.c-app-bar__title--center {
+  text-align: center;
+}

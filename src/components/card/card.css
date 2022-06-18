@@ -1,0 +1,38 @@
+.c-card {
+  display: flex;
+  align-items: center;
+  border-radius: 12px;
+}
+
+.c-card--filled {
+  background-color: var(--md-sys-color-surface-variant);
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+.c-card__meta {
+  opacity: 0.6;
+}
+
+.c-card__image {
+  height: 100px;
+  aspect-ratio: 1;
+  border-top-left-radius: 12px;
+  border-bottom-left-radius: 12px;
+  background-size: cover;
+  background-position: center center;
+}
+
+.c-card__content {
+  flex: 1;
+  padding: 16px;
+}
+
+.c-card__buttons {
+  margin-right: 16px;
+  text-align: right;
+}
+
+.c-card-grid {
+  display: grid;
+  grid-gap: 8px;
+}

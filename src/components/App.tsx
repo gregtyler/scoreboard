@@ -1,49 +1,29 @@
-import { useDB } from "../data/db";
-import { v4 as uuidv4 } from "uuid";
-import { ChangeEvent, useState } from "react";
-import { Link, Route, Routes } from "react-router-dom";
+import { Route, Routes } from "react-router-dom";
+import NavigationTray from "./navigation/NavigationTray";
+import Games from "../pages/Games";
+import Sessions from "../pages/Sessions";
+import Database from "../pages/Database";
+import EditGame from "../pages/EditGame";
+import FullPageError from "./FullPageError";
 
 const App = () => {
-  const [games, setGames] = useDB("games");
-  const [newGameName, setNewGameName] = useState("");
-
-  const addGame = () => {
-    setGames([...games, { _id: uuidv4(), name: newGameName }]);
-  };
-
-  const handleChange = (event: ChangeEvent<HTMLInputElement>) => {
-    setNewGameName(event.target?.value);
-  };
-
   return (
     <div className="container">
-      <h1>localStorage with React hooks</h1>
       <Routes>
+        <Route path="/" element={<Sessions></Sessions>} />
+        <Route path="/games" element={<Games></Games>} />
+        <Route path="/games/:id" element={<EditGame></EditGame>} />
+        <Route path="/database" element={<Database></Database>} />
         <Route
-          path="/"
+          path="*"
           element={
-            <div>
-              <p>You have {games.length} games:</p>
-
-              <ul>
-                {games.map((game) => (
-                  <li key={game._id}>
-                    {game.name} <small>{game._id}</small>
-                  </li>
-                ))}
-              </ul>
-
-              <input type="text" value={newGameName} onChange={handleChange} />
-              <button onClick={addGame}>Add</button>
-            </div>
+            <FullPageError>
+              <p>Page not found</p>
+            </FullPageError>
           }
         />
-        <Route path="expenses" element={<span>expenses</span>} />
-        <Route path="invoices" element={<span>invoices</span>} />
       </Routes>
-      <Link to="/">Sessions</Link>
-      <Link to="/games">Games</Link>
-      <Link to="/database">Database</Link>
+      <NavigationTray></NavigationTray>
     </div>
   );
 };

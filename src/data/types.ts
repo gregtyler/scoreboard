@@ -12,6 +12,7 @@ export type Reference = {
 export type Game = {
   _id: string;
   name: string;
+  image?: string;
 };
 
 export type Location = {
