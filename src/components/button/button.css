@@ -10,7 +10,7 @@
   border: 1px solid transparent;
   border-radius: 20px;
   background-color: transparent;
-  color: inherit;
+  color: var(--md-sys-color-primary);
   font-weight: var(--md-sys-typescale-button-weight);
   font-size: var(--md-sys-typescale-button-size);
   line-height: var(--md-sys-typescale-button-line-height);

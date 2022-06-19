@@ -2,10 +2,11 @@ import { InputHTMLAttributes } from "react";
 import Icon from "../Icon";
 import "./form.css";
 
-interface Props extends InputHTMLAttributes<HTMLInputElement> {
+interface Props extends InputHTMLAttributes<HTMLElement> {
   label: string;
   leadIcon?: string;
   supportText?: string;
+  options?: [string, string][];
 }
 
 const TextField = ({
@@ -14,15 +15,15 @@ const TextField = ({
   leadIcon,
   value,
   supportText,
+  options,
   ...props
 }: Props) => {
   const id = `f-id-${Math.random().toString(36).substring(2)}`;
 
   return (
     <div className="c-text-field__container">
-      <div className="c-text-field">
-        <label
-          htmlFor={id}
+      <label className="c-text-field" htmlFor={id}>
+        <span
           className={`c-text-field__label ${
             value == ""
               ? "c-text-field__label--no-value"
@@ -30,16 +31,39 @@ const TextField = ({
           }`}
         >
           {label}
-        </label>
+        </span>
         {leadIcon && <Icon>{leadIcon}</Icon>}
-        <input
-          id={id}
-          value={value}
-          placeholder={label}
-          className={`c-text-field__input ${className || ""}`}
-          {...props}
-        />
-      </div>
+        {options ? (
+          <select
+            id={id}
+            value={value}
+            placeholder={label}
+            className={`c-text-field__input ${
+              value === "" ? "c-text-field__select--empty" : ""
+            } ${className || ""}`}
+            {...props}
+          >
+            {value === "" && (
+              <option value="" disabled hidden>
+                {label}
+              </option>
+            )}
+            {options.map(([optionValue, optionLabel]) => (
+              <option key={optionValue} value={optionValue}>
+                {optionLabel}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <input
+            id={id}
+            value={value}
+            placeholder={label}
+            className={`c-text-field__input ${className || ""}`}
+            {...props}
+          />
+        )}
+      </label>
       <div className="c-text-field__support-text">{supportText}</div>
     </div>
   );

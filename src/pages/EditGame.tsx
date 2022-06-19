@@ -10,7 +10,7 @@ import Button from "../components/button/Button";
 import IconButton from "../components/button/IconButton";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
-import TopAppBar from "../components/navigation/AppBar";
+import AppBar from "../components/navigation/AppBar";
 import { useDB } from "../data/db";
 import Page from "./Page";
 
@@ -59,12 +59,12 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
 
   return (
     <div {...props}>
-      <TopAppBar
+      <AppBar
         variant="small"
         title="Edit game"
         backTo="/games"
         actions={<IconButton icon="delete" onClick={handleDelete}></IconButton>}
-      ></TopAppBar>
+      ></AppBar>
       <Page>
         <form onSubmit={handleSubmit}>
           <TextField

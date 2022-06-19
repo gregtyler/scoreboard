@@ -1,17 +1,16 @@
-import { MouseEventHandler } from "react";
-import Button from "./Button";
+import { HTMLAttributes } from "react";
 import IconButton from "./IconButton";
 
-interface Props {
+interface Props extends HTMLAttributes<HTMLButtonElement> {
   icon: string;
-  onClick: MouseEventHandler<Element> | undefined;
 }
 
-const FAB = ({ icon, onClick }: Props) => (
+const FAB = ({ icon, onClick, ...props }: Props) => (
   <IconButton
     className="c-button--fab"
     icon={icon}
     onClick={onClick}
+    {...props}
   ></IconButton>
 );
 

@@ -1,12 +1,21 @@
 import { HTMLAttributes, ReactNode } from "react";
+import { Link } from "react-router-dom";
 import "./card.css";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   buttons?: ReactNode;
   image?: string;
+  linkTo?: string;
 }
 
-const Card = ({ buttons, image, children, className, ...props }: Props) => (
+const Card = ({
+  buttons,
+  image,
+  children,
+  linkTo,
+  className,
+  ...props
+}: Props) => (
   <div className={`c-card c-card--filled ${className ?? ""}`} {...props}>
     {image && (
       <div
@@ -15,6 +24,8 @@ const Card = ({ buttons, image, children, className, ...props }: Props) => (
       />
     )}
     <div className="c-card__content">{children}</div>
+
+    {linkTo && <Link to={linkTo} className="c-card__cover"></Link>}
 
     {buttons && <div className="c-card__buttons">{buttons}</div>}
   </div>

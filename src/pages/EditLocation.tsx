@@ -10,7 +10,7 @@ import Button from "../components/button/Button";
 import IconButton from "../components/button/IconButton";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
-import TopAppBar from "../components/navigation/AppBar";
+import AppBar from "../components/navigation/AppBar";
 import { useDB } from "../data/db";
 import icons from "../data/_icons";
 import Page from "./Page";
@@ -60,12 +60,12 @@ const EditLocation = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
 
   return (
     <div {...props}>
-      <TopAppBar
+      <AppBar
         variant="small"
         title="Edit location"
         backTo="/database"
         actions={<IconButton icon="delete" onClick={handleDelete}></IconButton>}
-      ></TopAppBar>
+      ></AppBar>
       <Page>
         <form onSubmit={handleSubmit}>
           <TextField
@@ -79,17 +79,12 @@ const EditLocation = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
           <TextField
             label="Icon"
             value={icon}
-            list="icon-list"
+            options={icons.map(x => ([x, x]))}
             leadIcon={icons.includes(icon ?? "") ? icon : ""}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setIcon(e.target.value)
             }
           ></TextField>
-          <datalist id="icon-list">
-            {icons.map((x) => (
-              <option value={x}></option>
-            ))}
-          </datalist>
 
           <div style={{ textAlign: "right" }}>
             <Button variant="filled" type="submit">

@@ -42,3 +42,8 @@ a {
   padding-left: 16px;
   padding-right: 16px;
 }
+
+option {
+  font-family: var(--md-sys-typescale-body1-font), sans-serif;
+  color: initial;
+}

@@ -16,43 +16,7 @@ const dateFormatter = new Intl.DateTimeFormat("en-GB", {
 
 const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
   const [games] = useDB("games");
-  let [sessions, setSessions] = useDB("sessions");
-
-  sessions = [
-    {
-      _id: "def",
-      title: "Game of Parks",
-      start: "2022-06-15T20:59:33.492Z",
-      location: { _id: "1d499675-f04c-448b-bfa1-54d97e641a16" },
-      game: { _id: "f5e09249-d598-4824-9976-566d3315f74b" },
-      players: [
-        {
-          _id: "737e8406-4898-436e-a225-0e7bb5487634",
-        },
-        {
-          _id: "3f61c12b-e6ad-42f1-bfa8-66320328d7be",
-        },
-      ],
-      rounds: [],
-    },
-    {
-      _id: "def",
-      title: "Game of Parks",
-      start: "2022-06-18T20:59:33.492Z",
-      end: "2022-06-18T22:59:33.492Z",
-      location: { _id: "1d499675-f04c-448b-bfa1-54d97e641a16" },
-      game: { _id: "f5e09249-d598-4824-9976-566d3315f74b" },
-      players: [
-        {
-          _id: "737e8406-4898-436e-a225-0e7bb5487634",
-        },
-        {
-          _id: "3f61c12b-e6ad-42f1-bfa8-66320328d7be",
-        },
-      ],
-      rounds: [],
-    },
-  ];
+  let [sessions] = useDB("sessions");
 
   const sortByDate = (a: Session, b: Session) => {
     return (
@@ -61,12 +25,22 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
     );
   };
 
+  const sortedSessions = sessions.slice().sort(sortByDate);
+
   return (
     <div {...props}>
-      <AppBar variant="center" title="Sessions"></AppBar>
+      <AppBar
+        variant="center"
+        title="Sessions"
+        actions={
+          <Link to="/sessions/new">
+            <IconButton icon="add"></IconButton>
+          </Link>
+        }
+      ></AppBar>
       <Page>
         <CardGrid>
-          {sessions.sort(sortByDate).map((session) => {
+          {sortedSessions.map((session) => {
             const game = games.find((x) => x._id === session.game._id);
 
             if (typeof game === "undefined") {
@@ -86,8 +60,9 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
               <Card
                 key={session._id}
                 image={game.image}
+                linkTo={`/sessions/${session._id}`}
                 buttons={
-                  <Link to={`/sessions/${session._id}`}>
+                  <Link to={`/sessions/${session._id}/edit`}>
                     <IconButton icon="edit"></IconButton>
                   </Link>
                 }
@@ -106,7 +81,9 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
           })}
         </CardGrid>
 
-        <FAB icon="group_add" onClick={() => console.log("hi")}></FAB>
+        <Link to="/sessions/new">
+          <FAB icon="group_add"></FAB>
+        </Link>
       </Page>
     </div>
   );

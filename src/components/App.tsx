@@ -7,6 +7,9 @@ import EditGame from "../pages/EditGame";
 import FullPageError from "./FullPageError";
 import EditPlayer from "../pages/EditPlayer";
 import EditLocation from "../pages/EditLocation";
+import CreateSession from "../pages/CreateSession";
+import ViewSession from "../pages/ViewSession";
+import EditSession from "../pages/EditSession";
 
 const App = () => {
   return (
@@ -18,6 +21,12 @@ const App = () => {
         <Route path="/database" element={<Database></Database>} />
         <Route path="/players/:id" element={<EditPlayer></EditPlayer>} />
         <Route path="/locations/:id" element={<EditLocation></EditLocation>} />
+        <Route path="/sessions/new" element={<CreateSession></CreateSession>} />
+        <Route path="/sessions/:id" element={<ViewSession></ViewSession>} />
+        <Route
+          path="/sessions/:id/edit"
+          element={<EditSession></EditSession>}
+        />
         <Route
           path="*"
           element={

@@ -1,4 +1,5 @@
 .c-card {
+  position: relative;
   display: flex;
   align-items: center;
   border-radius: 12px;
@@ -25,6 +26,14 @@
 .c-card__content {
   flex: 1;
   padding: 16px;
+}
+
+.c-card__cover {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  right: 0;
 }
 
 .c-card__buttons {
