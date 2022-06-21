@@ -13,6 +13,9 @@ export type Game = {
   _id: string;
   name: string;
   image?: string;
+  config: {
+    scoreMode: "continuous" | "discrete";
+  };
 };
 
 export type Location = {
@@ -38,12 +41,12 @@ export type Session = {
   rounds: Round[];
 };
 
-type Round = {
-  label: string;
+export type Round = {
+  label?: string;
   scores: Score[];
 };
 
-type Score = {
+export type Score = {
   player: number;
-  score: number;
+  value: number;
 };

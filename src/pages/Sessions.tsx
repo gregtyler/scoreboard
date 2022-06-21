@@ -8,6 +8,7 @@ import Card from "../components/card/Card";
 import { Link } from "react-router-dom";
 import IconButton from "../components/button/IconButton";
 import { Session } from "../data/types";
+import DateTime from "../components/DateTime";
 
 const dateFormatter = new Intl.DateTimeFormat("en-GB", {
   dateStyle: "short",
@@ -71,9 +72,11 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
                 <div className="body-medium c-card__meta">
                   {game.name} &bull; {session.players.length} players
                   <div>
-                    {dateFormatter.format(
-                      new Date(session.end || session.start)
-                    )}
+                    <DateTime
+                      dateStyle="short"
+                      timeStyle="short"
+                      dateTime={session.end || session.start}
+                    ></DateTime>
                   </div>
                 </div>
               </Card>

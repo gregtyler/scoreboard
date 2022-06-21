@@ -8,6 +8,8 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../components/button/Button";
 import IconButton from "../components/button/IconButton";
+import Divider from "../components/Divider";
+import RadioButton from "../components/form/RadioButton";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
 import AppBar from "../components/navigation/AppBar";
@@ -31,6 +33,9 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
 
   const [name, setName] = useState(game.name);
   const [image, setImage] = useState(game.image);
+  const [scoreMode, setScoreMode] = useState<"continuous" | "discrete">(
+    game?.config?.scoreMode ?? "discrete"
+  );
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
@@ -42,6 +47,9 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
               ...x,
               name,
               image,
+              config: {
+                scoreMode,
+              },
             }
           : x
       )
@@ -83,6 +91,30 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
               setImage(e.target.value)
             }
           ></TextField>
+
+          <Divider />
+
+          <div className="label-large">Score mode</div>
+          <RadioButton
+            name="scoreMode"
+            label="Continuous"
+            value="continuous"
+            checked={scoreMode === "continuous"}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              if (e.target.checked) setScoreMode("continuous");
+            }}
+          ></RadioButton>
+          <RadioButton
+            name="scoreMode"
+            label="Discrete"
+            value="discrete"
+            checked={scoreMode === "discrete"}
+            onChange={(e: ChangeEvent<HTMLInputElement>) => {
+              if (e.target.checked) setScoreMode("discrete");
+            }}
+          ></RadioButton>
+
+          <Divider />
 
           <div style={{ textAlign: "right" }}>
             <Button variant="filled" type="submit">

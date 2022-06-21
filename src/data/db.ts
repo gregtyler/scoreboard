@@ -36,8 +36,16 @@ function getStateFromStorage() {
 
   if (_version < CURRENT_VERSION) {
     data = migrations
-      .slice(_version, CURRENT_VERSION - _version)
+      .slice(_version)
       .reduce((prev, migration) => migration(prev), data);
+
+    localStorage.setItem(
+      KEY,
+      JSON.stringify({
+        _version: CURRENT_VERSION,
+        ...data,
+      })
+    );
   }
 
   return data;
