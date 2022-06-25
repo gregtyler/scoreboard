@@ -3,6 +3,7 @@ import {
   FormEvent,
   FormHTMLAttributes,
   MouseEvent,
+  useEffect,
   useState,
 } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -13,47 +14,47 @@ import RadioButton from "../components/form/RadioButton";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
 import AppBar from "../components/navigation/AppBar";
-import { useDB } from "../data/db";
+import { db, useGame } from "../data/db";
 import Page from "./Page";
 
 const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [games, setGames] = useDB("games");
-  const game = games.find((x) => x._id === id);
-
-  if (typeof game === "undefined") {
-    return (
-      <FullPageError backTo="/games">
-        <p>Game not found</p>
-      </FullPageError>
-    );
+  if (typeof id !== "string") {
+    return <FullPageError title="Game not found"></FullPageError>;
   }
 
-  const [name, setName] = useState(game.name);
-  const [image, setImage] = useState(game.image);
+  const [name, setName] = useState("");
+  const [image, setImage] = useState("");
   const [scoreMode, setScoreMode] = useState<"continuous" | "discrete">(
-    game?.config?.scoreMode ?? "discrete"
+    "discrete"
   );
+
+  const [game, setGame] = useGame(id);
+  useEffect(() => {
+    if (game) {
+      setName(game.name);
+      setImage(game.image ?? "");
+      setScoreMode(game.config.scoreMode);
+    }
+  }, [game]);
+
+  if (!game) return null;
 
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    setGames(
-      games.map((x) =>
-        x._id === id
-          ? {
-              ...x,
-              name,
-              image,
-              config: {
-                scoreMode,
-              },
-            }
-          : x
-      )
-    );
+    if (game) {
+      setGame({
+        ...game,
+        name,
+        image,
+        config: {
+          scoreMode,
+        },
+      });
+    }
 
     navigate("/games");
   };
@@ -61,7 +62,7 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
   const handleDelete = (e: MouseEvent<Element>) => {
     e.preventDefault();
 
-    setGames(games.filter((x) => x._id !== id));
+    db.games.delete(id);
     navigate("/games");
   };
 

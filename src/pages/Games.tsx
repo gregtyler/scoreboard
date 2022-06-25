@@ -5,16 +5,21 @@ import IconButton from "../components/button/IconButton";
 import Card from "../components/card/Card";
 import CardGrid from "../components/card/CardGrid";
 import AppBar from "../components/navigation/AppBar";
-import { useDB } from "../data/db";
+import { db, useGames } from "../data/db";
 import Page from "./Page";
 
 const Games = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
-  const [games, setGames] = useDB("games");
   const navigate = useNavigate();
 
-  function addGame() {
+  const games = useGames();
+
+  async function addGame() {
     const id = uuidv4();
-    setGames([...games, { _id: id, name: "" }]);
+    await db.games.add({
+      _id: id,
+      name: "",
+      config: { scoreMode: "discrete" },
+    });
     navigate(`/games/${id}`);
   }
 

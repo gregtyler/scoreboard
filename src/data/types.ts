@@ -35,18 +35,27 @@ export type Session = {
   start: string;
   end?: string;
   labels?: string[];
-  game: Game | Reference;
-  location: Location | Reference;
-  players: (Player | Reference)[];
-  rounds: Round[];
+  gameId: string;
+  locationId: string;
+  playerIds: string[];
 };
 
+export interface SessionWithRelations extends Session {
+  game: Game;
+  location: Location;
+  players: Player[];
+  rounds: Round[];
+}
+
 export type Round = {
+  sessionId: string;
+  index: number;
   label?: string;
-  scores: Score[];
 };
 
 export type Score = {
-  player: number;
+  sessionId: string;
+  roundIndex: number;
+  playerId: string;
   value: number;
 };

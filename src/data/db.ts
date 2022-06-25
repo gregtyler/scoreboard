@@ -1,90 +1,118 @@
-import { useState } from "react";
-import migrations from "./migrations";
-import { Game, Location, Player, Session, State } from "./types";
+import Dexie, { Table } from "dexie";
+import { useLiveQuery } from "dexie-react-hooks";
+import {
+  Game,
+  Location,
+  Player,
+  Round,
+  Score,
+  Session,
+  SessionWithRelations,
+} from "./types";
 
-const KEY = "SCOREBOARD";
-const CURRENT_VERSION = migrations.length - 1;
-const CURRENT_DEFAULT: State = {
-  games: [],
-  locations: [],
-  players: [],
-  sessions: [],
-};
+export class MySubClassedDexie extends Dexie {
+  games!: Table<Game>;
+  locations!: Table<Location>;
+  players!: Table<Player>;
+  sessions!: Table<Session>;
+  rounds!: Table<Round>;
+  scores!: Table<Score>;
 
-function isValid(data: State) {
-  for (const game of data.games) {
-    if (
-      !game._id.match(
-        /^[0-9a-fA-F]{8}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{4}\b-[0-9a-fA-F]{12}$/
-      )
-    ) {
-      return false;
+  constructor() {
+    super("scoreboard");
+    this.version(2).stores({
+      sessions: "_id, gameId, locationId",
+    });
+
+    this.version(1).stores({
+      games: "_id",
+      locations: "_id",
+      players: "_id",
+      sessions: "_id",
+      rounds: "&[sessionId+index]",
+      scores: "&[sessionId+roundIndex+playerId], playerId",
+    });
+  }
+}
+
+export const db = new MySubClassedDexie();
+
+export function useGames() {
+  return useLiveQuery(() => db.games.toCollection().sortBy("name")) ?? [];
+}
+export function useGame(id: string): [Game | undefined, (game: Game) => void] {
+  const game = useLiveQuery(() => db.games.get(id));
+
+  function setGame(newGame: Game) {
+    db.games.put(newGame, id);
+  }
+
+  return [game, setGame];
+}
+
+export function usePlayers() {
+  return useLiveQuery(() => db.players.toCollection().sortBy("name")) ?? [];
+}
+export function usePlayer(
+  id: string
+): [Player | undefined, (player: Player) => void] {
+  const player = useLiveQuery(() => db.players.get(id));
+
+  function setPlayer(newPlayer: Player) {
+    db.players.put(newPlayer, id);
+  }
+
+  return [player, setPlayer];
+}
+
+export function useLocations() {
+  return useLiveQuery(() => db.locations.toCollection().sortBy("name")) ?? [];
+}
+export function useLocation(
+  id: string
+): [Location | undefined, (location: Location) => void] {
+  const location = useLiveQuery(() => db.locations.get(id));
+
+  function setLocation(newLocation: Location) {
+    db.locations.put(newLocation, id);
+  }
+
+  return [location, setLocation];
+}
+
+export function useSessions(): SessionWithRelations[] {
+  return useLiveQuery(() => db.sessions.toCollection().sortBy("start")) ?? [];
+}
+export function useSession(
+  id: string
+): [SessionWithRelations | undefined, (session: Session) => void] {
+  const session = useLiveQuery(async () => {
+    const sess = await db.sessions.get(id);
+    if (typeof sess === "undefined") throw new Error("Session not found");
+
+    const [game, location, players, rounds] = await Promise.all([
+      db.games.get(sess.gameId),
+      db.locations.get(sess.locationId),
+      db.players.where("_id").anyOf(sess.playerIds).toArray(),
+      db.rounds.where({ sessionId: sess._id }).sortBy("index"),
+    ]);
+
+    if (game === undefined || location === undefined) {
+      throw new Error("Not found");
     }
-  }
 
-  return true;
-}
-
-function getStateFromStorage() {
-  const saved = localStorage.getItem(KEY);
-  const parsed = JSON.parse(saved || "null") || {
-    _version: CURRENT_VERSION,
-    ...CURRENT_DEFAULT,
-  };
-
-  let { _version, ...data } = parsed;
-
-  if (_version < CURRENT_VERSION) {
-    data = migrations
-      .slice(_version)
-      .reduce((prev, migration) => migration(prev), data);
-
-    localStorage.setItem(
-      KEY,
-      JSON.stringify({
-        _version: CURRENT_VERSION,
-        ...data,
-      })
-    );
-  }
-
-  return data;
-}
-
-const state = getStateFromStorage();
-
-interface DBTypeMap {
-  games: Game[];
-  players: Player[];
-  locations: Location[];
-  sessions: Session[];
-}
-
-export function useDB<K extends keyof DBTypeMap>(
-  key: K
-): [DBTypeMap[K], (val: DBTypeMap[K]) => void] {
-  const [value, setValue] = useState<DBTypeMap[K]>(state[key]);
-
-  const setValueValidated = (val: DBTypeMap[K]): void => {
-    const newState = {
-      ...state,
-      [key]: val,
+    return {
+      ...sess,
+      game,
+      location,
+      players,
+      rounds,
     };
+  });
 
-    if (!isValid(newState)) {
-      return;
-    }
+  function setSession(newSession: Session) {
+    db.sessions.put(newSession, id);
+  }
 
-    state[key] = val;
-    setValue(val);
-    localStorage.setItem(
-      KEY,
-      JSON.stringify({
-        _version: CURRENT_VERSION,
-        ...newState,
-      })
-    );
-  };
-
-  return [value, setValueValidated];
+  return [session, setSession];
 }

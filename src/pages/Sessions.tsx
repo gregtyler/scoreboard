@@ -1,4 +1,3 @@
-import { useDB } from "../data/db";
 import { HTMLAttributes } from "react";
 import FAB from "../components/button/FAB";
 import Page from "./Page";
@@ -9,15 +8,11 @@ import { Link } from "react-router-dom";
 import IconButton from "../components/button/IconButton";
 import { Session } from "../data/types";
 import DateTime from "../components/DateTime";
-
-const dateFormatter = new Intl.DateTimeFormat("en-GB", {
-  dateStyle: "short",
-  timeStyle: "short",
-} as Intl.DateTimeFormatOptions);
+import { useGames, useSessions } from "../data/db";
 
 const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
-  const [games] = useDB("games");
-  let [sessions] = useDB("sessions");
+  const games = useGames();
+  const sessions = useSessions();
 
   const sortByDate = (a: Session, b: Session) => {
     return (

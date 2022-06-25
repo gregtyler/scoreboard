@@ -7,23 +7,30 @@ import Card from "../components/card/Card";
 import CardGrid from "../components/card/CardGrid";
 import Icon from "../components/Icon";
 import AppBar from "../components/navigation/AppBar";
-import { useDB } from "../data/db";
+import { db, useLocations, usePlayers } from "../data/db";
 import Page from "./Page";
 
 const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
-  const [locations, setLocations] = useDB("locations");
-  const [players, setPlayers] = useDB("players");
+  const locations = useLocations();
+  const players = usePlayers();
+
   const navigate = useNavigate();
 
-  function addPlayer() {
+  async function addPlayer() {
     const id = uuidv4();
-    setPlayers([...players, { _id: id, name: "" }]);
+    await db.players.add({
+      _id: id,
+      name: "",
+    });
     navigate(`/players/${id}`);
   }
 
-  function addLocation() {
+  async function addLocation() {
     const id = uuidv4();
-    setLocations([...locations, { _id: id, name: "" }]);
+    await db.locations.add({
+      _id: id,
+      name: "",
+    });
     navigate(`/locations/${id}`);
   }
 

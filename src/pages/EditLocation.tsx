@@ -3,6 +3,7 @@ import {
   FormEvent,
   FormHTMLAttributes,
   MouseEvent,
+  useEffect,
   useState,
 } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,7 +12,7 @@ import IconButton from "../components/button/IconButton";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
 import AppBar from "../components/navigation/AppBar";
-import { useDB } from "../data/db";
+import { db, useLocation } from "../data/db";
 import icons from "../data/_icons";
 import Page from "./Page";
 
@@ -19,8 +20,24 @@ const EditLocation = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [locations, setLocations] = useDB("locations");
-  const location = locations.find((x) => x._id === id);
+  if (typeof id !== "string") {
+    return (
+      <FullPageError backTo="/database">
+        <p>Location not found</p>
+      </FullPageError>
+    );
+  }
+
+  const [name, setName] = useState("");
+  const [icon, setIcon] = useState<string | undefined>(undefined);
+
+  const [location, setLocation] = useLocation(id);
+  useEffect(() => {
+    if (location) {
+      setName(location.name);
+      setIcon(location.icon);
+    }
+  }, [location]);
 
   if (typeof location === "undefined") {
     return (
@@ -30,23 +47,14 @@ const EditLocation = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
     );
   }
 
-  const [name, setName] = useState(location.name);
-  const [icon, setIcon] = useState(location.icon);
-
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    setLocations(
-      locations.map((x) =>
-        x._id === id
-          ? {
-              ...x,
-              name,
-              icon: icons.includes(icon ?? "") ? icon : "",
-            }
-          : x
-      )
-    );
+    setLocation({
+      ...location,
+      name,
+      icon: icons.includes(icon ?? "") ? icon : "",
+    });
 
     navigate("/database");
   };
@@ -54,7 +62,7 @@ const EditLocation = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
   const handleDelete = (e: MouseEvent<Element>) => {
     e.preventDefault();
 
-    setLocations(locations.filter((x) => x._id !== id));
+    db.locations.delete(id);
     navigate("/database");
   };
 
@@ -79,7 +87,7 @@ const EditLocation = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
           <TextField
             label="Icon"
             value={icon}
-            options={icons.map(x => ([x, x]))}
+            options={icons.map((x) => [x, x])}
             leadIcon={icons.includes(icon ?? "") ? icon : ""}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setIcon(e.target.value)

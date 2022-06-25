@@ -6,13 +6,12 @@ import ButtonStrip from "../components/form/ButtonStrip";
 import DateField from "../components/form/DateField";
 import TextField from "../components/form/TextField";
 import AppBar from "../components/navigation/AppBar";
-import { useDB } from "../data/db";
+import { db, useGames, useLocations } from "../data/db";
 import Page from "./Page";
 
 const CreateSession = () => {
-  const [games] = useDB("games");
-  const [locations] = useDB("locations");
-  const [sessions, setSessions] = useDB("sessions");
+  const games = useGames();
+  const locations = useLocations();
 
   const [title, setTitle] = useState("");
   const [start, setStart] = useState(new Date());
@@ -26,18 +25,14 @@ const CreateSession = () => {
 
     const _id = uuidv4();
 
-    setSessions([
-      ...sessions,
-      {
-        _id,
-        title,
-        start: start.toISOString(),
-        location: { _id: locationId },
-        game: { _id: gameId },
-        players: [],
-        rounds: [],
-      },
-    ]);
+    db.sessions.add({
+      _id,
+      title,
+      start: start.toISOString(),
+      locationId,
+      gameId,
+      playerIds: [],
+    });
 
     navigate(`/sessions/${_id}`);
   };

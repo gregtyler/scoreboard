@@ -3,6 +3,7 @@ import {
   FormEvent,
   FormHTMLAttributes,
   MouseEvent,
+  useEffect,
   useState,
 } from "react";
 import { useNavigate, useParams } from "react-router-dom";
@@ -11,15 +12,29 @@ import IconButton from "../components/button/IconButton";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
 import AppBar from "../components/navigation/AppBar";
-import { useDB } from "../data/db";
+import { db, usePlayer } from "../data/db";
 import Page from "./Page";
 
 const EditPlayer = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
   const { id } = useParams();
   const navigate = useNavigate();
 
-  const [players, setPlayers] = useDB("players");
-  const player = players.find((x) => x._id === id);
+  if (typeof id !== "string") {
+    return (
+      <FullPageError backTo="/database">
+        <p>Player not found</p>
+      </FullPageError>
+    );
+  }
+
+  const [name, setName] = useState("");
+
+  const [player, setPlayer] = usePlayer(id);
+  useEffect(() => {
+    if (player) {
+      setName(player.name);
+    }
+  }, [player]);
 
   if (typeof player === "undefined") {
     return (
@@ -29,21 +44,13 @@ const EditPlayer = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
     );
   }
 
-  const [name, setName] = useState(player.name);
-
   const handleSubmit = (e: FormEvent) => {
     e.preventDefault();
 
-    setPlayers(
-      players.map((x) =>
-        x._id === id
-          ? {
-              ...x,
-              name,
-            }
-          : x
-      )
-    );
+    setPlayer({
+      ...player,
+      name,
+    });
 
     navigate("/database");
   };
@@ -51,7 +58,7 @@ const EditPlayer = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
   const handleDelete = (e: MouseEvent<Element>) => {
     e.preventDefault();
 
-    setPlayers(players.filter((x) => x._id !== id));
+    db.players.delete(id);
     navigate("/database");
   };
 
