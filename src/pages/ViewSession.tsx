@@ -18,7 +18,7 @@ const error = (message: string) => (
 
 const ViewSession = () => {
   const { id } = useParams();
-  const [sessions] = useDB("sessions");
+  const [sessions, setSessions] = useDB("sessions");
   const [games] = useDB("games");
   const [locations] = useDB("locations");
   const [allPlayers] = useDB("players");
@@ -43,6 +43,34 @@ const ViewSession = () => {
 
     return player;
   });
+
+  const handleScoreChange = (args: {
+    round: number;
+    player: number;
+    score: number;
+  }) => {
+    setSessions(
+      sessions.map((s) =>
+        s._id === session._id
+          ? {
+              ...session,
+              rounds: session.rounds.map((r, i) =>
+                i === args.round
+                  ? {
+                      ...r,
+                      scores: r.scores.map((s2) =>
+                        s2.player === args.player
+                          ? { ...s2, value: args.score }
+                          : s2
+                      ),
+                    }
+                  : r
+              ),
+            }
+          : s
+      )
+    );
+  };
 
   return (
     <div>
@@ -83,6 +111,11 @@ const ViewSession = () => {
           rounds={session.rounds}
           players={players}
           editable
+          onScoreChange={(e: {
+            round: number;
+            player: number;
+            score: number;
+          }) => handleScoreChange(e)}
         ></ScoreTable>
       </Page>
     </div>

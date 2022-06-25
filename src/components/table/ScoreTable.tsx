@@ -6,10 +6,21 @@ import TableCellInput from "./TableCellInput";
 interface Props extends TableHTMLAttributes<HTMLTableElement> {
   rounds: Round[];
   players: Player[];
+  onScoreChange: (args: {
+    round: number;
+    player: number;
+    score: number;
+  }) => void;
   editable?: boolean;
 }
 
-const ScoreTable = ({ rounds, players, editable, ...props }: Props) => (
+const ScoreTable = ({
+  rounds,
+  players,
+  editable,
+  onScoreChange,
+  ...props
+}: Props) => (
   <Table {...props}>
     <thead>
       <tr>
@@ -27,7 +38,18 @@ const ScoreTable = ({ rounds, players, editable, ...props }: Props) => (
             const score = round.scores.find((x) => x.player === playerIndex);
 
             return editable ? (
-              <TableCellInput value={score?.value ?? ""} />
+              <TableCellInput
+                key={playerIndex}
+                type="number"
+                value={score?.value ?? ""}
+                onChange={(e) =>
+                  onScoreChange({
+                    round: index,
+                    player: playerIndex,
+                    score: parseFloat(e.target.value),
+                  })
+                }
+              />
             ) : (
               <td key={playerIndex}>{score?.value ?? ""}</td>
             );
