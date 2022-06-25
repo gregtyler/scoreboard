@@ -81,7 +81,36 @@ export function useLocation(
 }
 
 export function useSessions(): SessionWithRelations[] {
-  return useLiveQuery(() => db.sessions.toCollection().sortBy("start")) ?? [];
+  return (
+    useLiveQuery(async () => {
+      const sessions = await db.sessions.toCollection().sortBy("start");
+
+      if (sessions === undefined) return [];
+
+      return Promise.all(
+        sessions.map(async (session) => {
+          const [game, location, players, rounds] = await Promise.all([
+            db.games.get(session.gameId),
+            db.locations.get(session.locationId),
+            db.players.where("_id").anyOf(session.playerIds).toArray(),
+            db.rounds.where({ sessionId: session._id }).sortBy("index"),
+          ]);
+
+          if (game === undefined || location === undefined) {
+            throw new Error("Not found");
+          }
+
+          return {
+            ...session,
+            game,
+            location,
+            players,
+            rounds,
+          };
+        })
+      );
+    }) ?? []
+  );
 }
 export function useSession(
   id: string
@@ -111,7 +140,19 @@ export function useSession(
   });
 
   function setSession(newSession: Session) {
-    db.sessions.put(newSession, id);
+    const data: Session = {
+      _id: newSession._id,
+      title: newSession.title,
+      start: newSession.start,
+      gameId: newSession.gameId,
+      locationId: newSession.locationId,
+      playerIds: newSession.playerIds,
+    };
+
+    if (newSession.end) data.end = newSession.end;
+    if (newSession.labels) data.labels = newSession.labels;
+
+    db.sessions.put(data, id);
   }
 
   return [session, setSession];

@@ -20,7 +20,7 @@ const AddRoundModal = ({ onSave, onClose, ...props }: Props) => {
       title="New round"
       buttons={
         <>
-          <Button onClick={onClose}>Close</Button>
+          <Button onClick={onClose}>Cancel</Button>
           <Button onClick={handleSave} disabled={name === ""}>
             Add round
           </Button>

@@ -1,13 +1,17 @@
-import { ChangeEvent, FormEvent, useEffect, useState } from "react";
+import { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
-import { v4 as uuidv4 } from "uuid";
 import Button from "../components/button/Button";
+import IconButton from "../components/button/IconButton";
+import Card from "../components/card/Card";
+import Divider from "../components/Divider";
 import ButtonStrip from "../components/form/ButtonStrip";
 import DateField from "../components/form/DateField";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
 import AppBar from "../components/navigation/AppBar";
-import { useGames, useLocations, useSession } from "../data/db";
+import Tab from "../components/tabs/Tab";
+import Tabs from "../components/tabs/Tabs";
+import { useGames, useLocations, usePlayers, useSession } from "../data/db";
 import Page from "./Page";
 
 const EditSession = () => {
@@ -20,7 +24,9 @@ const EditSession = () => {
 
   const games = useGames();
   const locations = useLocations();
+  const allPlayers = usePlayers();
 
+  const [playerIds, setPlayerIds] = useState<string[]>([]);
   const [title, setTitle] = useState("");
   const [start, setStart] = useState(new Date());
   const [end, setEnd] = useState(new Date());
@@ -35,10 +41,19 @@ const EditSession = () => {
       setEnd(new Date(session.end ?? session.start));
       setGameId(session.gameId);
       setLocationId(session.locationId);
+      setPlayerIds(session.playerIds);
     }
   }, [session]);
 
+  const players = useMemo(() => {
+    return allPlayers.filter((x) => playerIds.includes(x._id));
+  }, [playerIds]);
+
   if (!session) return null;
+
+  const handleRemovePlayer = (playerId: string) => {
+    setPlayerIds(playerIds.filter((id) => id !== playerId));
+  };
 
   const handleSubmit = () => {
     setSession({
@@ -48,6 +63,7 @@ const EditSession = () => {
       end: end.toISOString(),
       locationId,
       gameId,
+      playerIds,
     });
 
     navigate(`/sessions/${session._id}`);
@@ -62,46 +78,73 @@ const EditSession = () => {
       ></AppBar>
       <Page>
         <form onSubmit={handleSubmit}>
-          <TextField
-            required
-            label="Session title"
-            value={title}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setTitle(e.target.value)
-            }
-          ></TextField>
+          <Tabs tabs={["Session details", "Players"]}>
+            <Tab>
+              <TextField
+                required
+                label="Session title"
+                value={title}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setTitle(e.target.value)
+                }
+              ></TextField>
 
-          <TextField
-            required
-            label="Game"
-            value={gameId}
-            options={games.map((x) => [x._id, x.name])}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setGameId(e.target.value)
-            }
-          ></TextField>
-          <TextField
-            required
-            label="Location"
-            value={locationId}
-            options={locations.map((x) => [x._id, x.name])}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setLocationId(e.target.value)
-            }
-          ></TextField>
+              <TextField
+                required
+                label="Game"
+                value={gameId}
+                options={games.map((x) => [x._id, x.name])}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setGameId(e.target.value)
+                }
+              ></TextField>
+              <TextField
+                required
+                label="Location"
+                value={locationId}
+                options={locations.map((x) => [x._id, x.name])}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setLocationId(e.target.value)
+                }
+              ></TextField>
 
-          <DateField
-            label="Start"
-            value={start}
-            onChange={(val: Date) => setStart(val)}
-          ></DateField>
+              <DateField
+                label="Start"
+                value={start}
+                onChange={(val: Date) => setStart(val)}
+              ></DateField>
 
-          <DateField
-            label="End"
-            value={end}
-            onChange={(val: Date) => setEnd(val)}
-          ></DateField>
+              <DateField
+                label="End"
+                value={end}
+                onChange={(val: Date) => setEnd(val)}
+              ></DateField>
+            </Tab>
+            <Tab>
+              {players.map((player) => (
+                <p
+                  key={player._id}
+                  style={{ display: "flex", alignItems: "center" }}
+                >
+                  <span style={{ flex: 1 }}>{player.name}</span>
+                  <IconButton
+                    onClick={() => handleRemovePlayer(player._id)}
+                    icon="delete"
+                  />
+                </p>
+              ))}
+              <Divider />
 
+              <TextField
+                label="Select player"
+                value=""
+                options={allPlayers.map((x) => [x._id, x.name])}
+                onChange={(e: ChangeEvent<HTMLInputElement>) =>
+                  setPlayerIds([...playerIds, e.target.value])
+                }
+              />
+            </Tab>
+          </Tabs>
           <ButtonStrip>
             <div>
               <Link to="/">

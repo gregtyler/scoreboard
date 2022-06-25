@@ -1,0 +1,60 @@
+.c-chip {
+  display: inline-flex;
+  position: relative;
+  align-items: center;
+  height: 32px;
+  padding-left: 16px;
+  padding-right: 16px;
+  border-radius: 8px;
+  border: 1px solid var(--md-sys-color-outline);
+  background-color: var(--md-sys-color-surface-1);
+  color: var(--md-sys-color-on-surface);
+  cursor: pointer;
+}
+
+.c-chip + .c-chip {
+  margin-left: 8px;
+}
+
+.c-chip--with-icon {
+  padding-left: 8px;
+}
+
+.c-chip__icon {
+  font-size: 18px;
+  margin-right: 8px;
+}
+
+.c-chip::after {
+  content: "";
+  border-radius: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  opacity: 0;
+  background-color: var(--md-sys-color-on-surface);
+}
+
+.c-chip--active::after {
+  background-color: var(--md-sys-color-on-surface-variant);
+}
+
+.c-chip--active {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.c-chip:hover::after {
+  opacity: var(--md-sys-state-hover-state-layer-opacity);
+}
+
+.c-chip:active::after {
+  opacity: var(--md-sys-state-focus-state-layer-opacity);
+}
+
+.c-chip--active {
+  font-weight: bold;
+}

@@ -1,8 +1,8 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
-import Button from "../components/button/Button";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import IconButton from "../components/button/IconButton";
 import Card from "../components/card/Card";
+import Chip from "../components/chip/Chip";
 import DateTime from "../components/DateTime";
 import FullPageError from "../components/FullPageError";
 import Icon from "../components/Icon";
@@ -18,6 +18,7 @@ const ViewSession = () => {
     return <FullPageError title="Game not found"></FullPageError>;
   }
 
+  const navigate = useNavigate();
   const [session] = useSession(id);
   const [addRoundModalOpen, setAddRoundModalOpen] = useState(false);
 
@@ -84,9 +85,16 @@ const ViewSession = () => {
           onClose={() => setAddRoundModalOpen(false)}
           onSave={handleAddRound}
         ></AddRoundModal>
-        <Button onClick={() => setAddRoundModalOpen(true)} variant="tonal">
+
+        <Chip onClick={() => setAddRoundModalOpen(true)} icon="add">
           Add round
-        </Button>
+        </Chip>
+        <Chip
+          onClick={() => navigate(`/sessions/${session._id}/edit`)}
+          icon="person"
+        >
+          Edit players
+        </Chip>
       </Page>
     </div>
   );

@@ -65,7 +65,7 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
               >
                 <div className="body-large">{session.title}</div>
                 <div className="body-medium c-card__meta">
-                  {game.name} &bull; {session.players.length} players
+                  {game.name} &bull; {session.playerIds.length} players
                   <div>
                     <DateTime
                       dateStyle="short"
