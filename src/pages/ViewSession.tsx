@@ -1,9 +1,12 @@
+import { useState } from "react";
 import { Link, useParams } from "react-router-dom";
+import Button from "../components/button/Button";
 import IconButton from "../components/button/IconButton";
 import Card from "../components/card/Card";
 import DateTime from "../components/DateTime";
 import FullPageError from "../components/FullPageError";
 import Icon from "../components/Icon";
+import AddRoundModal from "../components/modal/AddRoundModal";
 import AppBar from "../components/navigation/AppBar";
 import ScoreTable from "../components/score-table/ScoreTable";
 import { db, useSession } from "../data/db";
@@ -15,13 +18,12 @@ const ViewSession = () => {
     return <FullPageError title="Game not found"></FullPageError>;
   }
 
-  const [session, setSession] = useSession(id);
+  const [session] = useSession(id);
+  const [addRoundModalOpen, setAddRoundModalOpen] = useState(false);
 
   if (!session) return null;
 
-  const handleAddRound = () => {
-    const label = prompt("What should the round be called?") ?? "";
-
+  const handleAddRound = (label: string) => {
     db.rounds.add({
       sessionId: id,
       index: session.rounds.length,
@@ -29,26 +31,24 @@ const ViewSession = () => {
     });
   };
 
-  const handleAddPlayer = () => {
-    const playerId = prompt("Which player?") ?? "";
-    setSession({
-      ...session,
-      playerIds: [...session.playerIds, playerId],
-    });
+  const handleRemoveRound = (index: number) => {
+    db.rounds.delete([session._id, index]);
   };
 
   return (
     <div>
-      <AppBar variant="small" title={session.title} backTo="/"></AppBar>
+      <AppBar
+        variant="small"
+        title={session.title}
+        backTo="/"
+        actions={
+          <Link to={`/sessions/${session._id}/edit`}>
+            <IconButton icon="edit"></IconButton>
+          </Link>
+        }
+      ></AppBar>
       <Page>
-        <Card
-          image={session.game.image}
-          buttons={
-            <Link to={`/games/${session.game._id}`}>
-              <IconButton icon="edit"></IconButton>
-            </Link>
-          }
-        >
+        <Card image={session.game.image}>
           <div className="headline-small">{session.game.name}</div>
         </Card>
         {location && (
@@ -76,9 +76,17 @@ const ViewSession = () => {
           rounds={session.rounds}
           players={session.players}
           editable
+          onRemoveRound={handleRemoveRound}
         ></ScoreTable>
-        <button onClick={() => handleAddRound()}>Add round</button>
-        <button onClick={() => handleAddPlayer()}>Add player</button>
+
+        <AddRoundModal
+          open={addRoundModalOpen}
+          onClose={() => setAddRoundModalOpen(false)}
+          onSave={handleAddRound}
+        ></AddRoundModal>
+        <Button onClick={() => setAddRoundModalOpen(true)} variant="tonal">
+          Add round
+        </Button>
       </Page>
     </div>
   );

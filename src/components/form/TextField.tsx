@@ -7,6 +7,7 @@ interface Props extends InputHTMLAttributes<HTMLElement> {
   leadIcon?: string;
   supportText?: string;
   options?: [string, string][];
+  backgroundColor?: string;
 }
 
 const TextField = ({
@@ -16,13 +17,18 @@ const TextField = ({
   value,
   supportText,
   options,
+  backgroundColor,
   ...props
 }: Props) => {
   const id = `f-id-${Math.random().toString(36).substring(2)}`;
 
   return (
     <div className="c-text-field__container">
-      <label className="c-text-field" htmlFor={id}>
+      <label
+        className="c-text-field"
+        htmlFor={id}
+        style={backgroundColor ? { "--background": backgroundColor } : {}}
+      >
         <span
           className={`c-text-field__label ${
             value == ""

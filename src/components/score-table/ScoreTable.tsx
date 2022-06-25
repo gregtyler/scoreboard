@@ -1,5 +1,6 @@
 import { TableHTMLAttributes } from "react";
 import { Player, Round } from "../../data/types";
+import IconButton from "../button/IconButton";
 import Table from "../table/Table";
 import ScoreTableCell from "./ScoreTableCell";
 
@@ -7,9 +8,16 @@ interface Props extends TableHTMLAttributes<HTMLTableElement> {
   rounds: Round[];
   players: Player[];
   editable?: boolean;
+  onRemoveRound: (index: number) => void;
 }
 
-const ScoreTable = ({ rounds, players, editable, ...props }: Props) => (
+const ScoreTable = ({
+  rounds,
+  players,
+  editable,
+  onRemoveRound,
+  ...props
+}: Props) => (
   <Table {...props}>
     <thead>
       <tr>
@@ -22,7 +30,12 @@ const ScoreTable = ({ rounds, players, editable, ...props }: Props) => (
     <tbody>
       {rounds.map((round, index) => (
         <tr key={index}>
-          <th>{round.label ?? ""}</th>
+          <th>
+            <div style={{ display: "flex", alignItems: "center" }}>
+              {round.label ?? ""}
+              <IconButton icon="delete" onClick={() => onRemoveRound(index)} />
+            </div>
+          </th>
           {players.map((player) => (
             <ScoreTableCell
               key={player._id}

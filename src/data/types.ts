@@ -13,8 +13,8 @@ export type Game = {
   _id: string;
   name: string;
   image?: string;
-  config: {
-    scoreMode: "continuous" | "discrete";
+  template?: {
+    rounds: { label: string }[];
   };
 };
 

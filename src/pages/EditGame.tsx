@@ -27,16 +27,12 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
 
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
-  const [scoreMode, setScoreMode] = useState<"continuous" | "discrete">(
-    "discrete"
-  );
 
   const [game, setGame] = useGame(id);
   useEffect(() => {
     if (game) {
       setName(game.name);
       setImage(game.image ?? "");
-      setScoreMode(game.config.scoreMode);
     }
   }, [game]);
 
@@ -50,9 +46,6 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
         ...game,
         name,
         image,
-        config: {
-          scoreMode,
-        },
       });
     }
 
@@ -92,28 +85,6 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
               setImage(e.target.value)
             }
           ></TextField>
-
-          <Divider />
-
-          <div className="label-large">Score mode</div>
-          <RadioButton
-            name="scoreMode"
-            label="Continuous"
-            value="continuous"
-            checked={scoreMode === "continuous"}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              if (e.target.checked) setScoreMode("continuous");
-            }}
-          ></RadioButton>
-          <RadioButton
-            name="scoreMode"
-            label="Discrete"
-            value="discrete"
-            checked={scoreMode === "discrete"}
-            onChange={(e: ChangeEvent<HTMLInputElement>) => {
-              if (e.target.checked) setScoreMode("discrete");
-            }}
-          ></RadioButton>
 
           <Divider />
 

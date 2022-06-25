@@ -1,0 +1,41 @@
+.c-modal__backdrop {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: var(--md-sys-color-surface);
+  opacity: 0.7;
+}
+
+.c-modal {
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  max-width: calc(100% - (28px * 2));
+  min-width: 280px;
+  transform: translate(-50%, -50%);
+  border-radius: 28px;
+  background-color: var(--md-sys-color-surface-variant);
+  color: var(--md-sys-color-on-surface-variant);
+  box-shadow: var(--md-sys-elevation-3);
+}
+
+.c-modal__title {
+  margin-bottom: 16px;
+  color: var(--md-sys-color-on-surface);
+  text-align: center;
+}
+
+.c-modal__content {
+  margin: 24px;
+}
+
+.c-modal__buttons {
+  margin: 24px;
+  text-align: right;
+}
+
+.c-modal__buttons .c-button + .c-button {
+  margin-left: 8px;
+}

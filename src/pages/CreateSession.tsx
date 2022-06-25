@@ -20,7 +20,7 @@ const CreateSession = () => {
 
   const navigate = useNavigate();
 
-  const handleSubmit = (e: FormEvent) => {
+  const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
 
     const _id = uuidv4();
@@ -32,6 +32,15 @@ const CreateSession = () => {
       locationId,
       gameId,
       playerIds: [],
+    });
+
+    const game = await db.games.get(gameId);
+    game?.template?.rounds?.forEach((round, index) => {
+      db.rounds.add({
+        sessionId: _id,
+        index: index,
+        label: round.label,
+      });
     });
 
     navigate(`/sessions/${_id}`);

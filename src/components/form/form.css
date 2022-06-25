@@ -16,6 +16,7 @@
 }
 
 .c-text-field__container {
+  --background: var(--md-sys-color-surface);
   margin-bottom: 28px;
 }
 
@@ -25,7 +26,7 @@
   left: 12px;
   padding-left: 4px;
   padding-right: 4px;
-  background-color: var(--md-sys-color-surface);
+  background-color: var(--background);
   color: var(--md-sys-color-on-surface-variant);
   font-size: var(--md-sys-typescale-caption-size);
   line-height: var(--md-sys-typescale-caption-line-height);
