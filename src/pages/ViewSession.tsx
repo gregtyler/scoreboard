@@ -1,9 +1,11 @@
 import { useState } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
+
 import IconButton from "../components/button/IconButton";
 import Card from "../components/card/Card";
 import Chip from "../components/chip/Chip";
 import DateTime from "../components/DateTime";
+import Divider from "../components/Divider";
 import FullPageError from "../components/FullPageError";
 import Icon from "../components/Icon";
 import AddRoundModal from "../components/modal/AddRoundModal";
@@ -56,29 +58,32 @@ const ViewSession = () => {
         }
       ></AppBar>
       <Page>
-        <Card image={session.game.image}>
+        <Card image={session.game.image} orientation="vertical">
           <div className="headline-small">{session.game.name}</div>
-        </Card>
-        {location && (
-          <div className="body-large" style={{ margin: "16px 0" }}>
-            <span style={{ opacity: 0.6 }}>Played at</span>{" "}
-            <span
-              style={{
-                display: "inline-flex",
-                alignItems: "center",
-                verticalAlign: "top",
-              }}
-            >
-              <Icon>{session.location.icon}</Icon> {session.location.name}
-            </span>{" "}
-            <span style={{ opacity: 0.6 }}>on</span>{" "}
-            <DateTime
-              dateStyle="long"
-              timeStyle="short"
-              dateTime={session.end || session.start}
-            ></DateTime>
+          {location && (
+            <div className="c-card__body">
+              <span style={{ opacity: 0.6 }}>Played at</span>{" "}
+              <Icon style={{ verticalAlign: "middle" }}>
+                {session.location.icon}
+              </Icon>{" "}
+              {session.location.name}
+              <span style={{ opacity: 0.6 }}>on</span>{" "}
+              <DateTime
+                dateStyle="long"
+                timeStyle="short"
+                dateTime={session.end || session.start}
+              ></DateTime>
+            </div>
+          )}
+          <div>
+            <Chip onClick={() => setAddRoundModalOpen(true)} icon="add">
+              Add round
+            </Chip>
+            <Chip onClick={() => setEditPlayersModalOpen(true)} icon="person">
+              Edit players
+            </Chip>
           </div>
-        )}
+        </Card>
 
         <ScoreTable
           rounds={session.rounds}
@@ -100,13 +105,6 @@ const ViewSession = () => {
           onSave={handleEditPlayers}
           key={`edit-players-${editPlayersModalOpen}`}
         ></EditPlayersModal>
-
-        <Chip onClick={() => setAddRoundModalOpen(true)} icon="add">
-          Add round
-        </Chip>
-        <Chip onClick={() => setEditPlayersModalOpen(true)} icon="person">
-          Edit players
-        </Chip>
       </Page>
     </div>
   );

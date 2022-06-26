@@ -32,7 +32,13 @@ const ScoreTable = ({
       {rounds.map((round, index) => (
         <tr key={index}>
           <th>
-            <div style={{ display: "flex", alignItems: "center" }}>
+            <div
+              style={{
+                display: "flex",
+                alignItems: "center",
+                fontSize: "var(--md-sys-typescale-caption-size)",
+              }}
+            >
               {round.label ?? ""}
               <IconButton icon="delete" onClick={() => onRemoveRound(index)} />
             </div>

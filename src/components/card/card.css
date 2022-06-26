@@ -5,6 +5,11 @@
   border-radius: 12px;
 }
 
+.c-card--vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
 .c-card--filled {
   background-color: var(--md-sys-color-surface-variant);
   color: var(--md-sys-color-on-surface-variant);
@@ -15,17 +20,31 @@
 }
 
 .c-card__image {
+  background-size: cover;
+  background-position: center center;
+}
+
+.c-card--horizontal .c-card__image {
   height: 100px;
   aspect-ratio: 1;
   border-top-left-radius: 12px;
   border-bottom-left-radius: 12px;
-  background-size: cover;
-  background-position: center center;
+}
+
+.c-card--vertical .c-card__image {
+  height: 100px;
+  width: 100%;
+  border-radius: 12px;
 }
 
 .c-card__content {
   flex: 1;
   padding: 16px;
+}
+
+.c-card__body {
+  margin-top: 16px;
+  margin-bottom: 16px;
 }
 
 .c-card__cover {

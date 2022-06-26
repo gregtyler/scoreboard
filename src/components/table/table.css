@@ -1,5 +1,5 @@
 .c-table__wrapper {
-  max-width: calc(100vw - 2 * 24px);
+  max-width: calc(100vw - 2 * 16px);
   border: 1px solid var(--md-sys-color-surface-variant);
   border-radius: 12px;
   overflow-x: auto;

@@ -20,6 +20,7 @@ const Modal = ({
   ...props
 }: Props) => {
   const container = useRef(document.createElement("div"));
+  const id = Math.random().toString(36).substring(2);
 
   useEffect(() => {
     document.body.appendChild(container.current);
@@ -30,18 +31,27 @@ const Modal = ({
 
   return createPortal(
     open ? (
-      <form>
+      <>
         <div className="c-modal__backdrop" onClick={onClose}></div>
-        <div className="c-modal" {...props}>
-          <div className="c-modal__content">
-            <h2 className="c-modal__title headline-small">{title}</h2>
-            {children}
-          </div>
-          <div className="c-modal__buttons">
-            {buttons || <Button onClick={onClose}>Close</Button>}
-          </div>
-        </div>
-      </form>
+        <dialog
+          className="c-modal"
+          aria-describedby={`${id}-label`}
+          open
+          {...props}
+        >
+          <form>
+            <div className="c-modal__content">
+              <h2 className="c-modal__title headline-small" id={`${id}-label`}>
+                {title}
+              </h2>
+              {children}
+            </div>
+            <div className="c-modal__buttons">
+              {buttons || <Button onClick={onClose}>Close</Button>}
+            </div>
+          </form>
+        </dialog>
+      </>
     ) : null,
     container.current
   );

@@ -7,17 +7,24 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
   buttons?: ReactNode;
   image?: string;
   linkTo?: string;
+  orientation?: "vertical" | "horizontal";
 }
 
 const Card = ({
   buttons,
-  image,
   children,
-  linkTo,
   className,
+  image,
+  linkTo,
+  orientation = "horizontal",
   ...props
 }: Props) => (
-  <div className={`c-card c-card--filled ${className ?? ""}`} {...props}>
+  <div
+    className={`c-card c-card--${orientation} c-card--filled ${
+      className ?? ""
+    }`}
+    {...props}
+  >
     {image && (
       <div
         style={{ backgroundImage: `url(${image})` }}
