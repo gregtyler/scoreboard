@@ -1,19 +1,16 @@
 import { HTMLAttributes } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+
 import Button from "../components/button/Button";
 import IconButton from "../components/button/IconButton";
-import Card from "../components/card/Card";
-import CardGrid from "../components/card/CardGrid";
 import Icon from "../components/Icon";
 import List from "../components/list/List";
 import ListItem from "../components/list/ListItem";
-import Modal from "../components/modal/Modal";
 import AppBar from "../components/navigation/AppBar";
 import Tab from "../components/tabs/Tab";
 import Tabs from "../components/tabs/Tabs";
 import { db, useLocations, usePlayers } from "../data/db";
-import EditPlayer from "./EditPlayer";
 import Page from "./Page";
 
 const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {

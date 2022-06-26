@@ -1,5 +1,6 @@
-import { HTMLAttributes } from "react";
 import "./list.css";
+
+import { HTMLAttributes } from "react";
 
 const List = ({
   children,

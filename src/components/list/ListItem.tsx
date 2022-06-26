@@ -1,5 +1,6 @@
-import { HTMLAttributes, ReactNode } from "react";
 import "./list.css";
+
+import { HTMLAttributes, ReactNode } from "react";
 
 interface Props extends HTMLAttributes<HTMLLIElement> {
   action?: ReactNode;

@@ -1,7 +1,9 @@
+import "./modal.css";
+
 import { HTMLAttributes, ReactNode, useEffect, useRef } from "react";
 import { createPortal } from "react-dom";
+
 import Button from "../button/Button";
-import "./modal.css";
 
 export interface Props extends HTMLAttributes<HTMLDivElement> {
   open: boolean;

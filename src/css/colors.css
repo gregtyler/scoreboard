@@ -233,6 +233,8 @@
   --md-sys-color-inverse-surface-dark: #e6e2d9;
   --md-sys-color-inverse-on-surface-dark: #1c1c16;
   --md-sys-color-shadow: #000000;
+
+  color-scheme: dark light;
 }
 @media (prefers-color-scheme: light) {
   .material-theme {

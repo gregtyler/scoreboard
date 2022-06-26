@@ -7,6 +7,7 @@ import DateTime from "../components/DateTime";
 import FullPageError from "../components/FullPageError";
 import Icon from "../components/Icon";
 import AddRoundModal from "../components/modal/AddRoundModal";
+import EditPlayersModal from "../components/modal/EditPlayersModal";
 import AppBar from "../components/navigation/AppBar";
 import ScoreTable from "../components/score-table/ScoreTable";
 import { db, useSession } from "../data/db";
@@ -19,8 +20,9 @@ const ViewSession = () => {
   }
 
   const navigate = useNavigate();
-  const [session] = useSession(id);
+  const [session, setSession] = useSession(id);
   const [addRoundModalOpen, setAddRoundModalOpen] = useState(false);
+  const [editPlayersModalOpen, setEditPlayersModalOpen] = useState(false);
 
   if (!session) return null;
 
@@ -34,6 +36,13 @@ const ViewSession = () => {
 
   const handleRemoveRound = (index: number) => {
     db.rounds.delete([session._id, index]);
+  };
+
+  const handleEditPlayers = (playerIds: string[]) => {
+    setSession({
+      ...session,
+      playerIds,
+    });
   };
 
   return (
@@ -82,15 +91,20 @@ const ViewSession = () => {
           open={addRoundModalOpen}
           onClose={() => setAddRoundModalOpen(false)}
           onSave={handleAddRound}
+          key={`add-round-${addRoundModalOpen}`}
         ></AddRoundModal>
+        <EditPlayersModal
+          open={editPlayersModalOpen}
+          onClose={() => setEditPlayersModalOpen(false)}
+          playerIds={session.playerIds}
+          onSave={handleEditPlayers}
+          key={`edit-players-${editPlayersModalOpen}`}
+        ></EditPlayersModal>
 
         <Chip onClick={() => setAddRoundModalOpen(true)} icon="add">
           Add round
         </Chip>
-        <Chip
-          onClick={() => navigate(`/sessions/${session._id}/edit`)}
-          icon="person"
-        >
+        <Chip onClick={() => setEditPlayersModalOpen(true)} icon="person">
           Edit players
         </Chip>
       </Page>
