@@ -1,5 +1,4 @@
 import { HTMLAttributes, ReactNode } from "react";
-import { Link } from "react-router-dom";
 import IconButton from "../button/IconButton";
 import "./navigation.css";
 
@@ -20,9 +19,7 @@ const AppBar = ({
   <div className={`c-app-bar ${className ?? ""}`} {...props}>
     <div className="c-app-bar__strip">
       {backTo && (
-        <Link to={backTo}>
-          <IconButton icon="arrow_back" type="button"></IconButton>
-        </Link>
+        <IconButton icon="arrow_back" type="button" to={backTo}></IconButton>
       )}
       {(variant === "center" || variant === "small") && (
         <h1

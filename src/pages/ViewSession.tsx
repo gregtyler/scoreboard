@@ -43,9 +43,7 @@ const ViewSession = () => {
         title={session.title}
         backTo="/"
         actions={
-          <Link to={`/sessions/${session._id}/edit`}>
-            <IconButton icon="edit"></IconButton>
-          </Link>
+          <IconButton icon="edit" to={`/sessions/${session._id}/edit`} />
         }
       ></AppBar>
       <Page>

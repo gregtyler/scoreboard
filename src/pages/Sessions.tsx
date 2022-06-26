@@ -28,11 +28,7 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
       <AppBar
         variant="center"
         title="Sessions"
-        actions={
-          <Link to="/sessions/new">
-            <IconButton icon="add"></IconButton>
-          </Link>
-        }
+        actions={<IconButton icon="add" to="/sessions/new"></IconButton>}
       ></AppBar>
       <Page>
         <CardGrid>
@@ -58,9 +54,10 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
                 image={game.image}
                 linkTo={`/sessions/${session._id}`}
                 buttons={
-                  <Link to={`/sessions/${session._id}/edit`}>
-                    <IconButton icon="edit"></IconButton>
-                  </Link>
+                  <IconButton
+                    icon="edit"
+                    to={`/sessions/${session._id}/edit`}
+                  ></IconButton>
                 }
               >
                 <div className="body-large">{session.title}</div>
@@ -79,9 +76,7 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
           })}
         </CardGrid>
 
-        <Link to="/sessions/new">
-          <FAB icon="group_add"></FAB>
-        </Link>
+        <FAB icon="group_add" to="/sessions/new"></FAB>
       </Page>
     </div>
   );

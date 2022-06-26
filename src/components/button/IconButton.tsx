@@ -1,9 +1,8 @@
-import { ButtonHTMLAttributes } from "react";
 import Icon from "../Icon";
-import Button from "./Button";
+import Button, { Props as ButtonProps } from "./Button";
 import "./button.css";
 
-interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
+export interface Props extends ButtonProps {
   icon: string;
 }
 

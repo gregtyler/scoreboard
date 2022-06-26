@@ -18,7 +18,6 @@ const Games = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
     await db.games.add({
       _id: id,
       name: "",
-      config: { scoreMode: "discrete" },
     });
     navigate(`/games/${id}`);
   }
@@ -37,9 +36,7 @@ const Games = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
               key={game._id}
               image={game.image}
               buttons={
-                <Link to={`/games/${game._id}`}>
-                  <IconButton icon="edit"></IconButton>
-                </Link>
+                <IconButton icon="edit" to={`/games/${game._id}`}></IconButton>
               }
             >
               <div className="body-large">{game.name}</div>

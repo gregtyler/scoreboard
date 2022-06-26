@@ -44,9 +44,10 @@ const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
             <Card
               key={player._id}
               buttons={
-                <Link to={`/players/${player._id}`}>
-                  <IconButton icon="edit"></IconButton>
-                </Link>
+                <IconButton
+                  icon="edit"
+                  to={`/players/${player._id}`}
+                ></IconButton>
               }
             >
               <div className="body-large">{player.name}</div>
@@ -65,9 +66,7 @@ const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
             <Card
               key={location._id}
               buttons={
-                <Link to={`/locations/${location._id}`}>
-                  <IconButton icon="edit"></IconButton>
-                </Link>
+                <IconButton icon="edit" to={`/locations/${location._id}`} />
               }
             >
               <div

@@ -147,9 +147,9 @@ const EditSession = () => {
           </Tabs>
           <ButtonStrip>
             <div>
-              <Link to="/">
-                <Button type="button">Cancel</Button>
-              </Link>
+              <Button type="button" to={`/sessions/${session._id}`}>
+                Cancel
+              </Button>
               <Button type="submit">Save</Button>
             </div>
           </ButtonStrip>

@@ -1,11 +1,6 @@
-import { HTMLAttributes } from "react";
-import IconButton from "./IconButton";
+import IconButton, { Props as IconButtonProps } from "./IconButton";
 
-interface Props extends HTMLAttributes<HTMLButtonElement> {
-  icon: string;
-}
-
-const FAB = ({ icon, onClick, ...props }: Props) => (
+const FAB = ({ icon, onClick, ...props }: IconButtonProps) => (
   <IconButton
     className="c-button--fab"
     icon={icon}
