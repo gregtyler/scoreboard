@@ -9,7 +9,7 @@ interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
 
 const Button = ({ icon, variant, className, children, ...props }: Props) => (
   <button
-    className={`c-button ${variant ? "c-button--" + variant : ""} ${
+    className={`c-button o-interactive ${variant ? "c-button--" + variant : ""} ${
       icon ? "c-button--with-icon" : ""
     } ${className ?? ""}`}
     {...props}

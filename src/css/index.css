@@ -47,3 +47,34 @@ option {
   font-family: var(--md-sys-typescale-body1-font), sans-serif;
   color: initial;
 }
+
+.o-interactive::after {
+  content: "";
+  border-radius: inherit;
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 100%;
+  z-index: -1;
+  opacity: 0;
+  background-color: var(--md-sys-color-on-surface);
+}
+
+.o-interactive.o-interactive--active::after, .o-interactive--active .o-interactive::after {
+  background-color: var(--md-sys-color-on-surface-variant);
+}
+
+.o-interactive.o-interactive--active, .o-interactive--active .o-interactive {
+  background-color: var(--md-sys-color-secondary-container);
+  color: var(--md-sys-color-on-secondary-container);
+}
+
+.o-interactive:hover::after {
+  opacity: var(--md-sys-state-hover-state-layer-opacity);
+}
+
+.o-interactive:active::after {
+  opacity: var(--md-sys-state-focus-state-layer-opacity);
+}
+

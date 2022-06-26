@@ -7,7 +7,7 @@ const NavigationTrayLink = ({ children, to, ...props }: LinkProps) => {
   return (
     <Link
       className={`c-navigation-tray__item ${
-        match ? "c-navigation-tray__item--active" : ""
+        match ? "o-interactive--active" : ""
       }`}
       to={to}
       {...props}

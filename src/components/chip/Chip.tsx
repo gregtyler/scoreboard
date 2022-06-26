@@ -8,7 +8,7 @@ interface Props extends HTMLAttributes<HTMLButtonElement> {
 
 const Chip = ({ children, icon, className, ...props }: Props) => (
   <button
-    className={`c-chip ${icon ? "c-chip--with-icon" : ""} ${className ?? ""}`}
+    className={`c-chip o-interactive ${icon ? "c-chip--with-icon" : ""} ${className ?? ""}`}
     {...props}
   >
     {icon && <Icon className="c-chip__icon">{icon}</Icon>}

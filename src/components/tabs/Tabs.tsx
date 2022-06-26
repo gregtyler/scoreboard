@@ -14,8 +14,8 @@ const Tabs = ({ children, tabs }: Props) => {
       <div className="c-tabs__container">
         {tabs.map((label, index) => (
           <div
-            className={`c-tabs__item ${
-              index === currentTab ? "c-tabs__item--active" : ""
+            className={`c-tabs__item o-interactive ${
+              index === currentTab ? "o-interactive--active" : ""
             }`}
             key={index}
             onClick={() => setCurrentTab(index)}
