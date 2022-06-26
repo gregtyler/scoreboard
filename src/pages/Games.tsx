@@ -1,6 +1,7 @@
 import { HTMLAttributes } from "react";
-import { Link, useNavigate } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import { v4 as uuidv4 } from "uuid";
+
 import IconButton from "../components/button/IconButton";
 import Card from "../components/card/Card";
 import CardGrid from "../components/card/CardGrid";

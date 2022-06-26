@@ -15,7 +15,9 @@ const RadioButton = ({ label, className, ...props }: Props) => {
         className={`c-radio ${className ?? ""}`}
         {...props}
       />{" "}
-      <label htmlFor={id} className="c-radio__label">{label}</label>
+      <label htmlFor={id} className="c-radio__label">
+        {label}
+      </label>
     </div>
   );
 };

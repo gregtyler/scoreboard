@@ -1,14 +1,14 @@
 import { HTMLAttributes } from "react";
+
 import FAB from "../components/button/FAB";
-import Page from "./Page";
-import AppBar from "../components/navigation/AppBar";
-import CardGrid from "../components/card/CardGrid";
-import Card from "../components/card/Card";
-import { Link } from "react-router-dom";
 import IconButton from "../components/button/IconButton";
-import { Session } from "../data/types";
+import Card from "../components/card/Card";
+import CardGrid from "../components/card/CardGrid";
 import DateTime from "../components/DateTime";
+import AppBar from "../components/navigation/AppBar";
 import { useGames, useSessions } from "../data/db";
+import { Session } from "../data/types";
+import Page from "./Page";
 
 const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
   const games = useGames();

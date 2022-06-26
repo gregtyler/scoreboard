@@ -1,6 +1,8 @@
-import { InputHTMLAttributes } from "react";
-import Icon from "../Icon";
 import "./form.css";
+
+import { InputHTMLAttributes } from "react";
+
+import Icon from "../Icon";
 
 interface Props extends InputHTMLAttributes<HTMLElement> {
   label: string;

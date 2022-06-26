@@ -1,6 +1,8 @@
-import { HTMLAttributes, ReactNode } from "react";
-import IconButton from "../button/IconButton";
 import "./navigation.css";
+
+import { HTMLAttributes, ReactNode } from "react";
+
+import IconButton from "../button/IconButton";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   variant: "center" | "small" | "medium" | "large";

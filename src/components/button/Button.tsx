@@ -1,7 +1,9 @@
+import "./button.css";
+
 import { ButtonHTMLAttributes, MouseEvent } from "react";
 import { useNavigate } from "react-router-dom";
+
 import Icon from "../Icon";
-import "./button.css";
 
 export interface Props extends ButtonHTMLAttributes<HTMLButtonElement> {
   icon?: string;

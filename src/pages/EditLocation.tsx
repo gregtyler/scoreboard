@@ -4,16 +4,17 @@ import {
   FormHTMLAttributes,
   MouseEvent,
   useEffect,
-  useState,
+  useState
 } from "react";
 import { useNavigate, useParams } from "react-router-dom";
+
 import Button from "../components/button/Button";
 import IconButton from "../components/button/IconButton";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
 import AppBar from "../components/navigation/AppBar";
-import { db, useLocation } from "../data/db";
 import icons from "../data/_icons";
+import { db, useLocation } from "../data/db";
 import Page from "./Page";
 
 const EditLocation = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {

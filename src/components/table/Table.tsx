@@ -1,5 +1,6 @@
-import { TableHTMLAttributes } from "react";
 import "./table.css";
+
+import { TableHTMLAttributes } from "react";
 
 const Table = ({
   className,

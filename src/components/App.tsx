@@ -1,15 +1,16 @@
 import { Route, Routes } from "react-router-dom";
-import NavigationTray from "./navigation/NavigationTray";
-import Games from "../pages/Games";
-import Sessions from "../pages/Sessions";
+
+import CreateSession from "../pages/CreateSession";
 import Database from "../pages/Database";
 import EditGame from "../pages/EditGame";
-import FullPageError from "./FullPageError";
-import EditPlayer from "../pages/EditPlayer";
 import EditLocation from "../pages/EditLocation";
-import CreateSession from "../pages/CreateSession";
-import ViewSession from "../pages/ViewSession";
+import EditPlayer from "../pages/EditPlayer";
 import EditSession from "../pages/EditSession";
+import Games from "../pages/Games";
+import Sessions from "../pages/Sessions";
+import ViewSession from "../pages/ViewSession";
+import FullPageError from "./FullPageError";
+import NavigationTray from "./navigation/NavigationTray";
 
 const App = () => {
   return (

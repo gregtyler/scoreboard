@@ -1,6 +1,7 @@
+import "./button.css";
+
 import Icon from "../Icon";
 import Button, { Props as ButtonProps } from "./Button";
-import "./button.css";
 
 export interface Props extends ButtonProps {
   icon: string;

@@ -1,6 +1,7 @@
+import "./card.css";
+
 import { HTMLAttributes, ReactNode } from "react";
 import { Link } from "react-router-dom";
-import "./card.css";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   buttons?: ReactNode;

@@ -1,6 +1,7 @@
+import "./navigation.css";
+
 import Icon from "../Icon";
 import NavigationTrayLink from "./NavigationTrayLink";
-import "./navigation.css";
 
 const NavigationTray = () => {
   return (

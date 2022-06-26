@@ -1,5 +1,6 @@
-import { Children, ReactNode, useState } from "react";
 import "./tabs.css";
+
+import { Children, ReactNode, useState } from "react";
 
 interface Props {
   tabs: string[];

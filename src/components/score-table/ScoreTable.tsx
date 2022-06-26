@@ -1,4 +1,5 @@
 import { TableHTMLAttributes } from "react";
+
 import { Player, Round } from "../../data/types";
 import IconButton from "../button/IconButton";
 import Table from "../table/Table";

@@ -1,5 +1,6 @@
-import { HTMLAttributes, ReactNode } from "react";
 import "./card.css";
+
+import { HTMLAttributes, ReactNode } from "react";
 
 const CardGrid = ({
   children,
