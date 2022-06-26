@@ -6,8 +6,14 @@ import IconButton from "../components/button/IconButton";
 import Card from "../components/card/Card";
 import CardGrid from "../components/card/CardGrid";
 import Icon from "../components/Icon";
+import List from "../components/list/List";
+import ListItem from "../components/list/ListItem";
+import Modal from "../components/modal/Modal";
 import AppBar from "../components/navigation/AppBar";
+import Tab from "../components/tabs/Tab";
+import Tabs from "../components/tabs/Tabs";
 import { db, useLocations, usePlayers } from "../data/db";
+import EditPlayer from "./EditPlayer";
 import Page from "./Page";
 
 const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
@@ -38,52 +44,48 @@ const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
     <div {...props}>
       <AppBar variant="center" title="Database"></AppBar>
       <Page>
-        <h2 className="headline-small">Players</h2>
-        <CardGrid>
-          {players.map((player) => (
-            <Card
-              key={player._id}
-              buttons={
-                <IconButton
-                  icon="edit"
-                  to={`/players/${player._id}`}
-                ></IconButton>
-              }
-            >
-              <div className="body-large">{player.name}</div>
-            </Card>
-          ))}
-        </CardGrid>
-        <div style={{ textAlign: "center" }}>
-          <Button icon="add" onClick={addPlayer}>
-            Add new player
-          </Button>
-        </div>
-
-        <h2 className="headline-small">Locations</h2>
-        <CardGrid>
-          {locations.map((location) => (
-            <Card
-              key={location._id}
-              buttons={
-                <IconButton icon="edit" to={`/locations/${location._id}`} />
-              }
-            >
-              <div
-                className="body-large"
-                style={{ display: "flex", alignItems: "center" }}
-              >
-                {location.icon && <Icon>{location.icon}</Icon>}&nbsp;
-                {location.name}
-              </div>
-            </Card>
-          ))}
-        </CardGrid>
-        <div style={{ textAlign: "center" }}>
-          <Button icon="add" onClick={addLocation}>
-            Add new location
-          </Button>
-        </div>
+        <Tabs tabs={["Players", "Locations"]}>
+          <Tab>
+            <List>
+              {players.map((player) => (
+                <ListItem
+                  key={player._id}
+                  avatar={player.name.substring(0, 1)}
+                  action={
+                    <IconButton icon="edit" to={`/players/${player._id}`} />
+                  }
+                >
+                  {player.name}
+                </ListItem>
+              ))}
+            </List>
+            <div style={{ textAlign: "center" }}>
+              <Button icon="add" onClick={addPlayer}>
+                Add new player
+              </Button>
+            </div>
+          </Tab>
+          <Tab>
+            <List>
+              {locations.map((location) => (
+                <ListItem
+                  key={location._id}
+                  avatar={location.icon ? <Icon>{location.icon}</Icon> : ""}
+                  action={
+                    <IconButton icon="edit" to={`/locations/${location._id}`} />
+                  }
+                >
+                  {location.name}
+                </ListItem>
+              ))}
+            </List>
+            <div style={{ textAlign: "center" }}>
+              <Button icon="add" onClick={addLocation}>
+                Add new location
+              </Button>
+            </div>
+          </Tab>
+        </Tabs>
       </Page>
     </div>
   );

@@ -9,8 +9,6 @@ import {
 import { useNavigate, useParams } from "react-router-dom";
 import Button from "../components/button/Button";
 import IconButton from "../components/button/IconButton";
-import Divider from "../components/Divider";
-import RadioButton from "../components/form/RadioButton";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
 import AppBar from "../components/navigation/AppBar";
@@ -85,8 +83,6 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
               setImage(e.target.value)
             }
           ></TextField>
-
-          <Divider />
 
           <div style={{ textAlign: "right" }}>
             <Button variant="filled" type="submit">

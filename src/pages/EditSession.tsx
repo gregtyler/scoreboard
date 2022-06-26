@@ -8,6 +8,8 @@ import ButtonStrip from "../components/form/ButtonStrip";
 import DateField from "../components/form/DateField";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
+import List from "../components/list/List";
+import ListItem from "../components/list/ListItem";
 import AppBar from "../components/navigation/AppBar";
 import Tab from "../components/tabs/Tab";
 import Tabs from "../components/tabs/Tabs";
@@ -121,19 +123,22 @@ const EditSession = () => {
               ></DateField>
             </Tab>
             <Tab>
-              {players.map((player) => (
-                <p
-                  key={player._id}
-                  style={{ display: "flex", alignItems: "center" }}
-                >
-                  <span style={{ flex: 1 }}>{player.name}</span>
-                  <IconButton
-                    onClick={() => handleRemovePlayer(player._id)}
-                    icon="delete"
-                  />
-                </p>
-              ))}
-              <Divider />
+              <List>
+                {players.map((player) => (
+                  <ListItem
+                    key={player._id}
+                    avatar={player.name.substring(0, 1)}
+                    action={
+                      <IconButton
+                        onClick={() => handleRemovePlayer(player._id)}
+                        icon="delete"
+                      />
+                    }
+                  >
+                    <span style={{ flex: 1 }}>{player.name}</span>
+                  </ListItem>
+                ))}
+              </List>
 
               <TextField
                 label="Select player"
