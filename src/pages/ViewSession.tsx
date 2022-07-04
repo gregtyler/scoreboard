@@ -21,7 +21,6 @@ const ViewSession = () => {
     return <FullPageError title="Game not found"></FullPageError>;
   }
 
-  const navigate = useNavigate();
   const [session, setSession] = useSession(id);
   const [addRoundModalOpen, setAddRoundModalOpen] = useState(false);
   const [editPlayersModalOpen, setEditPlayersModalOpen] = useState(false);
@@ -66,8 +65,7 @@ const ViewSession = () => {
               <Icon style={{ verticalAlign: "middle" }}>
                 {session.location.icon}
               </Icon>{" "}
-              {session.location.name}
-              <span style={{ opacity: 0.6 }}>on</span>{" "}
+              {session.location.name} <span style={{ opacity: 0.6 }}>on</span>{" "}
               <DateTime
                 dateStyle="long"
                 timeStyle="short"

@@ -39,6 +39,7 @@ a {
 }
 
 .o-canvas {
+  margin-bottom: 96px;
   padding-left: 16px;
   padding-right: 16px;
 }
@@ -61,11 +62,13 @@ option {
   background-color: var(--md-sys-color-on-surface);
 }
 
-.o-interactive.o-interactive--active::after, .o-interactive--active .o-interactive::after {
+.o-interactive.o-interactive--active::after,
+.o-interactive--active .o-interactive::after {
   background-color: var(--md-sys-color-on-surface-variant);
 }
 
-.o-interactive.o-interactive--active, .o-interactive--active .o-interactive {
+.o-interactive.o-interactive--active,
+.o-interactive--active .o-interactive {
   background-color: var(--md-sys-color-secondary-container);
   color: var(--md-sys-color-on-secondary-container);
 }
@@ -77,4 +80,3 @@ option {
 .o-interactive:active::after {
   opacity: var(--md-sys-state-focus-state-layer-opacity);
 }
-
