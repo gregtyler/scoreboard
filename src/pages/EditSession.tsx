@@ -53,9 +53,9 @@ const EditSession = () => {
     navigate(`/sessions/${session._id}`);
   };
 
-  const handleDelete = () => {
+  const handleDelete = async () => {
     if (confirm("Are you sure you want to delete this session?")) {
-      deleteSession();
+      await deleteSession();
       navigate("/");
     }
   };

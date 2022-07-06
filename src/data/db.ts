@@ -156,8 +156,22 @@ export function useSession(
     db.sessions.put(data, id);
   }
 
-  function deleteSession() {
-    db.sessions.delete(id);
+  async function deleteSession() {
+    if (session) {
+      const scores = await db.scores.where({ sessionId: id }).toArray();
+
+      db.scores.bulkDelete(
+        scores.map((score) => [
+          score.sessionId,
+          score.roundIndex,
+          score.playerId,
+        ])
+      );
+      db.rounds.bulkDelete(
+        session.rounds.map((round) => [round.sessionId, round.index])
+      );
+      db.sessions.delete(id);
+    }
   }
 
   return [session, setSession, deleteSession];
