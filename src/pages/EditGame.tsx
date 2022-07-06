@@ -34,7 +34,7 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [scoreMode, setScoreMode] = useState<ScoreMode>(ScoreMode.Custom);
-  const [rounds, setRounds] = useState<{ label: string }[]>([]);
+  const [rounds, setRounds] = useState<{ label: string; colour: string }[]>([]);
 
   const [addRoundModalOpen, setAddRoundModalOpen] = useState(false);
   const [editRoundActive, setEditRoundActive] = useState(-1);
@@ -54,14 +54,16 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
 
   if (!game) return null;
 
-  const setRoundLabel = (index: number, label: string) => {
+  const setRound = (index: number, label: string, colour: string) => {
     setRounds(
-      rounds.map((round, i) => (i === index ? { ...round, label } : round))
+      rounds.map((round, i) =>
+        i === index ? { ...round, label, colour } : round
+      )
     );
   };
 
-  const addRound = (label: string) => {
-    setRounds([...rounds, { label }]);
+  const addRound = (label: string, colour: string) => {
+    setRounds([...rounds, { label, colour }]);
   };
 
   const removeRound = (index: number) => {
@@ -137,31 +139,29 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
             }}
           ></TextField>
 
-          <Divider />
-
           <h2 className="title-large">Rounds</h2>
 
           <EditRoundModal
             label={rounds[editRoundActive]?.label}
+            colour={rounds[editRoundActive]?.colour}
             open={editRoundActive !== -1}
             onClose={() => setEditRoundActive(-1)}
-            onSave={(label) => setRoundLabel(editRoundActive, label)}
+            onSave={(label, colour) => setRound(editRoundActive, label, colour)}
             key={`edit-round-${editRoundActive}`}
           ></EditRoundModal>
           <List>
             {rounds.map((round, index) => (
               <ListItem
                 key={index}
+                avatarColor={round.colour}
                 action={
                   <>
                     <IconButton
                       icon="edit"
-                      type="button"
                       onClick={() => setEditRoundActive(index)}
                     />
                     <IconButton
                       icon="delete"
-                      type="button"
                       onClick={() => removeRound(index)}
                     />
                   </>
@@ -175,14 +175,13 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
           <AddRoundModal
             open={addRoundModalOpen}
             onClose={() => setAddRoundModalOpen(false)}
-            onSave={(label) => addRound(label)}
+            onSave={addRound}
             key={`add-round-${addRoundModalOpen}`}
           ></AddRoundModal>
           <Button
             variant="outlined"
             onClick={() => setAddRoundModalOpen(true)}
             icon="add"
-            type="button"
           >
             Add
           </Button>

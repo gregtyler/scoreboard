@@ -88,9 +88,7 @@ const CreateSession = () => {
 
           <ButtonStrip>
             <div>
-              <Button type="button" to="/">
-                Cancel
-              </Button>
+              <Button to="/">Cancel</Button>
               <Button type="submit">Save</Button>
             </div>
           </ButtonStrip>

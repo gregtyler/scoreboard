@@ -12,6 +12,7 @@ import Button from "../components/button/Button";
 import IconButton from "../components/button/IconButton";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
+import Icon from "../components/Icon";
 import AppBar from "../components/navigation/AppBar";
 import icons from "../data/_icons";
 import { db, useLocation } from "../data/db";
@@ -89,7 +90,7 @@ const EditLocation = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
             label="Icon"
             value={icon}
             options={icons.map((x) => [x, x])}
-            leadIcon={icons.includes(icon ?? "") ? icon : ""}
+            prefix={icons.includes(icon ?? "") ? <Icon>{icon}</Icon> : ""}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setIcon(e.target.value)
             }

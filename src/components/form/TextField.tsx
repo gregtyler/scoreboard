@@ -1,12 +1,11 @@
 import "./form.css";
 
-import { InputHTMLAttributes } from "react";
-
-import Icon from "../Icon";
+import { InputHTMLAttributes, ReactNode } from "react";
 
 interface Props extends InputHTMLAttributes<HTMLElement> {
   label: string;
-  leadIcon?: string;
+  prefix?: ReactNode;
+  suffix?: ReactNode;
   supportText?: string;
   options?: [string, string][];
   backgroundColor?: string;
@@ -15,7 +14,8 @@ interface Props extends InputHTMLAttributes<HTMLElement> {
 const TextField = ({
   className,
   label,
-  leadIcon,
+  prefix,
+  suffix,
   value,
   supportText,
   options,
@@ -40,7 +40,7 @@ const TextField = ({
         >
           {label}
         </span>
-        {leadIcon && <Icon>{leadIcon}</Icon>}
+        {prefix}
         {options ? (
           <select
             id={id}
@@ -71,6 +71,7 @@ const TextField = ({
             {...props}
           />
         )}
+        {suffix}
       </label>
       <div className="c-text-field__support-text">{supportText}</div>
     </div>

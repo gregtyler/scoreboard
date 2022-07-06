@@ -20,9 +20,7 @@ const AppBar = ({
 }: Props) => (
   <div className={`c-app-bar ${className ?? ""}`} {...props}>
     <div className="c-app-bar__strip">
-      {backTo && (
-        <IconButton icon="arrow_back" type="button" to={backTo}></IconButton>
-      )}
+      {backTo && <IconButton icon="arrow_back" to={backTo}></IconButton>}
       {(variant === "center" || variant === "small") && (
         <h1
           className={`c-app-bar__title ${

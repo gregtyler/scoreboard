@@ -18,6 +18,7 @@ const Button = ({
   children,
   onClick,
   to,
+  type = "button",
   ...props
 }: Props) => {
   const navigate = useNavigate();
@@ -33,6 +34,7 @@ const Button = ({
       className={`c-button o-interactive ${
         variant ? "c-button--" + variant : ""
       } ${icon ? "c-button--with-icon" : ""} ${className ?? ""}`}
+      type={type}
       onClick={handleClick}
       {...props}
     >

@@ -103,9 +103,7 @@ const EditSession = () => {
           ></DateField>
           <ButtonStrip>
             <div>
-              <Button type="button" to={`/sessions/${session._id}`}>
-                Cancel
-              </Button>
+              <Button to={`/sessions/${session._id}`}>Cancel</Button>
               <Button type="submit">Save</Button>
             </div>
           </ButtonStrip>
