@@ -7,7 +7,7 @@ import DateField from "../components/form/DateField";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
 import AppBar from "../components/navigation/AppBar";
-import { useGames, useLocations, useSession } from "../data/db";
+import { useGames, useLocations, useSession, useSessions } from "../data/db";
 import Page from "./Page";
 
 const EditSession = () => {
@@ -27,7 +27,7 @@ const EditSession = () => {
   const [locationId, setLocationId] = useState("");
   const [gameId, setGameId] = useState("");
 
-  const [session, setSession] = useSession(id);
+  const [session, setSession, deleteSession] = useSession(id);
   useEffect(() => {
     if (session) {
       setTitle(session.title);
@@ -51,6 +51,13 @@ const EditSession = () => {
     });
 
     navigate(`/sessions/${session._id}`);
+  };
+
+  const handleDelete = () => {
+    if (confirm("Are you sure you want to delete this session?")) {
+      deleteSession();
+      navigate("/");
+    }
   };
 
   return (
@@ -104,6 +111,12 @@ const EditSession = () => {
           <ButtonStrip>
             <div>
               <Button to={`/sessions/${session._id}`}>Cancel</Button>
+              <Button
+                style={{ color: "var(--md-sys-color-error)" }}
+                onClick={handleDelete}
+              >
+                Delete
+              </Button>
               <Button type="submit">Save</Button>
             </div>
           </ButtonStrip>

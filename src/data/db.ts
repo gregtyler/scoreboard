@@ -115,7 +115,7 @@ export function useSessions(): SessionWithRelations[] {
 }
 export function useSession(
   id: string
-): [SessionWithRelations | undefined, (session: Session) => void] {
+): [SessionWithRelations | undefined, (session: Session) => void, () => void] {
   const session = useLiveQuery(async () => {
     const sess = await db.sessions.get(id);
     if (typeof sess === "undefined") throw new Error("Session not found");
@@ -156,5 +156,9 @@ export function useSession(
     db.sessions.put(data, id);
   }
 
-  return [session, setSession];
+  function deleteSession() {
+    db.sessions.delete(id);
+  }
+
+  return [session, setSession, deleteSession];
 }
