@@ -54,6 +54,7 @@ export type Round = {
   sessionId: string;
   index: number;
   label?: string;
+  colour?: string;
 };
 
 export type Score = {

@@ -2,6 +2,8 @@ import "./list.css";
 
 import { HTMLAttributes, ReactNode } from "react";
 
+import Avatar from "../avatar/Avatar";
+
 interface Props extends HTMLAttributes<HTMLLIElement> {
   action?: ReactNode;
   avatar?: ReactNode;
@@ -18,12 +20,7 @@ const ListItem = ({
 }: Props) => (
   <li className={`c-list__item ${className ?? ""}`} {...props}>
     {(avatar || avatarColor) && (
-      <span
-        className="c-list__item-avatar"
-        style={avatarColor ? { backgroundColor: avatarColor } : {}}
-      >
-        {avatar}
-      </span>
+      <Avatar colour={avatarColor ?? ""}>{avatar}</Avatar>
     )}
     <span className="c-list__item-body">{children}</span>
     {action ?? ""}

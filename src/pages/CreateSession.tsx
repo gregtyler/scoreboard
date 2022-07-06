@@ -41,6 +41,7 @@ const CreateSession = () => {
         sessionId: _id,
         index: index,
         label: round.label,
+        colour: round.colour,
       });
     });
 

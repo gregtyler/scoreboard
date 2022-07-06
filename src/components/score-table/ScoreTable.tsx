@@ -1,6 +1,7 @@
 import { TableHTMLAttributes } from "react";
 
 import { Player, Round } from "../../data/types";
+import Avatar from "../avatar/Avatar";
 import IconButton from "../button/IconButton";
 import Table from "../table/Table";
 import ScoreTableCell from "./ScoreTableCell";
@@ -36,11 +37,17 @@ const ScoreTable = ({
               style={{
                 display: "flex",
                 alignItems: "center",
-                fontSize: "var(--md-sys-typescale-caption-size)",
+                // fontSize: "var(--md-sys-typescale-caption-size)",
               }}
             >
+              {round.colour && <Avatar colour={round.colour}></Avatar>}
               {round.label ?? ""}
-              <IconButton icon="delete" onClick={() => onRemoveRound(index)} />
+              {editable && (
+                <IconButton
+                  icon="delete"
+                  onClick={() => onRemoveRound(index)}
+                />
+              )}
             </div>
           </th>
           {players.map((player) => (
