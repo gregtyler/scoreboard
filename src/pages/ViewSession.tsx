@@ -1,11 +1,10 @@
 import { useState } from "react";
-import { Link, useNavigate, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 import IconButton from "../components/button/IconButton";
 import Card from "../components/card/Card";
 import Chip from "../components/chip/Chip";
 import DateTime from "../components/DateTime";
-import Divider from "../components/Divider";
 import FullPageError from "../components/FullPageError";
 import Icon from "../components/Icon";
 import AddRoundModal from "../components/modal/AddRoundModal";

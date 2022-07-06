@@ -1,5 +1,6 @@
-import Dexie, { Table } from "dexie";
+import Dexie, { Table, Transaction } from "dexie";
 import { useLiveQuery } from "dexie-react-hooks";
+
 import {
   Game,
   Location,
@@ -7,7 +8,7 @@ import {
   Round,
   Score,
   Session,
-  SessionWithRelations,
+  SessionWithRelations
 } from "./types";
 
 export class MySubClassedDexie extends Dexie {

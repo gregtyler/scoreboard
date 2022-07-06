@@ -5,16 +5,19 @@ export type State = {
   sessions: Session[];
 };
 
-export type Reference = {
-  _id: string;
-};
+export enum ScoreMode {
+  Highest = "HIGHEST",
+  Lowest = "LOWEST",
+  Custom = "CUSTOM",
+}
 
 export type Game = {
   _id: string;
   name: string;
   image?: string;
   template?: {
-    rounds: { label: string }[];
+    scoreMode: ScoreMode;
+    rounds: { label: string; colour?: string }[];
   };
 };
 

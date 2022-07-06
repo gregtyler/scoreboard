@@ -2,5 +2,5 @@
 
 ## To do
 
-- Redesign session view
-- Templates
+- Round template editor
+- Separate design for viewing a session and editing scores
