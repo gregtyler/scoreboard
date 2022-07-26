@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import IconButton from "../components/button/IconButton";
 import Card from "../components/card/Card";
@@ -15,6 +15,7 @@ import { db, useSession } from "../data/db";
 import Page from "./Page";
 
 const ViewSession = () => {
+  const navigate = useNavigate();
   const { id } = useParams();
   if (typeof id !== "string") {
     return <FullPageError title="Game not found"></FullPageError>;
@@ -79,14 +80,21 @@ const ViewSession = () => {
             <Chip onClick={() => setEditPlayersModalOpen(true)} icon="person">
               Edit players
             </Chip>
+            <Chip
+              onClick={() => navigate(`/sessions/${session._id}/scores`)}
+              icon="scoreboard"
+            >
+              Edit scores
+            </Chip>
           </div>
         </Card>
 
         <ScoreTable
           rounds={session.rounds}
           players={session.players}
-          editable
+          scoreMode={session.game.scoreMode}
           onRemoveRound={handleRemoveRound}
+          editable
         ></ScoreTable>
 
         <AddRoundModal

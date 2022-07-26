@@ -21,12 +21,16 @@ const ScoreTableCell = ({ round, playerId, editable }: Props) => {
   );
 
   const handleScoreChange = (e: ChangeEvent<HTMLInputElement>) => {
-    db.scores.put({
-      sessionId: round.sessionId,
-      roundIndex: round.index,
-      playerId: playerId,
-      value: parseFloat(e.target.value),
-    });
+    if (e.target.value) {
+      db.scores.put({
+        sessionId: round.sessionId,
+        roundIndex: round.index,
+        playerId: playerId,
+        value: parseFloat(e.target.value),
+      });
+    } else {
+      db.scores.delete([round.sessionId, round.index, playerId]);
+    }
   };
 
   return editable ? (

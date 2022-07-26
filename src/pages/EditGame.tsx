@@ -10,7 +10,6 @@ import { useNavigate, useParams } from "react-router-dom";
 
 import Button from "../components/button/Button";
 import IconButton from "../components/button/IconButton";
-import Divider from "../components/Divider";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
 import List from "../components/list/List";
@@ -44,9 +43,9 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
     if (game) {
       setName(game.name);
       setImage(game.image ?? "");
+      setScoreMode(game.scoreMode ?? ScoreMode.Custom);
 
       if (game.template) {
-        setScoreMode(game.template.scoreMode ?? ScoreMode.Custom);
         setRounds(game.template.rounds ?? []);
       }
     }
@@ -78,9 +77,9 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
         ...game,
         name,
         image,
+        scoreMode,
         template: {
           ...game.template,
-          scoreMode,
           rounds,
         },
       });

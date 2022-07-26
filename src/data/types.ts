@@ -15,8 +15,8 @@ export type Game = {
   _id: string;
   name: string;
   image?: string;
+  scoreMode: ScoreMode;
   template?: {
-    scoreMode: ScoreMode;
     rounds: { label: string; colour: string }[];
   };
 };

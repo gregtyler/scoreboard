@@ -7,6 +7,7 @@ import Card from "../components/card/Card";
 import CardGrid from "../components/card/CardGrid";
 import AppBar from "../components/navigation/AppBar";
 import { db, useGames, useSessions } from "../data/db";
+import { ScoreMode } from "../data/types";
 import Page from "./Page";
 
 interface PlaysMap {
@@ -25,6 +26,7 @@ const Games = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
     await db.games.add({
       _id: id,
       name: "",
+      scoreMode: ScoreMode.Highest,
     });
     navigate(`/games/${id}`);
   }

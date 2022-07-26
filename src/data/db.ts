@@ -1,5 +1,6 @@
-import Dexie, { Table, Transaction } from "dexie";
+import Dexie, { Table } from "dexie";
 import { useLiveQuery } from "dexie-react-hooks";
+import { useMemo } from "react";
 
 import {
   Game,
@@ -175,4 +176,30 @@ export function useSession(
   }
 
   return [session, setSession, deleteSession];
+}
+
+type ScoreMap = { [playerId: string]: number };
+
+export function useTotalScores(sessionId: string): ScoreMap {
+  const scores = useLiveQuery(() =>
+    db.scores
+      .where({
+        sessionId: sessionId,
+      })
+      .toArray()
+  );
+
+  const totals = useMemo(
+    () =>
+      scores?.reduce((sums, score) => {
+        if (!sums[score.playerId]) sums[score.playerId] = 0;
+
+        sums[score.playerId] += score.value;
+
+        return sums;
+      }, {} as ScoreMap),
+    [scores]
+  );
+
+  return totals ?? {};
 }
