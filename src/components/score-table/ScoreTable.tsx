@@ -1,29 +1,27 @@
 import { TableHTMLAttributes } from "react";
 
 import { useTotalScores } from "../../data/db";
-import { Player, Round, ScoreMode } from "../../data/types";
+import { Round, ScoreMode, SessionWithRelations } from "../../data/types";
 import Avatar from "../avatar/Avatar";
 import IconButton from "../button/IconButton";
 import Table from "../table/Table";
 import ScoreTableCell from "./ScoreTableCell";
 
 interface Props extends TableHTMLAttributes<HTMLTableElement> {
-  rounds: Round[];
-  players: Player[];
+  session: SessionWithRelations;
   editable?: boolean;
-  scoreMode?: ScoreMode;
-  onRemoveRound: (index: number) => void;
+  onRemoveRound?: (index: number) => void;
 }
 
 const ScoreTable = ({
-  rounds,
-  players,
+  session,
   editable = false,
-  scoreMode,
-  onRemoveRound,
+  onRemoveRound = () => {},
   ...props
 }: Props) => {
-  const totalScores = useTotalScores(rounds[0].sessionId);
+  const totalScores = useTotalScores(session._id);
+
+  const { scoreMode } = session.game;
 
   let winner: string | null = null;
   if (scoreMode === ScoreMode.Highest) {
@@ -42,6 +40,8 @@ const ScoreTable = ({
         lowScore = score;
       }
     });
+  } else if (scoreMode === ScoreMode.Custom) {
+    winner = session.customWinner ?? null;
   }
 
   return (
@@ -49,7 +49,7 @@ const ScoreTable = ({
       <thead>
         <tr>
           <th></th>
-          {players.map((player) => (
+          {session.players.map((player) => (
             <th key={player._id}>
               {winner === player._id && "👑"} {player.name}
             </th>
@@ -57,14 +57,14 @@ const ScoreTable = ({
         </tr>
       </thead>
       <tbody>
-        {rounds.map((round, index) => (
+        {session.rounds.map((round, index) => (
           <tr key={index}>
             <th>
               <div
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  // fontSize: "var(--md-sys-typescale-caption-size)",
+                  fontSize: "var(--md-sys-typescale-caption-size)",
                 }}
               >
                 {round.colour && <Avatar colour={round.colour}></Avatar>}
@@ -72,12 +72,16 @@ const ScoreTable = ({
                 {editable && (
                   <IconButton
                     icon="delete"
-                    onClick={() => onRemoveRound(index)}
+                    onClick={() =>
+                      confirm(
+                        `Are you sure you want to remove ${round.label}?`
+                      ) && onRemoveRound(index)
+                    }
                   />
                 )}
               </div>
             </th>
-            {players.map((player) => (
+            {session.players.map((player) => (
               <ScoreTableCell
                 key={player._id}
                 round={round}
@@ -92,7 +96,7 @@ const ScoreTable = ({
         <tfoot>
           <tr>
             <th>Total</th>
-            {players.map((player) => (
+            {session.players.map((player) => (
               <td key={player._id}>
                 <strong>{totalScores[player._id]}</strong>
               </td>

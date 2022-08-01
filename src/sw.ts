@@ -7,6 +7,7 @@ self.addEventListener("install", function (e) {
         "/",
         "/index.html",
         "/index.js",
+        "/index.css",
         "/images/favicon.png",
         "/images/favicon-144.png",
         "/images/favicon-192.png",

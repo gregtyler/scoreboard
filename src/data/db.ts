@@ -149,6 +149,7 @@ export function useSession(
       gameId: newSession.gameId,
       locationId: newSession.locationId,
       playerIds: newSession.playerIds,
+      customWinner: newSession.customWinner,
     };
 
     if (newSession.end) data.end = newSession.end;

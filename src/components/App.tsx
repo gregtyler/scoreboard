@@ -6,6 +6,7 @@ import EditGame from "../pages/EditGame";
 import EditLocation from "../pages/EditLocation";
 import EditPlayer from "../pages/EditPlayer";
 import EditSession from "../pages/EditSession";
+import EditSessionScores from "../pages/EditSessionScores";
 import Games from "../pages/Games";
 import Sessions from "../pages/Sessions";
 import ViewSession from "../pages/ViewSession";
@@ -27,6 +28,10 @@ const App = () => {
         <Route
           path="/sessions/:id/edit"
           element={<EditSession></EditSession>}
+        />
+        <Route
+          path="/sessions/:id/scores"
+          element={<EditSessionScores></EditSessionScores>}
         />
         <Route
           path="*"

@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import IconButton from "../components/button/IconButton";
@@ -7,11 +6,9 @@ import Chip from "../components/chip/Chip";
 import DateTime from "../components/DateTime";
 import FullPageError from "../components/FullPageError";
 import Icon from "../components/Icon";
-import AddRoundModal from "../components/modal/AddRoundModal";
-import EditPlayersModal from "../components/modal/EditPlayersModal";
 import AppBar from "../components/navigation/AppBar";
 import ScoreTable from "../components/score-table/ScoreTable";
-import { db, useSession } from "../data/db";
+import { useSession } from "../data/db";
 import Page from "./Page";
 
 const ViewSession = () => {
@@ -21,30 +18,9 @@ const ViewSession = () => {
     return <FullPageError title="Game not found"></FullPageError>;
   }
 
-  const [session, setSession] = useSession(id);
-  const [addRoundModalOpen, setAddRoundModalOpen] = useState(false);
-  const [editPlayersModalOpen, setEditPlayersModalOpen] = useState(false);
+  const [session] = useSession(id);
 
   if (!session) return null;
-
-  const handleAddRound = (label: string) => {
-    db.rounds.add({
-      sessionId: id,
-      index: session.rounds.length,
-      label,
-    });
-  };
-
-  const handleRemoveRound = (index: number) => {
-    db.rounds.delete([session._id, index]);
-  };
-
-  const handleEditPlayers = (playerIds: string[]) => {
-    setSession({
-      ...session,
-      playerIds,
-    });
-  };
 
   return (
     <div>
@@ -74,12 +50,6 @@ const ViewSession = () => {
             </div>
           )}
           <div>
-            <Chip onClick={() => setAddRoundModalOpen(true)} icon="add">
-              Add round
-            </Chip>
-            <Chip onClick={() => setEditPlayersModalOpen(true)} icon="person">
-              Edit players
-            </Chip>
             <Chip
               onClick={() => navigate(`/sessions/${session._id}/scores`)}
               icon="scoreboard"
@@ -89,27 +59,7 @@ const ViewSession = () => {
           </div>
         </Card>
 
-        <ScoreTable
-          rounds={session.rounds}
-          players={session.players}
-          scoreMode={session.game.scoreMode}
-          onRemoveRound={handleRemoveRound}
-          editable
-        ></ScoreTable>
-
-        <AddRoundModal
-          open={addRoundModalOpen}
-          onClose={() => setAddRoundModalOpen(false)}
-          onSave={handleAddRound}
-          key={`add-round-${addRoundModalOpen}`}
-        ></AddRoundModal>
-        <EditPlayersModal
-          open={editPlayersModalOpen}
-          onClose={() => setEditPlayersModalOpen(false)}
-          playerIds={session.playerIds}
-          onSave={handleEditPlayers}
-          key={`edit-players-${editPlayersModalOpen}`}
-        ></EditPlayersModal>
+        <ScoreTable session={session}></ScoreTable>
       </Page>
     </div>
   );

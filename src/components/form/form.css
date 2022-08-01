@@ -67,11 +67,14 @@
 }
 
 .c-button-strip {
-  text-align: right;
+  display: flex;
+  justify-content: flex-end;
+  flex-flow: wrap;
+  gap: 12px;
 }
 
-.c-button-strip button {
-  margin-left: 16px;
+.c-button-strip--align-left {
+  justify-content: flex-start;
 }
 
 .c-radio__container {

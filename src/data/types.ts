@@ -41,6 +41,7 @@ export type Session = {
   gameId: string;
   locationId: string;
   playerIds: string[];
+  customWinner?: string;
 };
 
 export interface SessionWithRelations extends Session {
