@@ -23,25 +23,29 @@ const ScoreTable = ({
 
   const { scoreMode } = session.game;
 
-  let winner: string | null = null;
+  let winners: string[] = [];
   if (scoreMode === ScoreMode.Highest) {
     let highScore = 0;
     Object.entries(totalScores).forEach(([playerId, score]) => {
-      if (score >= highScore) {
-        winner = playerId;
+      if (score > highScore) {
+        winners = [playerId];
         highScore = score;
+      } else if (score === highScore) {
+        winners.push(playerId);
       }
     });
   } else if (scoreMode === ScoreMode.Lowest) {
     let lowScore = Infinity;
     Object.entries(totalScores).forEach(([playerId, score]) => {
-      if (score <= lowScore) {
-        winner = playerId;
+      if (score < lowScore) {
+        winners = [playerId];
         lowScore = score;
+      } else if (score === lowScore) {
+        winners.push(playerId);
       }
     });
   } else if (scoreMode === ScoreMode.Custom) {
-    winner = session.customWinner ?? null;
+    if (session.customWinner) winners.push(session.customWinner);
   }
 
   return (
@@ -51,10 +55,21 @@ const ScoreTable = ({
           <th></th>
           {session.players.map((player) => (
             <th key={player._id}>
-              {winner === player._id && "👑"} {player.name}
+              {winners.includes(player._id) && "👑"} {player.name}
             </th>
           ))}
         </tr>
+        {scoreMode &&
+          [ScoreMode.Highest, ScoreMode.Lowest].includes(scoreMode) && (
+            <tr>
+              <th scope="row">Total</th>
+              {session.players.map((player) => (
+                <th key={player._id}>
+                  <strong>{totalScores[player._id]}</strong>
+                </th>
+              ))}
+            </tr>
+          )}
       </thead>
       <tbody>
         {session.rounds.map((round, index) => (
