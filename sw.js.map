@@ -1,7 +1,0 @@
-{
-  "version": 3,
-  "sources": ["../src/sw.ts"],
-  "sourcesContent": ["self.addEventListener(\"install\", function (e) {\n  e.waitUntil(\n    caches.open(\"scoreboard\").then(function (cache) {\n      return cache.addAll([\n        \"/\",\n        \"/index.html\",\n        \"/index.js\",\n        \"/images/favicon.png\",\n        \"/images/favicon-144.png\",\n        \"/images/favicon-192.png\",\n        \"/images/favicon-512.png\",\n      ]);\n    })\n  );\n});\n\nself.addEventListener(\"fetch\", function (event) {\n  event.respondWith(\n    (async function () {\n      const response = await caches.match(event.request);\n      return response || fetch(event.request);\n    })()\n  );\n});\n\n// Clear the cache when sw.js has been changed\nself.addEventListener(\"activate\", function (event) {\n  event.waitUntil(\n    caches.keys().then(function (cacheNames) {\n      return Promise.all(\n        cacheNames.map(function (cacheName) {\n          return caches.delete(cacheName);\n        })\n      );\n    })\n  );\n});\n"],
-  "mappings": "MAAA,KAAK,iBAAiB,UAAW,SAAU,EAAG,CAC5C,EAAE,UACA,OAAO,KAAK,cAAc,KAAK,SAAU,EAAO,CAC9C,MAAO,GAAM,OAAO,CAClB,IACA,cACA,YACA,sBACA,0BACA,0BACA,iCAMR,KAAK,iBAAiB,QAAS,SAAU,EAAO,CAC9C,EAAM,YACH,gBAAkB,CAEjB,MAAO,AADU,MAAM,QAAO,MAAM,EAAM,UACvB,MAAM,EAAM,eAMrC,KAAK,iBAAiB,WAAY,SAAU,EAAO,CACjD,EAAM,UACJ,OAAO,OAAO,KAAK,SAAU,EAAY,CACvC,MAAO,SAAQ,IACb,EAAW,IAAI,SAAU,EAAW,CAClC,MAAO,QAAO,OAAO",
-  "names": []
-}
