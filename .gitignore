@@ -4,3 +4,4 @@ public/*
 !public/manifest.webmanifest
 !public/images
 !public/fonts
+!public/sw.js
