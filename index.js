@@ -24,7 +24,10 @@
     }
     return to;
   };
-  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target, mod));
+  var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+    isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
+    mod
+  ));
   var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
   // node_modules/react/cjs/react.development.js
@@ -641,7 +644,10 @@
                       checkKeyStringCoercion(mappedChild.key);
                     }
                   }
-                  mappedChild = cloneAndReplaceKey(mappedChild, escapedPrefix + (mappedChild.key && (!_child || _child.key !== mappedChild.key) ? escapeUserProvidedKey("" + mappedChild.key) + "/" : "") + childKey);
+                  mappedChild = cloneAndReplaceKey(
+                    mappedChild,
+                    escapedPrefix + (mappedChild.key && (!_child || _child.key !== mappedChild.key) ? escapeUserProvidedKey("" + mappedChild.key) + "/" : "") + childKey
+                  );
                 }
                 array.push(mappedChild);
               }
@@ -2364,7 +2370,7 @@
           var HostPortal = 4;
           var HostComponent = 5;
           var HostText = 6;
-          var Fragment2 = 7;
+          var Fragment8 = 7;
           var Mode = 8;
           var ContextConsumer = 9;
           var ContextProvider = 10;
@@ -2601,17 +2607,49 @@
             "style"
           ];
           reservedProps.forEach(function(name) {
-            properties[name] = new PropertyInfoRecord(name, RESERVED, false, name, null, false, false);
+            properties[name] = new PropertyInfoRecord(
+              name,
+              RESERVED,
+              false,
+              name,
+              null,
+              false,
+              false
+            );
           });
           [["acceptCharset", "accept-charset"], ["className", "class"], ["htmlFor", "for"], ["httpEquiv", "http-equiv"]].forEach(function(_ref) {
             var name = _ref[0], attributeName = _ref[1];
-            properties[name] = new PropertyInfoRecord(name, STRING, false, attributeName, null, false, false);
+            properties[name] = new PropertyInfoRecord(
+              name,
+              STRING,
+              false,
+              attributeName,
+              null,
+              false,
+              false
+            );
           });
           ["contentEditable", "draggable", "spellCheck", "value"].forEach(function(name) {
-            properties[name] = new PropertyInfoRecord(name, BOOLEANISH_STRING, false, name.toLowerCase(), null, false, false);
+            properties[name] = new PropertyInfoRecord(
+              name,
+              BOOLEANISH_STRING,
+              false,
+              name.toLowerCase(),
+              null,
+              false,
+              false
+            );
           });
           ["autoReverse", "externalResourcesRequired", "focusable", "preserveAlpha"].forEach(function(name) {
-            properties[name] = new PropertyInfoRecord(name, BOOLEANISH_STRING, false, name, null, false, false);
+            properties[name] = new PropertyInfoRecord(
+              name,
+              BOOLEANISH_STRING,
+              false,
+              name,
+              null,
+              false,
+              false
+            );
           });
           [
             "allowFullScreen",
@@ -2638,7 +2676,15 @@
             "seamless",
             "itemScope"
           ].forEach(function(name) {
-            properties[name] = new PropertyInfoRecord(name, BOOLEAN, false, name.toLowerCase(), null, false, false);
+            properties[name] = new PropertyInfoRecord(
+              name,
+              BOOLEAN,
+              false,
+              name.toLowerCase(),
+              null,
+              false,
+              false
+            );
           });
           [
             "checked",
@@ -2646,13 +2692,29 @@
             "muted",
             "selected"
           ].forEach(function(name) {
-            properties[name] = new PropertyInfoRecord(name, BOOLEAN, true, name, null, false, false);
+            properties[name] = new PropertyInfoRecord(
+              name,
+              BOOLEAN,
+              true,
+              name,
+              null,
+              false,
+              false
+            );
           });
           [
             "capture",
             "download"
           ].forEach(function(name) {
-            properties[name] = new PropertyInfoRecord(name, OVERLOADED_BOOLEAN, false, name, null, false, false);
+            properties[name] = new PropertyInfoRecord(
+              name,
+              OVERLOADED_BOOLEAN,
+              false,
+              name,
+              null,
+              false,
+              false
+            );
           });
           [
             "cols",
@@ -2660,10 +2722,26 @@
             "size",
             "span"
           ].forEach(function(name) {
-            properties[name] = new PropertyInfoRecord(name, POSITIVE_NUMERIC, false, name, null, false, false);
+            properties[name] = new PropertyInfoRecord(
+              name,
+              POSITIVE_NUMERIC,
+              false,
+              name,
+              null,
+              false,
+              false
+            );
           });
           ["rowSpan", "start"].forEach(function(name) {
-            properties[name] = new PropertyInfoRecord(name, NUMERIC, false, name.toLowerCase(), null, false, false);
+            properties[name] = new PropertyInfoRecord(
+              name,
+              NUMERIC,
+              false,
+              name.toLowerCase(),
+              null,
+              false,
+              false
+            );
           });
           var CAMELIZE = /[\-\:]([a-z])/g;
           var capitalize = function(token) {
@@ -2745,7 +2823,15 @@
             "x-height"
           ].forEach(function(attributeName) {
             var name = attributeName.replace(CAMELIZE, capitalize);
-            properties[name] = new PropertyInfoRecord(name, STRING, false, attributeName, null, false, false);
+            properties[name] = new PropertyInfoRecord(
+              name,
+              STRING,
+              false,
+              attributeName,
+              null,
+              false,
+              false
+            );
           });
           [
             "xlink:actuate",
@@ -2756,7 +2842,15 @@
             "xlink:type"
           ].forEach(function(attributeName) {
             var name = attributeName.replace(CAMELIZE, capitalize);
-            properties[name] = new PropertyInfoRecord(name, STRING, false, attributeName, "http://www.w3.org/1999/xlink", false, false);
+            properties[name] = new PropertyInfoRecord(
+              name,
+              STRING,
+              false,
+              attributeName,
+              "http://www.w3.org/1999/xlink",
+              false,
+              false
+            );
           });
           [
             "xml:base",
@@ -2764,15 +2858,47 @@
             "xml:space"
           ].forEach(function(attributeName) {
             var name = attributeName.replace(CAMELIZE, capitalize);
-            properties[name] = new PropertyInfoRecord(name, STRING, false, attributeName, "http://www.w3.org/XML/1998/namespace", false, false);
+            properties[name] = new PropertyInfoRecord(
+              name,
+              STRING,
+              false,
+              attributeName,
+              "http://www.w3.org/XML/1998/namespace",
+              false,
+              false
+            );
           });
           ["tabIndex", "crossOrigin"].forEach(function(attributeName) {
-            properties[attributeName] = new PropertyInfoRecord(attributeName, STRING, false, attributeName.toLowerCase(), null, false, false);
+            properties[attributeName] = new PropertyInfoRecord(
+              attributeName,
+              STRING,
+              false,
+              attributeName.toLowerCase(),
+              null,
+              false,
+              false
+            );
           });
           var xlinkHref = "xlinkHref";
-          properties[xlinkHref] = new PropertyInfoRecord("xlinkHref", STRING, false, "xlink:href", "http://www.w3.org/1999/xlink", true, false);
+          properties[xlinkHref] = new PropertyInfoRecord(
+            "xlinkHref",
+            STRING,
+            false,
+            "xlink:href",
+            "http://www.w3.org/1999/xlink",
+            true,
+            false
+          );
           ["src", "href", "action", "formAction"].forEach(function(attributeName) {
-            properties[attributeName] = new PropertyInfoRecord(attributeName, STRING, false, attributeName.toLowerCase(), null, true, true);
+            properties[attributeName] = new PropertyInfoRecord(
+              attributeName,
+              STRING,
+              false,
+              attributeName.toLowerCase(),
+              null,
+              true,
+              true
+            );
           });
           var isJavaScriptProtocol = /^[\u0000-\u001F ]*j[\r\n\t]*a[\r\n\t]*v[\r\n\t]*a[\r\n\t]*s[\r\n\t]*c[\r\n\t]*r[\r\n\t]*i[\r\n\t]*p[\r\n\t]*t[\r\n\t]*\:/i;
           var didWarn = false;
@@ -3321,7 +3447,7 @@
                 return "DehydratedFragment";
               case ForwardRef:
                 return getWrappedName$1(type2, type2.render, "ForwardRef");
-              case Fragment2:
+              case Fragment8:
                 return "Fragment";
               case HostComponent:
                 return type2;
@@ -4156,7 +4282,11 @@
                 return;
               }
               warnedStyleNames[name] = true;
-              error("Unsupported style property %s. Did you mean %s?", name, camelize(name.replace(msPattern$1, "ms-")));
+              error(
+                "Unsupported style property %s. Did you mean %s?",
+                name,
+                camelize(name.replace(msPattern$1, "ms-"))
+              );
             };
             var warnBadVendoredStyleName = function(name) {
               if (warnedStyleNames.hasOwnProperty(name) && warnedStyleNames[name]) {
@@ -10675,7 +10805,13 @@
                 }
                 case HostComponent: {
                   var isConcurrentMode = (returnFiber.mode & ConcurrentMode) !== NoMode;
-                  didNotHydrateInstance(returnFiber.type, returnFiber.memoizedProps, returnFiber.stateNode, instance, isConcurrentMode);
+                  didNotHydrateInstance(
+                    returnFiber.type,
+                    returnFiber.memoizedProps,
+                    returnFiber.stateNode,
+                    instance,
+                    isConcurrentMode
+                  );
                   break;
                 }
                 case SuspenseComponent: {
@@ -10730,13 +10866,26 @@
                       var _type = fiber.type;
                       var _props = fiber.pendingProps;
                       var isConcurrentMode = (returnFiber.mode & ConcurrentMode) !== NoMode;
-                      didNotFindHydratableInstance(parentType, parentProps, parentInstance, _type, _props, isConcurrentMode);
+                      didNotFindHydratableInstance(
+                        parentType,
+                        parentProps,
+                        parentInstance,
+                        _type,
+                        _props,
+                        isConcurrentMode
+                      );
                       break;
                     }
                     case HostText: {
                       var _text = fiber.pendingProps;
                       var _isConcurrentMode = (returnFiber.mode & ConcurrentMode) !== NoMode;
-                      didNotFindHydratableTextInstance(parentType, parentProps, parentInstance, _text, _isConcurrentMode);
+                      didNotFindHydratableTextInstance(
+                        parentType,
+                        parentProps,
+                        parentInstance,
+                        _text,
+                        _isConcurrentMode
+                      );
                       break;
                     }
                   }
@@ -10874,7 +11023,12 @@
                   case HostRoot: {
                     var parentContainer = returnFiber.stateNode.containerInfo;
                     var isConcurrentMode = (returnFiber.mode & ConcurrentMode) !== NoMode;
-                    didNotMatchHydratedContainerTextInstance(parentContainer, textInstance, textContent, isConcurrentMode);
+                    didNotMatchHydratedContainerTextInstance(
+                      parentContainer,
+                      textInstance,
+                      textContent,
+                      isConcurrentMode
+                    );
                     break;
                   }
                   case HostComponent: {
@@ -10882,7 +11036,14 @@
                     var parentProps = returnFiber.memoizedProps;
                     var parentInstance = returnFiber.stateNode;
                     var _isConcurrentMode2 = (returnFiber.mode & ConcurrentMode) !== NoMode;
-                    didNotMatchHydratedTextInstance(parentType, parentProps, parentInstance, textInstance, textContent, _isConcurrentMode2);
+                    didNotMatchHydratedTextInstance(
+                      parentType,
+                      parentProps,
+                      parentInstance,
+                      textInstance,
+                      textContent,
+                      _isConcurrentMode2
+                    );
                     break;
                   }
                 }
@@ -12651,7 +12812,7 @@
               }
             }
             function updateFragment2(returnFiber, current2, fragment, lanes, key) {
-              if (current2 === null || current2.tag !== Fragment2) {
+              if (current2 === null || current2.tag !== Fragment8) {
                 var created = createFiberFromFragment(fragment, returnFiber.mode, lanes, key);
                 created.return = returnFiber;
                 return created;
@@ -13053,7 +13214,7 @@
                 if (child.key === key) {
                   var elementType = element.type;
                   if (elementType === REACT_FRAGMENT_TYPE) {
-                    if (child.tag === Fragment2) {
+                    if (child.tag === Fragment8) {
                       deleteRemainingChildren(returnFiber, child.sibling);
                       var existing = useFiber(child, element.props.children);
                       existing.return = returnFiber;
@@ -15565,7 +15726,12 @@
               if (workInProgress2.type !== workInProgress2.elementType) {
                 var innerPropTypes = Component.propTypes;
                 if (innerPropTypes) {
-                  checkPropTypes(innerPropTypes, nextProps, "prop", getComponentNameFromType(Component));
+                  checkPropTypes(
+                    innerPropTypes,
+                    nextProps,
+                    "prop",
+                    getComponentNameFromType(Component)
+                  );
                 }
               }
             }
@@ -15625,7 +15791,12 @@
               {
                 var innerPropTypes = type2.propTypes;
                 if (innerPropTypes) {
-                  checkPropTypes(innerPropTypes, nextProps, "prop", getComponentNameFromType(type2));
+                  checkPropTypes(
+                    innerPropTypes,
+                    nextProps,
+                    "prop",
+                    getComponentNameFromType(type2)
+                  );
                 }
               }
               var child = createFiberFromTypeAndProps(Component.type, null, nextProps, workInProgress2, workInProgress2.mode, renderLanes2);
@@ -15638,7 +15809,12 @@
               var _type = Component.type;
               var _innerPropTypes = _type.propTypes;
               if (_innerPropTypes) {
-                checkPropTypes(_innerPropTypes, nextProps, "prop", getComponentNameFromType(_type));
+                checkPropTypes(
+                  _innerPropTypes,
+                  nextProps,
+                  "prop",
+                  getComponentNameFromType(_type)
+                );
               }
             }
             var currentChild = current2.child;
@@ -15673,7 +15849,12 @@
                   }
                   var outerPropTypes = outerMemoType && outerMemoType.propTypes;
                   if (outerPropTypes) {
-                    checkPropTypes(outerPropTypes, nextProps, "prop", getComponentNameFromType(outerMemoType));
+                    checkPropTypes(
+                      outerPropTypes,
+                      nextProps,
+                      "prop",
+                      getComponentNameFromType(outerMemoType)
+                    );
                   }
                 }
               }
@@ -15786,7 +15967,12 @@
               if (workInProgress2.type !== workInProgress2.elementType) {
                 var innerPropTypes = Component.propTypes;
                 if (innerPropTypes) {
-                  checkPropTypes(innerPropTypes, nextProps, "prop", getComponentNameFromType(Component));
+                  checkPropTypes(
+                    innerPropTypes,
+                    nextProps,
+                    "prop",
+                    getComponentNameFromType(Component)
+                  );
                 }
               }
             }
@@ -15856,7 +16042,12 @@
               if (workInProgress2.type !== workInProgress2.elementType) {
                 var innerPropTypes = Component.propTypes;
                 if (innerPropTypes) {
-                  checkPropTypes(innerPropTypes, nextProps, "prop", getComponentNameFromType(Component));
+                  checkPropTypes(
+                    innerPropTypes,
+                    nextProps,
+                    "prop",
+                    getComponentNameFromType(Component)
+                  );
                 }
               }
             }
@@ -16071,11 +16262,22 @@
                   if (workInProgress2.type !== workInProgress2.elementType) {
                     var outerPropTypes = Component.propTypes;
                     if (outerPropTypes) {
-                      checkPropTypes(outerPropTypes, resolvedProps, "prop", getComponentNameFromType(Component));
+                      checkPropTypes(
+                        outerPropTypes,
+                        resolvedProps,
+                        "prop",
+                        getComponentNameFromType(Component)
+                      );
                     }
                   }
                 }
-                child = updateMemoComponent(null, workInProgress2, Component, resolveDefaultProps(Component.type, resolvedProps), renderLanes2);
+                child = updateMemoComponent(
+                  null,
+                  workInProgress2,
+                  Component,
+                  resolveDefaultProps(Component.type, resolvedProps),
+                  renderLanes2
+                );
                 return child;
               }
             }
@@ -16487,7 +16689,12 @@
             if (!didSuspend) {
               warnIfHydrating();
               if ((workInProgress2.mode & ConcurrentMode) === NoMode) {
-                return retrySuspenseComponentWithoutHydrating(current2, workInProgress2, renderLanes2, null);
+                return retrySuspenseComponentWithoutHydrating(
+                  current2,
+                  workInProgress2,
+                  renderLanes2,
+                  null
+                );
               }
               if (isSuspenseInstanceFallback(suspenseInstance)) {
                 var digest, message, stack;
@@ -16740,7 +16947,13 @@
                     tail = lastContentRow.sibling;
                     lastContentRow.sibling = null;
                   }
-                  initSuspenseListRenderState(workInProgress2, false, tail, lastContentRow, tailMode);
+                  initSuspenseListRenderState(
+                    workInProgress2,
+                    false,
+                    tail,
+                    lastContentRow,
+                    tailMode
+                  );
                   break;
                 }
                 case "backwards": {
@@ -16758,11 +16971,23 @@
                     _tail = row;
                     row = nextRow;
                   }
-                  initSuspenseListRenderState(workInProgress2, true, _tail, null, tailMode);
+                  initSuspenseListRenderState(
+                    workInProgress2,
+                    true,
+                    _tail,
+                    null,
+                    tailMode
+                  );
                   break;
                 }
                 case "together": {
-                  initSuspenseListRenderState(workInProgress2, false, null, null, void 0);
+                  initSuspenseListRenderState(
+                    workInProgress2,
+                    false,
+                    null,
+                    null,
+                    void 0
+                  );
                   break;
                 }
                 default: {
@@ -17095,7 +17320,7 @@
                 var _resolvedProps2 = workInProgress2.elementType === type2 ? _unresolvedProps2 : resolveDefaultProps(type2, _unresolvedProps2);
                 return updateForwardRef(current2, workInProgress2, type2, _resolvedProps2, renderLanes2);
               }
-              case Fragment2:
+              case Fragment8:
                 return updateFragment(current2, workInProgress2, renderLanes2);
               case Mode:
                 return updateMode(current2, workInProgress2, renderLanes2);
@@ -17113,7 +17338,12 @@
                   if (workInProgress2.type !== workInProgress2.elementType) {
                     var outerPropTypes = _type2.propTypes;
                     if (outerPropTypes) {
-                      checkPropTypes(outerPropTypes, _resolvedProps3, "prop", getComponentNameFromType(_type2));
+                      checkPropTypes(
+                        outerPropTypes,
+                        _resolvedProps3,
+                        "prop",
+                        getComponentNameFromType(_type2)
+                      );
                     }
                   }
                 }
@@ -17362,7 +17592,7 @@
               case SimpleMemoComponent:
               case FunctionComponent:
               case ForwardRef:
-              case Fragment2:
+              case Fragment8:
               case Mode:
               case Profiler:
               case ContextConsumer:
@@ -19083,7 +19313,11 @@
                   var child = firstChild;
                   while (child !== null) {
                     nextEffect = child;
-                    commitLayoutEffects_begin(child, root2, committedLanes);
+                    commitLayoutEffects_begin(
+                      child,
+                      root2,
+                      committedLanes
+                    );
                     child = child.sibling;
                   }
                   nextEffect = fiber;
@@ -21572,7 +21806,7 @@
             return fiber;
           }
           function createFiberFromFragment(elements, mode, lanes, key) {
-            var fiber = createFiber(Fragment2, elements, key, mode);
+            var fiber = createFiber(Fragment8, elements, key, mode);
             fiber.lanes = lanes;
             return fiber;
           }
@@ -22010,7 +22244,12 @@
                   delete updated[oldKey];
                 }
               } else {
-                updated[oldKey] = copyWithRenameImpl(obj[oldKey], oldPath, newPath, index2 + 1);
+                updated[oldKey] = copyWithRenameImpl(
+                  obj[oldKey],
+                  oldPath,
+                  newPath,
+                  index2 + 1
+                );
               }
               return updated;
             };
@@ -22373,7 +22612,17 @@
                   originalCallback.call(instance);
                 };
               }
-              var root2 = createHydrationContainer(initialChildren, callback, container, LegacyRoot, null, false, false, "", noopOnRecoverableError);
+              var root2 = createHydrationContainer(
+                initialChildren,
+                callback,
+                container,
+                LegacyRoot,
+                null,
+                false,
+                false,
+                "",
+                noopOnRecoverableError
+              );
               container._reactRootContainer = root2;
               markContainerAsRoot(root2.current, container);
               var rootContainerElement = container.nodeType === COMMENT_NODE ? container.parentNode : container;
@@ -22392,7 +22641,15 @@
                   _originalCallback.call(instance);
                 };
               }
-              var _root = createContainer(container, LegacyRoot, null, false, false, "", noopOnRecoverableError);
+              var _root = createContainer(
+                container,
+                LegacyRoot,
+                null,
+                false,
+                false,
+                "",
+                noopOnRecoverableError
+              );
               container._reactRootContainer = _root;
               markContainerAsRoot(_root.current, container);
               var _rootContainerElement = container.nodeType === COMMENT_NODE ? container.parentNode : container;
@@ -22661,6 +22918,889 @@
         };
       }
       var i;
+    }
+  });
+
+  // node_modules/react/cjs/react-jsx-runtime.development.js
+  var require_react_jsx_runtime_development = __commonJS({
+    "node_modules/react/cjs/react-jsx-runtime.development.js"(exports) {
+      "use strict";
+      init_react_shim();
+      if (true) {
+        (function() {
+          "use strict";
+          var React2 = require_react();
+          var REACT_ELEMENT_TYPE = Symbol.for("react.element");
+          var REACT_PORTAL_TYPE = Symbol.for("react.portal");
+          var REACT_FRAGMENT_TYPE = Symbol.for("react.fragment");
+          var REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode");
+          var REACT_PROFILER_TYPE = Symbol.for("react.profiler");
+          var REACT_PROVIDER_TYPE = Symbol.for("react.provider");
+          var REACT_CONTEXT_TYPE = Symbol.for("react.context");
+          var REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref");
+          var REACT_SUSPENSE_TYPE = Symbol.for("react.suspense");
+          var REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list");
+          var REACT_MEMO_TYPE = Symbol.for("react.memo");
+          var REACT_LAZY_TYPE = Symbol.for("react.lazy");
+          var REACT_OFFSCREEN_TYPE = Symbol.for("react.offscreen");
+          var MAYBE_ITERATOR_SYMBOL = Symbol.iterator;
+          var FAUX_ITERATOR_SYMBOL = "@@iterator";
+          function getIteratorFn(maybeIterable) {
+            if (maybeIterable === null || typeof maybeIterable !== "object") {
+              return null;
+            }
+            var maybeIterator = MAYBE_ITERATOR_SYMBOL && maybeIterable[MAYBE_ITERATOR_SYMBOL] || maybeIterable[FAUX_ITERATOR_SYMBOL];
+            if (typeof maybeIterator === "function") {
+              return maybeIterator;
+            }
+            return null;
+          }
+          var ReactSharedInternals = React2.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED;
+          function error(format2) {
+            {
+              {
+                for (var _len2 = arguments.length, args = new Array(_len2 > 1 ? _len2 - 1 : 0), _key2 = 1; _key2 < _len2; _key2++) {
+                  args[_key2 - 1] = arguments[_key2];
+                }
+                printWarning("error", format2, args);
+              }
+            }
+          }
+          function printWarning(level, format2, args) {
+            {
+              var ReactDebugCurrentFrame2 = ReactSharedInternals.ReactDebugCurrentFrame;
+              var stack = ReactDebugCurrentFrame2.getStackAddendum();
+              if (stack !== "") {
+                format2 += "%s";
+                args = args.concat([stack]);
+              }
+              var argsWithFormat = args.map(function(item) {
+                return String(item);
+              });
+              argsWithFormat.unshift("Warning: " + format2);
+              Function.prototype.apply.call(console[level], console, argsWithFormat);
+            }
+          }
+          var enableScopeAPI = false;
+          var enableCacheElement = false;
+          var enableTransitionTracing = false;
+          var enableLegacyHidden = false;
+          var enableDebugTracing = false;
+          var REACT_MODULE_REFERENCE;
+          {
+            REACT_MODULE_REFERENCE = Symbol.for("react.module.reference");
+          }
+          function isValidElementType(type2) {
+            if (typeof type2 === "string" || typeof type2 === "function") {
+              return true;
+            }
+            if (type2 === REACT_FRAGMENT_TYPE || type2 === REACT_PROFILER_TYPE || enableDebugTracing || type2 === REACT_STRICT_MODE_TYPE || type2 === REACT_SUSPENSE_TYPE || type2 === REACT_SUSPENSE_LIST_TYPE || enableLegacyHidden || type2 === REACT_OFFSCREEN_TYPE || enableScopeAPI || enableCacheElement || enableTransitionTracing) {
+              return true;
+            }
+            if (typeof type2 === "object" && type2 !== null) {
+              if (type2.$$typeof === REACT_LAZY_TYPE || type2.$$typeof === REACT_MEMO_TYPE || type2.$$typeof === REACT_PROVIDER_TYPE || type2.$$typeof === REACT_CONTEXT_TYPE || type2.$$typeof === REACT_FORWARD_REF_TYPE || type2.$$typeof === REACT_MODULE_REFERENCE || type2.getModuleId !== void 0) {
+                return true;
+              }
+            }
+            return false;
+          }
+          function getWrappedName(outerType, innerType, wrapperName) {
+            var displayName = outerType.displayName;
+            if (displayName) {
+              return displayName;
+            }
+            var functionName = innerType.displayName || innerType.name || "";
+            return functionName !== "" ? wrapperName + "(" + functionName + ")" : wrapperName;
+          }
+          function getContextName(type2) {
+            return type2.displayName || "Context";
+          }
+          function getComponentNameFromType(type2) {
+            if (type2 == null) {
+              return null;
+            }
+            {
+              if (typeof type2.tag === "number") {
+                error("Received an unexpected object in getComponentNameFromType(). This is likely a bug in React. Please file an issue.");
+              }
+            }
+            if (typeof type2 === "function") {
+              return type2.displayName || type2.name || null;
+            }
+            if (typeof type2 === "string") {
+              return type2;
+            }
+            switch (type2) {
+              case REACT_FRAGMENT_TYPE:
+                return "Fragment";
+              case REACT_PORTAL_TYPE:
+                return "Portal";
+              case REACT_PROFILER_TYPE:
+                return "Profiler";
+              case REACT_STRICT_MODE_TYPE:
+                return "StrictMode";
+              case REACT_SUSPENSE_TYPE:
+                return "Suspense";
+              case REACT_SUSPENSE_LIST_TYPE:
+                return "SuspenseList";
+            }
+            if (typeof type2 === "object") {
+              switch (type2.$$typeof) {
+                case REACT_CONTEXT_TYPE:
+                  var context = type2;
+                  return getContextName(context) + ".Consumer";
+                case REACT_PROVIDER_TYPE:
+                  var provider = type2;
+                  return getContextName(provider._context) + ".Provider";
+                case REACT_FORWARD_REF_TYPE:
+                  return getWrappedName(type2, type2.render, "ForwardRef");
+                case REACT_MEMO_TYPE:
+                  var outerName = type2.displayName || null;
+                  if (outerName !== null) {
+                    return outerName;
+                  }
+                  return getComponentNameFromType(type2.type) || "Memo";
+                case REACT_LAZY_TYPE: {
+                  var lazyComponent = type2;
+                  var payload = lazyComponent._payload;
+                  var init = lazyComponent._init;
+                  try {
+                    return getComponentNameFromType(init(payload));
+                  } catch (x) {
+                    return null;
+                  }
+                }
+              }
+            }
+            return null;
+          }
+          var assign2 = Object.assign;
+          var disabledDepth = 0;
+          var prevLog;
+          var prevInfo;
+          var prevWarn;
+          var prevError;
+          var prevGroup;
+          var prevGroupCollapsed;
+          var prevGroupEnd;
+          function disabledLog() {
+          }
+          disabledLog.__reactDisabledLog = true;
+          function disableLogs() {
+            {
+              if (disabledDepth === 0) {
+                prevLog = console.log;
+                prevInfo = console.info;
+                prevWarn = console.warn;
+                prevError = console.error;
+                prevGroup = console.group;
+                prevGroupCollapsed = console.groupCollapsed;
+                prevGroupEnd = console.groupEnd;
+                var props2 = {
+                  configurable: true,
+                  enumerable: true,
+                  value: disabledLog,
+                  writable: true
+                };
+                Object.defineProperties(console, {
+                  info: props2,
+                  log: props2,
+                  warn: props2,
+                  error: props2,
+                  group: props2,
+                  groupCollapsed: props2,
+                  groupEnd: props2
+                });
+              }
+              disabledDepth++;
+            }
+          }
+          function reenableLogs() {
+            {
+              disabledDepth--;
+              if (disabledDepth === 0) {
+                var props2 = {
+                  configurable: true,
+                  enumerable: true,
+                  writable: true
+                };
+                Object.defineProperties(console, {
+                  log: assign2({}, props2, {
+                    value: prevLog
+                  }),
+                  info: assign2({}, props2, {
+                    value: prevInfo
+                  }),
+                  warn: assign2({}, props2, {
+                    value: prevWarn
+                  }),
+                  error: assign2({}, props2, {
+                    value: prevError
+                  }),
+                  group: assign2({}, props2, {
+                    value: prevGroup
+                  }),
+                  groupCollapsed: assign2({}, props2, {
+                    value: prevGroupCollapsed
+                  }),
+                  groupEnd: assign2({}, props2, {
+                    value: prevGroupEnd
+                  })
+                });
+              }
+              if (disabledDepth < 0) {
+                error("disabledDepth fell below zero. This is a bug in React. Please file an issue.");
+              }
+            }
+          }
+          var ReactCurrentDispatcher = ReactSharedInternals.ReactCurrentDispatcher;
+          var prefix;
+          function describeBuiltInComponentFrame(name, source, ownerFn) {
+            {
+              if (prefix === void 0) {
+                try {
+                  throw Error();
+                } catch (x) {
+                  var match2 = x.stack.trim().match(/\n( *(at )?)/);
+                  prefix = match2 && match2[1] || "";
+                }
+              }
+              return "\n" + prefix + name;
+            }
+          }
+          var reentry = false;
+          var componentFrameCache;
+          {
+            var PossiblyWeakMap = typeof WeakMap === "function" ? WeakMap : Map;
+            componentFrameCache = new PossiblyWeakMap();
+          }
+          function describeNativeComponentFrame(fn, construct) {
+            if (!fn || reentry) {
+              return "";
+            }
+            {
+              var frame = componentFrameCache.get(fn);
+              if (frame !== void 0) {
+                return frame;
+              }
+            }
+            var control;
+            reentry = true;
+            var previousPrepareStackTrace = Error.prepareStackTrace;
+            Error.prepareStackTrace = void 0;
+            var previousDispatcher;
+            {
+              previousDispatcher = ReactCurrentDispatcher.current;
+              ReactCurrentDispatcher.current = null;
+              disableLogs();
+            }
+            try {
+              if (construct) {
+                var Fake = function() {
+                  throw Error();
+                };
+                Object.defineProperty(Fake.prototype, "props", {
+                  set: function() {
+                    throw Error();
+                  }
+                });
+                if (typeof Reflect === "object" && Reflect.construct) {
+                  try {
+                    Reflect.construct(Fake, []);
+                  } catch (x) {
+                    control = x;
+                  }
+                  Reflect.construct(fn, [], Fake);
+                } else {
+                  try {
+                    Fake.call();
+                  } catch (x) {
+                    control = x;
+                  }
+                  fn.call(Fake.prototype);
+                }
+              } else {
+                try {
+                  throw Error();
+                } catch (x) {
+                  control = x;
+                }
+                fn();
+              }
+            } catch (sample) {
+              if (sample && control && typeof sample.stack === "string") {
+                var sampleLines = sample.stack.split("\n");
+                var controlLines = control.stack.split("\n");
+                var s = sampleLines.length - 1;
+                var c = controlLines.length - 1;
+                while (s >= 1 && c >= 0 && sampleLines[s] !== controlLines[c]) {
+                  c--;
+                }
+                for (; s >= 1 && c >= 0; s--, c--) {
+                  if (sampleLines[s] !== controlLines[c]) {
+                    if (s !== 1 || c !== 1) {
+                      do {
+                        s--;
+                        c--;
+                        if (c < 0 || sampleLines[s] !== controlLines[c]) {
+                          var _frame = "\n" + sampleLines[s].replace(" at new ", " at ");
+                          if (fn.displayName && _frame.includes("<anonymous>")) {
+                            _frame = _frame.replace("<anonymous>", fn.displayName);
+                          }
+                          {
+                            if (typeof fn === "function") {
+                              componentFrameCache.set(fn, _frame);
+                            }
+                          }
+                          return _frame;
+                        }
+                      } while (s >= 1 && c >= 0);
+                    }
+                    break;
+                  }
+                }
+              }
+            } finally {
+              reentry = false;
+              {
+                ReactCurrentDispatcher.current = previousDispatcher;
+                reenableLogs();
+              }
+              Error.prepareStackTrace = previousPrepareStackTrace;
+            }
+            var name = fn ? fn.displayName || fn.name : "";
+            var syntheticFrame = name ? describeBuiltInComponentFrame(name) : "";
+            {
+              if (typeof fn === "function") {
+                componentFrameCache.set(fn, syntheticFrame);
+              }
+            }
+            return syntheticFrame;
+          }
+          function describeFunctionComponentFrame(fn, source, ownerFn) {
+            {
+              return describeNativeComponentFrame(fn, false);
+            }
+          }
+          function shouldConstruct(Component) {
+            var prototype = Component.prototype;
+            return !!(prototype && prototype.isReactComponent);
+          }
+          function describeUnknownElementTypeFrameInDEV(type2, source, ownerFn) {
+            if (type2 == null) {
+              return "";
+            }
+            if (typeof type2 === "function") {
+              {
+                return describeNativeComponentFrame(type2, shouldConstruct(type2));
+              }
+            }
+            if (typeof type2 === "string") {
+              return describeBuiltInComponentFrame(type2);
+            }
+            switch (type2) {
+              case REACT_SUSPENSE_TYPE:
+                return describeBuiltInComponentFrame("Suspense");
+              case REACT_SUSPENSE_LIST_TYPE:
+                return describeBuiltInComponentFrame("SuspenseList");
+            }
+            if (typeof type2 === "object") {
+              switch (type2.$$typeof) {
+                case REACT_FORWARD_REF_TYPE:
+                  return describeFunctionComponentFrame(type2.render);
+                case REACT_MEMO_TYPE:
+                  return describeUnknownElementTypeFrameInDEV(type2.type, source, ownerFn);
+                case REACT_LAZY_TYPE: {
+                  var lazyComponent = type2;
+                  var payload = lazyComponent._payload;
+                  var init = lazyComponent._init;
+                  try {
+                    return describeUnknownElementTypeFrameInDEV(init(payload), source, ownerFn);
+                  } catch (x) {
+                  }
+                }
+              }
+            }
+            return "";
+          }
+          var hasOwnProperty = Object.prototype.hasOwnProperty;
+          var loggedTypeFailures = {};
+          var ReactDebugCurrentFrame = ReactSharedInternals.ReactDebugCurrentFrame;
+          function setCurrentlyValidatingElement(element) {
+            {
+              if (element) {
+                var owner = element._owner;
+                var stack = describeUnknownElementTypeFrameInDEV(element.type, element._source, owner ? owner.type : null);
+                ReactDebugCurrentFrame.setExtraStackFrame(stack);
+              } else {
+                ReactDebugCurrentFrame.setExtraStackFrame(null);
+              }
+            }
+          }
+          function checkPropTypes(typeSpecs, values, location2, componentName, element) {
+            {
+              var has = Function.call.bind(hasOwnProperty);
+              for (var typeSpecName in typeSpecs) {
+                if (has(typeSpecs, typeSpecName)) {
+                  var error$1 = void 0;
+                  try {
+                    if (typeof typeSpecs[typeSpecName] !== "function") {
+                      var err = Error((componentName || "React class") + ": " + location2 + " type `" + typeSpecName + "` is invalid; it must be a function, usually from the `prop-types` package, but received `" + typeof typeSpecs[typeSpecName] + "`.This often happens because of typos such as `PropTypes.function` instead of `PropTypes.func`.");
+                      err.name = "Invariant Violation";
+                      throw err;
+                    }
+                    error$1 = typeSpecs[typeSpecName](values, typeSpecName, componentName, location2, null, "SECRET_DO_NOT_PASS_THIS_OR_YOU_WILL_BE_FIRED");
+                  } catch (ex) {
+                    error$1 = ex;
+                  }
+                  if (error$1 && !(error$1 instanceof Error)) {
+                    setCurrentlyValidatingElement(element);
+                    error("%s: type specification of %s `%s` is invalid; the type checker function must return `null` or an `Error` but returned a %s. You may have forgotten to pass an argument to the type checker creator (arrayOf, instanceOf, objectOf, oneOf, oneOfType, and shape all require an argument).", componentName || "React class", location2, typeSpecName, typeof error$1);
+                    setCurrentlyValidatingElement(null);
+                  }
+                  if (error$1 instanceof Error && !(error$1.message in loggedTypeFailures)) {
+                    loggedTypeFailures[error$1.message] = true;
+                    setCurrentlyValidatingElement(element);
+                    error("Failed %s type: %s", location2, error$1.message);
+                    setCurrentlyValidatingElement(null);
+                  }
+                }
+              }
+            }
+          }
+          var isArrayImpl = Array.isArray;
+          function isArray2(a) {
+            return isArrayImpl(a);
+          }
+          function typeName(value) {
+            {
+              var hasToStringTag = typeof Symbol === "function" && Symbol.toStringTag;
+              var type2 = hasToStringTag && value[Symbol.toStringTag] || value.constructor.name || "Object";
+              return type2;
+            }
+          }
+          function willCoercionThrow(value) {
+            {
+              try {
+                testStringCoercion(value);
+                return false;
+              } catch (e) {
+                return true;
+              }
+            }
+          }
+          function testStringCoercion(value) {
+            return "" + value;
+          }
+          function checkKeyStringCoercion(value) {
+            {
+              if (willCoercionThrow(value)) {
+                error("The provided key is an unsupported type %s. This value must be coerced to a string before before using it here.", typeName(value));
+                return testStringCoercion(value);
+              }
+            }
+          }
+          var ReactCurrentOwner = ReactSharedInternals.ReactCurrentOwner;
+          var RESERVED_PROPS = {
+            key: true,
+            ref: true,
+            __self: true,
+            __source: true
+          };
+          var specialPropKeyWarningShown;
+          var specialPropRefWarningShown;
+          var didWarnAboutStringRefs;
+          {
+            didWarnAboutStringRefs = {};
+          }
+          function hasValidRef(config) {
+            {
+              if (hasOwnProperty.call(config, "ref")) {
+                var getter = Object.getOwnPropertyDescriptor(config, "ref").get;
+                if (getter && getter.isReactWarning) {
+                  return false;
+                }
+              }
+            }
+            return config.ref !== void 0;
+          }
+          function hasValidKey(config) {
+            {
+              if (hasOwnProperty.call(config, "key")) {
+                var getter = Object.getOwnPropertyDescriptor(config, "key").get;
+                if (getter && getter.isReactWarning) {
+                  return false;
+                }
+              }
+            }
+            return config.key !== void 0;
+          }
+          function warnIfStringRefCannotBeAutoConverted(config, self2) {
+            {
+              if (typeof config.ref === "string" && ReactCurrentOwner.current && self2 && ReactCurrentOwner.current.stateNode !== self2) {
+                var componentName = getComponentNameFromType(ReactCurrentOwner.current.type);
+                if (!didWarnAboutStringRefs[componentName]) {
+                  error('Component "%s" contains the string ref "%s". Support for string refs will be removed in a future major release. This case cannot be automatically converted to an arrow function. We ask you to manually fix this case by using useRef() or createRef() instead. Learn more about using refs safely here: https://reactjs.org/link/strict-mode-string-ref', getComponentNameFromType(ReactCurrentOwner.current.type), config.ref);
+                  didWarnAboutStringRefs[componentName] = true;
+                }
+              }
+            }
+          }
+          function defineKeyPropWarningGetter(props2, displayName) {
+            {
+              var warnAboutAccessingKey = function() {
+                if (!specialPropKeyWarningShown) {
+                  specialPropKeyWarningShown = true;
+                  error("%s: `key` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", displayName);
+                }
+              };
+              warnAboutAccessingKey.isReactWarning = true;
+              Object.defineProperty(props2, "key", {
+                get: warnAboutAccessingKey,
+                configurable: true
+              });
+            }
+          }
+          function defineRefPropWarningGetter(props2, displayName) {
+            {
+              var warnAboutAccessingRef = function() {
+                if (!specialPropRefWarningShown) {
+                  specialPropRefWarningShown = true;
+                  error("%s: `ref` is not a prop. Trying to access it will result in `undefined` being returned. If you need to access the same value within the child component, you should pass it as a different prop. (https://reactjs.org/link/special-props)", displayName);
+                }
+              };
+              warnAboutAccessingRef.isReactWarning = true;
+              Object.defineProperty(props2, "ref", {
+                get: warnAboutAccessingRef,
+                configurable: true
+              });
+            }
+          }
+          var ReactElement = function(type2, key, ref, self2, source, owner, props2) {
+            var element = {
+              $$typeof: REACT_ELEMENT_TYPE,
+              type: type2,
+              key,
+              ref,
+              props: props2,
+              _owner: owner
+            };
+            {
+              element._store = {};
+              Object.defineProperty(element._store, "validated", {
+                configurable: false,
+                enumerable: false,
+                writable: true,
+                value: false
+              });
+              Object.defineProperty(element, "_self", {
+                configurable: false,
+                enumerable: false,
+                writable: false,
+                value: self2
+              });
+              Object.defineProperty(element, "_source", {
+                configurable: false,
+                enumerable: false,
+                writable: false,
+                value: source
+              });
+              if (Object.freeze) {
+                Object.freeze(element.props);
+                Object.freeze(element);
+              }
+            }
+            return element;
+          };
+          function jsxDEV(type2, config, maybeKey, source, self2) {
+            {
+              var propName;
+              var props2 = {};
+              var key = null;
+              var ref = null;
+              if (maybeKey !== void 0) {
+                {
+                  checkKeyStringCoercion(maybeKey);
+                }
+                key = "" + maybeKey;
+              }
+              if (hasValidKey(config)) {
+                {
+                  checkKeyStringCoercion(config.key);
+                }
+                key = "" + config.key;
+              }
+              if (hasValidRef(config)) {
+                ref = config.ref;
+                warnIfStringRefCannotBeAutoConverted(config, self2);
+              }
+              for (propName in config) {
+                if (hasOwnProperty.call(config, propName) && !RESERVED_PROPS.hasOwnProperty(propName)) {
+                  props2[propName] = config[propName];
+                }
+              }
+              if (type2 && type2.defaultProps) {
+                var defaultProps = type2.defaultProps;
+                for (propName in defaultProps) {
+                  if (props2[propName] === void 0) {
+                    props2[propName] = defaultProps[propName];
+                  }
+                }
+              }
+              if (key || ref) {
+                var displayName = typeof type2 === "function" ? type2.displayName || type2.name || "Unknown" : type2;
+                if (key) {
+                  defineKeyPropWarningGetter(props2, displayName);
+                }
+                if (ref) {
+                  defineRefPropWarningGetter(props2, displayName);
+                }
+              }
+              return ReactElement(type2, key, ref, self2, source, ReactCurrentOwner.current, props2);
+            }
+          }
+          var ReactCurrentOwner$1 = ReactSharedInternals.ReactCurrentOwner;
+          var ReactDebugCurrentFrame$1 = ReactSharedInternals.ReactDebugCurrentFrame;
+          function setCurrentlyValidatingElement$1(element) {
+            {
+              if (element) {
+                var owner = element._owner;
+                var stack = describeUnknownElementTypeFrameInDEV(element.type, element._source, owner ? owner.type : null);
+                ReactDebugCurrentFrame$1.setExtraStackFrame(stack);
+              } else {
+                ReactDebugCurrentFrame$1.setExtraStackFrame(null);
+              }
+            }
+          }
+          var propTypesMisspellWarningShown;
+          {
+            propTypesMisspellWarningShown = false;
+          }
+          function isValidElement2(object) {
+            {
+              return typeof object === "object" && object !== null && object.$$typeof === REACT_ELEMENT_TYPE;
+            }
+          }
+          function getDeclarationErrorAddendum() {
+            {
+              if (ReactCurrentOwner$1.current) {
+                var name = getComponentNameFromType(ReactCurrentOwner$1.current.type);
+                if (name) {
+                  return "\n\nCheck the render method of `" + name + "`.";
+                }
+              }
+              return "";
+            }
+          }
+          function getSourceInfoErrorAddendum(source) {
+            {
+              if (source !== void 0) {
+                var fileName = source.fileName.replace(/^.*[\\\/]/, "");
+                var lineNumber = source.lineNumber;
+                return "\n\nCheck your code at " + fileName + ":" + lineNumber + ".";
+              }
+              return "";
+            }
+          }
+          var ownerHasKeyUseWarning = {};
+          function getCurrentComponentErrorInfo(parentType) {
+            {
+              var info = getDeclarationErrorAddendum();
+              if (!info) {
+                var parentName = typeof parentType === "string" ? parentType : parentType.displayName || parentType.name;
+                if (parentName) {
+                  info = "\n\nCheck the top-level render call using <" + parentName + ">.";
+                }
+              }
+              return info;
+            }
+          }
+          function validateExplicitKey(element, parentType) {
+            {
+              if (!element._store || element._store.validated || element.key != null) {
+                return;
+              }
+              element._store.validated = true;
+              var currentComponentErrorInfo = getCurrentComponentErrorInfo(parentType);
+              if (ownerHasKeyUseWarning[currentComponentErrorInfo]) {
+                return;
+              }
+              ownerHasKeyUseWarning[currentComponentErrorInfo] = true;
+              var childOwner = "";
+              if (element && element._owner && element._owner !== ReactCurrentOwner$1.current) {
+                childOwner = " It was passed a child from " + getComponentNameFromType(element._owner.type) + ".";
+              }
+              setCurrentlyValidatingElement$1(element);
+              error('Each child in a list should have a unique "key" prop.%s%s See https://reactjs.org/link/warning-keys for more information.', currentComponentErrorInfo, childOwner);
+              setCurrentlyValidatingElement$1(null);
+            }
+          }
+          function validateChildKeys(node, parentType) {
+            {
+              if (typeof node !== "object") {
+                return;
+              }
+              if (isArray2(node)) {
+                for (var i = 0; i < node.length; i++) {
+                  var child = node[i];
+                  if (isValidElement2(child)) {
+                    validateExplicitKey(child, parentType);
+                  }
+                }
+              } else if (isValidElement2(node)) {
+                if (node._store) {
+                  node._store.validated = true;
+                }
+              } else if (node) {
+                var iteratorFn = getIteratorFn(node);
+                if (typeof iteratorFn === "function") {
+                  if (iteratorFn !== node.entries) {
+                    var iterator = iteratorFn.call(node);
+                    var step;
+                    while (!(step = iterator.next()).done) {
+                      if (isValidElement2(step.value)) {
+                        validateExplicitKey(step.value, parentType);
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+          function validatePropTypes(element) {
+            {
+              var type2 = element.type;
+              if (type2 === null || type2 === void 0 || typeof type2 === "string") {
+                return;
+              }
+              var propTypes;
+              if (typeof type2 === "function") {
+                propTypes = type2.propTypes;
+              } else if (typeof type2 === "object" && (type2.$$typeof === REACT_FORWARD_REF_TYPE || type2.$$typeof === REACT_MEMO_TYPE)) {
+                propTypes = type2.propTypes;
+              } else {
+                return;
+              }
+              if (propTypes) {
+                var name = getComponentNameFromType(type2);
+                checkPropTypes(propTypes, element.props, "prop", name, element);
+              } else if (type2.PropTypes !== void 0 && !propTypesMisspellWarningShown) {
+                propTypesMisspellWarningShown = true;
+                var _name = getComponentNameFromType(type2);
+                error("Component %s declared `PropTypes` instead of `propTypes`. Did you misspell the property assignment?", _name || "Unknown");
+              }
+              if (typeof type2.getDefaultProps === "function" && !type2.getDefaultProps.isReactClassApproved) {
+                error("getDefaultProps is only used on classic React.createClass definitions. Use a static property named `defaultProps` instead.");
+              }
+            }
+          }
+          function validateFragmentProps(fragment) {
+            {
+              var keys2 = Object.keys(fragment.props);
+              for (var i = 0; i < keys2.length; i++) {
+                var key = keys2[i];
+                if (key !== "children" && key !== "key") {
+                  setCurrentlyValidatingElement$1(fragment);
+                  error("Invalid prop `%s` supplied to `React.Fragment`. React.Fragment can only have `key` and `children` props.", key);
+                  setCurrentlyValidatingElement$1(null);
+                  break;
+                }
+              }
+              if (fragment.ref !== null) {
+                setCurrentlyValidatingElement$1(fragment);
+                error("Invalid attribute `ref` supplied to `React.Fragment`.");
+                setCurrentlyValidatingElement$1(null);
+              }
+            }
+          }
+          function jsxWithValidation(type2, props2, key, isStaticChildren, source, self2) {
+            {
+              var validType = isValidElementType(type2);
+              if (!validType) {
+                var info = "";
+                if (type2 === void 0 || typeof type2 === "object" && type2 !== null && Object.keys(type2).length === 0) {
+                  info += " You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.";
+                }
+                var sourceInfo = getSourceInfoErrorAddendum(source);
+                if (sourceInfo) {
+                  info += sourceInfo;
+                } else {
+                  info += getDeclarationErrorAddendum();
+                }
+                var typeString;
+                if (type2 === null) {
+                  typeString = "null";
+                } else if (isArray2(type2)) {
+                  typeString = "array";
+                } else if (type2 !== void 0 && type2.$$typeof === REACT_ELEMENT_TYPE) {
+                  typeString = "<" + (getComponentNameFromType(type2.type) || "Unknown") + " />";
+                  info = " Did you accidentally export a JSX literal instead of a component?";
+                } else {
+                  typeString = typeof type2;
+                }
+                error("React.jsx: type is invalid -- expected a string (for built-in components) or a class/function (for composite components) but got: %s.%s", typeString, info);
+              }
+              var element = jsxDEV(type2, props2, key, source, self2);
+              if (element == null) {
+                return element;
+              }
+              if (validType) {
+                var children = props2.children;
+                if (children !== void 0) {
+                  if (isStaticChildren) {
+                    if (isArray2(children)) {
+                      for (var i = 0; i < children.length; i++) {
+                        validateChildKeys(children[i], type2);
+                      }
+                      if (Object.freeze) {
+                        Object.freeze(children);
+                      }
+                    } else {
+                      error("React.jsx: Static children should always be an array. You are likely explicitly calling React.jsxs or React.jsxDEV. Use the Babel transform instead.");
+                    }
+                  } else {
+                    validateChildKeys(children, type2);
+                  }
+                }
+              }
+              if (type2 === REACT_FRAGMENT_TYPE) {
+                validateFragmentProps(element);
+              } else {
+                validatePropTypes(element);
+              }
+              return element;
+            }
+          }
+          function jsxWithValidationStatic(type2, props2, key) {
+            {
+              return jsxWithValidation(type2, props2, key, true);
+            }
+          }
+          function jsxWithValidationDynamic(type2, props2, key) {
+            {
+              return jsxWithValidation(type2, props2, key, false);
+            }
+          }
+          var jsx43 = jsxWithValidationDynamic;
+          var jsxs28 = jsxWithValidationStatic;
+          exports.Fragment = REACT_FRAGMENT_TYPE;
+          exports.jsx = jsx43;
+          exports.jsxs = jsxs28;
+        })();
+      }
+    }
+  });
+
+  // node_modules/react/jsx-runtime.js
+  var require_jsx_runtime = __commonJS({
+    "node_modules/react/jsx-runtime.js"(exports, module) {
+      "use strict";
+      init_react_shim();
+      if (false) {
+        module.exports = null;
+      } else {
+        module.exports = require_react_jsx_runtime_development();
+      }
     }
   });
 
@@ -26701,7 +27841,9 @@
                         if (primKey == null) {
                           ctx.onerror && ctx.onerror(failures[i]);
                         } else {
-                          ctx.onsuccess && ctx.onsuccess(req2.type === "put" && existingValues[i] ? req2.values[i] : primKey);
+                          ctx.onsuccess && ctx.onsuccess(
+                            req2.type === "put" && existingValues[i] ? req2.values[i] : primKey
+                          );
                         }
                       }
                       return { failures, results, numFailures, lastResult };
@@ -27513,9 +28655,12 @@
             throw new Error("usePermissions() is only for Dexie Cloud but there's no dexie-cloud-addon active in given db.");
           if (!("permissions" in db2["cloud"]))
             throw new Error("usePermissions() requires a newer version of dexie-cloud-addon. Please upgrade it.");
-          return useObservable(function() {
-            return db2.cloud.permissions(obj, table);
-          }, [obj.realmId, obj.owner, table]);
+          return useObservable(
+            function() {
+              return db2.cloud.permissions(obj, table);
+            },
+            [obj.realmId, obj.owner, table]
+          );
         }
         exports2.useLiveQuery = useLiveQuery3;
         exports2.useObservable = useObservable;
@@ -27618,7 +28763,10 @@
               go(delta);
             }
           } else {
-            true ? warning(false, "You are trying to block a POP navigation to a location that was not created by the history library. The block will fail silently in production, but in general you should do all navigation with the history library (instead of using window.history.pushState directly) to avoid this situation.") : void 0;
+            true ? warning(
+              false,
+              "You are trying to block a POP navigation to a location that was not created by the history library. The block will fail silently in production, but in general you should do all navigation with the history library (instead of using window.history.pushState directly) to avoid this situation."
+            ) : void 0;
           }
         } else {
           applyTx(nextAction);
@@ -28100,7 +29248,10 @@
   var normalizeSearch = (search) => !search || search === "?" ? "" : search.startsWith("?") ? search : "?" + search;
   var normalizeHash = (hash) => !hash || hash === "#" ? "" : hash.startsWith("#") ? hash : "#" + hash;
   function useHref(to) {
-    !useInRouterContext() ? true ? invariant(false, "useHref() may be used only in the context of a <Router> component.") : invariant(false) : void 0;
+    !useInRouterContext() ? true ? invariant(
+      false,
+      "useHref() may be used only in the context of a <Router> component."
+    ) : invariant(false) : void 0;
     let {
       basename,
       navigator: navigator2
@@ -28126,18 +29277,27 @@
     return (0, import_react.useContext)(LocationContext) != null;
   }
   function useLocation() {
-    !useInRouterContext() ? true ? invariant(false, "useLocation() may be used only in the context of a <Router> component.") : invariant(false) : void 0;
+    !useInRouterContext() ? true ? invariant(
+      false,
+      "useLocation() may be used only in the context of a <Router> component."
+    ) : invariant(false) : void 0;
     return (0, import_react.useContext)(LocationContext).location;
   }
   function useMatch(pattern) {
-    !useInRouterContext() ? true ? invariant(false, "useMatch() may be used only in the context of a <Router> component.") : invariant(false) : void 0;
+    !useInRouterContext() ? true ? invariant(
+      false,
+      "useMatch() may be used only in the context of a <Router> component."
+    ) : invariant(false) : void 0;
     let {
       pathname
     } = useLocation();
     return (0, import_react.useMemo)(() => matchPath(pattern, pathname), [pathname, pattern]);
   }
   function useNavigate() {
-    !useInRouterContext() ? true ? invariant(false, "useNavigate() may be used only in the context of a <Router> component.") : invariant(false) : void 0;
+    !useInRouterContext() ? true ? invariant(
+      false,
+      "useNavigate() may be used only in the context of a <Router> component."
+    ) : invariant(false) : void 0;
     let {
       basename,
       navigator: navigator2
@@ -28190,7 +29350,10 @@
     return (0, import_react.useMemo)(() => resolveTo(to, JSON.parse(routePathnamesJson), locationPathname), [to, routePathnamesJson, locationPathname]);
   }
   function useRoutes(routes, locationArg) {
-    !useInRouterContext() ? true ? invariant(false, "useRoutes() may be used only in the context of a <Router> component.") : invariant(false) : void 0;
+    !useInRouterContext() ? true ? invariant(
+      false,
+      "useRoutes() may be used only in the context of a <Router> component."
+    ) : invariant(false) : void 0;
     let {
       matches: parentMatches
     } = (0, import_react.useContext)(RouteContext);
@@ -28592,17 +29755,20 @@
 
   // src/components/Icon.tsx
   init_react_shim();
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var Icon = ({
     children,
     className,
     ...props2
-  }) => /* @__PURE__ */ React.createElement("span", {
+  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
     className: `material-symbols-outlined ${className ?? ""}`,
-    ...props2
-  }, children);
+    ...props2,
+    children
+  });
   var Icon_default = Icon;
 
   // src/components/button/Button.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var Button = ({
     icon,
     variant,
@@ -28620,27 +29786,34 @@
       if (to && !e.defaultPrevented)
         navigate(to);
     };
-    return /* @__PURE__ */ React.createElement("button", {
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
       className: `c-button o-interactive ${variant ? "c-button--" + variant : ""} ${icon ? "c-button--with-icon" : ""} ${className ?? ""}`,
       type: type2,
       onClick: handleClick,
-      ...props2
-    }, icon && /* @__PURE__ */ React.createElement(Icon_default, {
-      className: "c-button__icon"
-    }, icon), children);
+      ...props2,
+      children: [
+        icon && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
+          className: "c-button__icon",
+          children: icon
+        }),
+        children
+      ]
+    });
   };
   var Button_default = Button;
 
   // src/components/form/ButtonStrip.tsx
   init_react_shim();
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var ButtonStrip = ({
     children,
     className,
     ...props2
-  }) => /* @__PURE__ */ React.createElement("div", {
+  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
     className: `c-button-strip ${className ?? ""}`,
-    ...props2
-  }, children);
+    ...props2,
+    children
+  });
   var ButtonStrip_default = ButtonStrip;
 
   // src/components/form/DateField.tsx
@@ -31700,6 +32873,7 @@
 
   // src/components/form/TextField.tsx
   init_react_shim();
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var TextField = ({
     className,
     label,
@@ -31712,40 +32886,58 @@
     ...props2
   }) => {
     const id = `f-id-${Math.random().toString(36).substring(2)}`;
-    return /* @__PURE__ */ React.createElement("div", {
-      className: "c-text-field__container"
-    }, /* @__PURE__ */ React.createElement("label", {
-      className: "c-text-field",
-      htmlFor: id,
-      style: backgroundColor ? { "--background": backgroundColor } : {}
-    }, /* @__PURE__ */ React.createElement("span", {
-      className: `c-text-field__label ${value == "" ? "c-text-field__label--no-value" : "c-text-field__label--has-value"}`
-    }, label), prefix, options ? /* @__PURE__ */ React.createElement("select", {
-      id,
-      value,
-      placeholder: label,
-      className: `c-text-field__input ${value === "" ? "c-text-field__select--empty" : ""} ${className || ""}`,
-      ...props2
-    }, value === "" && /* @__PURE__ */ React.createElement("option", {
-      value: "",
-      disabled: true,
-      hidden: true
-    }, label), options.map(([optionValue, optionLabel]) => /* @__PURE__ */ React.createElement("option", {
-      key: optionValue,
-      value: optionValue
-    }, optionLabel))) : /* @__PURE__ */ React.createElement("input", {
-      id,
-      value,
-      placeholder: label,
-      className: `c-text-field__input ${className || ""}`,
-      ...props2
-    }), suffix), /* @__PURE__ */ React.createElement("div", {
-      className: "c-text-field__support-text"
-    }, supportText));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+      className: "c-text-field__container",
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+          className: "c-text-field",
+          htmlFor: id,
+          style: backgroundColor ? { "--background": backgroundColor } : {},
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+              className: `c-text-field__label ${value == "" ? "c-text-field__label--no-value" : "c-text-field__label--has-value"}`,
+              children: label
+            }),
+            prefix,
+            options ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
+              id,
+              value,
+              placeholder: label,
+              className: `c-text-field__input ${value === "" ? "c-text-field__select--empty" : ""} ${className || ""}`,
+              ...props2,
+              children: [
+                value === "" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+                  value: "",
+                  disabled: true,
+                  hidden: true,
+                  children: label
+                }),
+                options.map(([optionValue, optionLabel]) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
+                  value: optionValue,
+                  children: optionLabel
+                }, optionValue))
+              ]
+            }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+              id,
+              value,
+              placeholder: label,
+              className: `c-text-field__input ${className || ""}`,
+              ...props2
+            }),
+            suffix
+          ]
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+          className: "c-text-field__support-text",
+          children: supportText
+        })
+      ]
+    });
   };
   var TextField_default = TextField;
 
   // src/components/form/DateField.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var ISO_DATE_FORMAT = "yyyy-MM-dd";
   var ISO_TIME_FORMAT = "HH:mm";
   var DateField = ({ label, value, onChange }) => {
@@ -31763,25 +32955,29 @@
       }
       onChange(newValue);
     };
-    return /* @__PURE__ */ React.createElement("div", {
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
       style: {
         display: "grid",
         gridTemplateColumns: "2fr 1fr",
         gridGap: "8px"
-      }
-    }, /* @__PURE__ */ React.createElement(TextField_default, {
-      required: true,
-      type: "date",
-      label: `${label} date`,
-      value: format(value, ISO_DATE_FORMAT),
-      onChange: (e) => setValue("date", e.target.value)
-    }), /* @__PURE__ */ React.createElement(TextField_default, {
-      required: true,
-      type: "time",
-      label: `${label} time`,
-      value: format(value, ISO_TIME_FORMAT),
-      onChange: (e) => setValue("time", e.target.value)
-    }));
+      },
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+          required: true,
+          type: "date",
+          label: `${label} date`,
+          value: format(value, ISO_DATE_FORMAT),
+          onChange: (e) => setValue("date", e.target.value)
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+          required: true,
+          type: "time",
+          label: `${label} time`,
+          value: format(value, ISO_TIME_FORMAT),
+          onChange: (e) => setValue("time", e.target.value)
+        })
+      ]
+    });
   };
   var DateField_default = DateField;
 
@@ -31790,13 +32986,18 @@
 
   // src/components/button/IconButton.tsx
   init_react_shim();
-  var IconButton = ({ icon, ...props2 }) => /* @__PURE__ */ React.createElement(Button_default, {
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var IconButton = ({ icon, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
     className: "c-button--icon-only",
-    ...props2
-  }, /* @__PURE__ */ React.createElement(Icon_default, null, icon));
+    ...props2,
+    children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
+      children: icon
+    })
+  });
   var IconButton_default = IconButton;
 
   // src/components/navigation/AppBar.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var AppBar = ({
     actions,
     backTo,
@@ -31804,19 +33005,30 @@
     variant,
     className,
     ...props2
-  }) => /* @__PURE__ */ React.createElement("div", {
+  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
     className: `c-app-bar ${className ?? ""}`,
-    ...props2
-  }, /* @__PURE__ */ React.createElement("div", {
-    className: "c-app-bar__strip"
-  }, backTo && /* @__PURE__ */ React.createElement(IconButton_default, {
-    icon: "arrow_back",
-    to: backTo
-  }), (variant === "center" || variant === "small") && /* @__PURE__ */ React.createElement("h1", {
-    className: `c-app-bar__title ${variant === "center" ? "c-app-bar__title--center" : ""}`
-  }, title), actions), (variant === "medium" || variant === "large") && /* @__PURE__ */ React.createElement("h1", {
-    className: variant === "large" ? "headline-medium" : "headline-small"
-  }, title));
+    ...props2,
+    children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+        className: "c-app-bar__strip",
+        children: [
+          backTo && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+            icon: "arrow_back",
+            to: backTo
+          }),
+          (variant === "center" || variant === "small") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+            className: `c-app-bar__title ${variant === "center" ? "c-app-bar__title--center" : ""}`,
+            children: title
+          }),
+          actions
+        ]
+      }),
+      (variant === "medium" || variant === "large") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+        className: variant === "large" ? "headline-medium" : "headline-small",
+        children: title
+      })
+    ]
+  });
   var AppBar_default = AppBar;
 
   // src/data/db.ts
@@ -31876,24 +33088,26 @@
       const sessions = await db.sessions.toCollection().sortBy("start");
       if (sessions === void 0)
         return [];
-      return Promise.all(sessions.map(async (session) => {
-        const [game, location2, players, rounds] = await Promise.all([
-          db.games.get(session.gameId),
-          db.locations.get(session.locationId),
-          db.players.where("_id").anyOf(session.playerIds).toArray(),
-          db.rounds.where({ sessionId: session._id }).sortBy("index")
-        ]);
-        if (game === void 0 || location2 === void 0) {
-          throw new Error("Not found");
-        }
-        return {
-          ...session,
-          game,
-          location: location2,
-          players,
-          rounds
-        };
-      }));
+      return Promise.all(
+        sessions.map(async (session) => {
+          const [game, location2, players, rounds] = await Promise.all([
+            db.games.get(session.gameId),
+            db.locations.get(session.locationId),
+            db.players.where("_id").anyOf(session.playerIds).toArray(),
+            db.rounds.where({ sessionId: session._id }).sortBy("index")
+          ]);
+          if (game === void 0 || location2 === void 0) {
+            throw new Error("Not found");
+          }
+          return {
+            ...session,
+            game,
+            location: location2,
+            players,
+            rounds
+          };
+        })
+      );
     }) ?? [];
   }
   function useSession(id) {
@@ -31937,43 +33151,55 @@
     async function deleteSession() {
       if (session) {
         const scores = await db.scores.where({ sessionId: id }).toArray();
-        db.scores.bulkDelete(scores.map((score) => [
-          score.sessionId,
-          score.roundIndex,
-          score.playerId
-        ]));
-        db.rounds.bulkDelete(session.rounds.map((round) => [round.sessionId, round.index]));
+        db.scores.bulkDelete(
+          scores.map((score) => [
+            score.sessionId,
+            score.roundIndex,
+            score.playerId
+          ])
+        );
+        db.rounds.bulkDelete(
+          session.rounds.map((round) => [round.sessionId, round.index])
+        );
         db.sessions.delete(id);
       }
     }
     return [session, setSession, deleteSession];
   }
   function useTotalScores(sessionId) {
-    const scores = (0, import_dexie_react_hooks.useLiveQuery)(() => db.scores.where({
-      sessionId
-    }).toArray());
-    const totals = (0, import_react3.useMemo)(() => scores?.reduce((sums, score) => {
-      if (!sums[score.playerId])
-        sums[score.playerId] = 0;
-      sums[score.playerId] += score.value;
-      return sums;
-    }, {}), [scores]);
+    const scores = (0, import_dexie_react_hooks.useLiveQuery)(
+      () => db.scores.where({
+        sessionId
+      }).toArray()
+    );
+    const totals = (0, import_react3.useMemo)(
+      () => scores?.reduce((sums, score) => {
+        if (!sums[score.playerId])
+          sums[score.playerId] = 0;
+        sums[score.playerId] += score.value;
+        return sums;
+      }, {}),
+      [scores]
+    );
     return totals ?? {};
   }
 
   // src/pages/Page.tsx
   init_react_shim();
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var Page = ({
     className,
     children,
     ...props2
-  }) => /* @__PURE__ */ React.createElement("div", {
+  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
     className: `o-canvas ${className ?? ""}`,
-    ...props2
-  }, children);
+    ...props2,
+    children
+  });
   var Page_default = Page;
 
   // src/pages/CreateSession.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var CreateSession = () => {
     const games = useGames();
     const locations = useLocations();
@@ -32004,38 +33230,61 @@
       });
       navigate(`/sessions/${_id}`);
     };
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(AppBar_default, {
-      variant: "small",
-      title: "New session",
-      backTo: "/"
-    }), /* @__PURE__ */ React.createElement(Page_default, null, /* @__PURE__ */ React.createElement("form", {
-      onSubmit: handleSubmit
-    }, /* @__PURE__ */ React.createElement(TextField_default, {
-      required: true,
-      label: "Session title",
-      value: title,
-      onChange: (e) => setTitle(e.target.value)
-    }), /* @__PURE__ */ React.createElement(TextField_default, {
-      required: true,
-      label: "Game",
-      value: gameId,
-      options: games.map((x) => [x._id, x.name]),
-      onChange: (e) => setGameId(e.target.value)
-    }), /* @__PURE__ */ React.createElement(TextField_default, {
-      required: true,
-      label: "Location",
-      value: locationId,
-      options: locations.map((x) => [x._id, x.name]),
-      onChange: (e) => setLocationId(e.target.value)
-    }), /* @__PURE__ */ React.createElement(DateField_default, {
-      label: "Start",
-      value: start,
-      onChange: (val) => setStart(val)
-    }), /* @__PURE__ */ React.createElement(ButtonStrip_default, null, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(Button_default, {
-      to: "/"
-    }, "Cancel"), /* @__PURE__ */ React.createElement(Button_default, {
-      type: "submit"
-    }, "Save"))))));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+          variant: "small",
+          title: "New session",
+          backTo: "/"
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page_default, {
+          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+            onSubmit: handleSubmit,
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+                required: true,
+                label: "Session title",
+                value: title,
+                onChange: (e) => setTitle(e.target.value)
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+                required: true,
+                label: "Game",
+                value: gameId,
+                options: games.map((x) => [x._id, x.name]),
+                onChange: (e) => setGameId(e.target.value)
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+                required: true,
+                label: "Location",
+                value: locationId,
+                options: locations.map((x) => [x._id, x.name]),
+                onChange: (e) => setLocationId(e.target.value)
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DateField_default, {
+                label: "Start",
+                value: start,
+                onChange: (val) => setStart(val)
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ButtonStrip_default, {
+                children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                      to: "/",
+                      children: "Cancel"
+                    }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                      type: "submit",
+                      children: "Save"
+                    })
+                  ]
+                })
+              })
+            ]
+          })
+        })
+      ]
+    });
   };
   var CreateSession_default = CreateSession;
 
@@ -32044,14 +33293,16 @@
 
   // src/components/list/List.tsx
   init_react_shim();
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var List = ({
     children,
     className,
     ...props2
-  }) => /* @__PURE__ */ React.createElement("ul", {
+  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
     className: `c-list ${className ?? ""}`,
-    ...props2
-  }, children);
+    ...props2,
+    children
+  });
   var List_default = List;
 
   // src/components/list/ListItem.tsx
@@ -32059,13 +33310,16 @@
 
   // src/components/avatar/Avatar.tsx
   init_react_shim();
-  var Avatar = ({ children, colour }) => /* @__PURE__ */ React.createElement("span", {
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var Avatar = ({ children, colour }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
     className: "c-avatar",
-    style: colour ? { backgroundColor: colour } : {}
-  }, children);
+    style: colour ? { backgroundColor: colour } : {},
+    children
+  });
   var Avatar_default = Avatar;
 
   // src/components/list/ListItem.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var ListItem = ({
     action,
     avatar = "",
@@ -32073,43 +33327,60 @@
     children,
     className,
     ...props2
-  }) => /* @__PURE__ */ React.createElement("li", {
+  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
     className: `c-list__item ${className ?? ""}`,
-    ...props2
-  }, (avatar || avatarColor) && /* @__PURE__ */ React.createElement(Avatar_default, {
-    colour: avatarColor ?? ""
-  }, avatar), /* @__PURE__ */ React.createElement("span", {
-    className: "c-list__item-body"
-  }, children), action ?? "");
+    ...props2,
+    children: [
+      (avatar || avatarColor) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Avatar_default, {
+        colour: avatarColor ?? "",
+        children: avatar
+      }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+        className: "c-list__item-body",
+        children
+      }),
+      action ?? ""
+    ]
+  });
   var ListItem_default = ListItem;
 
   // src/components/tabs/Tab.tsx
   init_react_shim();
-  var Tab = ({ children, ...props2 }) => /* @__PURE__ */ React.createElement("div", {
-    ...props2
-  }, children);
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var Tab = ({ children, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+    ...props2,
+    children
+  });
   var Tab_default = Tab;
 
   // src/components/tabs/Tabs.tsx
   init_react_shim();
   var import_react5 = __toESM(require_react());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var Tabs = ({ children, tabs }) => {
     const [currentTab, setCurrentTab] = (0, import_react5.useState)(0);
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement("div", {
-      className: "c-tabs__container"
-    }, tabs.map((label, index) => /* @__PURE__ */ React.createElement("div", {
-      className: `c-tabs__item o-interactive ${index === currentTab ? "o-interactive--active" : ""}`,
-      key: index,
-      onClick: () => setCurrentTab(index)
-    }, label))), import_react5.Children.toArray(children).map((child, index) => /* @__PURE__ */ React.createElement("div", {
-      className: "c-tabs__panel",
-      key: index,
-      hidden: index !== currentTab
-    }, child)));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+          className: "c-tabs__container",
+          children: tabs.map((label, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+            className: `c-tabs__item o-interactive ${index === currentTab ? "o-interactive--active" : ""}`,
+            onClick: () => setCurrentTab(index),
+            children: label
+          }, index))
+        }),
+        import_react5.Children.toArray(children).map((child, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+          className: "c-tabs__panel",
+          hidden: index !== currentTab,
+          children: child
+        }, index))
+      ]
+    });
   };
   var Tabs_default = Tabs;
 
   // src/pages/Database.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var Database = ({ ...props2 }) => {
     const locations = useLocations();
     const players = usePlayers();
@@ -32130,38 +33401,68 @@
       });
       navigate(`/locations/${id}`);
     }
-    return /* @__PURE__ */ React.createElement("div", {
-      ...props2
-    }, /* @__PURE__ */ React.createElement(AppBar_default, {
-      variant: "center",
-      title: "Database"
-    }), /* @__PURE__ */ React.createElement(Page_default, null, /* @__PURE__ */ React.createElement(Tabs_default, {
-      tabs: ["Players", "Locations"]
-    }, /* @__PURE__ */ React.createElement(Tab_default, null, /* @__PURE__ */ React.createElement(List_default, null, players.map((player) => /* @__PURE__ */ React.createElement(ListItem_default, {
-      key: player._id,
-      avatar: player.name.substring(0, 1),
-      action: /* @__PURE__ */ React.createElement(IconButton_default, {
-        icon: "edit",
-        to: `/players/${player._id}`
-      })
-    }, player.name))), /* @__PURE__ */ React.createElement("div", {
-      style: { textAlign: "center" }
-    }, /* @__PURE__ */ React.createElement(Button_default, {
-      icon: "add",
-      onClick: addPlayer
-    }, "Add new player"))), /* @__PURE__ */ React.createElement(Tab_default, null, /* @__PURE__ */ React.createElement(List_default, null, locations.map((location2) => /* @__PURE__ */ React.createElement(ListItem_default, {
-      key: location2._id,
-      avatar: location2.icon ? /* @__PURE__ */ React.createElement(Icon_default, null, location2.icon) : "",
-      action: /* @__PURE__ */ React.createElement(IconButton_default, {
-        icon: "edit",
-        to: `/locations/${location2._id}`
-      })
-    }, location2.name))), /* @__PURE__ */ React.createElement("div", {
-      style: { textAlign: "center" }
-    }, /* @__PURE__ */ React.createElement(Button_default, {
-      icon: "add",
-      onClick: addLocation
-    }, "Add new location"))))));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+      ...props2,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+          variant: "center",
+          title: "Database"
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page_default, {
+          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Tabs_default, {
+            tabs: ["Players", "Locations"],
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Tab_default, {
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)(List_default, {
+                    children: players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListItem_default, {
+                      avatar: player.name.substring(0, 1),
+                      action: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+                        icon: "edit",
+                        to: `/players/${player._id}`
+                      }),
+                      children: player.name
+                    }, player._id))
+                  }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+                    style: { textAlign: "center" },
+                    children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                      icon: "add",
+                      onClick: addPlayer,
+                      children: "Add new player"
+                    })
+                  })
+                ]
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Tab_default, {
+                children: [
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)(List_default, {
+                    children: locations.map((location2) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListItem_default, {
+                      avatar: location2.icon ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
+                        children: location2.icon
+                      }) : "",
+                      action: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+                        icon: "edit",
+                        to: `/locations/${location2._id}`
+                      }),
+                      children: location2.name
+                    }, location2._id))
+                  }),
+                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+                    style: { textAlign: "center" },
+                    children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                      icon: "add",
+                      onClick: addLocation,
+                      children: "Add new location"
+                    })
+                  })
+                ]
+              })
+            ]
+          })
+        })
+      ]
+    });
   };
   var Database_default = Database;
 
@@ -32171,13 +33472,18 @@
 
   // src/components/FullPageError.tsx
   init_react_shim();
-  var FullPageError = ({ title, children, backTo, ...props2 }) => /* @__PURE__ */ React.createElement("div", {
-    ...props2
-  }, /* @__PURE__ */ React.createElement(AppBar_default, {
-    variant: "large",
-    title: title || "An error occurred",
-    backTo
-  }), children);
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var FullPageError = ({ title, children, backTo, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+    ...props2,
+    children: [
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+        variant: "large",
+        title: title || "An error occurred",
+        backTo
+      }),
+      children
+    ]
+  });
   var FullPageError_default = FullPageError;
 
   // src/components/modal/AddRoundModal.tsx
@@ -32188,6 +33494,7 @@
   init_react_shim();
   var import_react6 = __toESM(require_react());
   var import_react_dom = __toESM(require_react_dom());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var Modal = ({
     buttons,
     title,
@@ -32204,28 +33511,50 @@
         document.body.removeChild(container.current);
       };
     }, []);
-    return (0, import_react_dom.createPortal)(open ? /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement("div", {
-      className: "c-modal__backdrop",
-      onClick: onClose
-    }), /* @__PURE__ */ React.createElement("dialog", {
-      className: "c-modal",
-      "aria-describedby": `${id}-label`,
-      open: true,
-      ...props2
-    }, /* @__PURE__ */ React.createElement("form", null, /* @__PURE__ */ React.createElement("div", {
-      className: "c-modal__content"
-    }, /* @__PURE__ */ React.createElement("h2", {
-      className: "c-modal__title headline-small",
-      id: `${id}-label`
-    }, title), children), /* @__PURE__ */ React.createElement("div", {
-      className: "c-modal__buttons"
-    }, buttons || /* @__PURE__ */ React.createElement(Button_default, {
-      onClick: onClose
-    }, "Close"))))) : null, container.current);
+    return (0, import_react_dom.createPortal)(
+      open ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, {
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+            className: "c-modal__backdrop",
+            onClick: onClose
+          }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("dialog", {
+            className: "c-modal",
+            "aria-describedby": `${id}-label`,
+            open: true,
+            ...props2,
+            children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+                  className: "c-modal__content",
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+                      className: "c-modal__title headline-small",
+                      id: `${id}-label`,
+                      children: title
+                    }),
+                    children
+                  ]
+                }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+                  className: "c-modal__buttons",
+                  children: buttons || /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                    onClick: onClose,
+                    children: "Close"
+                  })
+                })
+              ]
+            })
+          })
+        ]
+      }) : null,
+      container.current
+    );
   };
   var Modal_default = Modal;
 
   // src/components/modal/AddRoundModal.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var AddRoundModal = ({ onSave, onClose, ...props2 }) => {
     const [name, setName] = (0, import_react7.useState)("");
     const [colour, setColour] = (0, import_react7.useState)("");
@@ -32234,34 +33563,46 @@
         onSave(name, colour);
       onClose();
     };
-    return /* @__PURE__ */ React.createElement(Modal_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Modal_default, {
       title: "New round",
-      buttons: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button_default, {
-        onClick: onClose
-      }, "Cancel"), /* @__PURE__ */ React.createElement(Button_default, {
-        onClick: handleSave,
-        disabled: name === ""
-      }, "Add round")),
+      buttons: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, {
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+            onClick: onClose,
+            children: "Cancel"
+          }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+            onClick: handleSave,
+            disabled: name === "",
+            children: "Add round"
+          })
+        ]
+      }),
       onClose,
-      ...props2
-    }, /* @__PURE__ */ React.createElement(TextField_default, {
-      label: "Round name",
-      value: name,
-      onChange: (e) => setName(e.target.value),
-      backgroundColor: "var(--md-sys-color-surface-variant)"
-    }), /* @__PURE__ */ React.createElement(TextField_default, {
-      label: "Colour",
-      type: "color",
-      value: colour || "#ffffff",
-      onChange: (e) => setColour(e.target.value),
-      backgroundColor: "var(--md-sys-color-surface-variant)"
-    }));
+      ...props2,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+          label: "Round name",
+          value: name,
+          onChange: (e) => setName(e.target.value),
+          backgroundColor: "var(--md-sys-color-surface-variant)"
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+          label: "Colour",
+          type: "color",
+          value: colour || "#ffffff",
+          onChange: (e) => setColour(e.target.value),
+          backgroundColor: "var(--md-sys-color-surface-variant)"
+        })
+      ]
+    });
   };
   var AddRoundModal_default = AddRoundModal;
 
   // src/components/modal/EditRoundModal.tsx
   init_react_shim();
   var import_react8 = __toESM(require_react());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var EditRoundModal = ({
     onSave,
     onClose,
@@ -32276,32 +33617,43 @@
         onSave(name, colour);
       onClose();
     };
-    return /* @__PURE__ */ React.createElement(Modal_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Modal_default, {
       title: "Edit round",
-      buttons: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button_default, {
-        onClick: onClose
-      }, "Cancel"), /* @__PURE__ */ React.createElement(Button_default, {
-        onClick: handleSave,
-        disabled: name === ""
-      }, "Save changes")),
+      buttons: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, {
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+            onClick: onClose,
+            children: "Cancel"
+          }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+            onClick: handleSave,
+            disabled: name === "",
+            children: "Save changes"
+          })
+        ]
+      }),
       onClose,
-      ...props2
-    }, /* @__PURE__ */ React.createElement(TextField_default, {
-      label: "Round name",
-      value: name,
-      onChange: (e) => setName(e.target.value),
-      backgroundColor: "var(--md-sys-color-surface-variant)"
-    }), /* @__PURE__ */ React.createElement(TextField_default, {
-      label: "Colour",
-      type: "color",
-      value: colour || "#ffffff",
-      onChange: (e) => setColour(e.target.value),
-      backgroundColor: "var(--md-sys-color-surface-variant)",
-      suffix: /* @__PURE__ */ React.createElement(IconButton_default, {
-        icon: "close",
-        onClick: () => setColour("")
-      })
-    }));
+      ...props2,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+          label: "Round name",
+          value: name,
+          onChange: (e) => setName(e.target.value),
+          backgroundColor: "var(--md-sys-color-surface-variant)"
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+          label: "Colour",
+          type: "color",
+          value: colour || "#ffffff",
+          onChange: (e) => setColour(e.target.value),
+          backgroundColor: "var(--md-sys-color-surface-variant)",
+          suffix: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+            icon: "close",
+            onClick: () => setColour("")
+          })
+        })
+      ]
+    });
   };
   var EditRoundModal_default = EditRoundModal;
 
@@ -32319,11 +33671,12 @@
   var isEnumValue = (something, enumObject) => typeof something === "string" && Object.values(enumObject).includes(something);
 
   // src/pages/EditGame.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var EditGame = ({ ...props2 }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     if (typeof id !== "string") {
-      return /* @__PURE__ */ React.createElement(FullPageError_default, {
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
         title: "Game not found"
       });
     }
@@ -32347,7 +33700,11 @@
     if (!game)
       return null;
     const setRound = (index, label, colour) => {
-      setRounds(rounds.map((round, i) => i === index ? { ...round, label, colour } : round));
+      setRounds(
+        rounds.map(
+          (round, i) => i === index ? { ...round, label, colour } : round
+        )
+      );
     };
     const addRound = (label, colour) => {
       setRounds([...rounds, { label, colour }]);
@@ -32376,75 +33733,101 @@
       db.games.delete(id);
       navigate("/games");
     };
-    return /* @__PURE__ */ React.createElement("div", {
-      ...props2
-    }, /* @__PURE__ */ React.createElement(AppBar_default, {
-      variant: "small",
-      title: "Edit game",
-      backTo: "/games",
-      actions: /* @__PURE__ */ React.createElement(IconButton_default, {
-        icon: "delete",
-        onClick: handleDelete
-      })
-    }), /* @__PURE__ */ React.createElement(Page_default, null, /* @__PURE__ */ React.createElement("form", {
-      onSubmit: handleSubmit
-    }, /* @__PURE__ */ React.createElement(TextField_default, {
-      label: "Name",
-      value: name,
-      onChange: (e) => setName(e.target.value)
-    }), /* @__PURE__ */ React.createElement(TextField_default, {
-      label: "Image",
-      value: image,
-      supportText: "Enter a URL to an image",
-      onChange: (e) => setImage(e.target.value)
-    }), /* @__PURE__ */ React.createElement(TextField_default, {
-      label: "How is the winner decided?",
-      value: scoreMode,
-      options: [
-        ["HIGHEST" /* Highest */, "Highest score"],
-        ["LOWEST" /* Lowest */, "Lowest score"],
-        ["CUSTOM" /* Custom */, "Manually select"]
-      ],
-      onChange: (e) => {
-        const v = e.target.value;
-        if (isEnumValue(v, ScoreMode)) {
-          setScoreMode(v);
-        }
-      }
-    }), /* @__PURE__ */ React.createElement("h2", {
-      className: "title-large"
-    }, "Rounds"), /* @__PURE__ */ React.createElement(EditRoundModal_default, {
-      label: rounds[editRoundActive]?.label,
-      colour: rounds[editRoundActive]?.colour,
-      open: editRoundActive !== -1,
-      onClose: () => setEditRoundActive(-1),
-      onSave: (label, colour) => setRound(editRoundActive, label, colour),
-      key: `edit-round-${editRoundActive}`
-    }), /* @__PURE__ */ React.createElement(List_default, null, rounds.map((round, index) => /* @__PURE__ */ React.createElement(ListItem_default, {
-      key: index,
-      avatarColor: round.colour,
-      action: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(IconButton_default, {
-        icon: "edit",
-        onClick: () => setEditRoundActive(index)
-      }), /* @__PURE__ */ React.createElement(IconButton_default, {
-        icon: "delete",
-        onClick: () => removeRound(index)
-      }))
-    }, round.label))), /* @__PURE__ */ React.createElement(AddRoundModal_default, {
-      open: addRoundModalOpen,
-      onClose: () => setAddRoundModalOpen(false),
-      onSave: addRound,
-      key: `add-round-${addRoundModalOpen}`
-    }), /* @__PURE__ */ React.createElement(Button_default, {
-      variant: "outlined",
-      onClick: () => setAddRoundModalOpen(true),
-      icon: "add"
-    }, "Add"), /* @__PURE__ */ React.createElement("div", {
-      style: { textAlign: "right" }
-    }, /* @__PURE__ */ React.createElement(Button_default, {
-      variant: "filled",
-      type: "submit"
-    }, "Save")))));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+      ...props2,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+          variant: "small",
+          title: "Edit game",
+          backTo: "/games",
+          actions: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+            icon: "delete",
+            onClick: handleDelete
+          })
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page_default, {
+          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+            onSubmit: handleSubmit,
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+                label: "Name",
+                value: name,
+                onChange: (e) => setName(e.target.value)
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+                label: "Image",
+                value: image,
+                supportText: "Enter a URL to an image",
+                onChange: (e) => setImage(e.target.value)
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+                label: "How is the winner decided?",
+                value: scoreMode,
+                options: [
+                  ["HIGHEST" /* Highest */, "Highest score"],
+                  ["LOWEST" /* Lowest */, "Lowest score"],
+                  ["CUSTOM" /* Custom */, "Manually select"]
+                ],
+                onChange: (e) => {
+                  const v = e.target.value;
+                  if (isEnumValue(v, ScoreMode)) {
+                    setScoreMode(v);
+                  }
+                }
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
+                className: "title-large",
+                children: "Rounds"
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EditRoundModal_default, {
+                label: rounds[editRoundActive]?.label,
+                colour: rounds[editRoundActive]?.colour,
+                open: editRoundActive !== -1,
+                onClose: () => setEditRoundActive(-1),
+                onSave: (label, colour) => setRound(editRoundActive, label, colour)
+              }, `edit-round-${editRoundActive}`),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(List_default, {
+                children: rounds.map((round, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListItem_default, {
+                  avatarColor: round.colour,
+                  action: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, {
+                    children: [
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+                        icon: "edit",
+                        onClick: () => setEditRoundActive(index)
+                      }),
+                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+                        icon: "delete",
+                        onClick: () => removeRound(index)
+                      })
+                    ]
+                  }),
+                  children: round.label
+                }, index))
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AddRoundModal_default, {
+                open: addRoundModalOpen,
+                onClose: () => setAddRoundModalOpen(false),
+                onSave: addRound
+              }, `add-round-${addRoundModalOpen}`),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                variant: "outlined",
+                onClick: () => setAddRoundModalOpen(true),
+                icon: "add",
+                children: "Add"
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+                style: { textAlign: "right" },
+                children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                  variant: "filled",
+                  type: "submit",
+                  children: "Save"
+                })
+              })
+            ]
+          })
+        })
+      ]
+    });
   };
   var EditGame_default = EditGame;
 
@@ -34695,13 +36078,17 @@
   var icons_default = icons;
 
   // src/pages/EditLocation.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var EditLocation = ({ ...props2 }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     if (typeof id !== "string") {
-      return /* @__PURE__ */ React.createElement(FullPageError_default, {
-        backTo: "/database"
-      }, /* @__PURE__ */ React.createElement("p", null, "Location not found"));
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
+        backTo: "/database",
+        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+          children: "Location not found"
+        })
+      });
     }
     const [name, setName] = (0, import_react10.useState)("");
     const [icon, setIcon] = (0, import_react10.useState)(void 0);
@@ -34713,9 +36100,12 @@
       }
     }, [location2]);
     if (typeof location2 === "undefined") {
-      return /* @__PURE__ */ React.createElement(FullPageError_default, {
-        backTo: "/location"
-      }, /* @__PURE__ */ React.createElement("p", null, "Location not found"));
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
+        backTo: "/location",
+        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+          children: "Location not found"
+        })
+      });
     }
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -34731,47 +36121,66 @@
       db.locations.delete(id);
       navigate("/database");
     };
-    return /* @__PURE__ */ React.createElement("div", {
-      ...props2
-    }, /* @__PURE__ */ React.createElement(AppBar_default, {
-      variant: "small",
-      title: "Edit location",
-      backTo: "/database",
-      actions: /* @__PURE__ */ React.createElement(IconButton_default, {
-        icon: "delete",
-        onClick: handleDelete
-      })
-    }), /* @__PURE__ */ React.createElement(Page_default, null, /* @__PURE__ */ React.createElement("form", {
-      onSubmit: handleSubmit
-    }, /* @__PURE__ */ React.createElement(TextField_default, {
-      label: "Name",
-      value: name,
-      onChange: (e) => setName(e.target.value)
-    }), /* @__PURE__ */ React.createElement(TextField_default, {
-      label: "Icon",
-      value: icon,
-      options: icons_default.map((x) => [x, x]),
-      prefix: icons_default.includes(icon ?? "") ? /* @__PURE__ */ React.createElement(Icon_default, null, icon) : "",
-      onChange: (e) => setIcon(e.target.value)
-    }), /* @__PURE__ */ React.createElement("div", {
-      style: { textAlign: "right" }
-    }, /* @__PURE__ */ React.createElement(Button_default, {
-      variant: "filled",
-      type: "submit"
-    }, "Save")))));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+      ...props2,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+          variant: "small",
+          title: "Edit location",
+          backTo: "/database",
+          actions: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+            icon: "delete",
+            onClick: handleDelete
+          })
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page_default, {
+          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+            onSubmit: handleSubmit,
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+                label: "Name",
+                value: name,
+                onChange: (e) => setName(e.target.value)
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+                label: "Icon",
+                value: icon,
+                options: icons_default.map((x) => [x, x]),
+                prefix: icons_default.includes(icon ?? "") ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
+                  children: icon
+                }) : "",
+                onChange: (e) => setIcon(e.target.value)
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+                style: { textAlign: "right" },
+                children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                  variant: "filled",
+                  type: "submit",
+                  children: "Save"
+                })
+              })
+            ]
+          })
+        })
+      ]
+    });
   };
   var EditLocation_default = EditLocation;
 
   // src/pages/EditPlayer.tsx
   init_react_shim();
   var import_react11 = __toESM(require_react());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var EditPlayer = ({ ...props2 }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     if (typeof id !== "string") {
-      return /* @__PURE__ */ React.createElement(FullPageError_default, {
-        backTo: "/database"
-      }, /* @__PURE__ */ React.createElement("p", null, "Player not found"));
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
+        backTo: "/database",
+        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+          children: "Player not found"
+        })
+      });
     }
     const [name, setName] = (0, import_react11.useState)("");
     const [player, setPlayer] = usePlayer(id);
@@ -34781,9 +36190,12 @@
       }
     }, [player]);
     if (typeof player === "undefined") {
-      return /* @__PURE__ */ React.createElement(FullPageError_default, {
-        backTo: "/database"
-      }, /* @__PURE__ */ React.createElement("p", null, "Player not found"));
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
+        backTo: "/database",
+        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+          children: "Player not found"
+        })
+      });
     }
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -34798,39 +36210,52 @@
       db.players.delete(id);
       navigate("/database");
     };
-    return /* @__PURE__ */ React.createElement("div", {
-      ...props2
-    }, /* @__PURE__ */ React.createElement(AppBar_default, {
-      variant: "small",
-      title: "Edit player",
-      backTo: "/database",
-      actions: /* @__PURE__ */ React.createElement(IconButton_default, {
-        icon: "delete",
-        onClick: handleDelete
-      })
-    }), /* @__PURE__ */ React.createElement(Page_default, null, /* @__PURE__ */ React.createElement("form", {
-      onSubmit: handleSubmit
-    }, /* @__PURE__ */ React.createElement(TextField_default, {
-      label: "Name",
-      value: name,
-      onChange: (e) => setName(e.target.value)
-    }), /* @__PURE__ */ React.createElement("div", {
-      style: { textAlign: "right" }
-    }, /* @__PURE__ */ React.createElement(Button_default, {
-      variant: "filled",
-      type: "submit"
-    }, "Save")))));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+      ...props2,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+          variant: "small",
+          title: "Edit player",
+          backTo: "/database",
+          actions: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+            icon: "delete",
+            onClick: handleDelete
+          })
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page_default, {
+          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+            onSubmit: handleSubmit,
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+                label: "Name",
+                value: name,
+                onChange: (e) => setName(e.target.value)
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+                style: { textAlign: "right" },
+                children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                  variant: "filled",
+                  type: "submit",
+                  children: "Save"
+                })
+              })
+            ]
+          })
+        })
+      ]
+    });
   };
   var EditPlayer_default = EditPlayer;
 
   // src/pages/EditSession.tsx
   init_react_shim();
   var import_react12 = __toESM(require_react());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var EditSession = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     if (typeof id !== "string") {
-      return /* @__PURE__ */ React.createElement(FullPageError_default, {
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
         title: "Session not found"
       });
     }
@@ -34870,45 +36295,71 @@
         navigate("/");
       }
     };
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(AppBar_default, {
-      variant: "small",
-      title: "Edit session",
-      backTo: `/sessions/${session._id}`
-    }), /* @__PURE__ */ React.createElement(Page_default, null, /* @__PURE__ */ React.createElement("form", {
-      onSubmit: handleSubmit
-    }, /* @__PURE__ */ React.createElement(TextField_default, {
-      required: true,
-      label: "Session title",
-      value: title,
-      onChange: (e) => setTitle(e.target.value)
-    }), /* @__PURE__ */ React.createElement(TextField_default, {
-      required: true,
-      label: "Game",
-      value: gameId,
-      options: games.map((x) => [x._id, x.name]),
-      onChange: (e) => setGameId(e.target.value)
-    }), /* @__PURE__ */ React.createElement(TextField_default, {
-      required: true,
-      label: "Location",
-      value: locationId,
-      options: locations.map((x) => [x._id, x.name]),
-      onChange: (e) => setLocationId(e.target.value)
-    }), /* @__PURE__ */ React.createElement(DateField_default, {
-      label: "Start",
-      value: start,
-      onChange: (val) => setStart(val)
-    }), /* @__PURE__ */ React.createElement(DateField_default, {
-      label: "End",
-      value: end,
-      onChange: (val) => setEnd(val)
-    }), /* @__PURE__ */ React.createElement(ButtonStrip_default, null, /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(Button_default, {
-      to: `/sessions/${session._id}`
-    }, "Cancel"), /* @__PURE__ */ React.createElement(Button_default, {
-      style: { color: "var(--md-sys-color-error)" },
-      onClick: handleDelete
-    }, "Delete"), /* @__PURE__ */ React.createElement(Button_default, {
-      type: "submit"
-    }, "Save"))))));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+          variant: "small",
+          title: "Edit session",
+          backTo: `/sessions/${session._id}`
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page_default, {
+          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
+            onSubmit: handleSubmit,
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+                required: true,
+                label: "Session title",
+                value: title,
+                onChange: (e) => setTitle(e.target.value)
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+                required: true,
+                label: "Game",
+                value: gameId,
+                options: games.map((x) => [x._id, x.name]),
+                onChange: (e) => setGameId(e.target.value)
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+                required: true,
+                label: "Location",
+                value: locationId,
+                options: locations.map((x) => [x._id, x.name]),
+                onChange: (e) => setLocationId(e.target.value)
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DateField_default, {
+                label: "Start",
+                value: start,
+                onChange: (val) => setStart(val)
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DateField_default, {
+                label: "End",
+                value: end,
+                onChange: (val) => setEnd(val)
+              }),
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ButtonStrip_default, {
+                children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                      to: `/sessions/${session._id}`,
+                      children: "Cancel"
+                    }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                      style: { color: "var(--md-sys-color-error)" },
+                      onClick: handleDelete,
+                      children: "Delete"
+                    }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                      type: "submit",
+                      children: "Save"
+                    })
+                  ]
+                })
+              })
+            ]
+          })
+        })
+      ]
+    });
   };
   var EditSession_default = EditSession;
 
@@ -34919,6 +36370,7 @@
   // src/components/modal/EditPlayersModal.tsx
   init_react_shim();
   var import_react13 = __toESM(require_react());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var EditPlayersModal = ({ playerIds, onSave, onClose, ...props2 }) => {
     const [ids, setIds] = (0, import_react13.useState)(playerIds);
     const allPlayers = usePlayers();
@@ -34929,35 +36381,49 @@
       onSave(ids);
       onClose();
     };
-    return /* @__PURE__ */ React.createElement(Modal_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Modal_default, {
       title: "Edit players",
-      buttons: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button_default, {
-        onClick: onClose
-      }, "Cancel"), /* @__PURE__ */ React.createElement(Button_default, {
-        onClick: handleSave,
-        disabled: players.length === 0
-      }, "Save")),
+      buttons: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, {
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+            onClick: onClose,
+            children: "Cancel"
+          }),
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+            onClick: handleSave,
+            disabled: players.length === 0,
+            children: "Save"
+          })
+        ]
+      }),
       onClose,
-      ...props2
-    }, /* @__PURE__ */ React.createElement(List_default, null, players.map((player) => /* @__PURE__ */ React.createElement(ListItem_default, {
-      key: player._id,
-      avatar: player.name.substring(0, 1),
-      action: /* @__PURE__ */ React.createElement(IconButton_default, {
-        onClick: () => setIds(ids.filter((x) => x !== player._id)),
-        icon: "delete"
-      })
-    }, player.name))), /* @__PURE__ */ React.createElement(TextField_default, {
-      label: "Add player",
-      value: "",
-      options: allPlayers.filter((x) => !ids.includes(x._id)).map((x) => [x._id, x.name]),
-      onChange: (e) => setIds([...ids, e.target.value])
-    }));
+      ...props2,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(List_default, {
+          children: players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListItem_default, {
+            avatar: player.name.substring(0, 1),
+            action: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+              onClick: () => setIds(ids.filter((x) => x !== player._id)),
+              icon: "delete"
+            }),
+            children: player.name
+          }, player._id))
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
+          label: "Add player",
+          value: "",
+          options: allPlayers.filter((x) => !ids.includes(x._id)).map((x) => [x._id, x.name]),
+          onChange: (e) => setIds([...ids, e.target.value])
+        })
+      ]
+    });
   };
   var EditPlayersModal_default = EditPlayersModal;
 
   // src/components/modal/WinnerModal.tsx
   init_react_shim();
   var import_react14 = __toESM(require_react());
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var WinnerModal = ({ playerIds, onSave, onClose, ...props2 }) => {
     const [ids] = (0, import_react14.useState)(playerIds);
     const allPlayers = usePlayers();
@@ -34968,26 +36434,36 @@
       onSave(playerId);
       onClose();
     };
-    return /* @__PURE__ */ React.createElement(Modal_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Modal_default, {
       title: "Select winner",
-      buttons: /* @__PURE__ */ React.createElement(React.Fragment, null, /* @__PURE__ */ React.createElement(Button_default, {
-        onClick: onClose
-      }, "Cancel")),
+      buttons: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, {
+        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+          onClick: onClose,
+          children: "Cancel"
+        })
+      }),
       onClose,
-      ...props2
-    }, /* @__PURE__ */ React.createElement(List_default, null, /* @__PURE__ */ React.createElement(ListItem_default, {
-      action: /* @__PURE__ */ React.createElement(IconButton_default, {
-        onClick: () => handleSave(null),
-        icon: "check"
+      ...props2,
+      children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(List_default, {
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListItem_default, {
+            action: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+              onClick: () => handleSave(null),
+              icon: "check"
+            }),
+            children: "No winner"
+          }),
+          players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListItem_default, {
+            avatar: player.name.substring(0, 1),
+            action: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+              onClick: () => handleSave(player._id),
+              icon: "check"
+            }),
+            children: player.name
+          }, player._id))
+        ]
       })
-    }, "No winner"), players.map((player) => /* @__PURE__ */ React.createElement(ListItem_default, {
-      key: player._id,
-      avatar: player.name.substring(0, 1),
-      action: /* @__PURE__ */ React.createElement(IconButton_default, {
-        onClick: () => handleSave(player._id),
-        icon: "check"
-      })
-    }, player.name))));
+    });
   };
   var WinnerModal_default = WinnerModal;
 
@@ -34996,17 +36472,20 @@
 
   // src/components/table/Table.tsx
   init_react_shim();
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var Table3 = ({
     className,
     children,
     ...props2
   }) => {
-    return /* @__PURE__ */ React.createElement("div", {
-      className: "c-table__wrapper"
-    }, /* @__PURE__ */ React.createElement("table", {
-      className: `c-table ${className ?? ""}`,
-      ...props2
-    }, children));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+      className: "c-table__wrapper",
+      children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("table", {
+        className: `c-table ${className ?? ""}`,
+        ...props2,
+        children
+      })
+    });
   };
   var Table_default = Table3;
 
@@ -35016,26 +36495,31 @@
 
   // src/components/table/TableCellInput.tsx
   init_react_shim();
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var TableCellInput = ({
     value,
     ...props2
-  }) => /* @__PURE__ */ React.createElement("td", {
-    className: "c-table__cell--no-padding"
-  }, /* @__PURE__ */ React.createElement("input", {
-    ...props2,
-    className: "c-text-field__input",
-    style: { padding: "20px 12px", width: "100%", textAlign: "center" },
-    value
-  }));
+  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+    className: "c-table__cell--no-padding",
+    children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+      ...props2,
+      className: "c-text-field__input",
+      style: { padding: "20px 12px", width: "100%", textAlign: "center" },
+      value
+    })
+  });
   var TableCellInput_default = TableCellInput;
 
   // src/components/score-table/ScoreTableCell.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var ScoreTableCell = ({ round, playerId, editable }) => {
-    const score = (0, import_dexie_react_hooks2.useLiveQuery)(() => db.scores.get({
-      sessionId: round.sessionId,
-      roundIndex: round.index,
-      playerId
-    }));
+    const score = (0, import_dexie_react_hooks2.useLiveQuery)(
+      () => db.scores.get({
+        sessionId: round.sessionId,
+        roundIndex: round.index,
+        playerId
+      })
+    );
     const handleScoreChange = (e) => {
       if (e.target.value) {
         db.scores.put({
@@ -35048,15 +36532,18 @@
         db.scores.delete([round.sessionId, round.index, playerId]);
       }
     };
-    return editable ? /* @__PURE__ */ React.createElement(TableCellInput_default, {
+    return editable ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCellInput_default, {
       type: "number",
       value: score?.value ?? "",
       onChange: handleScoreChange
-    }) : /* @__PURE__ */ React.createElement("td", null, score?.value ?? "");
+    }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+      children: score?.value ?? ""
+    });
   };
   var ScoreTableCell_default = ScoreTableCell;
 
   // src/components/score-table/ScoreTable.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var ScoreTable = ({
     session,
     editable = false,
@@ -35091,43 +36578,95 @@
       if (session.customWinner)
         winners.push(session.customWinner);
     }
-    return /* @__PURE__ */ React.createElement(Table_default, {
-      ...props2
-    }, /* @__PURE__ */ React.createElement("thead", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null), session.players.map((player) => /* @__PURE__ */ React.createElement("th", {
-      key: player._id
-    }, winners.includes(player._id) && "\u{1F451}", " ", player.name))), scoreMode && ["HIGHEST" /* Highest */, "LOWEST" /* Lowest */].includes(scoreMode) && /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", {
-      scope: "row"
-    }, "Total"), session.players.map((player) => /* @__PURE__ */ React.createElement("th", {
-      key: player._id
-    }, /* @__PURE__ */ React.createElement("strong", null, totalScores[player._id]))))), /* @__PURE__ */ React.createElement("tbody", null, session.rounds.map((round, index) => /* @__PURE__ */ React.createElement("tr", {
-      key: index
-    }, /* @__PURE__ */ React.createElement("th", null, /* @__PURE__ */ React.createElement("div", {
-      style: {
-        display: "flex",
-        alignItems: "center",
-        fontSize: "var(--md-sys-typescale-caption-size)"
-      }
-    }, round.colour && /* @__PURE__ */ React.createElement(Avatar_default, {
-      colour: round.colour
-    }), round.label ?? "", editable && /* @__PURE__ */ React.createElement(IconButton_default, {
-      icon: "delete",
-      onClick: () => confirm(`Are you sure you want to remove ${round.label}?`) && onRemoveRound(index)
-    }))), session.players.map((player) => /* @__PURE__ */ React.createElement(ScoreTableCell_default, {
-      key: player._id,
-      round,
-      playerId: player._id,
-      editable
-    }))))), scoreMode && ["HIGHEST" /* Highest */, "LOWEST" /* Lowest */].includes(scoreMode) && /* @__PURE__ */ React.createElement("tfoot", null, /* @__PURE__ */ React.createElement("tr", null, /* @__PURE__ */ React.createElement("th", null, "Total"), session.players.map((player) => /* @__PURE__ */ React.createElement("td", {
-      key: player._id
-    }, /* @__PURE__ */ React.createElement("strong", null, totalScores[player._id]))))));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table_default, {
+      ...props2,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("thead", {
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {}),
+                session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("th", {
+                  children: [
+                    winners.includes(player._id) && "\u{1F451}",
+                    " ",
+                    player.name
+                  ]
+                }, player._id))
+              ]
+            }),
+            scoreMode && ["HIGHEST" /* Highest */, "LOWEST" /* Lowest */].includes(scoreMode) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+                  scope: "row",
+                  children: "Total"
+                }),
+                session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+                  children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+                    children: totalScores[player._id]
+                  })
+                }, player._id))
+              ]
+            })
+          ]
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", {
+          children: session.rounds.map((round, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+                children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+                  style: {
+                    display: "flex",
+                    alignItems: "center",
+                    fontSize: "var(--md-sys-typescale-caption-size)"
+                  },
+                  children: [
+                    round.colour && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Avatar_default, {
+                      colour: round.colour
+                    }),
+                    round.label ?? "",
+                    editable && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+                      icon: "delete",
+                      onClick: () => confirm(
+                        `Are you sure you want to remove ${round.label}?`
+                      ) && onRemoveRound(index)
+                    })
+                  ]
+                })
+              }),
+              session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScoreTableCell_default, {
+                round,
+                playerId: player._id,
+                editable
+              }, player._id))
+            ]
+          }, index))
+        }),
+        scoreMode && ["HIGHEST" /* Highest */, "LOWEST" /* Lowest */].includes(scoreMode) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tfoot", {
+          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+            children: [
+              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
+                children: "Total"
+              }),
+              session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
+                children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
+                  children: totalScores[player._id]
+                })
+              }, player._id))
+            ]
+          })
+        })
+      ]
+    });
   };
   var ScoreTable_default = ScoreTable;
 
   // src/pages/EditSessionScores.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var EditSessionScores = () => {
     const { id } = useParams();
     if (typeof id !== "string") {
-      return /* @__PURE__ */ React.createElement(FullPageError_default, {
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
         title: "Game not found"
       });
     }
@@ -35159,46 +36698,64 @@
         customWinner: playerId ?? void 0
       });
     };
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(AppBar_default, {
-      variant: "small",
-      title: `${session.title}: Scores`,
-      backTo: `/sessions/${session._id}`
-    }), /* @__PURE__ */ React.createElement(Page_default, null, /* @__PURE__ */ React.createElement(ButtonStrip_default, {
-      className: "c-button-strip--align-left"
-    }, /* @__PURE__ */ React.createElement(Button_default, {
-      variant: "tonal",
-      onClick: () => setAddRoundModalOpen(true),
-      icon: "add"
-    }, "Add round"), /* @__PURE__ */ React.createElement(Button_default, {
-      variant: "tonal",
-      onClick: () => setEditPlayersModalOpen(true),
-      icon: "person"
-    }, "Edit players"), session.game.scoreMode === "CUSTOM" /* Custom */ && /* @__PURE__ */ React.createElement(Button_default, {
-      variant: "tonal",
-      onClick: () => setWinnerModalOpen(true),
-      icon: "groups"
-    }, "Set winner")), /* @__PURE__ */ React.createElement(ScoreTable_default, {
-      session,
-      onRemoveRound: handleRemoveRound,
-      editable: true
-    }), /* @__PURE__ */ React.createElement(AddRoundModal_default, {
-      open: addRoundModalOpen,
-      onClose: () => setAddRoundModalOpen(false),
-      onSave: handleAddRound,
-      key: `add-round-${addRoundModalOpen}`
-    }), /* @__PURE__ */ React.createElement(EditPlayersModal_default, {
-      open: editPlayersModalOpen,
-      onClose: () => setEditPlayersModalOpen(false),
-      playerIds: session.playerIds,
-      onSave: handleEditPlayers,
-      key: `edit-players-${editPlayersModalOpen}`
-    }), /* @__PURE__ */ React.createElement(WinnerModal_default, {
-      open: winnerModalOpen,
-      onClose: () => setWinnerModalOpen(false),
-      playerIds: session.playerIds,
-      onSave: handleSetWinner,
-      key: `winner-${winnerModalOpen}`
-    })));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+          variant: "small",
+          title: `${session.title}: Scores`,
+          backTo: `/sessions/${session._id}`
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Page_default, {
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(ButtonStrip_default, {
+              className: "c-button-strip--align-left",
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                  variant: "tonal",
+                  onClick: () => setAddRoundModalOpen(true),
+                  icon: "add",
+                  children: "Add round"
+                }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                  variant: "tonal",
+                  onClick: () => setEditPlayersModalOpen(true),
+                  icon: "person",
+                  children: "Edit players"
+                }),
+                session.game.scoreMode === "CUSTOM" /* Custom */ && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
+                  variant: "tonal",
+                  onClick: () => setWinnerModalOpen(true),
+                  icon: "groups",
+                  children: "Set winner"
+                })
+              ]
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScoreTable_default, {
+              session,
+              onRemoveRound: handleRemoveRound,
+              editable: true
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AddRoundModal_default, {
+              open: addRoundModalOpen,
+              onClose: () => setAddRoundModalOpen(false),
+              onSave: handleAddRound
+            }, `add-round-${addRoundModalOpen}`),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EditPlayersModal_default, {
+              open: editPlayersModalOpen,
+              onClose: () => setEditPlayersModalOpen(false),
+              playerIds: session.playerIds,
+              onSave: handleEditPlayers
+            }, `edit-players-${editPlayersModalOpen}`),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WinnerModal_default, {
+              open: winnerModalOpen,
+              onClose: () => setWinnerModalOpen(false),
+              playerIds: session.playerIds,
+              onSave: handleSetWinner
+            }, `winner-${winnerModalOpen}`)
+          ]
+        })
+      ]
+    });
   };
   var EditSessionScores_default = EditSessionScores;
 
@@ -35208,6 +36765,7 @@
 
   // src/components/card/Card.tsx
   init_react_shim();
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var Card = ({
     buttons,
     children,
@@ -35216,35 +36774,46 @@
     linkTo,
     orientation = "horizontal",
     ...props2
-  }) => /* @__PURE__ */ React.createElement("div", {
+  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
     className: `c-card c-card--${orientation} c-card--filled ${className ?? ""}`,
-    ...props2
-  }, image && /* @__PURE__ */ React.createElement("div", {
-    style: { backgroundImage: `url(${image})` },
-    className: "c-card__image"
-  }), /* @__PURE__ */ React.createElement("div", {
-    className: "c-card__content"
-  }, children), linkTo && /* @__PURE__ */ React.createElement(Link, {
-    to: linkTo,
-    className: "c-card__cover"
-  }), buttons && /* @__PURE__ */ React.createElement("div", {
-    className: "c-card__buttons"
-  }, buttons));
+    ...props2,
+    children: [
+      image && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+        style: { backgroundImage: `url(${image})` },
+        className: "c-card__image"
+      }),
+      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+        className: "c-card__content",
+        children
+      }),
+      linkTo && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
+        to: linkTo,
+        className: "c-card__cover"
+      }),
+      buttons && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+        className: "c-card__buttons",
+        children: buttons
+      })
+    ]
+  });
   var Card_default = Card;
 
   // src/components/card/CardGrid.tsx
   init_react_shim();
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var CardGrid = ({
     children,
     className,
     ...props2
-  }) => /* @__PURE__ */ React.createElement("div", {
+  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
     className: `c-card-grid ${className || ""}`,
-    ...props2
-  }, children);
+    ...props2,
+    children
+  });
   var CardGrid_default = CardGrid;
 
   // src/pages/Games.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var Games = ({ ...props2 }) => {
     const navigate = useNavigate();
     const games = useGames();
@@ -35260,33 +36829,53 @@
       navigate(`/games/${id}`);
     }
     (0, import_react16.useEffect)(() => {
-      const newPlays = games?.reduce((obj, game) => ({
-        ...obj,
-        [game._id]: sessions.filter((x) => x.gameId === game._id).length
-      }), {});
+      const newPlays = games?.reduce(
+        (obj, game) => ({
+          ...obj,
+          [game._id]: sessions.filter((x) => x.gameId === game._id).length
+        }),
+        {}
+      );
       setPlays(newPlays);
     }, [games, sessions]);
-    return /* @__PURE__ */ React.createElement("div", {
-      ...props2
-    }, /* @__PURE__ */ React.createElement(AppBar_default, {
-      variant: "center",
-      title: "Games",
-      actions: /* @__PURE__ */ React.createElement(IconButton_default, {
-        icon: "add",
-        onClick: addGame
-      })
-    }), /* @__PURE__ */ React.createElement(Page_default, null, /* @__PURE__ */ React.createElement(CardGrid_default, null, games.map((game) => /* @__PURE__ */ React.createElement(Card_default, {
-      key: game._id,
-      image: game.image,
-      buttons: /* @__PURE__ */ React.createElement(IconButton_default, {
-        icon: "edit",
-        to: `/games/${game._id}`
-      })
-    }, /* @__PURE__ */ React.createElement("div", {
-      className: "body-large"
-    }, game.name), /* @__PURE__ */ React.createElement("div", {
-      className: "body-medium c-card__meta"
-    }, plays[game._id], " play", plays[game._id] === 1 ? "" : "s"))))));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+      ...props2,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+          variant: "center",
+          title: "Games",
+          actions: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+            icon: "add",
+            onClick: addGame
+          })
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page_default, {
+          children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardGrid_default, {
+            children: games.map((game) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card_default, {
+              image: game.image,
+              buttons: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+                icon: "edit",
+                to: `/games/${game._id}`
+              }),
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+                  className: "body-large",
+                  children: game.name
+                }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+                  className: "body-medium c-card__meta",
+                  children: [
+                    plays[game._id],
+                    " play",
+                    plays[game._id] === 1 ? "" : "s"
+                  ]
+                })
+              ]
+            }, game._id))
+          })
+        })
+      ]
+    });
   };
   var Games_default = Games;
 
@@ -35295,7 +36884,8 @@
 
   // src/components/button/FAB.tsx
   init_react_shim();
-  var FAB = ({ icon, onClick, ...props2 }) => /* @__PURE__ */ React.createElement(IconButton_default, {
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var FAB = ({ icon, onClick, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
     className: "c-button--fab",
     icon,
     onClick,
@@ -35305,18 +36895,21 @@
 
   // src/components/DateTime.tsx
   init_react_shim();
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var DateTime = ({ dateTime, dateStyle, timeStyle, ...props2 }) => {
     const dateFormatter = new Intl.DateTimeFormat("en-GB", {
       dateStyle,
       timeStyle
     });
-    return /* @__PURE__ */ React.createElement("span", {
-      ...props2
-    }, dateFormatter.format(new Date(dateTime || "")));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+      ...props2,
+      children: dateFormatter.format(new Date(dateTime || ""))
+    });
   };
   var DateTime_default = DateTime;
 
   // src/pages/Sessions.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var Sessions = ({ ...props2 }) => {
     const games = useGames();
     const sessions = useSessions();
@@ -35324,46 +36917,71 @@
       return new Date(b.end || b.start).getTime() - new Date(a.end || a.start).getTime();
     };
     const sortedSessions = sessions.slice().sort(sortByDate);
-    return /* @__PURE__ */ React.createElement("div", {
-      ...props2
-    }, /* @__PURE__ */ React.createElement(AppBar_default, {
-      variant: "center",
-      title: "Sessions",
-      actions: /* @__PURE__ */ React.createElement(IconButton_default, {
-        icon: "add",
-        to: "/sessions/new"
-      })
-    }), /* @__PURE__ */ React.createElement(Page_default, null, /* @__PURE__ */ React.createElement(CardGrid_default, null, sortedSessions.map((session) => {
-      const game = games.find((x) => x._id === session.game._id);
-      if (typeof game === "undefined") {
-        return /* @__PURE__ */ React.createElement("div", {
-          style: {
-            backgroundColor: "var(--md-sys-color-error)",
-            color: "var(--md-sys-color-on-error)"
-          }
-        }, "Cannot find game with ID");
-      }
-      return /* @__PURE__ */ React.createElement(Card_default, {
-        key: session._id,
-        image: game.image,
-        linkTo: `/sessions/${session._id}`,
-        buttons: /* @__PURE__ */ React.createElement(IconButton_default, {
-          icon: "edit",
-          to: `/sessions/${session._id}/edit`
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+      ...props2,
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+          variant: "center",
+          title: "Sessions",
+          actions: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+            icon: "add",
+            to: "/sessions/new"
+          })
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Page_default, {
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardGrid_default, {
+              children: sortedSessions.map((session) => {
+                const game = games.find((x) => x._id === session.game._id);
+                if (typeof game === "undefined") {
+                  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+                    style: {
+                      backgroundColor: "var(--md-sys-color-error)",
+                      color: "var(--md-sys-color-on-error)"
+                    },
+                    children: "Cannot find game with ID"
+                  });
+                }
+                return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card_default, {
+                  image: game.image,
+                  linkTo: `/sessions/${session._id}`,
+                  buttons: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+                    icon: "edit",
+                    to: `/sessions/${session._id}/edit`
+                  }),
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+                      className: "body-large",
+                      children: session.title
+                    }),
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+                      className: "body-medium c-card__meta",
+                      children: [
+                        game.name,
+                        " \u2022 ",
+                        session.playerIds.length,
+                        " players",
+                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+                          children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DateTime_default, {
+                            dateStyle: "short",
+                            timeStyle: "short",
+                            dateTime: session.end || session.start
+                          })
+                        })
+                      ]
+                    })
+                  ]
+                }, session._id);
+              })
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FAB_default, {
+              icon: "group_add",
+              to: "/sessions/new"
+            })
+          ]
         })
-      }, /* @__PURE__ */ React.createElement("div", {
-        className: "body-large"
-      }, session.title), /* @__PURE__ */ React.createElement("div", {
-        className: "body-medium c-card__meta"
-      }, game.name, " \u2022 ", session.playerIds.length, " players", /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(DateTime_default, {
-        dateStyle: "short",
-        timeStyle: "short",
-        dateTime: session.end || session.start
-      }))));
-    })), /* @__PURE__ */ React.createElement(FAB_default, {
-      icon: "group_add",
-      to: "/sessions/new"
-    })));
+      ]
+    });
   };
   var Sessions_default = Sessions;
 
@@ -35372,57 +36990,97 @@
 
   // src/components/chip/Chip.tsx
   init_react_shim();
-  var Chip = ({ children, icon, className, ...props2 }) => /* @__PURE__ */ React.createElement("button", {
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var Chip = ({ children, icon, className, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
     className: `c-chip o-interactive ${icon ? "c-chip--with-icon" : ""} ${className ?? ""}`,
-    ...props2
-  }, icon && /* @__PURE__ */ React.createElement(Icon_default, {
-    className: "c-chip__icon"
-  }, icon), children);
+    ...props2,
+    children: [
+      icon && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
+        className: "c-chip__icon",
+        children: icon
+      }),
+      children
+    ]
+  });
   var Chip_default = Chip;
 
   // src/pages/ViewSession.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var ViewSession = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     if (typeof id !== "string") {
-      return /* @__PURE__ */ React.createElement(FullPageError_default, {
+      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
         title: "Game not found"
       });
     }
     const [session] = useSession(id);
     if (!session)
       return null;
-    return /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(AppBar_default, {
-      variant: "small",
-      title: session.title,
-      backTo: "/",
-      actions: /* @__PURE__ */ React.createElement(IconButton_default, {
-        icon: "edit",
-        to: `/sessions/${session._id}/edit`
-      })
-    }), /* @__PURE__ */ React.createElement(Page_default, null, /* @__PURE__ */ React.createElement(Card_default, {
-      image: session.game.image,
-      orientation: "vertical"
-    }, /* @__PURE__ */ React.createElement("div", {
-      className: "headline-small"
-    }, session.game.name), location && /* @__PURE__ */ React.createElement("div", {
-      className: "c-card__body"
-    }, /* @__PURE__ */ React.createElement("span", {
-      style: { opacity: 0.6 }
-    }, "Played at"), " ", /* @__PURE__ */ React.createElement(Icon_default, {
-      style: { verticalAlign: "middle" }
-    }, session.location.icon), " ", session.location.name, " ", /* @__PURE__ */ React.createElement("span", {
-      style: { opacity: 0.6 }
-    }, "on"), " ", /* @__PURE__ */ React.createElement(DateTime_default, {
-      dateStyle: "long",
-      timeStyle: "short",
-      dateTime: session.end || session.start
-    })), /* @__PURE__ */ React.createElement("div", null, /* @__PURE__ */ React.createElement(Chip_default, {
-      onClick: () => navigate(`/sessions/${session._id}/scores`),
-      icon: "scoreboard"
-    }, "Edit scores"))), /* @__PURE__ */ React.createElement(ScoreTable_default, {
-      session
-    })));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+          variant: "small",
+          title: session.title,
+          backTo: "/",
+          actions: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
+            icon: "edit",
+            to: `/sessions/${session._id}/edit`
+          })
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Page_default, {
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card_default, {
+              image: session.game.image,
+              orientation: "vertical",
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+                  className: "headline-small",
+                  children: session.game.name
+                }),
+                location && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+                  className: "c-card__body",
+                  children: [
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+                      style: { opacity: 0.6 },
+                      children: "Played at"
+                    }),
+                    " ",
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
+                      style: { verticalAlign: "middle" },
+                      children: session.location.icon
+                    }),
+                    " ",
+                    session.location.name,
+                    " ",
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+                      style: { opacity: 0.6 },
+                      children: "on"
+                    }),
+                    " ",
+                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DateTime_default, {
+                      dateStyle: "long",
+                      timeStyle: "short",
+                      dateTime: session.end || session.start
+                    })
+                  ]
+                }),
+                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+                  children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Chip_default, {
+                    onClick: () => navigate(`/sessions/${session._id}/scores`),
+                    icon: "scoreboard",
+                    children: "Edit scores"
+                  })
+                })
+              ]
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScoreTable_default, {
+              session
+            })
+          ]
+        })
+      ]
+    });
   };
   var ViewSession_default = ViewSession;
 
@@ -35431,87 +37089,148 @@
 
   // src/components/navigation/NavigationTrayLink.tsx
   init_react_shim();
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var NavigationTrayLink = ({ children, to, ...props2 }) => {
     let resolved = useResolvedPath(to);
     let match2 = useMatch({ path: resolved.pathname, end: true });
-    return /* @__PURE__ */ React.createElement(Link, {
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
       className: `c-navigation-tray__item ${match2 ? "o-interactive--active" : ""}`,
       to,
-      ...props2
-    }, children);
+      ...props2,
+      children
+    });
   };
   var NavigationTrayLink_default = NavigationTrayLink;
 
   // src/components/navigation/NavigationTray.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var NavigationTray = () => {
-    return /* @__PURE__ */ React.createElement("nav", {
-      className: "c-navigation-tray"
-    }, /* @__PURE__ */ React.createElement(NavigationTrayLink_default, {
-      to: "/"
-    }, /* @__PURE__ */ React.createElement("span", {
-      className: "c-navigation-tray__icon o-interactive"
-    }, /* @__PURE__ */ React.createElement(Icon_default, null, "group")), "Sessions"), /* @__PURE__ */ React.createElement(NavigationTrayLink_default, {
-      to: "/games"
-    }, /* @__PURE__ */ React.createElement("span", {
-      className: "c-navigation-tray__icon o-interactive"
-    }, /* @__PURE__ */ React.createElement(Icon_default, null, "casino")), "Games"), /* @__PURE__ */ React.createElement(NavigationTrayLink_default, {
-      to: "/database"
-    }, /* @__PURE__ */ React.createElement("span", {
-      className: "c-navigation-tray__icon o-interactive"
-    }, /* @__PURE__ */ React.createElement(Icon_default, null, "database")), "Database"));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
+      className: "c-navigation-tray",
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NavigationTrayLink_default, {
+          to: "/",
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+              className: "c-navigation-tray__icon o-interactive",
+              children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
+                children: "group"
+              })
+            }),
+            "Sessions"
+          ]
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NavigationTrayLink_default, {
+          to: "/games",
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+              className: "c-navigation-tray__icon o-interactive",
+              children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
+                children: "casino"
+              })
+            }),
+            "Games"
+          ]
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NavigationTrayLink_default, {
+          to: "/database",
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
+              className: "c-navigation-tray__icon o-interactive",
+              children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
+                children: "database"
+              })
+            }),
+            "Database"
+          ]
+        })
+      ]
+    });
   };
   var NavigationTray_default = NavigationTray;
 
   // src/components/App.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var App = () => {
-    return /* @__PURE__ */ React.createElement("div", {
-      className: "container"
-    }, /* @__PURE__ */ React.createElement(Routes, null, /* @__PURE__ */ React.createElement(Route, {
-      path: "/",
-      element: /* @__PURE__ */ React.createElement(Sessions_default, null)
-    }), /* @__PURE__ */ React.createElement(Route, {
-      path: "/games",
-      element: /* @__PURE__ */ React.createElement(Games_default, null)
-    }), /* @__PURE__ */ React.createElement(Route, {
-      path: "/games/:id",
-      element: /* @__PURE__ */ React.createElement(EditGame_default, null)
-    }), /* @__PURE__ */ React.createElement(Route, {
-      path: "/database",
-      element: /* @__PURE__ */ React.createElement(Database_default, null)
-    }), /* @__PURE__ */ React.createElement(Route, {
-      path: "/players/:id",
-      element: /* @__PURE__ */ React.createElement(EditPlayer_default, null)
-    }), /* @__PURE__ */ React.createElement(Route, {
-      path: "/locations/:id",
-      element: /* @__PURE__ */ React.createElement(EditLocation_default, null)
-    }), /* @__PURE__ */ React.createElement(Route, {
-      path: "/sessions/new",
-      element: /* @__PURE__ */ React.createElement(CreateSession_default, null)
-    }), /* @__PURE__ */ React.createElement(Route, {
-      path: "/sessions/:id",
-      element: /* @__PURE__ */ React.createElement(ViewSession_default, null)
-    }), /* @__PURE__ */ React.createElement(Route, {
-      path: "/sessions/:id/edit",
-      element: /* @__PURE__ */ React.createElement(EditSession_default, null)
-    }), /* @__PURE__ */ React.createElement(Route, {
-      path: "/sessions/:id/scores",
-      element: /* @__PURE__ */ React.createElement(EditSessionScores_default, null)
-    }), /* @__PURE__ */ React.createElement(Route, {
-      path: "*",
-      element: /* @__PURE__ */ React.createElement(FullPageError_default, null, /* @__PURE__ */ React.createElement("p", null, "Page not found"))
-    })), /* @__PURE__ */ React.createElement(NavigationTray_default, null));
+    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
+      className: "container",
+      children: [
+        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Routes, {
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+              path: "/",
+              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sessions_default, {})
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+              path: "/games",
+              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Games_default, {})
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+              path: "/games/:id",
+              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EditGame_default, {})
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+              path: "/database",
+              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Database_default, {})
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+              path: "/players/:id",
+              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EditPlayer_default, {})
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+              path: "/locations/:id",
+              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EditLocation_default, {})
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+              path: "/sessions/new",
+              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreateSession_default, {})
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+              path: "/sessions/:id",
+              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ViewSession_default, {})
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+              path: "/sessions/:id/edit",
+              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EditSession_default, {})
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+              path: "/sessions/:id/scores",
+              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EditSessionScores_default, {})
+            }),
+            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
+              path: "*",
+              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
+                children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
+                  children: "Page not found"
+                })
+              })
+            })
+          ]
+        }),
+        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NavigationTray_default, {})
+      ]
+    });
   };
   var App_default = App;
 
   // src/index.tsx
+  var import_jsx_runtime = __toESM(require_jsx_runtime());
   var rootElement = document.getElementById("root");
   if (rootElement === null)
     throw new Error("Cannot find #root to bind to");
-  (0, import_client.createRoot)(rootElement).render(/* @__PURE__ */ React.createElement(import_react17.StrictMode, null, /* @__PURE__ */ React.createElement(HashRouter, null, /* @__PURE__ */ React.createElement(App_default, null))));
+  (0, import_client.createRoot)(rootElement).render(
+    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react17.StrictMode, {
+      children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HashRouter, {
+        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {})
+      })
+    })
+  );
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").then((reg) => {
       reg.addEventListener("updatefound", function() {
-        console.log("A new version of this application is available. Refresh to update.");
+        console.log(
+          "A new version of this application is available. Refresh to update."
+        );
       });
     });
   }
@@ -35519,6 +37238,15 @@
 /**
  * @license React
  * react-dom.development.js
+ *
+ * Copyright (c) Facebook, Inc. and its affiliates.
+ *
+ * This source code is licensed under the MIT license found in the
+ * LICENSE file in the root directory of this source tree.
+ */
+/**
+ * @license React
+ * react-jsx-runtime.development.js
  *
  * Copyright (c) Facebook, Inc. and its affiliates.
  *
