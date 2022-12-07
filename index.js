@@ -30301,15 +30301,11 @@
     children,
     className,
     ...props2
-  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-    className: `material-symbols-outlined ${className ?? ""}`,
-    ...props2,
-    children
-  });
+  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", { className: `material-symbols-outlined ${className ?? ""}`, ...props2, children });
   var Icon_default = Icon;
 
   // src/components/button/Button.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime2 = __toESM(require_jsx_runtime());
   var Button = ({
     icon,
     variant,
@@ -30327,34 +30323,30 @@
       if (to && !e.defaultPrevented)
         navigate(to);
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-      className: `c-button o-interactive ${variant ? "c-button--" + variant : ""} ${icon ? "c-button--with-icon" : ""} ${className ?? ""}`,
-      type: type2,
-      onClick: handleClick,
-      ...props2,
-      children: [
-        icon && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
-          className: "c-button__icon",
-          children: icon
-        }),
-        children
-      ]
-    });
+    return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
+      "button",
+      {
+        className: `c-button o-interactive ${variant ? "c-button--" + variant : ""} ${icon ? "c-button--with-icon" : ""} ${className ?? ""}`,
+        type: type2,
+        onClick: handleClick,
+        ...props2,
+        children: [
+          icon && /* @__PURE__ */ (0, import_jsx_runtime2.jsx)(Icon_default, { className: "c-button__icon", children: icon }),
+          children
+        ]
+      }
+    );
   };
   var Button_default = Button;
 
   // src/components/form/ButtonStrip.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime3 = __toESM(require_jsx_runtime());
   var ButtonStrip = ({
     children,
     className,
     ...props2
-  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-    className: `c-button-strip ${className ?? ""}`,
-    ...props2,
-    children
-  });
+  }) => /* @__PURE__ */ (0, import_jsx_runtime3.jsx)("div", { className: `c-button-strip ${className ?? ""}`, ...props2, children });
   var ButtonStrip_default = ButtonStrip;
 
   // src/components/form/DateField.tsx
@@ -33972,7 +33964,7 @@
 
   // src/components/form/TextField.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime4 = __toESM(require_jsx_runtime());
   var TextField = ({
     className,
     label,
@@ -33985,58 +33977,56 @@
     ...props2
   }) => {
     const id = `f-id-${Math.random().toString(36).substring(2)}`;
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-      className: "c-text-field__container",
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("label", {
+    return /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)("div", { className: "c-text-field__container", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+        "label",
+        {
           className: "c-text-field",
           htmlFor: id,
           style: backgroundColor ? { "--background": backgroundColor } : {},
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-              className: `c-text-field__label ${value == "" ? "c-text-field__label--no-value" : "c-text-field__label--has-value"}`,
-              children: label
-            }),
+            /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+              "span",
+              {
+                className: `c-text-field__label ${value == "" ? "c-text-field__label--no-value" : "c-text-field__label--has-value"}`,
+                children: label
+              }
+            ),
             prefix,
-            options ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("select", {
-              id,
-              value,
-              placeholder: label,
-              className: `c-text-field__input ${value === "" ? "c-text-field__select--empty" : ""} ${className || ""}`,
-              ...props2,
-              children: [
-                value === "" && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-                  value: "",
-                  disabled: true,
-                  hidden: true,
-                  children: label
-                }),
-                options.map(([optionValue, optionLabel]) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("option", {
-                  value: optionValue,
-                  children: optionLabel
-                }, optionValue))
-              ]
-            }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
-              id,
-              value,
-              placeholder: label,
-              className: `c-text-field__input ${className || ""}`,
-              ...props2
-            }),
+            options ? /* @__PURE__ */ (0, import_jsx_runtime4.jsxs)(
+              "select",
+              {
+                id,
+                value,
+                placeholder: label,
+                className: `c-text-field__input ${value === "" ? "c-text-field__select--empty" : ""} ${className || ""}`,
+                ...props2,
+                children: [
+                  value === "" && /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("option", { value: "", disabled: true, hidden: true, children: label }),
+                  options.map(([optionValue, optionLabel]) => /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("option", { value: optionValue, children: optionLabel }, optionValue))
+                ]
+              }
+            ) : /* @__PURE__ */ (0, import_jsx_runtime4.jsx)(
+              "input",
+              {
+                id,
+                value,
+                placeholder: label,
+                className: `c-text-field__input ${className || ""}`,
+                ...props2
+              }
+            ),
             suffix
           ]
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-          className: "c-text-field__support-text",
-          children: supportText
-        })
-      ]
-    });
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime4.jsx)("div", { className: "c-text-field__support-text", children: supportText })
+    ] });
   };
   var TextField_default = TextField;
 
   // src/components/form/DateField.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime5 = __toESM(require_jsx_runtime());
   var ISO_DATE_FORMAT = "yyyy-MM-dd";
   var ISO_TIME_FORMAT = "HH:mm";
   var DateField = ({ label, value, onChange }) => {
@@ -34054,29 +34044,38 @@
       }
       onChange(newValue);
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-      style: {
-        display: "grid",
-        gridTemplateColumns: "2fr 1fr",
-        gridGap: "8px"
-      },
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-          required: true,
-          type: "date",
-          label: `${label} date`,
-          value: format(value, ISO_DATE_FORMAT),
-          onChange: (e) => setValue("date", e.target.value)
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-          required: true,
-          type: "time",
-          label: `${label} time`,
-          value: format(value, ISO_TIME_FORMAT),
-          onChange: (e) => setValue("time", e.target.value)
-        })
-      ]
-    });
+    return /* @__PURE__ */ (0, import_jsx_runtime5.jsxs)(
+      "div",
+      {
+        style: {
+          display: "grid",
+          gridTemplateColumns: "2fr 1fr",
+          gridGap: "8px"
+        },
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+            TextField_default,
+            {
+              required: true,
+              type: "date",
+              label: `${label} date`,
+              value: format(value, ISO_DATE_FORMAT),
+              onChange: (e) => setValue("date", e.target.value)
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime5.jsx)(
+            TextField_default,
+            {
+              required: true,
+              type: "time",
+              label: `${label} time`,
+              value: format(value, ISO_TIME_FORMAT),
+              onChange: (e) => setValue("time", e.target.value)
+            }
+          )
+        ]
+      }
+    );
   };
   var DateField_default = DateField;
 
@@ -34085,18 +34084,12 @@
 
   // src/components/button/IconButton.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
-  var IconButton = ({ icon, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-    className: "c-button--icon-only",
-    ...props2,
-    children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
-      children: icon
-    })
-  });
+  var import_jsx_runtime6 = __toESM(require_jsx_runtime());
+  var IconButton = ({ icon, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Button_default, { className: "c-button--icon-only", ...props2, children: /* @__PURE__ */ (0, import_jsx_runtime6.jsx)(Icon_default, { children: icon }) });
   var IconButton_default = IconButton;
 
   // src/components/navigation/AppBar.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime7 = __toESM(require_jsx_runtime());
   var AppBar = ({
     actions,
     backTo,
@@ -34104,30 +34097,26 @@
     variant,
     className,
     ...props2
-  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-    className: `c-app-bar ${className ?? ""}`,
-    ...props2,
-    children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-        className: "c-app-bar__strip",
-        children: [
-          backTo && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-            icon: "arrow_back",
-            to: backTo
-          }),
-          (variant === "center" || variant === "small") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
-            className: `c-app-bar__title ${variant === "center" ? "c-app-bar__title--center" : ""}`,
-            children: title
-          }),
-          actions
-        ]
-      }),
-      (variant === "medium" || variant === "large") && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h1", {
+  }) => /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: `c-app-bar ${className ?? ""}`, ...props2, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime7.jsxs)("div", { className: "c-app-bar__strip", children: [
+      backTo && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(IconButton_default, { icon: "arrow_back", to: backTo }),
+      (variant === "center" || variant === "small") && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+        "h1",
+        {
+          className: `c-app-bar__title ${variant === "center" ? "c-app-bar__title--center" : ""}`,
+          children: title
+        }
+      ),
+      actions
+    ] }),
+    (variant === "medium" || variant === "large") && /* @__PURE__ */ (0, import_jsx_runtime7.jsx)(
+      "h1",
+      {
         className: variant === "large" ? "headline-medium" : "headline-small",
         children: title
-      })
-    ]
-  });
+      }
+    )
+  ] });
   var AppBar_default = AppBar;
 
   // src/data/db.ts
@@ -34285,20 +34274,16 @@
 
   // src/pages/Page.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime8 = __toESM(require_jsx_runtime());
   var Page = ({
     className,
     children,
     ...props2
-  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-    className: `o-canvas ${className ?? ""}`,
-    ...props2,
-    children
-  });
+  }) => /* @__PURE__ */ (0, import_jsx_runtime8.jsx)("div", { className: `o-canvas ${className ?? ""}`, ...props2, children });
   var Page_default = Page;
 
   // src/pages/CreateSession.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime9 = __toESM(require_jsx_runtime());
   var CreateSession = () => {
     const games = useGames();
     const locations = useLocations();
@@ -34329,61 +34314,52 @@
       });
       navigate(`/sessions/${_id}`);
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
-          variant: "small",
-          title: "New session",
-          backTo: "/"
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page_default, {
-          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-            onSubmit: handleSubmit,
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-                required: true,
-                label: "Session title",
-                value: title,
-                onChange: (e) => setTitle(e.target.value)
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-                required: true,
-                label: "Game",
-                value: gameId,
-                options: games.map((x) => [x._id, x.name]),
-                onChange: (e) => setGameId(e.target.value)
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-                required: true,
-                label: "Location",
-                value: locationId,
-                options: locations.map((x) => [x._id, x.name]),
-                onChange: (e) => setLocationId(e.target.value)
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DateField_default, {
-                label: "Start",
-                value: start,
-                onChange: (val) => setStart(val)
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ButtonStrip_default, {
-                children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-                  children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                      to: "/",
-                      children: "Cancel"
-                    }),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                      type: "submit",
-                      children: "Save"
-                    })
-                  ]
-                })
-              })
-            ]
-          })
-        })
-      ]
-    });
+    return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(AppBar_default, { variant: "small", title: "New session", backTo: "/" }),
+      /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Page_default, { children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("form", { onSubmit: handleSubmit, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          TextField_default,
+          {
+            required: true,
+            label: "Session title",
+            value: title,
+            onChange: (e) => setTitle(e.target.value)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          TextField_default,
+          {
+            required: true,
+            label: "Game",
+            value: gameId,
+            options: games.map((x) => [x._id, x.name]),
+            onChange: (e) => setGameId(e.target.value)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          TextField_default,
+          {
+            required: true,
+            label: "Location",
+            value: locationId,
+            options: locations.map((x) => [x._id, x.name]),
+            onChange: (e) => setLocationId(e.target.value)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
+          DateField_default,
+          {
+            label: "Start",
+            value: start,
+            onChange: (val) => setStart(val)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(ButtonStrip_default, { children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Button_default, { to: "/", children: "Cancel" }),
+          /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Button_default, { type: "submit", children: "Save" })
+        ] }) })
+      ] }) })
+    ] });
   };
   var CreateSession_default = CreateSession;
 
@@ -34392,16 +34368,12 @@
 
   // src/components/list/List.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime10 = __toESM(require_jsx_runtime());
   var List = ({
     children,
     className,
     ...props2
-  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("ul", {
-    className: `c-list ${className ?? ""}`,
-    ...props2,
-    children
-  });
+  }) => /* @__PURE__ */ (0, import_jsx_runtime10.jsx)("ul", { className: `c-list ${className ?? ""}`, ...props2, children });
   var List_default = List;
 
   // src/components/list/ListItem.tsx
@@ -34409,16 +34381,12 @@
 
   // src/components/avatar/Avatar.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
-  var Avatar = ({ children, colour }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-    className: "c-avatar",
-    style: colour ? { backgroundColor: colour } : {},
-    children
-  });
+  var import_jsx_runtime11 = __toESM(require_jsx_runtime());
+  var Avatar = ({ children, colour }) => /* @__PURE__ */ (0, import_jsx_runtime11.jsx)("span", { className: "c-avatar", style: colour ? { backgroundColor: colour } : {}, children });
   var Avatar_default = Avatar;
 
   // src/components/list/ListItem.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime12 = __toESM(require_jsx_runtime());
   var ListItem = ({
     action,
     avatar = "",
@@ -34426,60 +34394,50 @@
     children,
     className,
     ...props2
-  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("li", {
-    className: `c-list__item ${className ?? ""}`,
-    ...props2,
-    children: [
-      (avatar || avatarColor) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Avatar_default, {
-        colour: avatarColor ?? "",
-        children: avatar
-      }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-        className: "c-list__item-body",
-        children
-      }),
-      action ?? ""
-    ]
-  });
+  }) => /* @__PURE__ */ (0, import_jsx_runtime12.jsxs)("li", { className: `c-list__item ${className ?? ""}`, ...props2, children: [
+    (avatar || avatarColor) && /* @__PURE__ */ (0, import_jsx_runtime12.jsx)(Avatar_default, { colour: avatarColor ?? "", children: avatar }),
+    /* @__PURE__ */ (0, import_jsx_runtime12.jsx)("span", { className: "c-list__item-body", children }),
+    action ?? ""
+  ] });
   var ListItem_default = ListItem;
 
   // src/components/tabs/Tab.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
-  var Tab = ({ children, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-    ...props2,
-    children
-  });
+  var import_jsx_runtime13 = __toESM(require_jsx_runtime());
+  var Tab = ({ children, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime13.jsx)("div", { ...props2, children });
   var Tab_default = Tab;
 
   // src/components/tabs/Tabs.tsx
   init_react_shim();
   var import_react3 = __toESM(require_react());
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime14 = __toESM(require_jsx_runtime());
   var Tabs = ({ children, tabs }) => {
     const [currentTab, setCurrentTab] = (0, import_react3.useState)(0);
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-          className: "c-tabs__container",
-          children: tabs.map((label, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-            className: `c-tabs__item o-interactive ${index === currentTab ? "o-interactive--active" : ""}`,
-            onClick: () => setCurrentTab(index),
-            children: label
-          }, index))
-        }),
-        import_react3.Children.toArray(children).map((child, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
+    return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "c-tabs__container", children: tabs.map((label, index) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        "div",
+        {
+          className: `c-tabs__item o-interactive ${index === currentTab ? "o-interactive--active" : ""}`,
+          onClick: () => setCurrentTab(index),
+          children: label
+        },
+        index
+      )) }),
+      import_react3.Children.toArray(children).map((child, index) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+        "div",
+        {
           className: "c-tabs__panel",
           hidden: index !== currentTab,
           children: child
-        }, index))
-      ]
-    });
+        },
+        index
+      ))
+    ] });
   };
   var Tabs_default = Tabs;
 
   // src/pages/Database.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime15 = __toESM(require_jsx_runtime());
   var Database = ({ ...props2 }) => {
     const locations = useLocations();
     const players = usePlayers();
@@ -34500,68 +34458,35 @@
       });
       navigate(`/locations/${id}`);
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-      ...props2,
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
-          variant: "center",
-          title: "Database"
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page_default, {
-          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Tabs_default, {
-            tabs: ["Players", "Locations"],
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Tab_default, {
-                children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)(List_default, {
-                    children: players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListItem_default, {
-                      avatar: player.name.substring(0, 1),
-                      action: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-                        icon: "edit",
-                        to: `/players/${player._id}`
-                      }),
-                      children: player.name
-                    }, player._id))
-                  }),
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-                    style: { textAlign: "center" },
-                    children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                      icon: "add",
-                      onClick: addPlayer,
-                      children: "Add new player"
-                    })
-                  })
-                ]
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Tab_default, {
-                children: [
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)(List_default, {
-                    children: locations.map((location2) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListItem_default, {
-                      avatar: location2.icon ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
-                        children: location2.icon
-                      }) : "",
-                      action: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-                        icon: "edit",
-                        to: `/locations/${location2._id}`
-                      }),
-                      children: location2.name
-                    }, location2._id))
-                  }),
-                  /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-                    style: { textAlign: "center" },
-                    children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                      icon: "add",
-                      onClick: addLocation,
-                      children: "Add new location"
-                    })
-                  })
-                ]
-              })
-            ]
-          })
-        })
-      ]
-    });
+    return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { ...props2, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(AppBar_default, { variant: "center", title: "Database" }),
+      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Page_default, { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(Tabs_default, { tabs: ["Players", "Locations"], children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(Tab_default, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(List_default, { children: players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+            ListItem_default,
+            {
+              avatar: player.name.substring(0, 1),
+              action: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(IconButton_default, { icon: "edit", to: `/players/${player._id}` }),
+              children: player.name
+            },
+            player._id
+          )) }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Button_default, { icon: "add", onClick: addPlayer, children: "Add new player" }) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(Tab_default, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(List_default, { children: locations.map((location2) => /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
+            ListItem_default,
+            {
+              avatar: location2.icon ? /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Icon_default, { children: location2.icon }) : "",
+              action: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(IconButton_default, { icon: "edit", to: `/locations/${location2._id}` }),
+              children: location2.name
+            },
+            location2._id
+          )) }),
+          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Button_default, { icon: "add", onClick: addLocation, children: "Add new location" }) })
+        ] })
+      ] }) })
+    ] });
   };
   var Database_default = Database;
 
@@ -34571,18 +34496,18 @@
 
   // src/components/FullPageError.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
-  var FullPageError = ({ title, children, backTo, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-    ...props2,
-    children: [
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+  var import_jsx_runtime16 = __toESM(require_jsx_runtime());
+  var FullPageError = ({ title, children, backTo, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { ...props2, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
+      AppBar_default,
+      {
         variant: "large",
         title: title || "An error occurred",
         backTo
-      }),
-      children
-    ]
-  });
+      }
+    ),
+    children
+  ] });
   var FullPageError_default = FullPageError;
 
   // src/components/modal/AddRoundModal.tsx
@@ -34593,7 +34518,7 @@
   init_react_shim();
   var import_react4 = __toESM(require_react());
   var import_react_dom = __toESM(require_react_dom());
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime17 = __toESM(require_jsx_runtime());
   var Modal = ({
     buttons,
     title,
@@ -34611,49 +34536,32 @@
       };
     }, []);
     return (0, import_react_dom.createPortal)(
-      open ? /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, {
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-            className: "c-modal__backdrop",
-            onClick: onClose
-          }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)("dialog", {
+      open ? /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(import_jsx_runtime17.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "c-modal__backdrop", onClick: onClose }),
+        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+          "dialog",
+          {
             className: "c-modal",
             "aria-describedby": `${id}-label`,
             open: true,
             ...props2,
-            children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-                  className: "c-modal__content",
-                  children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-                      className: "c-modal__title headline-small",
-                      id: `${id}-label`,
-                      children: title
-                    }),
-                    children
-                  ]
-                }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-                  className: "c-modal__buttons",
-                  children: buttons || /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                    onClick: onClose,
-                    children: "Close"
-                  })
-                })
-              ]
-            })
-          })
-        ]
-      }) : null,
+            children: /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("form", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "c-modal__content", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("h2", { className: "c-modal__title headline-small", id: `${id}-label`, children: title }),
+                children
+              ] }),
+              /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "c-modal__buttons", children: buttons || /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Button_default, { onClick: onClose, children: "Close" }) })
+            ] })
+          }
+        )
+      ] }) : null,
       container.current
     );
   };
   var Modal_default = Modal;
 
   // src/components/modal/AddRoundModal.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime18 = __toESM(require_jsx_runtime());
   var AddRoundModal = ({ onSave, onClose, ...props2 }) => {
     const [name, setName] = (0, import_react5.useState)("");
     const [colour, setColour] = (0, import_react5.useState)("");
@@ -34662,46 +34570,46 @@
         onSave(name, colour);
       onClose();
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Modal_default, {
-      title: "New round",
-      buttons: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, {
+    return /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(
+      Modal_default,
+      {
+        title: "New round",
+        buttons: /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(import_jsx_runtime18.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(Button_default, { onClick: onClose, children: "Cancel" }),
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(Button_default, { onClick: handleSave, disabled: name === "", children: "Add round" })
+        ] }),
+        onClose,
+        ...props2,
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-            onClick: onClose,
-            children: "Cancel"
-          }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-            onClick: handleSave,
-            disabled: name === "",
-            children: "Add round"
-          })
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+            TextField_default,
+            {
+              label: "Round name",
+              value: name,
+              onChange: (e) => setName(e.target.value),
+              backgroundColor: "var(--md-sys-color-surface-variant)"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime18.jsx)(
+            TextField_default,
+            {
+              label: "Colour",
+              type: "color",
+              value: colour || "#ffffff",
+              onChange: (e) => setColour(e.target.value),
+              backgroundColor: "var(--md-sys-color-surface-variant)"
+            }
+          )
         ]
-      }),
-      onClose,
-      ...props2,
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-          label: "Round name",
-          value: name,
-          onChange: (e) => setName(e.target.value),
-          backgroundColor: "var(--md-sys-color-surface-variant)"
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-          label: "Colour",
-          type: "color",
-          value: colour || "#ffffff",
-          onChange: (e) => setColour(e.target.value),
-          backgroundColor: "var(--md-sys-color-surface-variant)"
-        })
-      ]
-    });
+      }
+    );
   };
   var AddRoundModal_default = AddRoundModal;
 
   // src/components/modal/EditRoundModal.tsx
   init_react_shim();
   var import_react6 = __toESM(require_react());
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime19 = __toESM(require_jsx_runtime());
   var EditRoundModal = ({
     onSave,
     onClose,
@@ -34716,43 +34624,40 @@
         onSave(name, colour);
       onClose();
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Modal_default, {
-      title: "Edit round",
-      buttons: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, {
+    return /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
+      Modal_default,
+      {
+        title: "Edit round",
+        buttons: /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(import_jsx_runtime19.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Button_default, { onClick: onClose, children: "Cancel" }),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(Button_default, { onClick: handleSave, disabled: name === "", children: "Save changes" })
+        ] }),
+        onClose,
+        ...props2,
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-            onClick: onClose,
-            children: "Cancel"
-          }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-            onClick: handleSave,
-            disabled: name === "",
-            children: "Save changes"
-          })
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+            TextField_default,
+            {
+              label: "Round name",
+              value: name,
+              onChange: (e) => setName(e.target.value),
+              backgroundColor: "var(--md-sys-color-surface-variant)"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(
+            TextField_default,
+            {
+              label: "Colour",
+              type: "color",
+              value: colour || "#ffffff",
+              onChange: (e) => setColour(e.target.value),
+              backgroundColor: "var(--md-sys-color-surface-variant)",
+              suffix: /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(IconButton_default, { icon: "close", onClick: () => setColour("") })
+            }
+          )
         ]
-      }),
-      onClose,
-      ...props2,
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-          label: "Round name",
-          value: name,
-          onChange: (e) => setName(e.target.value),
-          backgroundColor: "var(--md-sys-color-surface-variant)"
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-          label: "Colour",
-          type: "color",
-          value: colour || "#ffffff",
-          onChange: (e) => setColour(e.target.value),
-          backgroundColor: "var(--md-sys-color-surface-variant)",
-          suffix: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-            icon: "close",
-            onClick: () => setColour("")
-          })
-        })
-      ]
-    });
+      }
+    );
   };
   var EditRoundModal_default = EditRoundModal;
 
@@ -34770,14 +34675,12 @@
   var isEnumValue = (something, enumObject) => typeof something === "string" && Object.values(enumObject).includes(something);
 
   // src/pages/EditGame.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime20 = __toESM(require_jsx_runtime());
   var EditGame = ({ ...props2 }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     if (typeof id !== "string") {
-      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
-        title: "Game not found"
-      });
+      return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(FullPageError_default, { title: "Game not found" });
     }
     const [name, setName] = (0, import_react7.useState)("");
     const [image, setImage] = (0, import_react7.useState)("");
@@ -34832,101 +34735,109 @@
       db.games.delete(id);
       navigate("/games");
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-      ...props2,
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("div", { ...props2, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+        AppBar_default,
+        {
           variant: "small",
           title: "Edit game",
           backTo: "/games",
-          actions: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-            icon: "delete",
-            onClick: handleDelete
-          })
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page_default, {
-          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-            onSubmit: handleSubmit,
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-                label: "Name",
-                value: name,
-                onChange: (e) => setName(e.target.value)
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-                label: "Image",
-                value: image,
-                supportText: "Enter a URL to an image",
-                onChange: (e) => setImage(e.target.value)
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-                label: "How is the winner decided?",
-                value: scoreMode,
-                options: [
-                  ["HIGHEST" /* Highest */, "Highest score"],
-                  ["LOWEST" /* Lowest */, "Lowest score"],
-                  ["CUSTOM" /* Custom */, "Manually select"]
-                ],
-                onChange: (e) => {
-                  const v = e.target.value;
-                  if (isEnumValue(v, ScoreMode)) {
-                    setScoreMode(v);
-                  }
+          actions: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(IconButton_default, { icon: "delete", onClick: handleDelete })
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Page_default, { children: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)("form", { onSubmit: handleSubmit, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          TextField_default,
+          {
+            label: "Name",
+            value: name,
+            onChange: (e) => setName(e.target.value)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          TextField_default,
+          {
+            label: "Image",
+            value: image,
+            supportText: "Enter a URL to an image",
+            onChange: (e) => setImage(e.target.value)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          TextField_default,
+          {
+            label: "How is the winner decided?",
+            value: scoreMode,
+            options: [
+              ["HIGHEST" /* Highest */, "Highest score"],
+              ["LOWEST" /* Lowest */, "Lowest score"],
+              ["CUSTOM" /* Custom */, "Manually select"]
+            ],
+            onChange: (e) => {
+              const v = e.target.value;
+              if (isEnumValue(v, ScoreMode)) {
+                setScoreMode(v);
+              }
+            }
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("h2", { className: "title-large", children: "Rounds" }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          EditRoundModal_default,
+          {
+            label: rounds[editRoundActive]?.label,
+            colour: rounds[editRoundActive]?.colour,
+            open: editRoundActive !== -1,
+            onClose: () => setEditRoundActive(-1),
+            onSave: (label, colour) => setRound(editRoundActive, label, colour)
+          },
+          `edit-round-${editRoundActive}`
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(List_default, { children: rounds.map((round, index) => /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          ListItem_default,
+          {
+            avatarColor: round.colour,
+            action: /* @__PURE__ */ (0, import_jsx_runtime20.jsxs)(import_jsx_runtime20.Fragment, { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                IconButton_default,
+                {
+                  icon: "edit",
+                  onClick: () => setEditRoundActive(index)
                 }
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("h2", {
-                className: "title-large",
-                children: "Rounds"
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EditRoundModal_default, {
-                label: rounds[editRoundActive]?.label,
-                colour: rounds[editRoundActive]?.colour,
-                open: editRoundActive !== -1,
-                onClose: () => setEditRoundActive(-1),
-                onSave: (label, colour) => setRound(editRoundActive, label, colour)
-              }, `edit-round-${editRoundActive}`),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(List_default, {
-                children: rounds.map((round, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListItem_default, {
-                  avatarColor: round.colour,
-                  action: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, {
-                    children: [
-                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-                        icon: "edit",
-                        onClick: () => setEditRoundActive(index)
-                      }),
-                      /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-                        icon: "delete",
-                        onClick: () => removeRound(index)
-                      })
-                    ]
-                  }),
-                  children: round.label
-                }, index))
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AddRoundModal_default, {
-                open: addRoundModalOpen,
-                onClose: () => setAddRoundModalOpen(false),
-                onSave: addRound
-              }, `add-round-${addRoundModalOpen}`),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                variant: "outlined",
-                onClick: () => setAddRoundModalOpen(true),
-                icon: "add",
-                children: "Add"
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-                style: { textAlign: "right" },
-                children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                  variant: "filled",
-                  type: "submit",
-                  children: "Save"
-                })
-              })
-            ]
-          })
-        })
-      ]
-    });
+              ),
+              /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+                IconButton_default,
+                {
+                  icon: "delete",
+                  onClick: () => removeRound(index)
+                }
+              )
+            ] }),
+            children: round.label
+          },
+          index
+        )) }),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          AddRoundModal_default,
+          {
+            open: addRoundModalOpen,
+            onClose: () => setAddRoundModalOpen(false),
+            onSave: addRound
+          },
+          `add-round-${addRoundModalOpen}`
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(
+          Button_default,
+          {
+            variant: "outlined",
+            onClick: () => setAddRoundModalOpen(true),
+            icon: "add",
+            children: "Add"
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("div", { style: { textAlign: "right" }, children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(Button_default, { variant: "filled", type: "submit", children: "Save" }) })
+      ] }) })
+    ] });
   };
   var EditGame_default = EditGame;
 
@@ -37177,17 +37088,12 @@
   var icons_default = icons;
 
   // src/pages/EditLocation.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime21 = __toESM(require_jsx_runtime());
   var EditLocation = ({ ...props2 }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     if (typeof id !== "string") {
-      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
-        backTo: "/database",
-        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-          children: "Location not found"
-        })
-      });
+      return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(FullPageError_default, { backTo: "/database", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("p", { children: "Location not found" }) });
     }
     const [name, setName] = (0, import_react8.useState)("");
     const [icon, setIcon] = (0, import_react8.useState)(void 0);
@@ -37199,12 +37105,7 @@
       }
     }, [location2]);
     if (typeof location2 === "undefined") {
-      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
-        backTo: "/location",
-        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-          children: "Location not found"
-        })
-      });
+      return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(FullPageError_default, { backTo: "/location", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("p", { children: "Location not found" }) });
     }
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -37220,66 +37121,50 @@
       db.locations.delete(id);
       navigate("/database");
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-      ...props2,
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("div", { ...props2, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+        AppBar_default,
+        {
           variant: "small",
           title: "Edit location",
           backTo: "/database",
-          actions: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-            icon: "delete",
-            onClick: handleDelete
-          })
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page_default, {
-          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-            onSubmit: handleSubmit,
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-                label: "Name",
-                value: name,
-                onChange: (e) => setName(e.target.value)
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-                label: "Icon",
-                value: icon,
-                options: icons_default.map((x) => [x, x]),
-                prefix: icons_default.includes(icon ?? "") ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
-                  children: icon
-                }) : "",
-                onChange: (e) => setIcon(e.target.value)
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-                style: { textAlign: "right" },
-                children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                  variant: "filled",
-                  type: "submit",
-                  children: "Save"
-                })
-              })
-            ]
-          })
-        })
-      ]
-    });
+          actions: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(IconButton_default, { icon: "delete", onClick: handleDelete })
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Page_default, { children: /* @__PURE__ */ (0, import_jsx_runtime21.jsxs)("form", { onSubmit: handleSubmit, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+          TextField_default,
+          {
+            label: "Name",
+            value: name,
+            onChange: (e) => setName(e.target.value)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(
+          TextField_default,
+          {
+            label: "Icon",
+            value: icon,
+            options: icons_default.map((x) => [x, x]),
+            prefix: icons_default.includes(icon ?? "") ? /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Icon_default, { children: icon }) : "",
+            onChange: (e) => setIcon(e.target.value)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("div", { style: { textAlign: "right" }, children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(Button_default, { variant: "filled", type: "submit", children: "Save" }) })
+      ] }) })
+    ] });
   };
   var EditLocation_default = EditLocation;
 
   // src/pages/EditPlayer.tsx
   init_react_shim();
   var import_react9 = __toESM(require_react());
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
   var EditPlayer = ({ ...props2 }) => {
     const { id } = useParams();
     const navigate = useNavigate();
     if (typeof id !== "string") {
-      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
-        backTo: "/database",
-        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-          children: "Player not found"
-        })
-      });
+      return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(FullPageError_default, { backTo: "/database", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("p", { children: "Player not found" }) });
     }
     const [name, setName] = (0, import_react9.useState)("");
     const [player, setPlayer] = usePlayer(id);
@@ -37289,12 +37174,7 @@
       }
     }, [player]);
     if (typeof player === "undefined") {
-      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
-        backTo: "/database",
-        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-          children: "Player not found"
-        })
-      });
+      return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(FullPageError_default, { backTo: "/database", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("p", { children: "Player not found" }) });
     }
     const handleSubmit = (e) => {
       e.preventDefault();
@@ -37309,54 +37189,40 @@
       db.players.delete(id);
       navigate("/database");
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-      ...props2,
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("div", { ...props2, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+        AppBar_default,
+        {
           variant: "small",
           title: "Edit player",
           backTo: "/database",
-          actions: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-            icon: "delete",
-            onClick: handleDelete
-          })
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page_default, {
-          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-            onSubmit: handleSubmit,
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-                label: "Name",
-                value: name,
-                onChange: (e) => setName(e.target.value)
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-                style: { textAlign: "right" },
-                children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                  variant: "filled",
-                  type: "submit",
-                  children: "Save"
-                })
-              })
-            ]
-          })
-        })
-      ]
-    });
+          actions: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(IconButton_default, { icon: "delete", onClick: handleDelete })
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Page_default, { children: /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)("form", { onSubmit: handleSubmit, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+          TextField_default,
+          {
+            label: "Name",
+            value: name,
+            onChange: (e) => setName(e.target.value)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { style: { textAlign: "right" }, children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Button_default, { variant: "filled", type: "submit", children: "Save" }) })
+      ] }) })
+    ] });
   };
   var EditPlayer_default = EditPlayer;
 
   // src/pages/EditSession.tsx
   init_react_shim();
   var import_react10 = __toESM(require_react());
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
   var EditSession = () => {
     const { id } = useParams();
     const navigate = useNavigate();
     if (typeof id !== "string") {
-      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
-        title: "Session not found"
-      });
+      return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(FullPageError_default, { title: "Session not found" });
     }
     const games = useGames();
     const locations = useLocations();
@@ -37394,71 +37260,75 @@
         navigate("/");
       }
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+        AppBar_default,
+        {
           variant: "small",
           title: "Edit session",
           backTo: `/sessions/${session._id}`
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page_default, {
-          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("form", {
-            onSubmit: handleSubmit,
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-                required: true,
-                label: "Session title",
-                value: title,
-                onChange: (e) => setTitle(e.target.value)
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-                required: true,
-                label: "Game",
-                value: gameId,
-                options: games.map((x) => [x._id, x.name]),
-                onChange: (e) => setGameId(e.target.value)
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-                required: true,
-                label: "Location",
-                value: locationId,
-                options: locations.map((x) => [x._id, x.name]),
-                onChange: (e) => setLocationId(e.target.value)
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DateField_default, {
-                label: "Start",
-                value: start,
-                onChange: (val) => setStart(val)
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DateField_default, {
-                label: "End",
-                value: end,
-                onChange: (val) => setEnd(val)
-              }),
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ButtonStrip_default, {
-                children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-                  children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                      to: `/sessions/${session._id}`,
-                      children: "Cancel"
-                    }),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                      style: { color: "var(--md-sys-color-error)" },
-                      onClick: handleDelete,
-                      children: "Delete"
-                    }),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                      type: "submit",
-                      children: "Save"
-                    })
-                  ]
-                })
-              })
-            ]
-          })
-        })
-      ]
-    });
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Page_default, { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("form", { onSubmit: handleSubmit, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+          TextField_default,
+          {
+            required: true,
+            label: "Session title",
+            value: title,
+            onChange: (e) => setTitle(e.target.value)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+          TextField_default,
+          {
+            required: true,
+            label: "Game",
+            value: gameId,
+            options: games.map((x) => [x._id, x.name]),
+            onChange: (e) => setGameId(e.target.value)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+          TextField_default,
+          {
+            required: true,
+            label: "Location",
+            value: locationId,
+            options: locations.map((x) => [x._id, x.name]),
+            onChange: (e) => setLocationId(e.target.value)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+          DateField_default,
+          {
+            label: "Start",
+            value: start,
+            onChange: (val) => setStart(val)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+          DateField_default,
+          {
+            label: "End",
+            value: end,
+            onChange: (val) => setEnd(val)
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(ButtonStrip_default, { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("div", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Button_default, { to: `/sessions/${session._id}`, children: "Cancel" }),
+          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
+            Button_default,
+            {
+              style: { color: "var(--md-sys-color-error)" },
+              onClick: handleDelete,
+              children: "Delete"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Button_default, { type: "submit", children: "Save" })
+        ] }) })
+      ] }) })
+    ] });
   };
   var EditSession_default = EditSession;
 
@@ -37469,7 +37339,7 @@
   // src/components/modal/EditPlayersModal.tsx
   init_react_shim();
   var import_react11 = __toESM(require_react());
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
   var EditPlayersModal = ({ playerIds, onSave, onClose, ...props2 }) => {
     const [ids, setIds] = (0, import_react11.useState)(playerIds);
     const allPlayers = usePlayers();
@@ -37480,49 +37350,51 @@
       onSave(ids);
       onClose();
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Modal_default, {
-      title: "Edit players",
-      buttons: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(import_jsx_runtime.Fragment, {
+    return /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(
+      Modal_default,
+      {
+        title: "Edit players",
+        buttons: /* @__PURE__ */ (0, import_jsx_runtime24.jsxs)(import_jsx_runtime24.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Button_default, { onClick: onClose, children: "Cancel" }),
+          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(Button_default, { onClick: handleSave, disabled: players.length === 0, children: "Save" })
+        ] }),
+        onClose,
+        ...props2,
         children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-            onClick: onClose,
-            children: "Cancel"
-          }),
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-            onClick: handleSave,
-            disabled: players.length === 0,
-            children: "Save"
-          })
+          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(List_default, { children: players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
+            ListItem_default,
+            {
+              avatar: player.name.substring(0, 1),
+              action: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
+                IconButton_default,
+                {
+                  onClick: () => setIds(ids.filter((x) => x !== player._id)),
+                  icon: "delete"
+                }
+              ),
+              children: player.name
+            },
+            player._id
+          )) }),
+          /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
+            TextField_default,
+            {
+              label: "Add player",
+              value: "",
+              options: allPlayers.filter((x) => !ids.includes(x._id)).map((x) => [x._id, x.name]),
+              onChange: (e) => setIds([...ids, e.target.value])
+            }
+          )
         ]
-      }),
-      onClose,
-      ...props2,
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(List_default, {
-          children: players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListItem_default, {
-            avatar: player.name.substring(0, 1),
-            action: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-              onClick: () => setIds(ids.filter((x) => x !== player._id)),
-              icon: "delete"
-            }),
-            children: player.name
-          }, player._id))
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TextField_default, {
-          label: "Add player",
-          value: "",
-          options: allPlayers.filter((x) => !ids.includes(x._id)).map((x) => [x._id, x.name]),
-          onChange: (e) => setIds([...ids, e.target.value])
-        })
-      ]
-    });
+      }
+    );
   };
   var EditPlayersModal_default = EditPlayersModal;
 
   // src/components/modal/WinnerModal.tsx
   init_react_shim();
   var import_react12 = __toESM(require_react());
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime25 = __toESM(require_jsx_runtime());
   var WinnerModal = ({ playerIds, onSave, onClose, ...props2 }) => {
     const [ids] = (0, import_react12.useState)(playerIds);
     const allPlayers = usePlayers();
@@ -37533,36 +37405,33 @@
       onSave(playerId);
       onClose();
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Modal_default, {
-      title: "Select winner",
-      buttons: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_jsx_runtime.Fragment, {
-        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-          onClick: onClose,
-          children: "Cancel"
-        })
-      }),
-      onClose,
-      ...props2,
-      children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(List_default, {
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListItem_default, {
-            action: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-              onClick: () => handleSave(null),
-              icon: "check"
-            }),
-            children: "No winner"
-          }),
-          players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ListItem_default, {
-            avatar: player.name.substring(0, 1),
-            action: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-              onClick: () => handleSave(player._id),
-              icon: "check"
-            }),
-            children: player.name
-          }, player._id))
-        ]
-      })
-    });
+    return /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+      Modal_default,
+      {
+        title: "Select winner",
+        buttons: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(import_jsx_runtime25.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Button_default, { onClick: onClose, children: "Cancel" }) }),
+        onClose,
+        ...props2,
+        children: /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(List_default, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+            ListItem_default,
+            {
+              action: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(IconButton_default, { onClick: () => handleSave(null), icon: "check" }),
+              children: "No winner"
+            }
+          ),
+          players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+            ListItem_default,
+            {
+              avatar: player.name.substring(0, 1),
+              action: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(IconButton_default, { onClick: () => handleSave(player._id), icon: "check" }),
+              children: player.name
+            },
+            player._id
+          ))
+        ] })
+      }
+    );
   };
   var WinnerModal_default = WinnerModal;
 
@@ -37571,20 +37440,13 @@
 
   // src/components/table/Table.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime26 = __toESM(require_jsx_runtime());
   var Table3 = ({
     className,
     children,
     ...props2
   }) => {
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-      className: "c-table__wrapper",
-      children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("table", {
-        className: `c-table ${className ?? ""}`,
-        ...props2,
-        children
-      })
-    });
+    return /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("div", { className: "c-table__wrapper", children: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("table", { className: `c-table ${className ?? ""}`, ...props2, children }) });
   };
   var Table_default = Table3;
 
@@ -37594,23 +37456,23 @@
 
   // src/components/table/TableCellInput.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime27 = __toESM(require_jsx_runtime());
   var TableCellInput = ({
     value,
     ...props2
-  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
-    className: "c-table__cell--no-padding",
-    children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("input", {
+  }) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("td", { className: "c-table__cell--no-padding", children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+    "input",
+    {
       ...props2,
       className: "c-text-field__input",
       style: { padding: "20px 12px", width: "100%", textAlign: "center" },
       value
-    })
-  });
+    }
+  ) });
   var TableCellInput_default = TableCellInput;
 
   // src/components/score-table/ScoreTableCell.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime28 = __toESM(require_jsx_runtime());
   var ScoreTableCell = ({ round, playerId, editable }) => {
     const score = (0, import_dexie_react_hooks2.useLiveQuery)(
       () => db.scores.get({
@@ -37631,18 +37493,19 @@
         db.scores.delete([round.sessionId, round.index, playerId]);
       }
     };
-    return editable ? /* @__PURE__ */ (0, import_jsx_runtime.jsx)(TableCellInput_default, {
-      type: "number",
-      value: score?.value ?? "",
-      onChange: handleScoreChange
-    }) : /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
-      children: score?.value ?? ""
-    });
+    return editable ? /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+      TableCellInput_default,
+      {
+        type: "number",
+        value: score?.value ?? "",
+        onChange: handleScoreChange
+      }
+    ) : /* @__PURE__ */ (0, import_jsx_runtime28.jsx)("td", { children: score?.value ?? "" });
   };
   var ScoreTableCell_default = ScoreTableCell;
 
   // src/components/score-table/ScoreTable.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime29 = __toESM(require_jsx_runtime());
   var ScoreTable = ({
     session,
     editable = false,
@@ -37677,97 +37540,69 @@
       if (session.customWinner)
         winners.push(session.customWinner);
     }
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Table_default, {
-      ...props2,
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("thead", {
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {}),
-                session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("th", {
-                  children: [
-                    winners.includes(player._id) && "\u{1F451}",
-                    " ",
-                    player.name
-                  ]
-                }, player._id))
-              ]
-            }),
-            scoreMode && ["HIGHEST" /* Highest */, "LOWEST" /* Lowest */].includes(scoreMode) && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
-                  scope: "row",
-                  children: "Total"
-                }),
-                session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
-                  children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
-                    children: totalScores[player._id]
-                  })
-                }, player._id))
-              ]
-            })
-          ]
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tbody", {
-          children: session.rounds.map((round, index) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
+    return /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(Table_default, { ...props2, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("thead", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("tr", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("th", {}),
+          session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("th", { children: [
+            winners.includes(player._id) && "\u{1F451}",
+            " ",
+            player.name
+          ] }, player._id))
+        ] }),
+        scoreMode && ["HIGHEST" /* Highest */, "LOWEST" /* Lowest */].includes(scoreMode) && /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("tr", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("th", { scope: "row", children: "Total" }),
+          session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("th", { children: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("strong", { children: totalScores[player._id] }) }, player._id))
+        ] })
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("tbody", { children: session.rounds.map((round, index) => /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("tr", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("th", { children: /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(
+          "div",
+          {
+            style: {
+              display: "flex",
+              alignItems: "center",
+              fontSize: "var(--md-sys-typescale-caption-size)"
+            },
             children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
-                children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-                  style: {
-                    display: "flex",
-                    alignItems: "center",
-                    fontSize: "var(--md-sys-typescale-caption-size)"
-                  },
-                  children: [
-                    round.colour && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Avatar_default, {
-                      colour: round.colour
-                    }),
-                    round.label ?? "",
-                    editable && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-                      icon: "delete",
-                      onClick: () => confirm(
-                        `Are you sure you want to remove ${round.label}?`
-                      ) && onRemoveRound(index)
-                    })
-                  ]
-                })
-              }),
-              session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScoreTableCell_default, {
-                round,
-                playerId: player._id,
-                editable
-              }, player._id))
+              round.colour && /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(Avatar_default, { colour: round.colour }),
+              round.label ?? "",
+              editable && /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+                IconButton_default,
+                {
+                  icon: "delete",
+                  onClick: () => confirm(
+                    `Are you sure you want to remove ${round.label}?`
+                  ) && onRemoveRound(index)
+                }
+              )
             ]
-          }, index))
-        }),
-        scoreMode && ["HIGHEST" /* Highest */, "LOWEST" /* Lowest */].includes(scoreMode) && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("tfoot", {
-          children: /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("tr", {
-            children: [
-              /* @__PURE__ */ (0, import_jsx_runtime.jsx)("th", {
-                children: "Total"
-              }),
-              session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("td", {
-                children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("strong", {
-                  children: totalScores[player._id]
-                })
-              }, player._id))
-            ]
-          })
-        })
-      ]
-    });
+          }
+        ) }),
+        session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+          ScoreTableCell_default,
+          {
+            round,
+            playerId: player._id,
+            editable
+          },
+          player._id
+        ))
+      ] }, index)) }),
+      scoreMode && ["HIGHEST" /* Highest */, "LOWEST" /* Lowest */].includes(scoreMode) && /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("tfoot", { children: /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("tr", { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("th", { children: "Total" }),
+        session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("strong", { children: totalScores[player._id] }) }, player._id))
+      ] }) })
+    ] });
   };
   var ScoreTable_default = ScoreTable;
 
   // src/pages/EditSessionScores.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime30 = __toESM(require_jsx_runtime());
   var EditSessionScores = () => {
     const { id } = useParams();
     if (typeof id !== "string") {
-      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
-        title: "Game not found"
-      });
+      return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(FullPageError_default, { title: "Game not found" });
     }
     const [session, setSession] = useSession(id);
     const [addRoundModalOpen, setAddRoundModalOpen] = (0, import_react13.useState)(false);
@@ -37797,64 +37632,84 @@
         customWinner: playerId ?? void 0
       });
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+        AppBar_default,
+        {
           variant: "small",
           title: `${session.title}: Scores`,
           backTo: `/sessions/${session._id}`
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Page_default, {
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(ButtonStrip_default, {
-              className: "c-button-strip--align-left",
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                  variant: "tonal",
-                  onClick: () => setAddRoundModalOpen(true),
-                  icon: "add",
-                  children: "Add round"
-                }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                  variant: "tonal",
-                  onClick: () => setEditPlayersModalOpen(true),
-                  icon: "person",
-                  children: "Edit players"
-                }),
-                session.game.scoreMode === "CUSTOM" /* Custom */ && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Button_default, {
-                  variant: "tonal",
-                  onClick: () => setWinnerModalOpen(true),
-                  icon: "groups",
-                  children: "Set winner"
-                })
-              ]
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScoreTable_default, {
-              session,
-              onRemoveRound: handleRemoveRound,
-              editable: true
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AddRoundModal_default, {
-              open: addRoundModalOpen,
-              onClose: () => setAddRoundModalOpen(false),
-              onSave: handleAddRound
-            }, `add-round-${addRoundModalOpen}`),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EditPlayersModal_default, {
-              open: editPlayersModalOpen,
-              onClose: () => setEditPlayersModalOpen(false),
-              playerIds: session.playerIds,
-              onSave: handleEditPlayers
-            }, `edit-players-${editPlayersModalOpen}`),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(WinnerModal_default, {
-              open: winnerModalOpen,
-              onClose: () => setWinnerModalOpen(false),
-              playerIds: session.playerIds,
-              onSave: handleSetWinner
-            }, `winner-${winnerModalOpen}`)
-          ]
-        })
-      ]
-    });
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(Page_default, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(ButtonStrip_default, { className: "c-button-strip--align-left", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+            Button_default,
+            {
+              variant: "tonal",
+              onClick: () => setAddRoundModalOpen(true),
+              icon: "add",
+              children: "Add round"
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+            Button_default,
+            {
+              variant: "tonal",
+              onClick: () => setEditPlayersModalOpen(true),
+              icon: "person",
+              children: "Edit players"
+            }
+          ),
+          session.game.scoreMode === "CUSTOM" /* Custom */ && /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+            Button_default,
+            {
+              variant: "tonal",
+              onClick: () => setWinnerModalOpen(true),
+              icon: "groups",
+              children: "Set winner"
+            }
+          )
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+          ScoreTable_default,
+          {
+            session,
+            onRemoveRound: handleRemoveRound,
+            editable: true
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+          AddRoundModal_default,
+          {
+            open: addRoundModalOpen,
+            onClose: () => setAddRoundModalOpen(false),
+            onSave: handleAddRound
+          },
+          `add-round-${addRoundModalOpen}`
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+          EditPlayersModal_default,
+          {
+            open: editPlayersModalOpen,
+            onClose: () => setEditPlayersModalOpen(false),
+            playerIds: session.playerIds,
+            onSave: handleEditPlayers
+          },
+          `edit-players-${editPlayersModalOpen}`
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
+          WinnerModal_default,
+          {
+            open: winnerModalOpen,
+            onClose: () => setWinnerModalOpen(false),
+            playerIds: session.playerIds,
+            onSave: handleSetWinner
+          },
+          `winner-${winnerModalOpen}`
+        )
+      ] })
+    ] });
   };
   var EditSessionScores_default = EditSessionScores;
 
@@ -37864,7 +37719,7 @@
 
   // src/components/card/Card.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime31 = __toESM(require_jsx_runtime());
   var Card = ({
     buttons,
     children,
@@ -37873,46 +37728,39 @@
     linkTo,
     orientation = "horizontal",
     ...props2
-  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-    className: `c-card c-card--${orientation} c-card--filled ${className ?? ""}`,
-    ...props2,
-    children: [
-      image && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-        style: { backgroundImage: `url(${image})` },
-        className: "c-card__image"
-      }),
-      /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-        className: "c-card__content",
-        children
-      }),
-      linkTo && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-        to: linkTo,
-        className: "c-card__cover"
-      }),
-      buttons && /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-        className: "c-card__buttons",
-        children: buttons
-      })
-    ]
-  });
+  }) => /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(
+    "div",
+    {
+      className: `c-card c-card--${orientation} c-card--filled ${className ?? ""}`,
+      ...props2,
+      children: [
+        image && /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
+          "div",
+          {
+            style: { backgroundImage: `url(${image})` },
+            className: "c-card__image"
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("div", { className: "c-card__content", children }),
+        linkTo && /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(Link, { to: linkTo, className: "c-card__cover" }),
+        buttons && /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("div", { className: "c-card__buttons", children: buttons })
+      ]
+    }
+  );
   var Card_default = Card;
 
   // src/components/card/CardGrid.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime32 = __toESM(require_jsx_runtime());
   var CardGrid = ({
     children,
     className,
     ...props2
-  }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-    className: `c-card-grid ${className || ""}`,
-    ...props2,
-    children
-  });
+  }) => /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("div", { className: `c-card-grid ${className || ""}`, ...props2, children });
   var CardGrid_default = CardGrid;
 
   // src/pages/Games.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime33 = __toESM(require_jsx_runtime());
   var Games = ({ ...props2 }) => {
     const navigate = useNavigate();
     const games = useGames();
@@ -37937,44 +37785,32 @@
       );
       setPlays(newPlays);
     }, [games, sessions]);
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-      ...props2,
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)("div", { ...props2, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
+        AppBar_default,
+        {
           variant: "center",
           title: "Games",
-          actions: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-            icon: "add",
-            onClick: addGame
-          })
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Page_default, {
-          children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardGrid_default, {
-            children: games.map((game) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card_default, {
-              image: game.image,
-              buttons: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-                icon: "edit",
-                to: `/games/${game._id}`
-              }),
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-                  className: "body-large",
-                  children: game.name
-                }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-                  className: "body-medium c-card__meta",
-                  children: [
-                    plays[game._id],
-                    " play",
-                    plays[game._id] === 1 ? "" : "s"
-                  ]
-                })
-              ]
-            }, game._id))
-          })
-        })
-      ]
-    });
+          actions: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(IconButton_default, { icon: "add", onClick: addGame })
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(Page_default, { children: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(CardGrid_default, { children: games.map((game) => /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)(
+        Card_default,
+        {
+          image: game.image,
+          buttons: /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(IconButton_default, { icon: "edit", to: `/games/${game._id}` }),
+          children: [
+            /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("div", { className: "body-large", children: game.name }),
+            /* @__PURE__ */ (0, import_jsx_runtime33.jsxs)("div", { className: "body-medium c-card__meta", children: [
+              plays[game._id],
+              " play",
+              plays[game._id] === 1 ? "" : "s"
+            ] })
+          ]
+        },
+        game._id
+      )) }) })
+    ] });
   };
   var Games_default = Games;
 
@@ -37983,32 +37819,32 @@
 
   // src/components/button/FAB.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
-  var FAB = ({ icon, onClick, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-    className: "c-button--fab",
-    icon,
-    onClick,
-    ...props2
-  });
+  var import_jsx_runtime34 = __toESM(require_jsx_runtime());
+  var FAB = ({ icon, onClick, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
+    IconButton_default,
+    {
+      className: "c-button--fab",
+      icon,
+      onClick,
+      ...props2
+    }
+  );
   var FAB_default = FAB;
 
   // src/components/DateTime.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime35 = __toESM(require_jsx_runtime());
   var DateTime = ({ dateTime, dateStyle, timeStyle, ...props2 }) => {
     const dateFormatter = new Intl.DateTimeFormat("en-GB", {
       dateStyle,
       timeStyle
     });
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-      ...props2,
-      children: dateFormatter.format(new Date(dateTime || ""))
-    });
+    return /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("span", { ...props2, children: dateFormatter.format(new Date(dateTime || "")) });
   };
   var DateTime_default = DateTime;
 
   // src/pages/Sessions.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime36 = __toESM(require_jsx_runtime());
   var Sessions = ({ ...props2 }) => {
     const games = useGames();
     const sessions = useSessions();
@@ -38016,71 +37852,66 @@
       return new Date(b.end || b.start).getTime() - new Date(a.end || a.start).getTime();
     };
     const sortedSessions = sessions.slice().sort(sortByDate);
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-      ...props2,
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)("div", { ...props2, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
+        AppBar_default,
+        {
           variant: "center",
           title: "Sessions",
-          actions: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-            icon: "add",
-            to: "/sessions/new"
-          })
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Page_default, {
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CardGrid_default, {
-              children: sortedSessions.map((session) => {
-                const game = games.find((x) => x._id === session.game._id);
-                if (typeof game === "undefined") {
-                  return /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-                    style: {
-                      backgroundColor: "var(--md-sys-color-error)",
-                      color: "var(--md-sys-color-on-error)"
-                    },
-                    children: "Cannot find game with ID"
-                  });
+          actions: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(IconButton_default, { icon: "add", to: "/sessions/new" })
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(Page_default, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(CardGrid_default, { children: sortedSessions.map((session) => {
+          const game = games.find((x) => x._id === session.game._id);
+          if (typeof game === "undefined") {
+            return /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
+              "div",
+              {
+                style: {
+                  backgroundColor: "var(--md-sys-color-error)",
+                  color: "var(--md-sys-color-on-error)"
+                },
+                children: "Cannot find game with ID"
+              }
+            );
+          }
+          return /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(
+            Card_default,
+            {
+              image: game.image,
+              linkTo: `/sessions/${session._id}`,
+              buttons: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
+                IconButton_default,
+                {
+                  icon: "edit",
+                  to: `/sessions/${session._id}/edit`
                 }
-                return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card_default, {
-                  image: game.image,
-                  linkTo: `/sessions/${session._id}`,
-                  buttons: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-                    icon: "edit",
-                    to: `/sessions/${session._id}/edit`
-                  }),
-                  children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-                      className: "body-large",
-                      children: session.title
-                    }),
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-                      className: "body-medium c-card__meta",
-                      children: [
-                        game.name,
-                        " \u2022 ",
-                        session.playerIds.length,
-                        " players",
-                        /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-                          children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DateTime_default, {
-                            dateStyle: "short",
-                            timeStyle: "short",
-                            dateTime: session.end || session.start
-                          })
-                        })
-                      ]
-                    })
-                  ]
-                }, session._id);
-              })
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FAB_default, {
-              icon: "group_add",
-              to: "/sessions/new"
-            })
-          ]
-        })
-      ]
-    });
+              ),
+              children: [
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("div", { className: "body-large", children: session.title }),
+                /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)("div", { className: "body-medium c-card__meta", children: [
+                  game.name,
+                  " \u2022 ",
+                  session.playerIds.length,
+                  " players",
+                  /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
+                    DateTime_default,
+                    {
+                      dateStyle: "short",
+                      timeStyle: "short",
+                      dateTime: session.end || session.start
+                    }
+                  ) })
+                ] })
+              ]
+            },
+            session._id
+          );
+        }) }),
+        /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(FAB_default, { icon: "group_add", to: "/sessions/new" })
+      ] })
+    ] });
   };
   var Sessions_default = Sessions;
 
@@ -38089,97 +37920,74 @@
 
   // src/components/chip/Chip.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
-  var Chip = ({ children, icon, className, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("button", {
-    className: `c-chip o-interactive ${icon ? "c-chip--with-icon" : ""} ${className ?? ""}`,
-    ...props2,
-    children: [
-      icon && /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
-        className: "c-chip__icon",
-        children: icon
-      }),
-      children
-    ]
-  });
+  var import_jsx_runtime37 = __toESM(require_jsx_runtime());
+  var Chip = ({ children, icon, className, ...props2 }) => /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)(
+    "button",
+    {
+      className: `c-chip o-interactive ${icon ? "c-chip--with-icon" : ""} ${className ?? ""}`,
+      ...props2,
+      children: [
+        icon && /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(Icon_default, { className: "c-chip__icon", children: icon }),
+        children
+      ]
+    }
+  );
   var Chip_default = Chip;
 
   // src/pages/ViewSession.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime38 = __toESM(require_jsx_runtime());
   var ViewSession = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     if (typeof id !== "string") {
-      return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
-        title: "Game not found"
-      });
+      return /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(FullPageError_default, { title: "Game not found" });
     }
     const [session] = useSession(id);
     if (!session)
       return null;
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(AppBar_default, {
+    return /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+        AppBar_default,
+        {
           variant: "small",
           title: session.title,
           backTo: "/",
-          actions: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(IconButton_default, {
-            icon: "edit",
-            to: `/sessions/${session._id}/edit`
-          })
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Page_default, {
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Card_default, {
-              image: session.game.image,
-              orientation: "vertical",
-              children: [
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-                  className: "headline-small",
-                  children: session.game.name
-                }),
-                location && /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-                  className: "c-card__body",
-                  children: [
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-                      style: { opacity: 0.6 },
-                      children: "Played at"
-                    }),
-                    " ",
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
-                      style: { verticalAlign: "middle" },
-                      children: session.location.icon
-                    }),
-                    " ",
-                    session.location.name,
-                    " ",
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-                      style: { opacity: 0.6 },
-                      children: "on"
-                    }),
-                    " ",
-                    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(DateTime_default, {
-                      dateStyle: "long",
-                      timeStyle: "short",
-                      dateTime: session.end || session.start
-                    })
-                  ]
-                }),
-                /* @__PURE__ */ (0, import_jsx_runtime.jsx)("div", {
-                  children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Chip_default, {
-                    onClick: () => navigate(`/sessions/${session._id}/scores`),
-                    icon: "scoreboard",
-                    children: "Edit scores"
-                  })
-                })
-              ]
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ScoreTable_default, {
-              session
-            })
-          ]
-        })
-      ]
-    });
+          actions: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(IconButton_default, { icon: "edit", to: `/sessions/${session._id}/edit` })
+        }
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)(Page_default, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)(Card_default, { image: session.game.image, orientation: "vertical", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("div", { className: "headline-small", children: session.game.name }),
+          location && /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("div", { className: "c-card__body", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("span", { style: { opacity: 0.6 }, children: "Played at" }),
+            " ",
+            /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(Icon_default, { style: { verticalAlign: "middle" }, children: session.location.icon }),
+            " ",
+            session.location.name,
+            " ",
+            /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("span", { style: { opacity: 0.6 }, children: "on" }),
+            " ",
+            /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+              DateTime_default,
+              {
+                dateStyle: "long",
+                timeStyle: "short",
+                dateTime: session.end || session.start
+              }
+            )
+          ] }),
+          /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
+            Chip_default,
+            {
+              onClick: () => navigate(`/sessions/${session._id}/scores`),
+              icon: "scoreboard",
+              children: "Edit scores"
+            }
+          ) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(ScoreTable_default, { session })
+      ] })
+    ] });
   };
   var ViewSession_default = ViewSession;
 
@@ -38188,141 +37996,89 @@
 
   // src/components/navigation/NavigationTrayLink.tsx
   init_react_shim();
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime39 = __toESM(require_jsx_runtime());
   var NavigationTrayLink = ({ children, to, ...props2 }) => {
     let resolved = useResolvedPath(to);
     let match2 = useMatch({ path: resolved.pathname, end: true });
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Link, {
-      className: `c-navigation-tray__item ${match2 ? "o-interactive--active" : ""}`,
-      to,
-      ...props2,
-      children
-    });
+    return /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(
+      Link,
+      {
+        className: `c-navigation-tray__item ${match2 ? "o-interactive--active" : ""}`,
+        to,
+        ...props2,
+        children
+      }
+    );
   };
   var NavigationTrayLink_default = NavigationTrayLink;
 
   // src/components/navigation/NavigationTray.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime40 = __toESM(require_jsx_runtime());
   var NavigationTray = () => {
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("nav", {
-      className: "c-navigation-tray",
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NavigationTrayLink_default, {
-          to: "/",
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-              className: "c-navigation-tray__icon o-interactive",
-              children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
-                children: "group"
-              })
-            }),
-            "Sessions"
-          ]
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NavigationTrayLink_default, {
-          to: "/games",
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-              className: "c-navigation-tray__icon o-interactive",
-              children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
-                children: "casino"
-              })
-            }),
-            "Games"
-          ]
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(NavigationTrayLink_default, {
-          to: "/database",
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)("span", {
-              className: "c-navigation-tray__icon o-interactive",
-              children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Icon_default, {
-                children: "database"
-              })
-            }),
-            "Database"
-          ]
-        })
-      ]
-    });
+    return /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)("nav", { className: "c-navigation-tray", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)(NavigationTrayLink_default, { to: "/", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("span", { className: "c-navigation-tray__icon o-interactive", children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Icon_default, { children: "group" }) }),
+        "Sessions"
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)(NavigationTrayLink_default, { to: "/games", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("span", { className: "c-navigation-tray__icon o-interactive", children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Icon_default, { children: "casino" }) }),
+        "Games"
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)(NavigationTrayLink_default, { to: "/database", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("span", { className: "c-navigation-tray__icon o-interactive", children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Icon_default, { children: "database" }) }),
+        "Database"
+      ] })
+    ] });
   };
   var NavigationTray_default = NavigationTray;
 
   // src/components/App.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime41 = __toESM(require_jsx_runtime());
   var App = () => {
-    return /* @__PURE__ */ (0, import_jsx_runtime.jsxs)("div", {
-      className: "container",
-      children: [
-        /* @__PURE__ */ (0, import_jsx_runtime.jsxs)(Routes, {
-          children: [
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-              path: "/",
-              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Sessions_default, {})
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-              path: "/games",
-              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Games_default, {})
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-              path: "/games/:id",
-              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EditGame_default, {})
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-              path: "/database",
-              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Database_default, {})
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-              path: "/players/:id",
-              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EditPlayer_default, {})
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-              path: "/locations/:id",
-              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EditLocation_default, {})
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-              path: "/sessions/new",
-              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(CreateSession_default, {})
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-              path: "/sessions/:id",
-              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(ViewSession_default, {})
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-              path: "/sessions/:id/edit",
-              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EditSession_default, {})
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-              path: "/sessions/:id/scores",
-              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(EditSessionScores_default, {})
-            }),
-            /* @__PURE__ */ (0, import_jsx_runtime.jsx)(Route, {
-              path: "*",
-              element: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(FullPageError_default, {
-                children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)("p", {
-                  children: "Page not found"
-                })
-              })
-            })
-          ]
-        }),
-        /* @__PURE__ */ (0, import_jsx_runtime.jsx)(NavigationTray_default, {})
-      ]
-    });
+    return /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)("div", { className: "container", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)(Routes, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Route, { path: "/", element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Sessions_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Route, { path: "/games", element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Games_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Route, { path: "/games/:id", element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(EditGame_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Route, { path: "/database", element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Database_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Route, { path: "/players/:id", element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(EditPlayer_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Route, { path: "/locations/:id", element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(EditLocation_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Route, { path: "/sessions/new", element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(CreateSession_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Route, { path: "/sessions/:id", element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(ViewSession_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
+          Route,
+          {
+            path: "/sessions/:id/edit",
+            element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(EditSession_default, {})
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
+          Route,
+          {
+            path: "/sessions/:id/scores",
+            element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(EditSessionScores_default, {})
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
+          Route,
+          {
+            path: "*",
+            element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(FullPageError_default, { children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("p", { children: "Page not found" }) })
+          }
+        )
+      ] }),
+      /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(NavigationTray_default, {})
+    ] });
   };
   var App_default = App;
 
   // src/index.tsx
-  var import_jsx_runtime = __toESM(require_jsx_runtime());
+  var import_jsx_runtime42 = __toESM(require_jsx_runtime());
   var rootElement = document.getElementById("root");
   if (rootElement === null)
     throw new Error("Cannot find #root to bind to");
   (0, import_client.createRoot)(rootElement).render(
-    /* @__PURE__ */ (0, import_jsx_runtime.jsx)(import_react15.StrictMode, {
-      children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(HashRouter, {
-        children: /* @__PURE__ */ (0, import_jsx_runtime.jsx)(App_default, {})
-      })
-    })
+    /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_react15.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(HashRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(App_default, {}) }) })
   );
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").then((reg) => {
@@ -38334,83 +38090,4 @@
     });
   }
 })();
-/**
- * @license React
- * react-dom.development.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-/**
- * @license React
- * react-jsx-runtime.development.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-/**
- * @license React
- * react.development.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-/**
- * @license React
- * scheduler.development.js
- *
- * Copyright (c) Facebook, Inc. and its affiliates.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE file in the root directory of this source tree.
- */
-/**
- * @remix-run/router v1.0.0
- *
- * Copyright (c) Remix Software Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.md file in the root directory of this source tree.
- *
- * @license MIT
- */
-/**
- * Checks if an event is supported in the current execution environment.
- *
- * NOTE: This will not work correctly for non-generic events such as `change`,
- * `reset`, `load`, `error`, and `select`.
- *
- * Borrows from Modernizr.
- *
- * @param {string} eventNameSuffix Event name, e.g. "click".
- * @return {boolean} True if the event is supported.
- * @internal
- * @license Modernizr 3.0.0pre (Custom Build) | MIT
- */
-/**
- * React Router DOM v6.4.0
- *
- * Copyright (c) Remix Software Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.md file in the root directory of this source tree.
- *
- * @license MIT
- */
-/**
- * React Router v6.4.0
- *
- * Copyright (c) Remix Software Inc.
- *
- * This source code is licensed under the MIT license found in the
- * LICENSE.md file in the root directory of this source tree.
- *
- * @license MIT
- */
 //# sourceMappingURL=index.js.map
