@@ -12,9 +12,14 @@ import Sessions from "../pages/Sessions";
 import ViewSession from "../pages/ViewSession";
 import FullPageError from "./FullPageError";
 import NavigationTray from "./navigation/NavigationTray";
+import { useDBInit } from "../data/db";
+import Loading from "./Loading";
 
 const App = () => {
-  return (
+  // const ready = useDBInit();
+  const ready = true;
+
+  return ready ? (
     <div className="container">
       <Routes>
         <Route path="/" element={<Sessions></Sessions>} />
@@ -44,6 +49,8 @@ const App = () => {
       </Routes>
       <NavigationTray></NavigationTray>
     </div>
+  ) : (
+    <Loading />
   );
 };
 

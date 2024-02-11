@@ -38,6 +38,11 @@ a {
   text-decoration: none;
 }
 
+.c-loading {
+  text-align: center;
+  margin: 1rem;
+}
+
 .o-canvas {
   margin-bottom: 96px;
   padding-left: 16px;

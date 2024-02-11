@@ -1,6 +1,7 @@
-import Dexie, { Table } from "dexie";
+import Dexie, { Table, liveQuery } from "dexie";
+import "dexie-export-import";
 import { useLiveQuery } from "dexie-react-hooks";
-import { useMemo } from "react";
+import { useEffect, useMemo, useState } from "react";
 
 import {
   Game,
@@ -9,8 +10,9 @@ import {
   Round,
   Score,
   Session,
-  SessionWithRelations
+  SessionWithRelations,
 } from "./types";
+import { pull, push } from "./sync";
 
 export class MySubClassedDexie extends Dexie {
   games!: Table<Game>;
@@ -203,4 +205,27 @@ export function useTotalScores(sessionId: string): ScoreMap {
   );
 
   return totals ?? {};
+}
+
+let startedInit = false;
+export function useDBInit() {
+  const [ready, setReady] = useState(false);
+
+  useEffect(() => {
+    if (startedInit) return;
+
+    startedInit = true;
+    (async () => {
+      liveQuery(() => {
+        push(db);
+      });
+
+      await pull(db);
+      await push(db);
+
+      setReady(true);
+    })();
+  });
+
+  return ready;
 }
