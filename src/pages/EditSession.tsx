@@ -71,15 +71,6 @@ const EditSession = () => {
         <form onSubmit={handleSubmit}>
           <TextField
             required
-            label="Session title"
-            value={title}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setTitle(e.target.value)
-            }
-          ></TextField>
-
-          <TextField
-            required
             label="Game"
             value={gameId}
             options={games.map((x) => [x._id, x.name])}

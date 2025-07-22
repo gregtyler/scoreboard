@@ -14,7 +14,6 @@ const CreateSession = () => {
   const games = useGames();
   const locations = useLocations();
 
-  const [title, setTitle] = useState("");
   const [start, setStart] = useState(new Date());
   const [locationId, setLocationId] = useState("");
   const [gameId, setGameId] = useState("");
@@ -26,16 +25,11 @@ const CreateSession = () => {
 
     const _id = uuidv4();
 
-    db.sessions.add({
-      _id,
-      title,
-      start: start.toISOString(),
-      locationId,
-      gameId,
-      playerIds: [],
-    });
-
     const game = await db.games.get(gameId);
+    if (!game) {
+      throw new Error("Couldn't identify game");
+    }
+
     game?.template?.rounds?.forEach((round, index) => {
       db.rounds.add({
         sessionId: _id,
@@ -43,6 +37,15 @@ const CreateSession = () => {
         label: round.label,
         colour: round.colour,
       });
+    });
+
+    db.sessions.add({
+      _id,
+      title: game?.name,
+      start: start.toISOString(),
+      locationId,
+      gameId,
+      playerIds: [],
     });
 
     navigate(`/sessions/${_id}`);
@@ -53,15 +56,6 @@ const CreateSession = () => {
       <AppBar variant="small" title="New session" backTo="/"></AppBar>
       <Page>
         <form onSubmit={handleSubmit}>
-          <TextField
-            required
-            label="Session title"
-            value={title}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setTitle(e.target.value)
-            }
-          ></TextField>
-
           <TextField
             required
             label="Game"
