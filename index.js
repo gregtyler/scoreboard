@@ -25,6 +25,10 @@
     return to;
   };
   var __toESM = (mod, isNodeMode, target) => (target = mod != null ? __create(__getProtoOf(mod)) : {}, __copyProps(
+    // If the importer is in node compatibility mode or this is not an ESM
+    // file that has been converted to a CommonJS file using a Babel-
+    // compatible transform (i.e. "__esModule" has not been set), then set
+    // "default" to the CommonJS "module.exports" for node compatibility.
     isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
     mod
   ));
@@ -68,6 +72,10 @@
             return null;
           }
           var ReactCurrentDispatcher = {
+            /**
+             * @internal
+             * @type {ReactComponent}
+             */
             current: null
           };
           var ReactCurrentBatchConfig = {
@@ -75,10 +83,15 @@
           };
           var ReactCurrentActQueue = {
             current: null,
+            // Used to reproduce behavior of `batchedUpdates` in legacy mode.
             isBatchingLegacy: false,
             didScheduleLegacyUpdate: false
           };
           var ReactCurrentOwner = {
+            /**
+             * @internal
+             * @type {ReactComponent}
+             */
             current: null
           };
           var ReactDebugCurrentFrame = {};
@@ -170,15 +183,62 @@
             }
           }
           var ReactNoopUpdateQueue = {
+            /**
+             * Checks whether or not this composite component is mounted.
+             * @param {ReactClass} publicInstance The instance we want to test.
+             * @return {boolean} True if mounted, false otherwise.
+             * @protected
+             * @final
+             */
             isMounted: function(publicInstance) {
               return false;
             },
+            /**
+             * Forces an update. This should only be invoked when it is known with
+             * certainty that we are **not** in a DOM transaction.
+             *
+             * You may want to call this when you know that some deeper aspect of the
+             * component's state has changed but `setState` was not called.
+             *
+             * This will not invoke `shouldComponentUpdate`, but it will invoke
+             * `componentWillUpdate` and `componentDidUpdate`.
+             *
+             * @param {ReactClass} publicInstance The instance that should rerender.
+             * @param {?function} callback Called after component is updated.
+             * @param {?string} callerName name of the calling function in the public API.
+             * @internal
+             */
             enqueueForceUpdate: function(publicInstance, callback, callerName) {
               warnNoop(publicInstance, "forceUpdate");
             },
+            /**
+             * Replaces all of the state. Always use this or `setState` to mutate state.
+             * You should treat `this.state` as immutable.
+             *
+             * There is no guarantee that `this.state` will be immediately updated, so
+             * accessing `this.state` after calling this method may return the old value.
+             *
+             * @param {ReactClass} publicInstance The instance that should rerender.
+             * @param {object} completeState Next state.
+             * @param {?function} callback Called after component is updated.
+             * @param {?string} callerName name of the calling function in the public API.
+             * @internal
+             */
             enqueueReplaceState: function(publicInstance, completeState, callback, callerName) {
               warnNoop(publicInstance, "replaceState");
             },
+            /**
+             * Sets a subset of the state. This only exists because _pendingState is
+             * internal. This provides a merging strategy that is not available to deep
+             * properties which is confusing. TODO: Expose pendingState or don't use it
+             * during the merge.
+             *
+             * @param {ReactClass} publicInstance The instance that should rerender.
+             * @param {object} partialState Next partial state to be merged with state.
+             * @param {?function} callback Called after component is updated.
+             * @param {?string} Name of the calling function in the public API.
+             * @internal
+             */
             enqueueSetState: function(publicInstance, partialState, callback, callerName) {
               warnNoop(publicInstance, "setState");
             }
@@ -423,11 +483,14 @@
           }
           var ReactElement = function(type2, key, ref, self2, source, owner, props2) {
             var element = {
+              // This tag allows us to uniquely identify this as a React Element
               $$typeof: REACT_ELEMENT_TYPE,
+              // Built-in properties that belong on the element
               type: type2,
               key,
               ref,
               props: props2,
+              // Record the component responsible for creating this element.
               _owner: owner
             };
             {
@@ -646,7 +709,14 @@
                   }
                   mappedChild = cloneAndReplaceKey(
                     mappedChild,
-                    escapedPrefix + (mappedChild.key && (!_child || _child.key !== mappedChild.key) ? escapeUserProvidedKey("" + mappedChild.key) + "/" : "") + childKey
+                    // Keep both the (mapped) and old keys if they differ, just as
+                    // traverseAllChildren used to do for objects as children
+                    escapedPrefix + // $FlowFixMe Flow incorrectly thinks React.Portal doesn't have a key
+                    (mappedChild.key && (!_child || _child.key !== mappedChild.key) ? (
+                      // $FlowFixMe Flow incorrectly thinks existing element's key can be a number
+                      // eslint-disable-next-line react-internal/safe-string-coercion
+                      escapeUserProvidedKey("" + mappedChild.key) + "/"
+                    ) : "") + childKey
                   );
                 }
                 array.push(mappedChild);
@@ -724,14 +794,23 @@
             }
             return children;
           }
-          function createContext2(defaultValue) {
+          function createContext3(defaultValue) {
             var context = {
               $$typeof: REACT_CONTEXT_TYPE,
+              // As a workaround to support multiple concurrent renderers, we categorize
+              // some renderers as primary and others as secondary. We only expect
+              // there to be two concurrent renderers at most: React Native (primary) and
+              // Fabric (secondary); React DOM (primary) and React ART (secondary).
+              // Secondary renderers store their context values on separate fields.
               _currentValue: defaultValue,
               _currentValue2: defaultValue,
+              // Used to track how many concurrent renderers this context currently
+              // supports within in a single renderer. Such as parallel server rendering.
               _threadCount: 0,
+              // These are circular
               Provider: null,
               Consumer: null,
+              // Add these to use same hidden class in VM as ServerContext
               _defaultValue: null,
               _globalName: null
             };
@@ -859,6 +938,7 @@
           }
           function lazy(ctor) {
             var payload = {
+              // We use these fields to store the result.
               _status: Uninitialized,
               _result: ctor
             };
@@ -952,13 +1032,17 @@
               return true;
             }
             if (typeof type2 === "object" && type2 !== null) {
-              if (type2.$$typeof === REACT_LAZY_TYPE || type2.$$typeof === REACT_MEMO_TYPE || type2.$$typeof === REACT_PROVIDER_TYPE || type2.$$typeof === REACT_CONTEXT_TYPE || type2.$$typeof === REACT_FORWARD_REF_TYPE || type2.$$typeof === REACT_MODULE_REFERENCE || type2.getModuleId !== void 0) {
+              if (type2.$$typeof === REACT_LAZY_TYPE || type2.$$typeof === REACT_MEMO_TYPE || type2.$$typeof === REACT_PROVIDER_TYPE || type2.$$typeof === REACT_CONTEXT_TYPE || type2.$$typeof === REACT_FORWARD_REF_TYPE || // This needs to include all possible module reference object
+              // types supported by any Flight configuration anywhere since
+              // we don't know which Flight build this will end up being used
+              // with.
+              type2.$$typeof === REACT_MODULE_REFERENCE || type2.getModuleId !== void 0) {
                 return true;
               }
             }
             return false;
           }
-          function memo(type2, compare) {
+          function memo2(type2, compare) {
             {
               if (!isValidElementType(type2)) {
                 error("memo: The first argument must be a component. Instead received: %s", type2 === null ? "null" : typeof type2);
@@ -1010,7 +1094,7 @@
             }
             return dispatcher.useContext(Context);
           }
-          function useState17(initialState) {
+          function useState16(initialState) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useState(initialState);
           }
@@ -1022,7 +1106,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useRef(initialValue);
           }
-          function useEffect11(create, deps) {
+          function useEffect10(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useEffect(create, deps);
           }
@@ -1030,7 +1114,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useInsertionEffect(create, deps);
           }
-          function useLayoutEffect4(create, deps) {
+          function useLayoutEffect3(create, deps) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useLayoutEffect(create, deps);
           }
@@ -1046,7 +1130,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useImperativeHandle(ref, create, deps);
           }
-          function useDebugValue2(value, formatterFn) {
+          function useDebugValue(value, formatterFn) {
             {
               var dispatcher = resolveDispatcher();
               return dispatcher.useDebugValue(value, formatterFn);
@@ -1064,7 +1148,7 @@
             var dispatcher = resolveDispatcher();
             return dispatcher.useId();
           }
-          function useSyncExternalStore2(subscribe, getSnapshot, getServerSnapshot) {
+          function useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot) {
             var dispatcher = resolveDispatcher();
             return dispatcher.useSyncExternalStore(subscribe, getSnapshot, getServerSnapshot);
           }
@@ -1468,7 +1552,9 @@
               var propTypes;
               if (typeof type2 === "function") {
                 propTypes = type2.propTypes;
-              } else if (typeof type2 === "object" && (type2.$$typeof === REACT_FORWARD_REF_TYPE || type2.$$typeof === REACT_MEMO_TYPE)) {
+              } else if (typeof type2 === "object" && (type2.$$typeof === REACT_FORWARD_REF_TYPE || // Note: Memo only checks outer props here.
+              // Inner props are checked in the reconciler.
+              type2.$$typeof === REACT_MEMO_TYPE)) {
                 propTypes = type2.propTypes;
               } else {
                 return;
@@ -1788,30 +1874,30 @@
           exports.Suspense = REACT_SUSPENSE_TYPE;
           exports.__SECRET_INTERNALS_DO_NOT_USE_OR_YOU_WILL_BE_FIRED = ReactSharedInternals;
           exports.cloneElement = cloneElement$1;
-          exports.createContext = createContext2;
+          exports.createContext = createContext3;
           exports.createElement = createElement$1;
           exports.createFactory = createFactory;
           exports.createRef = createRef;
           exports.forwardRef = forwardRef2;
           exports.isValidElement = isValidElement2;
           exports.lazy = lazy;
-          exports.memo = memo;
+          exports.memo = memo2;
           exports.startTransition = startTransition;
           exports.unstable_act = act;
           exports.useCallback = useCallback3;
           exports.useContext = useContext3;
-          exports.useDebugValue = useDebugValue2;
+          exports.useDebugValue = useDebugValue;
           exports.useDeferredValue = useDeferredValue;
-          exports.useEffect = useEffect11;
+          exports.useEffect = useEffect10;
           exports.useId = useId;
           exports.useImperativeHandle = useImperativeHandle;
           exports.useInsertionEffect = useInsertionEffect;
-          exports.useLayoutEffect = useLayoutEffect4;
+          exports.useLayoutEffect = useLayoutEffect3;
           exports.useMemo = useMemo6;
           exports.useReducer = useReducer;
           exports.useRef = useRef4;
-          exports.useState = useState17;
-          exports.useSyncExternalStore = useSyncExternalStore2;
+          exports.useState = useState16;
+          exports.useSyncExternalStore = useSyncExternalStore;
           exports.useTransition = useTransition;
           exports.version = ReactVersion;
           if (typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ !== "undefined" && typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStop === "function") {
@@ -2370,7 +2456,7 @@
           var HostPortal = 4;
           var HostComponent = 5;
           var HostText = 6;
-          var Fragment8 = 7;
+          var Fragment9 = 7;
           var Mode = 8;
           var ContextConsumer = 9;
           var ContextProvider = 10;
@@ -2424,7 +2510,7 @@
               allNativeEvents.add(dependencies[i]);
             }
           }
-          var canUseDOM2 = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
+          var canUseDOM = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
           var hasOwnProperty = Object.prototype.hasOwnProperty;
           function typeName(value) {
             {
@@ -2599,6 +2685,9 @@
           var reservedProps = [
             "children",
             "dangerouslySetInnerHTML",
+            // TODO: This prevents the assignment of defaultValue to regular
+            // elements (not just inputs). Now that ReactDOMInput assigns to the
+            // defaultValue property -- do we need this?
             "defaultValue",
             "defaultChecked",
             "innerHTML",
@@ -2611,9 +2700,13 @@
               name,
               RESERVED,
               false,
+              // mustUseProperty
               name,
+              // attributeName
               null,
+              // attributeNamespace
               false,
+              // sanitizeURL
               false
             );
           });
@@ -2623,9 +2716,13 @@
               name,
               STRING,
               false,
+              // mustUseProperty
               attributeName,
+              // attributeName
               null,
+              // attributeNamespace
               false,
+              // sanitizeURL
               false
             );
           });
@@ -2634,9 +2731,13 @@
               name,
               BOOLEANISH_STRING,
               false,
+              // mustUseProperty
               name.toLowerCase(),
+              // attributeName
               null,
+              // attributeNamespace
               false,
+              // sanitizeURL
               false
             );
           });
@@ -2645,15 +2746,21 @@
               name,
               BOOLEANISH_STRING,
               false,
+              // mustUseProperty
               name,
+              // attributeName
               null,
+              // attributeNamespace
               false,
+              // sanitizeURL
               false
             );
           });
           [
             "allowFullScreen",
             "async",
+            // Note: there is a special case that prevents it from being written to the DOM
+            // on the client side because the browsers are inconsistent. Instead we call focus().
             "autoFocus",
             "autoPlay",
             "controls",
@@ -2674,45 +2781,66 @@
             "reversed",
             "scoped",
             "seamless",
+            // Microdata
             "itemScope"
           ].forEach(function(name) {
             properties[name] = new PropertyInfoRecord(
               name,
               BOOLEAN,
               false,
+              // mustUseProperty
               name.toLowerCase(),
+              // attributeName
               null,
+              // attributeNamespace
               false,
+              // sanitizeURL
               false
             );
           });
           [
             "checked",
+            // Note: `option.selected` is not updated if `select.multiple` is
+            // disabled with `removeAttribute`. We have special logic for handling this.
             "multiple",
             "muted",
             "selected"
+            // NOTE: if you add a camelCased prop to this list,
+            // you'll need to set attributeName to name.toLowerCase()
+            // instead in the assignment below.
           ].forEach(function(name) {
             properties[name] = new PropertyInfoRecord(
               name,
               BOOLEAN,
               true,
+              // mustUseProperty
               name,
+              // attributeName
               null,
+              // attributeNamespace
               false,
+              // sanitizeURL
               false
             );
           });
           [
             "capture",
             "download"
+            // NOTE: if you add a camelCased prop to this list,
+            // you'll need to set attributeName to name.toLowerCase()
+            // instead in the assignment below.
           ].forEach(function(name) {
             properties[name] = new PropertyInfoRecord(
               name,
               OVERLOADED_BOOLEAN,
               false,
+              // mustUseProperty
               name,
+              // attributeName
               null,
+              // attributeNamespace
               false,
+              // sanitizeURL
               false
             );
           });
@@ -2721,14 +2849,21 @@
             "rows",
             "size",
             "span"
+            // NOTE: if you add a camelCased prop to this list,
+            // you'll need to set attributeName to name.toLowerCase()
+            // instead in the assignment below.
           ].forEach(function(name) {
             properties[name] = new PropertyInfoRecord(
               name,
               POSITIVE_NUMERIC,
               false,
+              // mustUseProperty
               name,
+              // attributeName
               null,
+              // attributeNamespace
               false,
+              // sanitizeURL
               false
             );
           });
@@ -2737,9 +2872,13 @@
               name,
               NUMERIC,
               false,
+              // mustUseProperty
               name.toLowerCase(),
+              // attributeName
               null,
+              // attributeNamespace
               false,
+              // sanitizeURL
               false
             );
           });
@@ -2821,15 +2960,21 @@
             "writing-mode",
             "xmlns:xlink",
             "x-height"
+            // NOTE: if you add a camelCased prop to this list,
+            // you'll need to set attributeName to name.toLowerCase()
+            // instead in the assignment below.
           ].forEach(function(attributeName) {
             var name = attributeName.replace(CAMELIZE, capitalize);
             properties[name] = new PropertyInfoRecord(
               name,
               STRING,
               false,
+              // mustUseProperty
               attributeName,
               null,
+              // attributeNamespace
               false,
+              // sanitizeURL
               false
             );
           });
@@ -2840,15 +2985,20 @@
             "xlink:show",
             "xlink:title",
             "xlink:type"
+            // NOTE: if you add a camelCased prop to this list,
+            // you'll need to set attributeName to name.toLowerCase()
+            // instead in the assignment below.
           ].forEach(function(attributeName) {
             var name = attributeName.replace(CAMELIZE, capitalize);
             properties[name] = new PropertyInfoRecord(
               name,
               STRING,
               false,
+              // mustUseProperty
               attributeName,
               "http://www.w3.org/1999/xlink",
               false,
+              // sanitizeURL
               false
             );
           });
@@ -2856,15 +3006,20 @@
             "xml:base",
             "xml:lang",
             "xml:space"
+            // NOTE: if you add a camelCased prop to this list,
+            // you'll need to set attributeName to name.toLowerCase()
+            // instead in the assignment below.
           ].forEach(function(attributeName) {
             var name = attributeName.replace(CAMELIZE, capitalize);
             properties[name] = new PropertyInfoRecord(
               name,
               STRING,
               false,
+              // mustUseProperty
               attributeName,
               "http://www.w3.org/XML/1998/namespace",
               false,
+              // sanitizeURL
               false
             );
           });
@@ -2873,9 +3028,13 @@
               attributeName,
               STRING,
               false,
+              // mustUseProperty
               attributeName.toLowerCase(),
+              // attributeName
               null,
+              // attributeNamespace
               false,
+              // sanitizeURL
               false
             );
           });
@@ -2884,9 +3043,11 @@
             "xlinkHref",
             STRING,
             false,
+            // mustUseProperty
             "xlink:href",
             "http://www.w3.org/1999/xlink",
             true,
+            // sanitizeURL
             false
           );
           ["src", "href", "action", "formAction"].forEach(function(attributeName) {
@@ -2894,9 +3055,13 @@
               attributeName,
               STRING,
               false,
+              // mustUseProperty
               attributeName.toLowerCase(),
+              // attributeName
               null,
+              // attributeNamespace
               true,
+              // sanitizeURL
               true
             );
           });
@@ -3447,7 +3612,7 @@
                 return "DehydratedFragment";
               case ForwardRef:
                 return getWrappedName$1(type2, type2.render, "ForwardRef");
-              case Fragment8:
+              case Fragment9:
                 return "Fragment";
               case HostComponent:
                 return type2;
@@ -3741,7 +3906,9 @@
             var type2 = props2.type;
             if (value != null) {
               if (type2 === "number") {
-                if (value === 0 && node.value === "" || node.value != value) {
+                if (value === 0 && node.value === "" || // We explicitly want to coerce to number here if possible.
+                // eslint-disable-next-line
+                node.value != value) {
                   node.value = toString2(value);
                 }
               } else if (node.value !== toString2(value)) {
@@ -3827,7 +3994,10 @@
             }
           }
           function setDefaultValue(node, type2, value) {
-            if (type2 !== "number" || getActiveElement(node.ownerDocument) !== node) {
+            if (
+              // Focused number inputs synchronize on blur. See ChangeEventPlugin.js
+              type2 !== "number" || getActiveElement(node.ownerDocument) !== node
+            ) {
               if (value == null) {
                 node.defaultValue = toString2(node._wrapperState.initialValue);
               } else if (node.defaultValue !== toString2(value)) {
@@ -4225,6 +4395,7 @@
             widows: true,
             zIndex: true,
             zoom: true,
+            // SVG-related properties
             fillOpacity: true,
             floodOpacity: true,
             stopOpacity: true,
@@ -4285,6 +4456,9 @@
               error(
                 "Unsupported style property %s. Did you mean %s?",
                 name,
+                // As Andi Smith suggests
+                // (http://www.andismith.com/blog/2012/02/modernizr-prefixed/), an `-ms` prefix
+                // is converted to lowercase `ms`.
                 camelize(name.replace(msPattern$1, "ms-"))
               );
             };
@@ -4427,6 +4601,7 @@
             source: true,
             track: true,
             wbr: true
+            // NOTE: menuitem's close tag should be omitted, but that causes problems.
           };
           var voidElementTags = assign2({
             menuitem: true
@@ -4477,6 +4652,7 @@
             }
           }
           var possibleStandardNames = {
+            // HTML
             accept: "accept",
             acceptcharset: "acceptCharset",
             "accept-charset": "acceptCharset",
@@ -4626,6 +4802,7 @@
             width: "width",
             wmode: "wmode",
             wrap: "wrap",
+            // SVG
             about: "about",
             accentheight: "accentHeight",
             "accent-height": "accentHeight",
@@ -4965,14 +5142,19 @@
           };
           var ariaProperties = {
             "aria-current": 0,
+            // state
             "aria-description": 0,
             "aria-details": 0,
             "aria-disabled": 0,
+            // state
             "aria-hidden": 0,
+            // state
             "aria-invalid": 0,
+            // state
             "aria-keyshortcuts": 0,
             "aria-label": 0,
             "aria-roledescription": 0,
+            // Widget Attributes
             "aria-autocomplete": 0,
             "aria-checked": 0,
             "aria-expanded": 0,
@@ -4992,12 +5174,15 @@
             "aria-valuemin": 0,
             "aria-valuenow": 0,
             "aria-valuetext": 0,
+            // Live Region Attributes
             "aria-atomic": 0,
             "aria-busy": 0,
             "aria-live": 0,
             "aria-relevant": 0,
+            // Drag-and-Drop Attributes
             "aria-dropeffect": 0,
             "aria-grabbed": 0,
+            // Relationship Attributes
             "aria-activedescendant": 0,
             "aria-colcount": 0,
             "aria-colindex": 0,
@@ -5303,13 +5488,13 @@
           var batchedUpdatesImpl = function(fn, bookkeeping) {
             return fn(bookkeeping);
           };
-          var flushSyncImpl = function() {
+          var flushSyncImpl2 = function() {
           };
           var isInsideEventHandler = false;
           function finishEventHandler() {
             var controlledComponentsHavePendingUpdates = needsStateRestore();
             if (controlledComponentsHavePendingUpdates) {
-              flushSyncImpl();
+              flushSyncImpl2();
               restoreStateIfNeeded();
             }
           }
@@ -5327,7 +5512,7 @@
           }
           function setBatchingImplementation(_batchedUpdatesImpl, _discreteUpdatesImpl, _flushSyncImpl) {
             batchedUpdatesImpl = _batchedUpdatesImpl;
-            flushSyncImpl = _flushSyncImpl;
+            flushSyncImpl2 = _flushSyncImpl;
           }
           function isInteractive(tag) {
             return tag === "button" || tag === "input" || tag === "select" || tag === "textarea";
@@ -5369,7 +5554,7 @@
             return listener;
           }
           var passiveBrowserEventsSupported = false;
-          if (canUseDOM2) {
+          if (canUseDOM) {
             try {
               var options = {};
               Object.defineProperty(options, "passive", {
@@ -5515,33 +5700,112 @@
           function set(key, value) {
             key._reactInternals = value;
           }
-          var NoFlags = 0;
-          var PerformedWork = 1;
-          var Placement = 2;
-          var Update = 4;
-          var ChildDeletion = 16;
-          var ContentReset = 32;
-          var Callback = 64;
-          var DidCapture = 128;
-          var ForceClientRender = 256;
-          var Ref = 512;
-          var Snapshot = 1024;
-          var Passive = 2048;
-          var Hydrating = 4096;
-          var Visibility = 8192;
-          var StoreConsistency = 16384;
+          var NoFlags = (
+            /*                      */
+            0
+          );
+          var PerformedWork = (
+            /*                */
+            1
+          );
+          var Placement = (
+            /*                    */
+            2
+          );
+          var Update = (
+            /*                       */
+            4
+          );
+          var ChildDeletion = (
+            /*                */
+            16
+          );
+          var ContentReset = (
+            /*                 */
+            32
+          );
+          var Callback = (
+            /*                     */
+            64
+          );
+          var DidCapture = (
+            /*                   */
+            128
+          );
+          var ForceClientRender = (
+            /*            */
+            256
+          );
+          var Ref = (
+            /*                          */
+            512
+          );
+          var Snapshot = (
+            /*                     */
+            1024
+          );
+          var Passive = (
+            /*                      */
+            2048
+          );
+          var Hydrating = (
+            /*                    */
+            4096
+          );
+          var Visibility = (
+            /*                   */
+            8192
+          );
+          var StoreConsistency = (
+            /*             */
+            16384
+          );
           var LifecycleEffectMask = Passive | Update | Callback | Ref | Snapshot | StoreConsistency;
-          var HostEffectMask = 32767;
-          var Incomplete = 32768;
-          var ShouldCapture = 65536;
-          var ForceUpdateForLegacySuspense = 131072;
-          var Forked = 1048576;
-          var RefStatic = 2097152;
-          var LayoutStatic = 4194304;
-          var PassiveStatic = 8388608;
-          var MountLayoutDev = 16777216;
-          var MountPassiveDev = 33554432;
-          var BeforeMutationMask = Update | Snapshot | 0;
+          var HostEffectMask = (
+            /*               */
+            32767
+          );
+          var Incomplete = (
+            /*                   */
+            32768
+          );
+          var ShouldCapture = (
+            /*                */
+            65536
+          );
+          var ForceUpdateForLegacySuspense = (
+            /* */
+            131072
+          );
+          var Forked = (
+            /*                       */
+            1048576
+          );
+          var RefStatic = (
+            /*                    */
+            2097152
+          );
+          var LayoutStatic = (
+            /*                 */
+            4194304
+          );
+          var PassiveStatic = (
+            /*                */
+            8388608
+          );
+          var MountLayoutDev = (
+            /*               */
+            16777216
+          );
+          var MountPassiveDev = (
+            /*              */
+            33554432
+          );
+          var BeforeMutationMask = (
+            // TODO: Remove Update flag from before mutation phase by re-landing Visibility
+            // flag logic (see #20043)
+            Update | Snapshot | 0
+          );
           var MutationMask = Placement | Update | ChildDeletion | ContentReset | Ref | Hydrating | Visibility;
           var LayoutMask = Update | Callback | Ref | Visibility;
           var PassiveMask = Passive | ChildDeletion;
@@ -6083,11 +6347,26 @@
               }
             }
           }
-          var NoMode = 0;
-          var ConcurrentMode = 1;
-          var ProfileMode = 2;
-          var StrictLegacyMode = 8;
-          var StrictEffectsMode = 16;
+          var NoMode = (
+            /*                         */
+            0
+          );
+          var ConcurrentMode = (
+            /*                 */
+            1
+          );
+          var ProfileMode = (
+            /*                    */
+            2
+          );
+          var StrictLegacyMode = (
+            /*               */
+            8
+          );
+          var StrictEffectsMode = (
+            /*              */
+            16
+          );
           var clz32 = Math.clz32 ? Math.clz32 : clz32Fallback;
           var log = Math.log;
           var LN2 = Math.LN2;
@@ -6099,43 +6378,151 @@
             return 31 - (log(asUint) / LN2 | 0) | 0;
           }
           var TotalLanes = 31;
-          var NoLanes = 0;
-          var NoLane = 0;
-          var SyncLane = 1;
-          var InputContinuousHydrationLane = 2;
-          var InputContinuousLane = 4;
-          var DefaultHydrationLane = 8;
-          var DefaultLane = 16;
-          var TransitionHydrationLane = 32;
-          var TransitionLanes = 4194240;
-          var TransitionLane1 = 64;
-          var TransitionLane2 = 128;
-          var TransitionLane3 = 256;
-          var TransitionLane4 = 512;
-          var TransitionLane5 = 1024;
-          var TransitionLane6 = 2048;
-          var TransitionLane7 = 4096;
-          var TransitionLane8 = 8192;
-          var TransitionLane9 = 16384;
-          var TransitionLane10 = 32768;
-          var TransitionLane11 = 65536;
-          var TransitionLane12 = 131072;
-          var TransitionLane13 = 262144;
-          var TransitionLane14 = 524288;
-          var TransitionLane15 = 1048576;
-          var TransitionLane16 = 2097152;
-          var RetryLanes = 130023424;
-          var RetryLane1 = 4194304;
-          var RetryLane2 = 8388608;
-          var RetryLane3 = 16777216;
-          var RetryLane4 = 33554432;
-          var RetryLane5 = 67108864;
+          var NoLanes = (
+            /*                        */
+            0
+          );
+          var NoLane = (
+            /*                          */
+            0
+          );
+          var SyncLane = (
+            /*                        */
+            1
+          );
+          var InputContinuousHydrationLane = (
+            /*    */
+            2
+          );
+          var InputContinuousLane = (
+            /*             */
+            4
+          );
+          var DefaultHydrationLane = (
+            /*            */
+            8
+          );
+          var DefaultLane = (
+            /*                     */
+            16
+          );
+          var TransitionHydrationLane = (
+            /*                */
+            32
+          );
+          var TransitionLanes = (
+            /*                       */
+            4194240
+          );
+          var TransitionLane1 = (
+            /*                        */
+            64
+          );
+          var TransitionLane2 = (
+            /*                        */
+            128
+          );
+          var TransitionLane3 = (
+            /*                        */
+            256
+          );
+          var TransitionLane4 = (
+            /*                        */
+            512
+          );
+          var TransitionLane5 = (
+            /*                        */
+            1024
+          );
+          var TransitionLane6 = (
+            /*                        */
+            2048
+          );
+          var TransitionLane7 = (
+            /*                        */
+            4096
+          );
+          var TransitionLane8 = (
+            /*                        */
+            8192
+          );
+          var TransitionLane9 = (
+            /*                        */
+            16384
+          );
+          var TransitionLane10 = (
+            /*                       */
+            32768
+          );
+          var TransitionLane11 = (
+            /*                       */
+            65536
+          );
+          var TransitionLane12 = (
+            /*                       */
+            131072
+          );
+          var TransitionLane13 = (
+            /*                       */
+            262144
+          );
+          var TransitionLane14 = (
+            /*                       */
+            524288
+          );
+          var TransitionLane15 = (
+            /*                       */
+            1048576
+          );
+          var TransitionLane16 = (
+            /*                       */
+            2097152
+          );
+          var RetryLanes = (
+            /*                            */
+            130023424
+          );
+          var RetryLane1 = (
+            /*                             */
+            4194304
+          );
+          var RetryLane2 = (
+            /*                             */
+            8388608
+          );
+          var RetryLane3 = (
+            /*                             */
+            16777216
+          );
+          var RetryLane4 = (
+            /*                             */
+            33554432
+          );
+          var RetryLane5 = (
+            /*                             */
+            67108864
+          );
           var SomeRetryLane = RetryLane1;
-          var SelectiveHydrationLane = 134217728;
-          var NonIdleLanes = 268435455;
-          var IdleHydrationLane = 268435456;
-          var IdleLane = 536870912;
-          var OffscreenLane = 1073741824;
+          var SelectiveHydrationLane = (
+            /*          */
+            134217728
+          );
+          var NonIdleLanes = (
+            /*                          */
+            268435455
+          );
+          var IdleHydrationLane = (
+            /*               */
+            268435456
+          );
+          var IdleLane = (
+            /*                        */
+            536870912
+          );
+          var OffscreenLane = (
+            /*                   */
+            1073741824
+          );
           function getLabelForLane(lane) {
             {
               if (lane & SyncLane) {
@@ -6263,10 +6650,19 @@
             if (nextLanes === NoLanes) {
               return NoLanes;
             }
-            if (wipLanes !== NoLanes && wipLanes !== nextLanes && (wipLanes & suspendedLanes) === NoLanes) {
+            if (wipLanes !== NoLanes && wipLanes !== nextLanes && // If we already suspended with a delay, then interrupting is fine. Don't
+            // bother waiting until the root is complete.
+            (wipLanes & suspendedLanes) === NoLanes) {
               var nextLane = getHighestPriorityLane(nextLanes);
               var wipLane = getHighestPriorityLane(wipLanes);
-              if (nextLane >= wipLane || nextLane === DefaultLane && (wipLane & TransitionLanes) !== NoLanes) {
+              if (
+                // Tests whether the next lane is equal or lower priority than the wip
+                // one. This works because the bits decrease in priority as you go left.
+                nextLane >= wipLane || // Default priority updates should not interrupt transition updates. The
+                // only difference between default updates and transition updates is that
+                // default updates do not support refresh transitions.
+                nextLane === DefaultLane && (wipLane & TransitionLanes) !== NoLanes
+              ) {
                 return wipLanes;
               }
             }
@@ -6512,7 +6908,11 @@
             while (lanes) {
               var index2 = pickArbitraryLaneIndex(lanes);
               var lane = 1 << index2;
-              if (lane & entangledLanes | entanglements[index2] & entangledLanes) {
+              if (
+                // Is this one of the newly entangled lanes?
+                lane & entangledLanes | // Is this lane transitively entangled with the newly entangled lanes?
+                entanglements[index2] & entangledLanes
+              ) {
                 entanglements[index2] |= entangledLanes;
               }
               lanes &= ~lane;
@@ -6701,6 +7101,7 @@
             "keyup",
             "input",
             "textInput",
+            // Intentionally camelCase
             "copy",
             "cut",
             "paste",
@@ -7302,8 +7703,18 @@
                 }
                 this.isPropagationStopped = functionThatReturnsTrue;
               },
+              /**
+               * We release all dispatched `SyntheticEvent`s after each event loop, adding
+               * them back into the pool. This allows a way to hold onto a reference that
+               * won't be added back into the pool.
+               */
               persist: function() {
               },
+              /**
+               * Checks if this event should be released back into the pool.
+               *
+               * @return {boolean} True if this should not be released, false otherwise.
+               */
               isPersistent: functionThatReturnsTrue
             });
             return SyntheticBaseEvent;
@@ -7495,6 +7906,7 @@
             repeat: 0,
             locale: 0,
             getModifierState: getEventModifierState,
+            // Legacy Interface
             charCode: function(event) {
               if (event.type === "keypress") {
                 return getEventCharCode(event);
@@ -7550,24 +7962,37 @@
           var SyntheticTransitionEvent = createSyntheticEvent(TransitionEventInterface);
           var WheelEventInterface = assign2({}, MouseEventInterface, {
             deltaX: function(event) {
-              return "deltaX" in event ? event.deltaX : "wheelDeltaX" in event ? -event.wheelDeltaX : 0;
+              return "deltaX" in event ? event.deltaX : (
+                // Fallback to `wheelDeltaX` for Webkit and normalize (right is positive).
+                "wheelDeltaX" in event ? -event.wheelDeltaX : 0
+              );
             },
             deltaY: function(event) {
-              return "deltaY" in event ? event.deltaY : "wheelDeltaY" in event ? -event.wheelDeltaY : "wheelDelta" in event ? -event.wheelDelta : 0;
+              return "deltaY" in event ? event.deltaY : (
+                // Fallback to `wheelDeltaY` for Webkit and normalize (down is positive).
+                "wheelDeltaY" in event ? -event.wheelDeltaY : (
+                  // Fallback to `wheelDelta` for IE<9 and normalize (down is positive).
+                  "wheelDelta" in event ? -event.wheelDelta : 0
+                )
+              );
             },
             deltaZ: 0,
+            // Browsers without "deltaMode" is reporting in raw wheel delta where one
+            // notch on the scroll is always +/- 120, roughly equivalent to pixels.
+            // A good approximation of DOM_DELTA_LINE (1) is 5% of viewport size or
+            // ~40 pixels, for DOM_DELTA_SCREEN (2) it is 87.5% of viewport size.
             deltaMode: 0
           });
           var SyntheticWheelEvent = createSyntheticEvent(WheelEventInterface);
           var END_KEYCODES = [9, 13, 27, 32];
           var START_KEYCODE = 229;
-          var canUseCompositionEvent = canUseDOM2 && "CompositionEvent" in window;
+          var canUseCompositionEvent = canUseDOM && "CompositionEvent" in window;
           var documentMode = null;
-          if (canUseDOM2 && "documentMode" in document) {
+          if (canUseDOM && "documentMode" in document) {
             documentMode = document.documentMode;
           }
-          var canUseTextInputEvent = canUseDOM2 && "TextEvent" in window && !documentMode;
-          var useFallbackCompositionData = canUseDOM2 && (!canUseCompositionEvent || documentMode && documentMode > 8 && documentMode <= 11);
+          var canUseTextInputEvent = canUseDOM && "TextEvent" in window && !documentMode;
+          var useFallbackCompositionData = canUseDOM && (!canUseCompositionEvent || documentMode && documentMode > 8 && documentMode <= 11);
           var SPACEBAR_CODE = 32;
           var SPACEBAR_CHAR = String.fromCharCode(SPACEBAR_CODE);
           function registerEvents() {
@@ -7578,7 +8003,8 @@
           }
           var hasSpaceKeypress = false;
           function isKeypressCommand(nativeEvent) {
-            return (nativeEvent.ctrlKey || nativeEvent.altKey || nativeEvent.metaKey) && !(nativeEvent.ctrlKey && nativeEvent.altKey);
+            return (nativeEvent.ctrlKey || nativeEvent.altKey || nativeEvent.metaKey) && // ctrlKey && altKey is equivalent to AltGr, and is not a command.
+            !(nativeEvent.ctrlKey && nativeEvent.altKey);
           }
           function getCompositionEventType(domEventName) {
             switch (domEventName) {
@@ -7760,7 +8186,7 @@
             return false;
           }
           function isEventSupported(eventNameSuffix) {
-            if (!canUseDOM2) {
+            if (!canUseDOM) {
               return false;
             }
             var eventName = "on" + eventNameSuffix;
@@ -7812,7 +8238,7 @@
             }
           }
           var isInputEventSupported = false;
-          if (canUseDOM2) {
+          if (canUseDOM) {
             isInputEventSupported = isEventSupported("input") && (!document.documentMode || document.documentMode > 9);
           }
           function startWatchingForValueChange(target, targetInst) {
@@ -7976,10 +8402,10 @@
             }
             accumulateEnterLeaveTwoPhaseListeners(dispatchQueue, leave, enter, from, to);
           }
-          function is2(x, y) {
+          function is(x, y) {
             return x === y && (x !== 0 || 1 / x === 1 / y) || x !== x && y !== y;
           }
-          var objectIs = typeof Object.is === "function" ? Object.is : is2;
+          var objectIs = typeof Object.is === "function" ? Object.is : is;
           function shallowEqual(objA, objB) {
             if (objectIs(objA, objB)) {
               return true;
@@ -8245,7 +8671,7 @@
               setOffsets(input, offsets);
             }
           }
-          var skipSelectionChangeEvent = canUseDOM2 && "documentMode" in document && document.documentMode <= 11;
+          var skipSelectionChangeEvent = canUseDOM && "documentMode" in document && document.documentMode <= 11;
           function registerEvents$3() {
             registerTwoPhaseEvent("onSelect", ["focusout", "contextmenu", "dragend", "focusin", "keydown", "keyup", "mousedown", "mouseup", "selectionchange"]);
           }
@@ -8340,7 +8766,7 @@
           };
           var prefixedEventNames = {};
           var style = {};
-          if (canUseDOM2) {
+          if (canUseDOM) {
             style = document.createElement("div").style;
             if (!("AnimationEvent" in window)) {
               delete vendorPrefixes.animationend.animation;
@@ -8480,7 +8906,11 @@
             }
             var inCapturePhase = (eventSystemFlags & IS_CAPTURE_PHASE) !== 0;
             {
-              var accumulateTargetOnly = !inCapturePhase && domEventName === "scroll";
+              var accumulateTargetOnly = !inCapturePhase && // TODO: ideally, we'd eventually add all events from
+              // nonDelegatedEvents list in DOMPluginEventSystem.
+              // Then we can remove this special list.
+              // This is a breaking change that can wait until React 18.
+              domEventName === "scroll";
               var _listeners = accumulateSinglePhaseListeners(targetInst, reactName, nativeEvent.type, inCapturePhase, accumulateTargetOnly);
               if (_listeners.length > 0) {
                 var _event = new SyntheticEventCtor(reactName, reactEventType, null, nativeEvent, nativeEventTarget);
@@ -8832,7 +9262,13 @@
           var normalizeHTML;
           {
             warnedUnknownTags = {
+              // There are working polyfills for <dialog>. Let people use it.
               dialog: true,
+              // Electron ships a custom <webview> tag to display external web content in
+              // an isolated frame and process.
+              // This tag is not present in non Electron environments such as JSDom which
+              // is often used for testing purposes.
+              // @see https://electronjs.org/docs/api/webview-tag
               webview: true
             };
             validatePropertiesInDevelopment = function(type2, props2) {
@@ -8843,7 +9279,7 @@
                 possibleRegistrationNames
               });
             };
-            canDiffStyleForHydrationWarning = canUseDOM2 && !document.documentMode;
+            canDiffStyleForHydrationWarning = canUseDOM && !document.documentMode;
             warnForPropDifference = function(propName, serverValue, clientValue) {
               if (didWarnInvalidHydration) {
                 return;
@@ -9379,12 +9815,15 @@
                     listenToNonDelegatedEvent("scroll", domElement);
                   }
                 }
-              } else if (shouldWarnDev && true && typeof isCustomComponentTag === "boolean") {
+              } else if (shouldWarnDev && true && // Convince Flow we've calculated it (it's DEV-only in this method.)
+              typeof isCustomComponentTag === "boolean") {
                 var serverValue = void 0;
                 var propertyInfo = isCustomComponentTag && enableCustomElementPropertySupport ? null : getPropertyInfo(propKey);
                 if (rawProps[SUPPRESS_HYDRATION_WARNING] === true)
                   ;
-                else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING || propKey === "value" || propKey === "checked" || propKey === "selected")
+                else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING || // Controlled attributes are not validated
+                // TODO: Only ignore them on controlled tags.
+                propKey === "value" || propKey === "checked" || propKey === "selected")
                   ;
                 else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
                   var serverHTML = domElement.innerHTML;
@@ -9441,7 +9880,10 @@
             }
             {
               if (shouldWarnDev) {
-                if (extraAttributeNames.size > 0 && rawProps[SUPPRESS_HYDRATION_WARNING] !== true) {
+                if (
+                  // $FlowFixMe - Should be inferred as not undefined.
+                  extraAttributeNames.size > 0 && rawProps[SUPPRESS_HYDRATION_WARNING] !== true
+                ) {
                   warnForExtraAttributes(extraAttributeNames);
                 }
               }
@@ -9538,6 +9980,9 @@
               "marquee",
               "object",
               "template",
+              // https://html.spec.whatwg.org/multipage/syntax.html#html-integration-point
+              // TODO: Distinguish by namespace here -- for <title>, including it here
+              // errs on the side of fewer warnings
               "foreignObject",
               "desc",
               "title"
@@ -10810,6 +11255,7 @@
                     returnFiber.memoizedProps,
                     returnFiber.stateNode,
                     instance,
+                    // TODO: Delete this argument when we remove the legacy root API.
                     isConcurrentMode
                   );
                   break;
@@ -10872,6 +11318,7 @@
                         parentInstance,
                         _type,
                         _props,
+                        // TODO: Delete this argument when we remove the legacy root API.
                         isConcurrentMode
                       );
                       break;
@@ -10884,6 +11331,7 @@
                         parentProps,
                         parentInstance,
                         _text,
+                        // TODO: Delete this argument when we remove the legacy root API.
                         _isConcurrentMode
                       );
                       break;
@@ -11027,6 +11475,7 @@
                       parentContainer,
                       textInstance,
                       textContent,
+                      // TODO: Delete this argument when we remove the legacy root API.
                       isConcurrentMode
                     );
                     break;
@@ -11042,6 +11491,7 @@
                       parentInstance,
                       textInstance,
                       textContent,
+                      // TODO: Delete this argument when we remove the legacy root API.
                       _isConcurrentMode2
                     );
                     break;
@@ -11184,7 +11634,8 @@
               if (didWarnAboutUnsafeLifecycles.has(fiber.type)) {
                 return;
               }
-              if (typeof instance.componentWillMount === "function" && instance.componentWillMount.__suppressDeprecationWarning !== true) {
+              if (typeof instance.componentWillMount === "function" && // Don't warn about react-lifecycles-compat polyfilled components.
+              instance.componentWillMount.__suppressDeprecationWarning !== true) {
                 pendingComponentWillMountWarnings.push(fiber);
               }
               if (fiber.mode & StrictLegacyMode && typeof instance.UNSAFE_componentWillMount === "function") {
@@ -11917,6 +12368,9 @@
                   if (newLastBaseUpdate !== null) {
                     var _clone = {
                       eventTime: updateEventTime,
+                      // This update is going to be committed so we never want uncommit
+                      // it. Using NoLane works because 0 is a subset of all bitmasks, so
+                      // this will never be skipped by the check above.
                       lane: NoLane,
                       tag: update.tag,
                       payload: update.payload,
@@ -11927,7 +12381,9 @@
                   }
                   newState = getStateFromUpdate(workInProgress2, queue, update, newState, props2, instance);
                   var callback = update.callback;
-                  if (callback !== null && update.lane !== NoLane) {
+                  if (callback !== null && // If the update was already committed, we should not queue its
+                  // callback again.
+                  update.lane !== NoLane) {
                     workInProgress2.flags |= Callback;
                     var effects = queue.effects;
                     if (effects === null) {
@@ -12258,7 +12714,10 @@
             var contextType = ctor.contextType;
             {
               if ("contextType" in ctor) {
-                var isValid2 = contextType === null || contextType !== void 0 && contextType.$$typeof === REACT_CONTEXT_TYPE && contextType._context === void 0;
+                var isValid2 = (
+                  // Allow null for conditional declaration
+                  contextType === null || contextType !== void 0 && contextType.$$typeof === REACT_CONTEXT_TYPE && contextType._context === void 0
+                );
                 if (!isValid2 && !didWarnAboutInvalidateContextType.has(ctor)) {
                   didWarnAboutInvalidateContextType.add(ctor);
                   var addendum = "";
@@ -12553,7 +13012,11 @@
               applyDerivedStateFromProps(workInProgress2, ctor, getDerivedStateFromProps, newProps);
               newState = workInProgress2.memoizedState;
             }
-            var shouldUpdate = checkHasForceUpdateAfterProcessing() || checkShouldComponentUpdate(workInProgress2, ctor, oldProps, newProps, oldState, newState, nextContext) || enableLazyContextPropagation;
+            var shouldUpdate = checkHasForceUpdateAfterProcessing() || checkShouldComponentUpdate(workInProgress2, ctor, oldProps, newProps, oldState, newState, nextContext) || // TODO: In some cases, we'll end up checking if context has changed twice,
+            // both before and after `shouldComponentUpdate` has been called. Not ideal,
+            // but I'm loath to refactor this function. This only happens for memoized
+            // components so it's not that common.
+            enableLazyContextPropagation;
             if (shouldUpdate) {
               if (!hasNewLifecycles && (typeof instance.UNSAFE_componentWillUpdate === "function" || typeof instance.componentWillUpdate === "function")) {
                 if (typeof instance.componentWillUpdate === "function") {
@@ -12624,7 +13087,10 @@
             var mixedRef = element.ref;
             if (mixedRef !== null && typeof mixedRef !== "function" && typeof mixedRef !== "object") {
               {
-                if ((returnFiber.mode & StrictLegacyMode || warnAboutStringRefs) && !(element._owner && element._self && element._owner.stateNode !== element._self)) {
+                if ((returnFiber.mode & StrictLegacyMode || warnAboutStringRefs) && // We warn in ReactElement.js if owner and self are equal for string refs
+                // because these cannot be automatically converted to an arrow function
+                // using a codemod. Therefore, we don't have to warn about string refs again.
+                !(element._owner && element._self && element._owner.stateNode !== element._self)) {
                   var componentName = getComponentNameFromFiber(returnFiber) || "Component";
                   if (!didWarnAboutStringRefs[componentName]) {
                     {
@@ -12784,7 +13250,12 @@
                 return updateFragment2(returnFiber, current2, element.props.children, lanes, element.key);
               }
               if (current2 !== null) {
-                if (current2.elementType === elementType || isCompatibleFamilyForHotReloading(current2, element) || typeof elementType === "object" && elementType !== null && elementType.$$typeof === REACT_LAZY_TYPE && resolveLazy(elementType) === current2.type) {
+                if (current2.elementType === elementType || // Keep this check inline so it only runs on the false path:
+                isCompatibleFamilyForHotReloading(current2, element) || // Lazy types should reconcile their resolved type.
+                // We need to do this after the Hot Reloading check above,
+                // because hot reloading has different semantics than prod because
+                // it doesn't resuspend. So we can't let the call below suspend.
+                typeof elementType === "object" && elementType !== null && elementType.$$typeof === REACT_LAZY_TYPE && resolveLazy(elementType) === current2.type) {
                   var existing = useFiber(current2, element.props);
                   existing.ref = coerceRef(returnFiber, current2, element);
                   existing.return = returnFiber;
@@ -12812,7 +13283,7 @@
               }
             }
             function updateFragment2(returnFiber, current2, fragment, lanes, key) {
-              if (current2 === null || current2.tag !== Fragment8) {
+              if (current2 === null || current2.tag !== Fragment9) {
                 var created = createFiberFromFragment(fragment, returnFiber.mode, lanes, key);
                 created.return = returnFiber;
                 return created;
@@ -13077,7 +13548,8 @@
                 throw new Error("An object is not an iterable. This error is likely caused by a bug in React. Please file an issue.");
               }
               {
-                if (typeof Symbol === "function" && newChildrenIterable[Symbol.toStringTag] === "Generator") {
+                if (typeof Symbol === "function" && // $FlowFixMe Flow doesn't know about toStringTag
+                newChildrenIterable[Symbol.toStringTag] === "Generator") {
                   if (!didWarnAboutGenerators) {
                     error("Using Generators as children is unsupported and will likely yield unexpected results because enumerating a generator mutates it. You may convert it to an array with `Array.from()` or the `[...spread]` operator before rendering. Keep in mind you might need to polyfill these features for older browsers.");
                   }
@@ -13214,7 +13686,7 @@
                 if (child.key === key) {
                   var elementType = element.type;
                   if (elementType === REACT_FRAGMENT_TYPE) {
-                    if (child.tag === Fragment8) {
+                    if (child.tag === Fragment9) {
                       deleteRemainingChildren(returnFiber, child.sibling);
                       var existing = useFiber(child, element.props.children);
                       existing.return = returnFiber;
@@ -13225,7 +13697,12 @@
                       return existing;
                     }
                   } else {
-                    if (child.elementType === elementType || isCompatibleFamilyForHotReloading(child, element) || typeof elementType === "object" && elementType !== null && elementType.$$typeof === REACT_LAZY_TYPE && resolveLazy(elementType) === child.type) {
+                    if (child.elementType === elementType || // Keep this check inline so it only runs on the false path:
+                    isCompatibleFamilyForHotReloading(child, element) || // Lazy types should reconcile their resolved type.
+                    // We need to do this after the Hot Reloading check above,
+                    // because hot reloading has different semantics than prod because
+                    // it doesn't resuspend. So we can't let the call below suspend.
+                    typeof elementType === "object" && elementType !== null && elementType.$$typeof === REACT_LAZY_TYPE && resolveLazy(elementType) === child.type) {
                       deleteRemainingChildren(returnFiber, child.sibling);
                       var _existing = useFiber(child, element.props);
                       _existing.ref = coerceRef(returnFiber, child, element);
@@ -13436,7 +13913,9 @@
                     return node;
                   }
                 }
-              } else if (node.tag === SuspenseListComponent && node.memoizedProps.revealOrder !== void 0) {
+              } else if (node.tag === SuspenseListComponent && // revealOrder undefined can't be trusted because it don't
+              // keep track of whether it suspended or not.
+              node.memoizedProps.revealOrder !== void 0) {
                 var didSuspend = (node.flags & DidCapture) !== NoFlags;
                 if (didSuspend) {
                   return node;
@@ -13460,11 +13939,26 @@
             }
             return null;
           }
-          var NoFlags$1 = 0;
-          var HasEffect = 1;
-          var Insertion = 2;
-          var Layout = 4;
-          var Passive$1 = 8;
+          var NoFlags$1 = (
+            /*   */
+            0
+          );
+          var HasEffect = (
+            /* */
+            1
+          );
+          var Insertion = (
+            /*  */
+            2
+          );
+          var Layout = (
+            /*    */
+            4
+          );
+          var Passive$1 = (
+            /*   */
+            8
+          );
           var workInProgressSources = [];
           function resetWorkInProgressVersions() {
             for (var i = 0; i < workInProgressSources.length; i++) {
@@ -13486,7 +13980,7 @@
           }
           var ReactCurrentDispatcher$1 = ReactSharedInternals.ReactCurrentDispatcher, ReactCurrentBatchConfig$2 = ReactSharedInternals.ReactCurrentBatchConfig;
           var didWarnAboutMismatchedHooksForComponent;
-          var didWarnUncachedGetSnapshot2;
+          var didWarnUncachedGetSnapshot;
           {
             didWarnAboutMismatchedHooksForComponent = /* @__PURE__ */ new Set();
           }
@@ -13638,7 +14132,12 @@
               currentHookNameInDev = null;
               hookTypesDev = null;
               hookTypesUpdateIndexDev = -1;
-              if (current2 !== null && (current2.flags & StaticMask) !== (workInProgress2.flags & StaticMask) && (current2.mode & ConcurrentMode) !== NoMode) {
+              if (current2 !== null && (current2.flags & StaticMask) !== (workInProgress2.flags & StaticMask) && // Disable this warning in legacy mode, because legacy Suspense is weird
+              // and creates false positives. To make this work in legacy mode, we'd
+              // need to mark fibers that commit in an incomplete state, somehow. For
+              // now I'll disable the warning that most of the bugs that would trigger
+              // it are either exclusive to concurrent mode or exist in both.
+              (current2.mode & ConcurrentMode) !== NoMode) {
                 error("Internal React error: Expected static flag was missing. Please notify the React team.");
               }
             }
@@ -13828,6 +14327,9 @@
                 } else {
                   if (newBaseQueueLast !== null) {
                     var _clone = {
+                      // This update is going to be committed so we never want uncommit
+                      // it. Using NoLane works because 0 is a subset of all bitmasks, so
+                      // this will never be skipped by the check above.
                       lane: NoLane,
                       action: update.action,
                       hasEagerState: update.hasEagerState,
@@ -13924,21 +14426,21 @@
               }
               nextSnapshot = getServerSnapshot();
               {
-                if (!didWarnUncachedGetSnapshot2) {
+                if (!didWarnUncachedGetSnapshot) {
                   if (nextSnapshot !== getServerSnapshot()) {
                     error("The result of getServerSnapshot should be cached to avoid an infinite loop");
-                    didWarnUncachedGetSnapshot2 = true;
+                    didWarnUncachedGetSnapshot = true;
                   }
                 }
               }
             } else {
               nextSnapshot = getSnapshot();
               {
-                if (!didWarnUncachedGetSnapshot2) {
+                if (!didWarnUncachedGetSnapshot) {
                   var cachedSnapshot = getSnapshot();
                   if (!objectIs(nextSnapshot, cachedSnapshot)) {
                     error("The result of getSnapshot should be cached to avoid an infinite loop");
-                    didWarnUncachedGetSnapshot2 = true;
+                    didWarnUncachedGetSnapshot = true;
                   }
                 }
               }
@@ -13966,11 +14468,11 @@
             var hook = updateWorkInProgressHook();
             var nextSnapshot = getSnapshot();
             {
-              if (!didWarnUncachedGetSnapshot2) {
+              if (!didWarnUncachedGetSnapshot) {
                 var cachedSnapshot = getSnapshot();
                 if (!objectIs(nextSnapshot, cachedSnapshot)) {
                   error("The result of getSnapshot should be cached to avoid an infinite loop");
-                  didWarnUncachedGetSnapshot2 = true;
+                  didWarnUncachedGetSnapshot = true;
                 }
               }
             }
@@ -13982,7 +14484,9 @@
             }
             var inst = hook.queue;
             updateEffect(subscribeToStore.bind(null, fiber, inst, subscribe), [subscribe]);
-            if (inst.getSnapshot !== getSnapshot || snapshotChanged || workInProgressHook !== null && workInProgressHook.memoizedState.tag & HasEffect) {
+            if (inst.getSnapshot !== getSnapshot || snapshotChanged || // Check if the susbcribe function changed. We can save some memory by
+            // checking whether we scheduled a subscription effect above.
+            workInProgressHook !== null && workInProgressHook.memoizedState.tag & HasEffect) {
               fiber.flags |= Passive;
               pushEffect(HasEffect | Passive$1, updateStoreInstance.bind(null, fiber, inst, nextSnapshot, getSnapshot), void 0, null);
               var root2 = getWorkInProgressRoot();
@@ -14018,19 +14522,19 @@
           function updateStoreInstance(fiber, inst, nextSnapshot, getSnapshot) {
             inst.value = nextSnapshot;
             inst.getSnapshot = getSnapshot;
-            if (checkIfSnapshotChanged2(inst)) {
+            if (checkIfSnapshotChanged(inst)) {
               forceStoreRerender(fiber);
             }
           }
           function subscribeToStore(fiber, inst, subscribe) {
             var handleStoreChange = function() {
-              if (checkIfSnapshotChanged2(inst)) {
+              if (checkIfSnapshotChanged(inst)) {
                 forceStoreRerender(fiber);
               }
             };
             return subscribe(handleStoreChange);
           }
-          function checkIfSnapshotChanged2(inst) {
+          function checkIfSnapshotChanged(inst) {
             var latestGetSnapshot = inst.getSnapshot;
             var prevValue = inst.value;
             try {
@@ -14076,6 +14580,7 @@
               create,
               destroy,
               deps,
+              // Circular
               next: null
             };
             var componentUpdateQueue = currentlyRenderingFiber$1.updateQueue;
@@ -15729,6 +16234,7 @@
                   checkPropTypes(
                     innerPropTypes,
                     nextProps,
+                    // Resolved props
                     "prop",
                     getComponentNameFromType(Component2)
                   );
@@ -15776,7 +16282,8 @@
           function updateMemoComponent(current2, workInProgress2, Component2, nextProps, renderLanes2) {
             if (current2 === null) {
               var type2 = Component2.type;
-              if (isSimpleFunctionComponent(type2) && Component2.compare === null && Component2.defaultProps === void 0) {
+              if (isSimpleFunctionComponent(type2) && Component2.compare === null && // SimpleMemoComponent codepath doesn't resolve outer props either.
+              Component2.defaultProps === void 0) {
                 var resolvedType = type2;
                 {
                   resolvedType = resolveFunctionForHotReloading(type2);
@@ -15794,6 +16301,7 @@
                   checkPropTypes(
                     innerPropTypes,
                     nextProps,
+                    // Resolved props
                     "prop",
                     getComponentNameFromType(type2)
                   );
@@ -15812,6 +16320,7 @@
                 checkPropTypes(
                   _innerPropTypes,
                   nextProps,
+                  // Resolved props
                   "prop",
                   getComponentNameFromType(_type)
                 );
@@ -15852,6 +16361,7 @@
                     checkPropTypes(
                       outerPropTypes,
                       nextProps,
+                      // Resolved (SimpleMemoComponent has no defaultProps)
                       "prop",
                       getComponentNameFromType(outerMemoType)
                     );
@@ -15861,7 +16371,8 @@
             }
             if (current2 !== null) {
               var prevProps = current2.memoizedProps;
-              if (shallowEqual(prevProps, nextProps) && current2.ref === workInProgress2.ref && workInProgress2.type === current2.type) {
+              if (shallowEqual(prevProps, nextProps) && current2.ref === workInProgress2.ref && // Prevent bailout if the implementation changed due to hot reload.
+              workInProgress2.type === current2.type) {
                 didReceiveUpdate = false;
                 workInProgress2.pendingProps = nextProps = prevProps;
                 if (!checkScheduledUpdateOrContext(current2, renderLanes2)) {
@@ -15970,6 +16481,7 @@
                   checkPropTypes(
                     innerPropTypes,
                     nextProps,
+                    // Resolved props
                     "prop",
                     getComponentNameFromType(Component2)
                   );
@@ -16045,6 +16557,7 @@
                   checkPropTypes(
                     innerPropTypes,
                     nextProps,
+                    // Resolved props
                     "prop",
                     getComponentNameFromType(Component2)
                   );
@@ -16265,6 +16778,7 @@
                       checkPropTypes(
                         outerPropTypes,
                         resolvedProps,
+                        // Resolved for outer only
                         "prop",
                         getComponentNameFromType(Component2)
                       );
@@ -16276,6 +16790,7 @@
                   workInProgress2,
                   Component2,
                   resolveDefaultProps(Component2.type, resolvedProps),
+                  // The inner type can have defaults too
                   renderLanes2
                 );
                 return child;
@@ -16348,7 +16863,11 @@
                 }
               }
             }
-            if (typeof value === "object" && value !== null && typeof value.render === "function" && value.$$typeof === void 0) {
+            if (
+              // Run these checks in production only if the flag is off.
+              // Eventually we'll delete this branch altogether.
+              typeof value === "object" && value !== null && typeof value.render === "function" && value.$$typeof === void 0
+            ) {
               {
                 var _componentName2 = getComponentNameFromType(Component2) || "Unknown";
                 if (!didWarnAboutModulePatternComponent[_componentName2]) {
@@ -16613,7 +17132,17 @@
               children: primaryChildren
             };
             var primaryChildFragment;
-            if ((mode & ConcurrentMode) === NoMode && workInProgress2.child !== currentPrimaryChildFragment) {
+            if (
+              // In legacy mode, we commit the primary tree as if it successfully
+              // completed, even though it's in an inconsistent state.
+              (mode & ConcurrentMode) === NoMode && // Make sure we're on the second pass, i.e. the primary child fragment was
+              // already cloned. In legacy mode, the only case where this isn't true is
+              // when DevTools forces us to display a fallback; we skip the first render
+              // pass entirely and go straight to rendering the fallback. (In Concurrent
+              // Mode, SuspenseList can also trigger this scenario, but this is a legacy-
+              // only codepath.)
+              workInProgress2.child !== currentPrimaryChildFragment
+            ) {
               var progressedPrimaryFragment = workInProgress2.child;
               primaryChildFragment = progressedPrimaryFragment;
               primaryChildFragment.childLanes = NoLanes;
@@ -16693,6 +17222,9 @@
                   current2,
                   workInProgress2,
                   renderLanes2,
+                  // TODO: When we delete legacy mode, we should make this error argument
+                  // required — every concurrent mode path that causes hydration to
+                  // de-opt to client rendering should have an error message.
                   null
                 );
               }
@@ -16950,6 +17482,7 @@
                   initSuspenseListRenderState(
                     workInProgress2,
                     false,
+                    // isBackwards
                     tail,
                     lastContentRow,
                     tailMode
@@ -16974,8 +17507,10 @@
                   initSuspenseListRenderState(
                     workInProgress2,
                     true,
+                    // isBackwards
                     _tail,
                     null,
+                    // last
                     tailMode
                   );
                   break;
@@ -16984,8 +17519,11 @@
                   initSuspenseListRenderState(
                     workInProgress2,
                     false,
+                    // isBackwards
                     null,
+                    // tail
                     null,
+                    // last
                     void 0
                   );
                   break;
@@ -17261,11 +17799,14 @@
             if (current2 !== null) {
               var oldProps = current2.memoizedProps;
               var newProps = workInProgress2.pendingProps;
-              if (oldProps !== newProps || hasContextChanged() || workInProgress2.type !== current2.type) {
+              if (oldProps !== newProps || hasContextChanged() || // Force a re-render if the implementation changed due to hot reload:
+              workInProgress2.type !== current2.type) {
                 didReceiveUpdate = true;
               } else {
                 var hasScheduledUpdateOrContext = checkScheduledUpdateOrContext(current2, renderLanes2);
-                if (!hasScheduledUpdateOrContext && (workInProgress2.flags & DidCapture) === NoFlags) {
+                if (!hasScheduledUpdateOrContext && // If this is the second pass of an error or suspense boundary, there
+                // may not be work scheduled on `current`, so we check for this flag.
+                (workInProgress2.flags & DidCapture) === NoFlags) {
                   didReceiveUpdate = false;
                   return attemptEarlyBailoutIfNoScheduledUpdate(current2, workInProgress2, renderLanes2);
                 }
@@ -17320,7 +17861,7 @@
                 var _resolvedProps2 = workInProgress2.elementType === type2 ? _unresolvedProps2 : resolveDefaultProps(type2, _unresolvedProps2);
                 return updateForwardRef(current2, workInProgress2, type2, _resolvedProps2, renderLanes2);
               }
-              case Fragment8:
+              case Fragment9:
                 return updateFragment(current2, workInProgress2, renderLanes2);
               case Mode:
                 return updateMode(current2, workInProgress2, renderLanes2);
@@ -17341,6 +17882,7 @@
                       checkPropTypes(
                         outerPropTypes,
                         _resolvedProps3,
+                        // Resolved for outer only
                         "prop",
                         getComponentNameFromType(_type2)
                       );
@@ -17592,7 +18134,7 @@
               case SimpleMemoComponent:
               case FunctionComponent:
               case ForwardRef:
-              case Fragment8:
+              case Fragment9:
               case Mode:
               case Profiler:
               case ContextConsumer:
@@ -17623,7 +18165,11 @@
                   } else {
                     if (current2 !== null) {
                       var prevState = current2.memoizedState;
-                      if (!prevState.isDehydrated || (workInProgress2.flags & ForceClientRender) !== NoFlags) {
+                      if (
+                        // Check if this is a client root
+                        !prevState.isDehydrated || // Check if we reverted to client rendering (e.g. due to an error)
+                        (workInProgress2.flags & ForceClientRender) !== NoFlags
+                      ) {
                         workInProgress2.flags |= Snapshot;
                         upgradeHydrationErrorsToRecoverable();
                       }
@@ -17829,7 +18375,12 @@
                         bubbleProperties(workInProgress2);
                         return null;
                       }
-                    } else if (now() * 2 - renderState.renderingStartTime > getRenderTargetTime() && renderLanes2 !== OffscreenLane) {
+                    } else if (
+                      // The time it took to render last row is greater than the remaining
+                      // time we have to render. So rendering one more row would likely
+                      // exceed it.
+                      now() * 2 - renderState.renderingStartTime > getRenderTargetTime() && renderLanes2 !== OffscreenLane
+                    ) {
                       workInProgress2.flags |= DidCapture;
                       didSuspendAlready = true;
                       cutOffTailIfNeeded(renderState, false);
@@ -17878,7 +18429,8 @@
                 if (current2 !== null) {
                   var _prevState = current2.memoizedState;
                   var prevIsHidden = _prevState !== null;
-                  if (prevIsHidden !== nextIsHidden && !enableLegacyHidden) {
+                  if (prevIsHidden !== nextIsHidden && // LegacyHidden doesn't do any hiding — it only pre-renders.
+                  !enableLegacyHidden) {
                     workInProgress2.flags |= Visibility;
                   }
                 }
@@ -18965,7 +19517,10 @@
                 return;
               }
               case OffscreenComponent: {
-                if (deletedFiber.mode & ConcurrentMode) {
+                if (
+                  // TODO: Remove this dead flag
+                  deletedFiber.mode & ConcurrentMode
+                ) {
                   var prevOffscreenSubtreeWasHidden = offscreenSubtreeWasHidden;
                   offscreenSubtreeWasHidden = prevOffscreenSubtreeWasHidden || deletedFiber.memoizedState !== null;
                   recursivelyTraverseDeletionEffects(finishedRoot, nearestMountedAncestor, deletedFiber);
@@ -19211,7 +19766,10 @@
               }
               case OffscreenComponent: {
                 var _wasHidden = current2 !== null && current2.memoizedState !== null;
-                if (finishedWork.mode & ConcurrentMode) {
+                if (
+                  // TODO: Remove this dead flag
+                  finishedWork.mode & ConcurrentMode
+                ) {
                   var prevOffscreenSubtreeWasHidden = offscreenSubtreeWasHidden;
                   offscreenSubtreeWasHidden = prevOffscreenSubtreeWasHidden || _wasHidden;
                   recursivelyTraverseMutationEffects(root2, finishedWork);
@@ -19315,6 +19873,7 @@
                     nextEffect = child;
                     commitLayoutEffects_begin(
                       child,
+                      // New root; bubble back up to here and stop.
                       root2,
                       committedLanes
                     );
@@ -19757,14 +20316,20 @@
           var ReactCurrentActQueue = ReactSharedInternals.ReactCurrentActQueue;
           function isLegacyActEnvironment(fiber) {
             {
-              var isReactActEnvironmentGlobal = typeof IS_REACT_ACT_ENVIRONMENT !== "undefined" ? IS_REACT_ACT_ENVIRONMENT : void 0;
+              var isReactActEnvironmentGlobal = (
+                // $FlowExpectedError – Flow doesn't know about IS_REACT_ACT_ENVIRONMENT global
+                typeof IS_REACT_ACT_ENVIRONMENT !== "undefined" ? IS_REACT_ACT_ENVIRONMENT : void 0
+              );
               var jestIsDefined = typeof jest !== "undefined";
               return jestIsDefined && isReactActEnvironmentGlobal !== false;
             }
           }
           function isConcurrentActEnvironment() {
             {
-              var isReactActEnvironmentGlobal = typeof IS_REACT_ACT_ENVIRONMENT !== "undefined" ? IS_REACT_ACT_ENVIRONMENT : void 0;
+              var isReactActEnvironmentGlobal = (
+                // $FlowExpectedError – Flow doesn't know about IS_REACT_ACT_ENVIRONMENT global
+                typeof IS_REACT_ACT_ENVIRONMENT !== "undefined" ? IS_REACT_ACT_ENVIRONMENT : void 0
+              );
               if (!isReactActEnvironmentGlobal && ReactCurrentActQueue.current !== null) {
                 error("The current testing environment is not configured to support act(...)");
               }
@@ -19773,10 +20338,22 @@
           }
           var ceil = Math.ceil;
           var ReactCurrentDispatcher$2 = ReactSharedInternals.ReactCurrentDispatcher, ReactCurrentOwner$2 = ReactSharedInternals.ReactCurrentOwner, ReactCurrentBatchConfig$3 = ReactSharedInternals.ReactCurrentBatchConfig, ReactCurrentActQueue$1 = ReactSharedInternals.ReactCurrentActQueue;
-          var NoContext = 0;
-          var BatchedContext = 1;
-          var RenderContext = 2;
-          var CommitContext = 4;
+          var NoContext = (
+            /*             */
+            0
+          );
+          var BatchedContext = (
+            /*               */
+            1
+          );
+          var RenderContext = (
+            /*                */
+            2
+          );
+          var CommitContext = (
+            /*                */
+            4
+          );
           var RootInProgress = 0;
           var RootFatalErrored = 1;
           var RootErrored = 2;
@@ -19907,7 +20484,8 @@
                 }
               }
               ensureRootIsScheduled(root2, eventTime);
-              if (lane === SyncLane && executionContext === NoContext && (fiber.mode & ConcurrentMode) === NoMode && !ReactCurrentActQueue$1.isBatchingLegacy) {
+              if (lane === SyncLane && executionContext === NoContext && (fiber.mode & ConcurrentMode) === NoMode && // Treat `act` as if it's inside `batchedUpdates`, even in legacy mode.
+              !ReactCurrentActQueue$1.isBatchingLegacy) {
                 resetRenderTimer();
                 flushSyncCallbacksOnlyInLegacyMode();
               }
@@ -19920,7 +20498,11 @@
             ensureRootIsScheduled(root2, eventTime);
           }
           function isUnsafeClassRenderPhaseUpdate(fiber) {
-            return (executionContext & RenderContext) !== NoContext;
+            return (
+              // TODO: Remove outdated deferRenderPhaseUpdateToNextBatch experiment. We
+              // decided not to enable it.
+              (executionContext & RenderContext) !== NoContext
+            );
           }
           function ensureRootIsScheduled(root2, currentTime) {
             var existingCallbackNode = root2.callbackNode;
@@ -19936,7 +20518,10 @@
             }
             var newCallbackPriority = getHighestPriorityLane(nextLanes);
             var existingCallbackPriority = root2.callbackPriority;
-            if (existingCallbackPriority === newCallbackPriority && !(ReactCurrentActQueue$1.current !== null && existingCallbackNode !== fakeActCallbackNode)) {
+            if (existingCallbackPriority === newCallbackPriority && // Special case related to `act`. If the currently scheduled task is a
+            // Scheduler task, rather than an `act` task, cancel it and re-scheduled
+            // on the `act` queue.
+            !(ReactCurrentActQueue$1.current !== null && existingCallbackNode !== fakeActCallbackNode)) {
               {
                 if (existingCallbackNode == null && existingCallbackPriority !== SyncLane) {
                   error("Expected scheduled callback to exist. This error is likely caused by a bug in React. Please file an issue.");
@@ -20101,7 +20686,8 @@
               }
               case RootSuspended: {
                 markRootSuspended$1(root2, lanes);
-                if (includesOnlyRetries(lanes) && !shouldForceFlushFallbacksInDEV()) {
+                if (includesOnlyRetries(lanes) && // do not delay if we're inside an act() scope
+                !shouldForceFlushFallbacksInDEV()) {
                   var msUntilTimeout = globalMostRecentFallbackTime + FALLBACK_THROTTLE_MS - now();
                   if (msUntilTimeout > 10) {
                     var nextLanes = getNextLanes(root2, NoLanes);
@@ -20251,7 +20837,8 @@
               return fn(a);
             } finally {
               executionContext = prevExecutionContext;
-              if (executionContext === NoContext && !ReactCurrentActQueue$1.isBatchingLegacy) {
+              if (executionContext === NoContext && // Treat `act` as if it's inside `batchedUpdates`, even in legacy mode.
+              !ReactCurrentActQueue$1.isBatchingLegacy) {
                 resetRenderTimer();
                 flushSyncCallbacksOnlyInLegacyMode();
               }
@@ -21806,7 +22393,7 @@
             return fiber;
           }
           function createFiberFromFragment(elements, mode, lanes, key) {
-            var fiber = createFiber(Fragment8, elements, key, mode);
+            var fiber = createFiber(Fragment9, elements, key, mode);
             fiber.lanes = lanes;
             return fiber;
           }
@@ -21871,6 +22458,7 @@
             fiber.stateNode = {
               containerInfo: portal.containerInfo,
               pendingChildren: null,
+              // Used by persistent updates
               implementation: portal.implementation
             };
             return fiber;
@@ -21972,6 +22560,7 @@
                 element: initialChildren,
                 isDehydrated: hydrate2,
                 cache: null,
+                // not enabled yet
                 transitions: null,
                 pendingSuspenseBoundaries: null
               };
@@ -21987,6 +22576,7 @@
               checkKeyStringCoercion(key);
             }
             return {
+              // This tag allow us to uniquely identify this as a React Portal
               $$typeof: REACT_PORTAL_TYPE,
               key: key == null ? null : "" + key,
               children,
@@ -22245,6 +22835,7 @@
                 }
               } else {
                 updated[oldKey] = copyWithRenameImpl(
+                  // $FlowFixMe number or string is fine here
                   obj[oldKey],
                   oldPath,
                   newPath,
@@ -22402,15 +22993,23 @@
               currentDispatcherRef: ReactCurrentDispatcher2,
               findHostInstanceByFiber,
               findFiberByHostInstance: findFiberByHostInstance || emptyFindFiberByHostInstance,
+              // React Refresh
               findHostInstancesForRefresh,
               scheduleRefresh,
               scheduleRoot,
               setRefreshHandler,
+              // Enables DevTools to append owner stacks to error messages in DEV mode.
               getCurrentFiber: getCurrentFiberForDevTools,
+              // Enables DevTools to detect reconciler version rather than renderer version
+              // which may not match for third party renderers.
               reconcilerVersion: ReactVersion
             });
           }
-          var defaultOnRecoverableError = typeof reportError === "function" ? reportError : function(error2) {
+          var defaultOnRecoverableError = typeof reportError === "function" ? (
+            // In modern browsers, reportError will dispatch an error event,
+            // emulating an uncaught JavaScript error.
+            reportError
+          ) : function(error2) {
             console["error"](error2);
           };
           function ReactDOMRoot(internalRoot) {
@@ -22618,9 +23217,13 @@
                 container,
                 LegacyRoot,
                 null,
+                // hydrationCallbacks
                 false,
+                // isStrictMode
                 false,
+                // concurrentUpdatesByDefaultOverride,
                 "",
+                // identifierPrefix
                 noopOnRecoverableError
               );
               container._reactRootContainer = root2;
@@ -22645,9 +23248,13 @@
                 container,
                 LegacyRoot,
                 null,
+                // hydrationCallbacks
                 false,
+                // isStrictMode
                 false,
+                // concurrentUpdatesByDefaultOverride,
                 "",
+                // identifierPrefix
                 noopOnRecoverableError
               );
               container._reactRootContainer = _root;
@@ -22795,7 +23402,9 @@
           setGetCurrentUpdatePriority(getCurrentUpdatePriority);
           setAttemptHydrationAtPriority(runWithPriority);
           {
-            if (typeof Map !== "function" || Map.prototype == null || typeof Map.prototype.forEach !== "function" || typeof Set !== "function" || Set.prototype == null || typeof Set.prototype.clear !== "function" || typeof Set.prototype.forEach !== "function") {
+            if (typeof Map !== "function" || // $FlowIssue Flow incorrectly thinks Map has no prototype
+            Map.prototype == null || typeof Map.prototype.forEach !== "function" || typeof Set !== "function" || // $FlowIssue Flow incorrectly thinks Set has no prototype
+            Set.prototype == null || typeof Set.prototype.clear !== "function" || typeof Set.prototype.forEach !== "function") {
               error("React depends on Map and Set built-in types. Make sure that you load a polyfill in older browsers. https://reactjs.org/link/react-polyfills");
             }
           }
@@ -22813,6 +23422,8 @@
           }
           var Internals = {
             usingClientEntryPoint: false,
+            // Keep in sync with ReactTestUtils.js.
+            // This is an array for better minification.
             Events: [getInstanceFromNode, getNodeFromInstance, getFiberCurrentPropsFromNode, enqueueStateRestore, restoreStateIfNeeded, batchedUpdates$1]
           };
           function createRoot$1(container, options2) {
@@ -22846,7 +23457,7 @@
             rendererPackageName: "react-dom"
           });
           {
-            if (!foundDevTools && canUseDOM2 && window.top === window.self) {
+            if (!foundDevTools && canUseDOM && window.top === window.self) {
               if (navigator.userAgent.indexOf("Chrome") > -1 && navigator.userAgent.indexOf("Edge") === -1 || navigator.userAgent.indexOf("Firefox") > -1) {
                 var protocol = window.location.protocol;
                 if (/^(https?|file):$/.test(protocol)) {
@@ -22998,7 +23609,11 @@
               return true;
             }
             if (typeof type2 === "object" && type2 !== null) {
-              if (type2.$$typeof === REACT_LAZY_TYPE || type2.$$typeof === REACT_MEMO_TYPE || type2.$$typeof === REACT_PROVIDER_TYPE || type2.$$typeof === REACT_CONTEXT_TYPE || type2.$$typeof === REACT_FORWARD_REF_TYPE || type2.$$typeof === REACT_MODULE_REFERENCE || type2.getModuleId !== void 0) {
+              if (type2.$$typeof === REACT_LAZY_TYPE || type2.$$typeof === REACT_MEMO_TYPE || type2.$$typeof === REACT_PROVIDER_TYPE || type2.$$typeof === REACT_CONTEXT_TYPE || type2.$$typeof === REACT_FORWARD_REF_TYPE || // This needs to include all possible module reference object
+              // types supported by any Flight configuration anywhere since
+              // we don't know which Flight build this will end up being used
+              // with.
+              type2.$$typeof === REACT_MODULE_REFERENCE || type2.getModuleId !== void 0) {
                 return true;
               }
             }
@@ -23478,11 +24093,14 @@
           }
           var ReactElement = function(type2, key, ref, self2, source, owner, props2) {
             var element = {
+              // This tag allows us to uniquely identify this as a React Element
               $$typeof: REACT_ELEMENT_TYPE,
+              // Built-in properties that belong on the element
               type: type2,
               key,
               ref,
               props: props2,
+              // Record the component responsible for creating this element.
               _owner: owner
             };
             {
@@ -23676,7 +24294,9 @@
               var propTypes;
               if (typeof type2 === "function") {
                 propTypes = type2.propTypes;
-              } else if (typeof type2 === "object" && (type2.$$typeof === REACT_FORWARD_REF_TYPE || type2.$$typeof === REACT_MEMO_TYPE)) {
+              } else if (typeof type2 === "object" && (type2.$$typeof === REACT_FORWARD_REF_TYPE || // Note: Memo only checks outer props here.
+              // Inner props are checked in the reconciler.
+              type2.$$typeof === REACT_MEMO_TYPE)) {
                 propTypes = type2.propTypes;
               } else {
                 return;
@@ -28656,6 +29276,7 @@
           if (!("permissions" in db2["cloud"]))
             throw new Error("usePermissions() requires a newer version of dexie-cloud-addon. Please upgrade it.");
           return useObservable(
+            // @ts-ignore
             function() {
               return db2.cloud.permissions(obj, table);
             },
@@ -28678,9 +29299,11 @@
   // node_modules/react-router-dom/dist/index.js
   init_react_shim();
   var React3 = __toESM(require_react());
+  var ReactDOM = __toESM(require_react_dom());
 
   // node_modules/react-router/dist/index.js
   init_react_shim();
+  var React2 = __toESM(require_react());
 
   // node_modules/@remix-run/router/dist/router.js
   init_react_shim();
@@ -28710,12 +29333,14 @@
       options = {};
     }
     function createHashLocation(window2, globalHistory) {
-      var _globalHistory$state3, _globalHistory$state4;
       let {
         pathname = "/",
         search = "",
         hash = ""
       } = parsePath(window2.location.hash.substr(1));
+      if (!pathname.startsWith("/") && !pathname.startsWith(".")) {
+        pathname = "/" + pathname;
+      }
       return createLocation(
         "",
         {
@@ -28723,8 +29348,9 @@
           search,
           hash
         },
-        ((_globalHistory$state3 = globalHistory.state) == null ? void 0 : _globalHistory$state3.usr) || null,
-        ((_globalHistory$state4 = globalHistory.state) == null ? void 0 : _globalHistory$state4.key) || "default"
+        // state defaults to `null` because `window.history.state` does
+        globalHistory.state && globalHistory.state.usr || null,
+        globalHistory.state && globalHistory.state.key || "default"
       );
     }
     function createHashHref(window2, to) {
@@ -28738,11 +29364,16 @@
       return href + "#" + (typeof to === "string" ? to : createPath(to));
     }
     function validateHashLocation(location2, to) {
-      warning$1(location2.pathname.charAt(0) === "/", "relative pathnames are not supported in hash history.push(" + JSON.stringify(to) + ")");
+      warning(location2.pathname.charAt(0) === "/", "relative pathnames are not supported in hash history.push(" + JSON.stringify(to) + ")");
     }
     return getUrlBasedHistory(createHashLocation, createHashHref, validateHashLocation, options);
   }
-  function warning$1(cond, message) {
+  function invariant(value, message) {
+    if (value === false || value === null || typeof value === "undefined") {
+      throw new Error(message);
+    }
+  }
+  function warning(cond, message) {
     if (!cond) {
       if (typeof console !== "undefined")
         console.warn(message);
@@ -28755,10 +29386,11 @@
   function createKey() {
     return Math.random().toString(36).substr(2, 8);
   }
-  function getHistoryState(location2) {
+  function getHistoryState(location2, index) {
     return {
       usr: location2.state,
-      key: location2.key
+      key: location2.key,
+      idx: index
     };
   }
   function createLocation(current, to, state, key) {
@@ -28771,7 +29403,11 @@
       hash: ""
     }, typeof to === "string" ? parsePath(to) : to, {
       state,
-      key: (to == null ? void 0 : to.key) || key || createKey()
+      // TODO: This could be cleaned up.  push/replace should probably just take
+      // full Locations now and avoid the need to run through this flow at all
+      // But that's a pretty big refactor to the current test suite so going to
+      // keep as is for the time being and just let any incoming keys take precedence
+      key: to && to.key || key || createKey()
     });
     return location2;
   }
@@ -28817,46 +29453,79 @@
     let globalHistory = window2.history;
     let action = Action.Pop;
     let listener = null;
+    let index = getIndex();
+    if (index == null) {
+      index = 0;
+      globalHistory.replaceState(_extends({}, globalHistory.state, {
+        idx: index
+      }), "");
+    }
+    function getIndex() {
+      let state = globalHistory.state || {
+        idx: null
+      };
+      return state.idx;
+    }
     function handlePop() {
       action = Action.Pop;
+      let nextIndex = getIndex();
+      let delta = nextIndex == null ? null : nextIndex - index;
+      index = nextIndex;
       if (listener) {
         listener({
           action,
-          location: history.location
+          location: history.location,
+          delta
         });
       }
     }
     function push2(to, state) {
       action = Action.Push;
       let location2 = createLocation(history.location, to, state);
-      validateLocation == null ? void 0 : validateLocation(location2, to);
-      let historyState = getHistoryState(location2);
+      if (validateLocation)
+        validateLocation(location2, to);
+      index = getIndex() + 1;
+      let historyState = getHistoryState(location2, index);
       let url = history.createHref(location2);
       try {
         globalHistory.pushState(historyState, "", url);
       } catch (error) {
+        if (error instanceof DOMException && error.name === "DataCloneError") {
+          throw error;
+        }
         window2.location.assign(url);
       }
       if (v5Compat && listener) {
         listener({
           action,
-          location: location2
+          location: history.location,
+          delta: 1
         });
       }
     }
-    function replace(to, state) {
+    function replace2(to, state) {
       action = Action.Replace;
       let location2 = createLocation(history.location, to, state);
-      validateLocation == null ? void 0 : validateLocation(location2, to);
-      let historyState = getHistoryState(location2);
+      if (validateLocation)
+        validateLocation(location2, to);
+      index = getIndex();
+      let historyState = getHistoryState(location2, index);
       let url = history.createHref(location2);
       globalHistory.replaceState(historyState, "", url);
       if (v5Compat && listener) {
         listener({
           action,
-          location: location2
+          location: history.location,
+          delta: 0
         });
       }
+    }
+    function createURL(to) {
+      let base = window2.location.origin !== "null" ? window2.location.origin : window2.location.href;
+      let href = typeof to === "string" ? to : createPath(to);
+      href = href.replace(/ $/, "%20");
+      invariant(base, "No window.location.(origin|href) available to create URL for href: " + href);
+      return new URL(href, base);
     }
     let history = {
       get action() {
@@ -28879,8 +29548,17 @@
       createHref(to) {
         return createHref(window2, to);
       },
+      createURL,
+      encodeLocation(to) {
+        let url = createURL(to);
+        return {
+          pathname: url.pathname,
+          search: url.search,
+          hash: url.hash
+        };
+      },
       push: push2,
-      replace,
+      replace: replace2,
       go(n) {
         return globalHistory.go(n);
       }
@@ -28898,6 +29576,9 @@
     if (basename === void 0) {
       basename = "/";
     }
+    return matchRoutesImpl(routes, locationArg, basename, false);
+  }
+  function matchRoutesImpl(routes, locationArg, basename, allowPartial) {
     let location2 = typeof locationArg === "string" ? parsePath(locationArg) : locationArg;
     let pathname = stripBasename(location2.pathname || "/", basename);
     if (pathname == null) {
@@ -28907,9 +29588,24 @@
     rankRouteBranches(branches);
     let matches = null;
     for (let i = 0; matches == null && i < branches.length; ++i) {
-      matches = matchRouteBranch(branches[i], pathname);
+      let decoded = decodePath(pathname);
+      matches = matchRouteBranch(branches[i], decoded, allowPartial);
     }
     return matches;
+  }
+  function convertRouteMatchToUiMatch(match2, loaderData) {
+    let {
+      route,
+      pathname,
+      params
+    } = match2;
+    return {
+      id: route.id,
+      pathname,
+      params,
+      data: loaderData[route.id],
+      handle: route.handle
+    };
   }
   function flattenRoutes(routes, branches, parentsMeta, parentPath) {
     if (branches === void 0) {
@@ -28921,9 +29617,9 @@
     if (parentPath === void 0) {
       parentPath = "";
     }
-    routes.forEach((route, index) => {
+    let flattenRoute = (route, index, relativePath) => {
       let meta = {
-        relativePath: route.path || "",
+        relativePath: relativePath === void 0 ? route.path || "" : relativePath,
         caseSensitive: route.caseSensitive === true,
         childrenIndex: index,
         route
@@ -28935,7 +29631,12 @@
       let path = joinPaths([parentPath, meta.relativePath]);
       let routesMeta = parentsMeta.concat(meta);
       if (route.children && route.children.length > 0) {
-        invariant(route.index !== true, "Index routes must not have child routes. Please remove " + ('all child routes from route path "' + path + '".'));
+        invariant(
+          // Our types know better, but runtime JS may not!
+          // @ts-expect-error
+          route.index !== true,
+          "Index routes must not have child routes. Please remove " + ('all child routes from route path "' + path + '".')
+        );
         flattenRoutes(route.children, branches, routesMeta, path);
       }
       if (route.path == null && !route.index) {
@@ -28946,13 +29647,41 @@
         score: computeScore(path, route.index),
         routesMeta
       });
+    };
+    routes.forEach((route, index) => {
+      var _route$path;
+      if (route.path === "" || !((_route$path = route.path) != null && _route$path.includes("?"))) {
+        flattenRoute(route, index);
+      } else {
+        for (let exploded of explodeOptionalSegments(route.path)) {
+          flattenRoute(route, index, exploded);
+        }
+      }
     });
     return branches;
+  }
+  function explodeOptionalSegments(path) {
+    let segments = path.split("/");
+    if (segments.length === 0)
+      return [];
+    let [first, ...rest] = segments;
+    let isOptional = first.endsWith("?");
+    let required = first.replace(/\?$/, "");
+    if (rest.length === 0) {
+      return isOptional ? [required, ""] : [required];
+    }
+    let restExploded = explodeOptionalSegments(rest.join("/"));
+    let result = [];
+    result.push(...restExploded.map((subpath) => subpath === "" ? required : [required, subpath].join("/")));
+    if (isOptional) {
+      result.push(...restExploded);
+    }
+    return result.map((exploded) => path.startsWith("/") && exploded === "" ? "/" : exploded);
   }
   function rankRouteBranches(branches) {
     branches.sort((a, b) => a.score !== b.score ? b.score - a.score : compareIndexes(a.routesMeta.map((meta) => meta.childrenIndex), b.routesMeta.map((meta) => meta.childrenIndex)));
   }
-  var paramRe = /^:\w+$/;
+  var paramRe = /^:[\w-]+$/;
   var dynamicSegmentValue = 3;
   var indexRouteValue = 2;
   var emptySegmentValue = 1;
@@ -28972,9 +29701,22 @@
   }
   function compareIndexes(a, b) {
     let siblings = a.length === b.length && a.slice(0, -1).every((n, i) => n === b[i]);
-    return siblings ? a[a.length - 1] - b[b.length - 1] : 0;
+    return siblings ? (
+      // If two routes are siblings, we should try to match the earlier sibling
+      // first. This allows people to have fine-grained control over the matching
+      // behavior by simply putting routes with identical paths in the order they
+      // want them tried.
+      a[a.length - 1] - b[b.length - 1]
+    ) : (
+      // Otherwise, it doesn't really make sense to rank non-siblings by index,
+      // so they sort equally.
+      0
+    );
   }
-  function matchRouteBranch(branch, pathname) {
+  function matchRouteBranch(branch, pathname, allowPartial) {
+    if (allowPartial === void 0) {
+      allowPartial = false;
+    }
     let {
       routesMeta
     } = branch;
@@ -28990,11 +29732,20 @@
         caseSensitive: meta.caseSensitive,
         end
       }, remainingPathname);
-      if (!match2)
-        return null;
-      Object.assign(matchedParams, match2.params);
       let route = meta.route;
+      if (!match2 && end && allowPartial && !routesMeta[routesMeta.length - 1].route.index) {
+        match2 = matchPath({
+          path: meta.relativePath,
+          caseSensitive: meta.caseSensitive,
+          end: false
+        }, remainingPathname);
+      }
+      if (!match2) {
+        return null;
+      }
+      Object.assign(matchedParams, match2.params);
       matches.push({
+        // TODO: Can this as be avoided?
         params: matchedParams,
         pathname: joinPaths([matchedPathname, match2.pathname]),
         pathnameBase: normalizePathname(joinPaths([matchedPathname, match2.pathnameBase])),
@@ -29014,20 +29765,29 @@
         end: true
       };
     }
-    let [matcher, paramNames] = compilePath(pattern.path, pattern.caseSensitive, pattern.end);
+    let [matcher, compiledParams] = compilePath(pattern.path, pattern.caseSensitive, pattern.end);
     let match2 = pathname.match(matcher);
     if (!match2)
       return null;
     let matchedPathname = match2[0];
     let pathnameBase = matchedPathname.replace(/(.)\/+$/, "$1");
     let captureGroups = match2.slice(1);
-    let params = paramNames.reduce((memo, paramName, index) => {
+    let params = compiledParams.reduce((memo2, _ref, index) => {
+      let {
+        paramName,
+        isOptional
+      } = _ref;
       if (paramName === "*") {
         let splatValue = captureGroups[index] || "";
         pathnameBase = matchedPathname.slice(0, matchedPathname.length - splatValue.length).replace(/(.)\/+$/, "$1");
       }
-      memo[paramName] = safelyDecodeURIComponent(captureGroups[index] || "", paramName);
-      return memo;
+      const value = captureGroups[index];
+      if (isOptional && !value) {
+        memo2[paramName] = void 0;
+      } else {
+        memo2[paramName] = (value || "").replace(/%2F/g, "/");
+      }
+      return memo2;
     }, {});
     return {
       params,
@@ -29044,25 +29804,33 @@
       end = true;
     }
     warning(path === "*" || !path.endsWith("*") || path.endsWith("/*"), 'Route path "' + path + '" will be treated as if it were ' + ('"' + path.replace(/\*$/, "/*") + '" because the `*` character must ') + "always follow a `/` in the pattern. To get rid of this warning, " + ('please change the route path to "' + path.replace(/\*$/, "/*") + '".'));
-    let paramNames = [];
-    let regexpSource = "^" + path.replace(/\/*\*?$/, "").replace(/^\/*/, "/").replace(/[\\.*+^$?{}|()[\]]/g, "\\$&").replace(/:(\w+)/g, (_, paramName) => {
-      paramNames.push(paramName);
-      return "([^\\/]+)";
+    let params = [];
+    let regexpSource = "^" + path.replace(/\/*\*?$/, "").replace(/^\/*/, "/").replace(/[\\.*+^${}|()[\]]/g, "\\$&").replace(/\/:([\w-]+)(\?)?/g, (_, paramName, isOptional) => {
+      params.push({
+        paramName,
+        isOptional: isOptional != null
+      });
+      return isOptional ? "/?([^\\/]+)?" : "/([^\\/]+)";
     });
     if (path.endsWith("*")) {
-      paramNames.push("*");
+      params.push({
+        paramName: "*"
+      });
       regexpSource += path === "*" || path === "/*" ? "(.*)$" : "(?:\\/(.+)|\\/*)$";
-    } else {
-      regexpSource += end ? "\\/*$" : "(?:(?=[@.~-]|%[0-9A-F]{2})|\\b|\\/|$)";
-    }
+    } else if (end) {
+      regexpSource += "\\/*$";
+    } else if (path !== "" && path !== "/") {
+      regexpSource += "(?:(?=\\/|$))";
+    } else
+      ;
     let matcher = new RegExp(regexpSource, caseSensitive ? void 0 : "i");
-    return [matcher, paramNames];
+    return [matcher, params];
   }
-  function safelyDecodeURIComponent(value, paramName) {
+  function decodePath(value) {
     try {
-      return decodeURIComponent(value);
+      return value.split("/").map((v) => decodeURIComponent(v).replace(/\//g, "%2F")).join("/");
     } catch (error) {
-      warning(false, 'The value for the URL param "' + paramName + '" will not be decoded because' + (' the string "' + value + '" is a malformed URL segment. This is probably') + (" due to a bad percent encoding (" + error + ")."));
+      warning(false, 'The URL path "' + value + '" could not be decoded because it is is a malformed URL segment. This is probably due to a bad percent ' + ("encoding (" + error + ")."));
       return value;
     }
   }
@@ -29078,21 +29846,6 @@
       return null;
     }
     return pathname.slice(startIndex) || "/";
-  }
-  function invariant(value, message) {
-    if (value === false || value === null || typeof value === "undefined") {
-      throw new Error(message);
-    }
-  }
-  function warning(cond, message) {
-    if (!cond) {
-      if (typeof console !== "undefined")
-        console.warn(message);
-      try {
-        throw new Error(message);
-      } catch (e) {
-      }
-    }
   }
   function resolvePath(to, fromPathname) {
     if (fromPathname === void 0) {
@@ -29123,19 +29876,40 @@
     });
     return segments.length > 1 ? segments.join("/") : "/";
   }
+  function getInvalidPathError(char, field, dest, path) {
+    return "Cannot include a '" + char + "' character in a manually specified " + ("`to." + field + "` field [" + JSON.stringify(path) + "].  Please separate it out to the ") + ("`to." + dest + "` field. Alternatively you may provide the full path as ") + 'a string in <Link to="..."> and the router will parse it for you.';
+  }
+  function getPathContributingMatches(matches) {
+    return matches.filter((match2, index) => index === 0 || match2.route.path && match2.route.path.length > 0);
+  }
+  function getResolveToMatches(matches, v7_relativeSplatPath) {
+    let pathMatches = getPathContributingMatches(matches);
+    if (v7_relativeSplatPath) {
+      return pathMatches.map((match2, idx) => idx === pathMatches.length - 1 ? match2.pathname : match2.pathnameBase);
+    }
+    return pathMatches.map((match2) => match2.pathnameBase);
+  }
   function resolveTo(toArg, routePathnames, locationPathname, isPathRelative) {
     if (isPathRelative === void 0) {
       isPathRelative = false;
     }
-    let to = typeof toArg === "string" ? parsePath(toArg) : _extends({}, toArg);
+    let to;
+    if (typeof toArg === "string") {
+      to = parsePath(toArg);
+    } else {
+      to = _extends({}, toArg);
+      invariant(!to.pathname || !to.pathname.includes("?"), getInvalidPathError("?", "pathname", "search", to));
+      invariant(!to.pathname || !to.pathname.includes("#"), getInvalidPathError("#", "pathname", "hash", to));
+      invariant(!to.search || !to.search.includes("#"), getInvalidPathError("#", "search", "hash", to));
+    }
     let isEmptyPath = toArg === "" || to.pathname === "";
     let toPathname = isEmptyPath ? "/" : to.pathname;
     let from;
-    if (isPathRelative || toPathname == null) {
+    if (toPathname == null) {
       from = locationPathname;
     } else {
       let routePathnameIndex = routePathnames.length - 1;
-      if (toPathname.startsWith("..")) {
+      if (!isPathRelative && toPathname.startsWith("..")) {
         let toSegments = toPathname.split("/");
         while (toSegments[0] === "..") {
           toSegments.shift();
@@ -29157,19 +29931,16 @@
   var normalizePathname = (pathname) => pathname.replace(/\/+$/, "").replace(/^\/*/, "/");
   var normalizeSearch = (search) => !search || search === "?" ? "" : search.startsWith("?") ? search : "?" + search;
   var normalizeHash = (hash) => !hash || hash === "#" ? "" : hash.startsWith("#") ? hash : "#" + hash;
-  var ErrorResponse = class {
-    constructor(status, statusText, data) {
-      this.status = status;
-      this.statusText = statusText || "";
-      this.data = data;
-    }
-  };
-  function isRouteErrorResponse(e) {
-    return e instanceof ErrorResponse;
+  function isRouteErrorResponse(error) {
+    return error != null && typeof error.status === "number" && typeof error.statusText === "string" && typeof error.internal === "boolean" && "data" in error;
   }
+  var validMutationMethodsArr = ["post", "put", "patch", "delete"];
+  var validMutationMethods = new Set(validMutationMethodsArr);
+  var validRequestMethodsArr = ["get", ...validMutationMethodsArr];
+  var validRequestMethods = new Set(validRequestMethodsArr);
+  var UNSAFE_DEFERRED_SYMBOL = Symbol("deferred");
 
   // node_modules/react-router/dist/index.js
-  var React2 = __toESM(require_react());
   function _extends2() {
     _extends2 = Object.assign ? Object.assign.bind() : function(target) {
       for (var i = 1; i < arguments.length; i++) {
@@ -29183,93 +29954,6 @@
       return target;
     };
     return _extends2.apply(this, arguments);
-  }
-  function isPolyfill(x, y) {
-    return x === y && (x !== 0 || 1 / x === 1 / y) || x !== x && y !== y;
-  }
-  var is = typeof Object.is === "function" ? Object.is : isPolyfill;
-  var {
-    useState: useState2,
-    useEffect: useEffect2,
-    useLayoutEffect: useLayoutEffect2,
-    useDebugValue
-  } = React2;
-  var didWarnOld18Alpha = false;
-  var didWarnUncachedGetSnapshot = false;
-  function useSyncExternalStore$2(subscribe, getSnapshot, getServerSnapshot) {
-    if (true) {
-      if (!didWarnOld18Alpha) {
-        if ("startTransition" in React2) {
-          didWarnOld18Alpha = true;
-          console.error("You are using an outdated, pre-release alpha of React 18 that does not support useSyncExternalStore. The use-sync-external-store shim will not work correctly. Upgrade to a newer pre-release.");
-        }
-      }
-    }
-    const value = getSnapshot();
-    if (true) {
-      if (!didWarnUncachedGetSnapshot) {
-        const cachedValue = getSnapshot();
-        if (!is(value, cachedValue)) {
-          console.error("The result of getSnapshot should be cached to avoid an infinite loop");
-          didWarnUncachedGetSnapshot = true;
-        }
-      }
-    }
-    const [{
-      inst
-    }, forceUpdate] = useState2({
-      inst: {
-        value,
-        getSnapshot
-      }
-    });
-    useLayoutEffect2(() => {
-      inst.value = value;
-      inst.getSnapshot = getSnapshot;
-      if (checkIfSnapshotChanged(inst)) {
-        forceUpdate({
-          inst
-        });
-      }
-    }, [subscribe, value, getSnapshot]);
-    useEffect2(() => {
-      if (checkIfSnapshotChanged(inst)) {
-        forceUpdate({
-          inst
-        });
-      }
-      const handleStoreChange = () => {
-        if (checkIfSnapshotChanged(inst)) {
-          forceUpdate({
-            inst
-          });
-        }
-      };
-      return subscribe(handleStoreChange);
-    }, [subscribe]);
-    useDebugValue(value);
-    return value;
-  }
-  function checkIfSnapshotChanged(inst) {
-    const latestGetSnapshot = inst.getSnapshot;
-    const prevValue = inst.value;
-    try {
-      const nextValue = latestGetSnapshot();
-      return !is(prevValue, nextValue);
-    } catch (error) {
-      return true;
-    }
-  }
-  function useSyncExternalStore$1(subscribe, getSnapshot, getServerSnapshot) {
-    return getSnapshot();
-  }
-  var canUseDOM = !!(typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined");
-  var isServerEnvironment = !canUseDOM;
-  var shim = isServerEnvironment ? useSyncExternalStore$1 : useSyncExternalStore$2;
-  var useSyncExternalStore = "useSyncExternalStore" in React2 ? ((module) => module.useSyncExternalStore)(React2) : shim;
-  var DataStaticRouterContext = /* @__PURE__ */ React2.createContext(null);
-  if (true) {
-    DataStaticRouterContext.displayName = "DataStaticRouterContext";
   }
   var DataRouterContext = /* @__PURE__ */ React2.createContext(null);
   if (true) {
@@ -29293,7 +29977,8 @@
   }
   var RouteContext = /* @__PURE__ */ React2.createContext({
     outlet: null,
-    matches: []
+    matches: [],
+    isDataRoute: false
   });
   if (true) {
     RouteContext.displayName = "Route";
@@ -29308,6 +29993,8 @@
     } = _temp === void 0 ? {} : _temp;
     !useInRouterContext() ? true ? invariant(
       false,
+      // TODO: This error is probably because they somehow have 2 versions of the
+      // router loaded. We can help them understand how to avoid that.
       "useHref() may be used only in the context of a <Router> component."
     ) : invariant(false) : void 0;
     let {
@@ -29337,6 +30024,8 @@
   function useLocation() {
     !useInRouterContext() ? true ? invariant(
       false,
+      // TODO: This error is probably because they somehow have 2 versions of the
+      // router loaded. We can help them understand how to avoid that.
       "useLocation() may be used only in the context of a <Router> component."
     ) : invariant(false) : void 0;
     return React2.useContext(LocationContext).location;
@@ -29344,23 +30033,39 @@
   function useMatch(pattern) {
     !useInRouterContext() ? true ? invariant(
       false,
+      // TODO: This error is probably because they somehow have 2 versions of the
+      // router loaded. We can help them understand how to avoid that.
       "useMatch() may be used only in the context of a <Router> component."
     ) : invariant(false) : void 0;
     let {
       pathname
     } = useLocation();
-    return React2.useMemo(() => matchPath(pattern, pathname), [pathname, pattern]);
+    return React2.useMemo(() => matchPath(pattern, decodePath(pathname)), [pathname, pattern]);
   }
-  function getPathContributingMatches(matches) {
-    return matches.filter((match2, index) => index === 0 || !match2.route.index && match2.pathnameBase !== matches[index - 1].pathnameBase);
+  var navigateEffectWarning = "You should call navigate() in a React.useEffect(), not when your component is first rendered.";
+  function useIsomorphicLayoutEffect(cb) {
+    let isStatic = React2.useContext(NavigationContext).static;
+    if (!isStatic) {
+      React2.useLayoutEffect(cb);
+    }
   }
   function useNavigate() {
+    let {
+      isDataRoute
+    } = React2.useContext(RouteContext);
+    return isDataRoute ? useNavigateStable() : useNavigateUnstable();
+  }
+  function useNavigateUnstable() {
     !useInRouterContext() ? true ? invariant(
       false,
+      // TODO: This error is probably because they somehow have 2 versions of the
+      // router loaded. We can help them understand how to avoid that.
       "useNavigate() may be used only in the context of a <Router> component."
     ) : invariant(false) : void 0;
+    let dataRouterContext = React2.useContext(DataRouterContext);
     let {
       basename,
+      future,
       navigator: navigator2
     } = React2.useContext(NavigationContext);
     let {
@@ -29369,16 +30074,16 @@
     let {
       pathname: locationPathname
     } = useLocation();
-    let routePathnamesJson = JSON.stringify(getPathContributingMatches(matches).map((match2) => match2.pathnameBase));
+    let routePathnamesJson = JSON.stringify(getResolveToMatches(matches, future.v7_relativeSplatPath));
     let activeRef = React2.useRef(false);
-    React2.useEffect(() => {
+    useIsomorphicLayoutEffect(() => {
       activeRef.current = true;
     });
     let navigate = React2.useCallback(function(to, options) {
       if (options === void 0) {
         options = {};
       }
-      true ? warning(activeRef.current, "You should call navigate() in a React.useEffect(), not when your component is first rendered.") : void 0;
+      true ? warning(activeRef.current, navigateEffectWarning) : void 0;
       if (!activeRef.current)
         return;
       if (typeof to === "number") {
@@ -29386,11 +30091,11 @@
         return;
       }
       let path = resolveTo(to, JSON.parse(routePathnamesJson), locationPathname, options.relative === "path");
-      if (basename !== "/") {
+      if (dataRouterContext == null && basename !== "/") {
         path.pathname = path.pathname === "/" ? basename : joinPaths([basename, path.pathname]);
       }
       (!!options.replace ? navigator2.replace : navigator2.push)(path, options.state, options);
-    }, [basename, navigator2, routePathnamesJson, locationPathname]);
+    }, [basename, navigator2, routePathnamesJson, locationPathname, dataRouterContext]);
     return navigate;
   }
   function useParams() {
@@ -29405,20 +30110,30 @@
       relative
     } = _temp2 === void 0 ? {} : _temp2;
     let {
+      future
+    } = React2.useContext(NavigationContext);
+    let {
       matches
     } = React2.useContext(RouteContext);
     let {
       pathname: locationPathname
     } = useLocation();
-    let routePathnamesJson = JSON.stringify(getPathContributingMatches(matches).map((match2) => match2.pathnameBase));
+    let routePathnamesJson = JSON.stringify(getResolveToMatches(matches, future.v7_relativeSplatPath));
     return React2.useMemo(() => resolveTo(to, JSON.parse(routePathnamesJson), locationPathname, relative === "path"), [to, routePathnamesJson, locationPathname, relative]);
   }
   function useRoutes(routes, locationArg) {
+    return useRoutesImpl(routes, locationArg);
+  }
+  function useRoutesImpl(routes, locationArg, dataRouterState, future) {
     !useInRouterContext() ? true ? invariant(
       false,
+      // TODO: This error is probably because they somehow have 2 versions of the
+      // router loaded. We can help them understand how to avoid that.
       "useRoutes() may be used only in the context of a <Router> component."
     ) : invariant(false) : void 0;
-    let dataRouterStateContext = React2.useContext(DataRouterStateContext);
+    let {
+      navigator: navigator2
+    } = React2.useContext(NavigationContext);
     let {
       matches: parentMatches
     } = React2.useContext(RouteContext);
@@ -29444,20 +30159,33 @@
       location2 = locationFromContext;
     }
     let pathname = location2.pathname || "/";
-    let remainingPathname = parentPathnameBase === "/" ? pathname : pathname.slice(parentPathnameBase.length) || "/";
+    let remainingPathname = pathname;
+    if (parentPathnameBase !== "/") {
+      let parentSegments = parentPathnameBase.replace(/^\//, "").split("/");
+      let segments = pathname.replace(/^\//, "").split("/");
+      remainingPathname = "/" + segments.slice(parentSegments.length).join("/");
+    }
     let matches = matchRoutes(routes, {
       pathname: remainingPathname
     });
     if (true) {
       true ? warning(parentRoute || matches != null, 'No routes matched location "' + location2.pathname + location2.search + location2.hash + '" ') : void 0;
-      true ? warning(matches == null || matches[matches.length - 1].route.element !== void 0, 'Matched leaf route at location "' + location2.pathname + location2.search + location2.hash + '" does not have an element. This means it will render an <Outlet /> with a null value by default resulting in an "empty" page.') : void 0;
+      true ? warning(matches == null || matches[matches.length - 1].route.element !== void 0 || matches[matches.length - 1].route.Component !== void 0 || matches[matches.length - 1].route.lazy !== void 0, 'Matched leaf route at location "' + location2.pathname + location2.search + location2.hash + '" does not have an element or Component. This means it will render an <Outlet /> with a null value by default resulting in an "empty" page.') : void 0;
     }
     let renderedMatches = _renderMatches(matches && matches.map((match2) => Object.assign({}, match2, {
       params: Object.assign({}, parentParams, match2.params),
-      pathname: joinPaths([parentPathnameBase, match2.pathname]),
-      pathnameBase: match2.pathnameBase === "/" ? parentPathnameBase : joinPaths([parentPathnameBase, match2.pathnameBase])
-    })), parentMatches, dataRouterStateContext || void 0);
-    if (locationArg) {
+      pathname: joinPaths([
+        parentPathnameBase,
+        // Re-encode pathnames that were decoded inside matchRoutes
+        navigator2.encodeLocation ? navigator2.encodeLocation(match2.pathname).pathname : match2.pathname
+      ]),
+      pathnameBase: match2.pathnameBase === "/" ? parentPathnameBase : joinPaths([
+        parentPathnameBase,
+        // Re-encode pathnames that were decoded inside matchRoutes
+        navigator2.encodeLocation ? navigator2.encodeLocation(match2.pathnameBase).pathname : match2.pathnameBase
+      ])
+    })), parentMatches, dataRouterState, future);
+    if (locationArg && renderedMatches) {
       return /* @__PURE__ */ React2.createElement(LocationContext.Provider, {
         value: {
           location: _extends2({
@@ -29473,7 +30201,7 @@
     }
     return renderedMatches;
   }
-  function DefaultErrorElement() {
+  function DefaultErrorComponent() {
     let error = useRouteError();
     let message = isRouteErrorResponse(error) ? error.status + " " + error.statusText : error instanceof Error ? error.message : JSON.stringify(error);
     let stack = error instanceof Error ? error.stack : null;
@@ -29486,23 +30214,30 @@
       padding: "2px 4px",
       backgroundColor: lightgrey
     };
-    return /* @__PURE__ */ React2.createElement(React2.Fragment, null, /* @__PURE__ */ React2.createElement("h2", null, "Unhandled Thrown Error!"), /* @__PURE__ */ React2.createElement("h3", {
+    let devInfo = null;
+    if (true) {
+      console.error("Error handled by React Router default ErrorBoundary:", error);
+      devInfo = /* @__PURE__ */ React2.createElement(React2.Fragment, null, /* @__PURE__ */ React2.createElement("p", null, "\u{1F4BF} Hey developer \u{1F44B}"), /* @__PURE__ */ React2.createElement("p", null, "You can provide a way better UX than this when your app throws errors by providing your own ", /* @__PURE__ */ React2.createElement("code", {
+        style: codeStyles
+      }, "ErrorBoundary"), " or", " ", /* @__PURE__ */ React2.createElement("code", {
+        style: codeStyles
+      }, "errorElement"), " prop on your route."));
+    }
+    return /* @__PURE__ */ React2.createElement(React2.Fragment, null, /* @__PURE__ */ React2.createElement("h2", null, "Unexpected Application Error!"), /* @__PURE__ */ React2.createElement("h3", {
       style: {
         fontStyle: "italic"
       }
     }, message), stack ? /* @__PURE__ */ React2.createElement("pre", {
       style: preStyles
-    }, stack) : null, /* @__PURE__ */ React2.createElement("p", null, "\u{1F4BF} Hey developer \u{1F44B}"), /* @__PURE__ */ React2.createElement("p", null, "You can provide a way better UX than this when your app throws errors by providing your own\xA0", /* @__PURE__ */ React2.createElement("code", {
-      style: codeStyles
-    }, "errorElement"), " props on\xA0", /* @__PURE__ */ React2.createElement("code", {
-      style: codeStyles
-    }, "<Route>")));
+    }, stack) : null, devInfo);
   }
+  var defaultErrorElement = /* @__PURE__ */ React2.createElement(DefaultErrorComponent, null);
   var RenderErrorBoundary = class extends React2.Component {
     constructor(props2) {
       super(props2);
       this.state = {
         location: props2.location,
+        revalidation: props2.revalidation,
         error: props2.error
       };
     }
@@ -29512,25 +30247,29 @@
       };
     }
     static getDerivedStateFromProps(props2, state) {
-      if (state.location !== props2.location) {
+      if (state.location !== props2.location || state.revalidation !== "idle" && props2.revalidation === "idle") {
         return {
           error: props2.error,
-          location: props2.location
+          location: props2.location,
+          revalidation: props2.revalidation
         };
       }
       return {
-        error: props2.error || state.error,
-        location: state.location
+        error: props2.error !== void 0 ? props2.error : state.error,
+        location: state.location,
+        revalidation: props2.revalidation || state.revalidation
       };
     }
     componentDidCatch(error, errorInfo) {
       console.error("React Router caught the following error during render", error, errorInfo);
     }
     render() {
-      return this.state.error ? /* @__PURE__ */ React2.createElement(RouteErrorContext.Provider, {
+      return this.state.error !== void 0 ? /* @__PURE__ */ React2.createElement(RouteContext.Provider, {
+        value: this.props.routeContext
+      }, /* @__PURE__ */ React2.createElement(RouteErrorContext.Provider, {
         value: this.state.error,
         children: this.props.component
-      }) : this.props.children;
+      })) : this.props.children;
     }
   };
   function RenderedRoute(_ref) {
@@ -29539,127 +30278,283 @@
       match: match2,
       children
     } = _ref;
-    let dataStaticRouterContext = React2.useContext(DataStaticRouterContext);
-    if (dataStaticRouterContext && match2.route.errorElement) {
-      dataStaticRouterContext._deepestRenderedBoundaryId = match2.route.id;
+    let dataRouterContext = React2.useContext(DataRouterContext);
+    if (dataRouterContext && dataRouterContext.static && dataRouterContext.staticContext && (match2.route.errorElement || match2.route.ErrorBoundary)) {
+      dataRouterContext.staticContext._deepestRenderedBoundaryId = match2.route.id;
     }
     return /* @__PURE__ */ React2.createElement(RouteContext.Provider, {
       value: routeContext
     }, children);
   }
-  function _renderMatches(matches, parentMatches, dataRouterState) {
+  function _renderMatches(matches, parentMatches, dataRouterState, future) {
+    var _dataRouterState;
     if (parentMatches === void 0) {
       parentMatches = [];
     }
+    if (dataRouterState === void 0) {
+      dataRouterState = null;
+    }
+    if (future === void 0) {
+      future = null;
+    }
     if (matches == null) {
-      if (dataRouterState != null && dataRouterState.errors) {
+      var _future;
+      if (!dataRouterState) {
+        return null;
+      }
+      if (dataRouterState.errors) {
+        matches = dataRouterState.matches;
+      } else if ((_future = future) != null && _future.v7_partialHydration && parentMatches.length === 0 && !dataRouterState.initialized && dataRouterState.matches.length > 0) {
         matches = dataRouterState.matches;
       } else {
         return null;
       }
     }
     let renderedMatches = matches;
-    let errors = dataRouterState == null ? void 0 : dataRouterState.errors;
+    let errors = (_dataRouterState = dataRouterState) == null ? void 0 : _dataRouterState.errors;
     if (errors != null) {
-      let errorIndex = renderedMatches.findIndex((m) => m.route.id && (errors == null ? void 0 : errors[m.route.id]));
-      !(errorIndex >= 0) ? true ? invariant(false, "Could not find a matching route for the current errors: " + errors) : invariant(false) : void 0;
+      let errorIndex = renderedMatches.findIndex((m) => m.route.id && (errors == null ? void 0 : errors[m.route.id]) !== void 0);
+      !(errorIndex >= 0) ? true ? invariant(false, "Could not find a matching route for errors on route IDs: " + Object.keys(errors).join(",")) : invariant(false) : void 0;
       renderedMatches = renderedMatches.slice(0, Math.min(renderedMatches.length, errorIndex + 1));
     }
-    return renderedMatches.reduceRight((outlet, match2, index) => {
-      let error = match2.route.id ? errors == null ? void 0 : errors[match2.route.id] : null;
-      let errorElement = dataRouterState ? match2.route.errorElement || /* @__PURE__ */ React2.createElement(DefaultErrorElement, null) : null;
-      let getChildren = () => /* @__PURE__ */ React2.createElement(RenderedRoute, {
-        match: match2,
-        routeContext: {
-          outlet,
-          matches: parentMatches.concat(renderedMatches.slice(0, index + 1))
+    let renderFallback = false;
+    let fallbackIndex = -1;
+    if (dataRouterState && future && future.v7_partialHydration) {
+      for (let i = 0; i < renderedMatches.length; i++) {
+        let match2 = renderedMatches[i];
+        if (match2.route.HydrateFallback || match2.route.hydrateFallbackElement) {
+          fallbackIndex = i;
         }
-      }, error ? errorElement : match2.route.element !== void 0 ? match2.route.element : outlet);
-      return dataRouterState && (match2.route.errorElement || index === 0) ? /* @__PURE__ */ React2.createElement(RenderErrorBoundary, {
+        if (match2.route.id) {
+          let {
+            loaderData,
+            errors: errors2
+          } = dataRouterState;
+          let needsToRunLoader = match2.route.loader && loaderData[match2.route.id] === void 0 && (!errors2 || errors2[match2.route.id] === void 0);
+          if (match2.route.lazy || needsToRunLoader) {
+            renderFallback = true;
+            if (fallbackIndex >= 0) {
+              renderedMatches = renderedMatches.slice(0, fallbackIndex + 1);
+            } else {
+              renderedMatches = [renderedMatches[0]];
+            }
+            break;
+          }
+        }
+      }
+    }
+    return renderedMatches.reduceRight((outlet, match2, index) => {
+      let error;
+      let shouldRenderHydrateFallback = false;
+      let errorElement = null;
+      let hydrateFallbackElement = null;
+      if (dataRouterState) {
+        error = errors && match2.route.id ? errors[match2.route.id] : void 0;
+        errorElement = match2.route.errorElement || defaultErrorElement;
+        if (renderFallback) {
+          if (fallbackIndex < 0 && index === 0) {
+            warningOnce("route-fallback", false, "No `HydrateFallback` element provided to render during initial hydration");
+            shouldRenderHydrateFallback = true;
+            hydrateFallbackElement = null;
+          } else if (fallbackIndex === index) {
+            shouldRenderHydrateFallback = true;
+            hydrateFallbackElement = match2.route.hydrateFallbackElement || null;
+          }
+        }
+      }
+      let matches2 = parentMatches.concat(renderedMatches.slice(0, index + 1));
+      let getChildren = () => {
+        let children;
+        if (error) {
+          children = errorElement;
+        } else if (shouldRenderHydrateFallback) {
+          children = hydrateFallbackElement;
+        } else if (match2.route.Component) {
+          children = /* @__PURE__ */ React2.createElement(match2.route.Component, null);
+        } else if (match2.route.element) {
+          children = match2.route.element;
+        } else {
+          children = outlet;
+        }
+        return /* @__PURE__ */ React2.createElement(RenderedRoute, {
+          match: match2,
+          routeContext: {
+            outlet,
+            matches: matches2,
+            isDataRoute: dataRouterState != null
+          },
+          children
+        });
+      };
+      return dataRouterState && (match2.route.ErrorBoundary || match2.route.errorElement || index === 0) ? /* @__PURE__ */ React2.createElement(RenderErrorBoundary, {
         location: dataRouterState.location,
+        revalidation: dataRouterState.revalidation,
         component: errorElement,
         error,
-        children: getChildren()
+        children: getChildren(),
+        routeContext: {
+          outlet: null,
+          matches: matches2,
+          isDataRoute: true
+        }
       }) : getChildren();
     }, null);
   }
-  var DataRouterHook;
-  (function(DataRouterHook2) {
-    DataRouterHook2["UseLoaderData"] = "useLoaderData";
-    DataRouterHook2["UseActionData"] = "useActionData";
-    DataRouterHook2["UseRouteError"] = "useRouteError";
-    DataRouterHook2["UseNavigation"] = "useNavigation";
-    DataRouterHook2["UseRouteLoaderData"] = "useRouteLoaderData";
-    DataRouterHook2["UseMatches"] = "useMatches";
-    DataRouterHook2["UseRevalidator"] = "useRevalidator";
-  })(DataRouterHook || (DataRouterHook = {}));
+  var DataRouterHook = /* @__PURE__ */ function(DataRouterHook3) {
+    DataRouterHook3["UseBlocker"] = "useBlocker";
+    DataRouterHook3["UseRevalidator"] = "useRevalidator";
+    DataRouterHook3["UseNavigateStable"] = "useNavigate";
+    return DataRouterHook3;
+  }(DataRouterHook || {});
+  var DataRouterStateHook = /* @__PURE__ */ function(DataRouterStateHook3) {
+    DataRouterStateHook3["UseBlocker"] = "useBlocker";
+    DataRouterStateHook3["UseLoaderData"] = "useLoaderData";
+    DataRouterStateHook3["UseActionData"] = "useActionData";
+    DataRouterStateHook3["UseRouteError"] = "useRouteError";
+    DataRouterStateHook3["UseNavigation"] = "useNavigation";
+    DataRouterStateHook3["UseRouteLoaderData"] = "useRouteLoaderData";
+    DataRouterStateHook3["UseMatches"] = "useMatches";
+    DataRouterStateHook3["UseRevalidator"] = "useRevalidator";
+    DataRouterStateHook3["UseNavigateStable"] = "useNavigate";
+    DataRouterStateHook3["UseRouteId"] = "useRouteId";
+    return DataRouterStateHook3;
+  }(DataRouterStateHook || {});
+  function getDataRouterConsoleError(hookName) {
+    return hookName + " must be used within a data router.  See https://reactrouter.com/v6/routers/picking-a-router.";
+  }
+  function useDataRouterContext(hookName) {
+    let ctx = React2.useContext(DataRouterContext);
+    !ctx ? true ? invariant(false, getDataRouterConsoleError(hookName)) : invariant(false) : void 0;
+    return ctx;
+  }
   function useDataRouterState(hookName) {
     let state = React2.useContext(DataRouterStateContext);
-    !state ? true ? invariant(false, hookName + " must be used within a DataRouterStateContext") : invariant(false) : void 0;
+    !state ? true ? invariant(false, getDataRouterConsoleError(hookName)) : invariant(false) : void 0;
     return state;
   }
+  function useRouteContext(hookName) {
+    let route = React2.useContext(RouteContext);
+    !route ? true ? invariant(false, getDataRouterConsoleError(hookName)) : invariant(false) : void 0;
+    return route;
+  }
+  function useCurrentRouteId(hookName) {
+    let route = useRouteContext(hookName);
+    let thisRoute = route.matches[route.matches.length - 1];
+    !thisRoute.route.id ? true ? invariant(false, hookName + ' can only be used on routes that contain a unique "id"') : invariant(false) : void 0;
+    return thisRoute.route.id;
+  }
+  function useRouteId() {
+    return useCurrentRouteId(DataRouterStateHook.UseRouteId);
+  }
   function useNavigation() {
-    let state = useDataRouterState(DataRouterHook.UseNavigation);
+    let state = useDataRouterState(DataRouterStateHook.UseNavigation);
     return state.navigation;
   }
   function useMatches() {
     let {
       matches,
       loaderData
-    } = useDataRouterState(DataRouterHook.UseMatches);
-    return React2.useMemo(() => matches.map((match2) => {
-      let {
-        pathname,
-        params
-      } = match2;
-      return {
-        id: match2.route.id,
-        pathname,
-        params,
-        data: loaderData[match2.route.id],
-        handle: match2.route.handle
-      };
-    }), [matches, loaderData]);
+    } = useDataRouterState(DataRouterStateHook.UseMatches);
+    return React2.useMemo(() => matches.map((m) => convertRouteMatchToUiMatch(m, loaderData)), [matches, loaderData]);
   }
   function useRouteError() {
     var _state$errors;
     let error = React2.useContext(RouteErrorContext);
-    let state = useDataRouterState(DataRouterHook.UseRouteError);
-    let route = React2.useContext(RouteContext);
-    let thisRoute = route.matches[route.matches.length - 1];
-    if (error) {
+    let state = useDataRouterState(DataRouterStateHook.UseRouteError);
+    let routeId = useCurrentRouteId(DataRouterStateHook.UseRouteError);
+    if (error !== void 0) {
       return error;
     }
-    !route ? true ? invariant(false, "useRouteError must be used inside a RouteContext") : invariant(false) : void 0;
-    !thisRoute.route.id ? true ? invariant(false, 'useRouteError can only be used on routes that contain a unique "id"') : invariant(false) : void 0;
-    return (_state$errors = state.errors) == null ? void 0 : _state$errors[thisRoute.route.id];
+    return (_state$errors = state.errors) == null ? void 0 : _state$errors[routeId];
   }
-  var alreadyWarned = {};
+  function useNavigateStable() {
+    let {
+      router
+    } = useDataRouterContext(DataRouterHook.UseNavigateStable);
+    let id = useCurrentRouteId(DataRouterStateHook.UseNavigateStable);
+    let activeRef = React2.useRef(false);
+    useIsomorphicLayoutEffect(() => {
+      activeRef.current = true;
+    });
+    let navigate = React2.useCallback(function(to, options) {
+      if (options === void 0) {
+        options = {};
+      }
+      true ? warning(activeRef.current, navigateEffectWarning) : void 0;
+      if (!activeRef.current)
+        return;
+      if (typeof to === "number") {
+        router.navigate(to);
+      } else {
+        router.navigate(to, _extends2({
+          fromRouteId: id
+        }, options));
+      }
+    }, [router, id]);
+    return navigate;
+  }
+  var alreadyWarned$1 = {};
   function warningOnce(key, cond, message) {
-    if (!cond && !alreadyWarned[key]) {
-      alreadyWarned[key] = true;
+    if (!cond && !alreadyWarned$1[key]) {
+      alreadyWarned$1[key] = true;
       true ? warning(false, message) : void 0;
     }
   }
+  var alreadyWarned = {};
+  function warnOnce(key, message) {
+    if (!alreadyWarned[message]) {
+      alreadyWarned[message] = true;
+      console.warn(message);
+    }
+  }
+  var logDeprecation = (flag, msg, link) => warnOnce(flag, "\u26A0\uFE0F React Router Future Flag Warning: " + msg + ". " + ("You can use the `" + flag + "` future flag to opt-in early. ") + ("For more information, see " + link + "."));
+  function logV6DeprecationWarnings(renderFuture, routerFuture) {
+    if ((renderFuture == null ? void 0 : renderFuture.v7_startTransition) === void 0) {
+      logDeprecation("v7_startTransition", "React Router will begin wrapping state updates in `React.startTransition` in v7", "https://reactrouter.com/v6/upgrading/future#v7_starttransition");
+    }
+    if ((renderFuture == null ? void 0 : renderFuture.v7_relativeSplatPath) === void 0 && (!routerFuture || routerFuture.v7_relativeSplatPath === void 0)) {
+      logDeprecation("v7_relativeSplatPath", "Relative route resolution within Splat routes is changing in v7", "https://reactrouter.com/v6/upgrading/future#v7_relativesplatpath");
+    }
+    if (routerFuture) {
+      if (routerFuture.v7_fetcherPersist === void 0) {
+        logDeprecation("v7_fetcherPersist", "The persistence behavior of fetchers is changing in v7", "https://reactrouter.com/v6/upgrading/future#v7_fetcherpersist");
+      }
+      if (routerFuture.v7_normalizeFormMethod === void 0) {
+        logDeprecation("v7_normalizeFormMethod", "Casing of `formMethod` fields is being normalized to uppercase in v7", "https://reactrouter.com/v6/upgrading/future#v7_normalizeformmethod");
+      }
+      if (routerFuture.v7_partialHydration === void 0) {
+        logDeprecation("v7_partialHydration", "`RouterProvider` hydration behavior is changing in v7", "https://reactrouter.com/v6/upgrading/future#v7_partialhydration");
+      }
+      if (routerFuture.v7_skipActionErrorRevalidation === void 0) {
+        logDeprecation("v7_skipActionErrorRevalidation", "The revalidation behavior after 4xx/5xx `action` responses is changing in v7", "https://reactrouter.com/v6/upgrading/future#v7_skipactionerrorrevalidation");
+      }
+    }
+  }
+  var START_TRANSITION = "startTransition";
+  var startTransitionImpl = React2[START_TRANSITION];
   function Route(_props) {
     true ? invariant(false, "A <Route> is only ever to be used as the child of <Routes> element, never rendered directly. Please wrap your <Route> in a <Routes>.") : invariant(false);
   }
-  function Router(_ref4) {
+  function Router(_ref5) {
     let {
       basename: basenameProp = "/",
       children = null,
       location: locationProp,
       navigationType = Action.Pop,
       navigator: navigator2,
-      static: staticProp = false
-    } = _ref4;
+      static: staticProp = false,
+      future
+    } = _ref5;
     !!useInRouterContext() ? true ? invariant(false, "You cannot render a <Router> inside another <Router>. You should never have more than one in your app.") : invariant(false) : void 0;
     let basename = basenameProp.replace(/^\/*/, "/");
     let navigationContext = React2.useMemo(() => ({
       basename,
       navigator: navigator2,
-      static: staticProp
-    }), [basename, navigator2, staticProp]);
+      static: staticProp,
+      future: _extends2({
+        v7_relativeSplatPath: false
+      }, future)
+    }), [basename, future, navigator2, staticProp]);
     if (typeof locationProp === "string") {
       locationProp = parsePath(locationProp);
     }
@@ -29670,48 +30565,40 @@
       state = null,
       key = "default"
     } = locationProp;
-    let location2 = React2.useMemo(() => {
+    let locationContext = React2.useMemo(() => {
       let trailingPathname = stripBasename(pathname, basename);
       if (trailingPathname == null) {
         return null;
       }
       return {
-        pathname: trailingPathname,
-        search,
-        hash,
-        state,
-        key
+        location: {
+          pathname: trailingPathname,
+          search,
+          hash,
+          state,
+          key
+        },
+        navigationType
       };
-    }, [basename, pathname, search, hash, state, key]);
-    true ? warning(location2 != null, '<Router basename="' + basename + '"> is not able to match the URL ' + ('"' + pathname + search + hash + '" because it does not start with the ') + "basename, so the <Router> won't render anything.") : void 0;
-    if (location2 == null) {
+    }, [basename, pathname, search, hash, state, key, navigationType]);
+    true ? warning(locationContext != null, '<Router basename="' + basename + '"> is not able to match the URL ' + ('"' + pathname + search + hash + '" because it does not start with the ') + "basename, so the <Router> won't render anything.") : void 0;
+    if (locationContext == null) {
       return null;
     }
     return /* @__PURE__ */ React2.createElement(NavigationContext.Provider, {
       value: navigationContext
     }, /* @__PURE__ */ React2.createElement(LocationContext.Provider, {
       children,
-      value: {
-        location: location2,
-        navigationType
-      }
+      value: locationContext
     }));
   }
-  function Routes(_ref5) {
+  function Routes(_ref6) {
     let {
       children,
       location: location2
-    } = _ref5;
-    let dataRouterContext = React2.useContext(DataRouterContext);
-    let routes = dataRouterContext && !children ? dataRouterContext.router.routes : createRoutesFromChildren(children);
-    return useRoutes(routes, location2);
+    } = _ref6;
+    return useRoutes(createRoutesFromChildren(children), location2);
   }
-  var AwaitRenderStatus;
-  (function(AwaitRenderStatus2) {
-    AwaitRenderStatus2[AwaitRenderStatus2["pending"] = 0] = "pending";
-    AwaitRenderStatus2[AwaitRenderStatus2["success"] = 1] = "success";
-    AwaitRenderStatus2[AwaitRenderStatus2["error"] = 2] = "error";
-  })(AwaitRenderStatus || (AwaitRenderStatus = {}));
   var neverSettledPromise = new Promise(() => {
   });
   function createRoutesFromChildren(children, parentPath) {
@@ -29723,24 +30610,28 @@
       if (!/* @__PURE__ */ React2.isValidElement(element)) {
         return;
       }
+      let treePath = [...parentPath, index];
       if (element.type === React2.Fragment) {
-        routes.push.apply(routes, createRoutesFromChildren(element.props.children, parentPath));
+        routes.push.apply(routes, createRoutesFromChildren(element.props.children, treePath));
         return;
       }
       !(element.type === Route) ? true ? invariant(false, "[" + (typeof element.type === "string" ? element.type : element.type.name) + "] is not a <Route> component. All component children of <Routes> must be a <Route> or <React.Fragment>") : invariant(false) : void 0;
-      let treePath = [...parentPath, index];
+      !(!element.props.index || !element.props.children) ? true ? invariant(false, "An index route cannot have child routes.") : invariant(false) : void 0;
       let route = {
         id: element.props.id || treePath.join("-"),
         caseSensitive: element.props.caseSensitive,
         element: element.props.element,
+        Component: element.props.Component,
         index: element.props.index,
         path: element.props.path,
         loader: element.props.loader,
         action: element.props.action,
         errorElement: element.props.errorElement,
-        hasErrorBoundary: element.props.errorElement != null,
+        ErrorBoundary: element.props.ErrorBoundary,
+        hasErrorBoundary: element.props.ErrorBoundary != null || element.props.errorElement != null,
         shouldRevalidate: element.props.shouldRevalidate,
-        handle: element.props.handle
+        handle: element.props.handle,
+        lazy: element.props.lazy
       };
       if (element.props.children) {
         route.children = createRoutesFromChildren(element.props.children, treePath);
@@ -29797,76 +30688,121 @@
     return !!(event.metaKey || event.altKey || event.ctrlKey || event.shiftKey);
   }
   function shouldProcessLinkClick(event, target) {
-    return event.button === 0 && (!target || target === "_self") && !isModifiedEvent(event);
+    return event.button === 0 && // Ignore everything but left clicks
+    (!target || target === "_self") && // Let browser handle "target=_blank" etc.
+    !isModifiedEvent(event);
   }
-  function getFormSubmissionInfo(target, defaultAction, options) {
+  var _formDataSupportsSubmitter = null;
+  function isFormDataSubmitterSupported() {
+    if (_formDataSupportsSubmitter === null) {
+      try {
+        new FormData(
+          document.createElement("form"),
+          // @ts-expect-error if FormData supports the submitter parameter, this will throw
+          0
+        );
+        _formDataSupportsSubmitter = false;
+      } catch (e) {
+        _formDataSupportsSubmitter = true;
+      }
+    }
+    return _formDataSupportsSubmitter;
+  }
+  var supportedFormEncTypes = /* @__PURE__ */ new Set(["application/x-www-form-urlencoded", "multipart/form-data", "text/plain"]);
+  function getFormEncType(encType) {
+    if (encType != null && !supportedFormEncTypes.has(encType)) {
+      true ? warning(false, '"' + encType + '" is not a valid `encType` for `<Form>`/`<fetcher.Form>` ' + ('and will default to "' + defaultEncType + '"')) : void 0;
+      return null;
+    }
+    return encType;
+  }
+  function getFormSubmissionInfo(target, basename) {
     let method;
     let action;
     let encType;
     let formData;
+    let body;
     if (isFormElement(target)) {
-      let submissionTrigger = options.submissionTrigger;
-      method = options.method || target.getAttribute("method") || defaultMethod;
-      action = options.action || target.getAttribute("action") || defaultAction;
-      encType = options.encType || target.getAttribute("enctype") || defaultEncType;
+      let attr = target.getAttribute("action");
+      action = attr ? stripBasename(attr, basename) : null;
+      method = target.getAttribute("method") || defaultMethod;
+      encType = getFormEncType(target.getAttribute("enctype")) || defaultEncType;
       formData = new FormData(target);
-      if (submissionTrigger && submissionTrigger.name) {
-        formData.append(submissionTrigger.name, submissionTrigger.value);
-      }
     } else if (isButtonElement(target) || isInputElement(target) && (target.type === "submit" || target.type === "image")) {
       let form = target.form;
       if (form == null) {
         throw new Error('Cannot submit a <button> or <input type="submit"> without a <form>');
       }
-      method = options.method || target.getAttribute("formmethod") || form.getAttribute("method") || defaultMethod;
-      action = options.action || target.getAttribute("formaction") || form.getAttribute("action") || defaultAction;
-      encType = options.encType || target.getAttribute("formenctype") || form.getAttribute("enctype") || defaultEncType;
-      formData = new FormData(form);
-      if (target.name) {
-        formData.append(target.name, target.value);
+      let attr = target.getAttribute("formaction") || form.getAttribute("action");
+      action = attr ? stripBasename(attr, basename) : null;
+      method = target.getAttribute("formmethod") || form.getAttribute("method") || defaultMethod;
+      encType = getFormEncType(target.getAttribute("formenctype")) || getFormEncType(form.getAttribute("enctype")) || defaultEncType;
+      formData = new FormData(form, target);
+      if (!isFormDataSubmitterSupported()) {
+        let {
+          name,
+          type: type2,
+          value
+        } = target;
+        if (type2 === "image") {
+          let prefix = name ? name + "." : "";
+          formData.append(prefix + "x", "0");
+          formData.append(prefix + "y", "0");
+        } else if (name) {
+          formData.append(name, value);
+        }
       }
     } else if (isHtmlElement(target)) {
       throw new Error('Cannot submit element that is not <form>, <button>, or <input type="submit|image">');
     } else {
-      method = options.method || defaultMethod;
-      action = options.action || defaultAction;
-      encType = options.encType || defaultEncType;
-      if (target instanceof FormData) {
-        formData = target;
-      } else {
-        formData = new FormData();
-        if (target instanceof URLSearchParams) {
-          for (let [name, value] of target) {
-            formData.append(name, value);
-          }
-        } else if (target != null) {
-          for (let name of Object.keys(target)) {
-            formData.append(name, target[name]);
-          }
-        }
-      }
+      method = defaultMethod;
+      action = null;
+      encType = defaultEncType;
+      body = target;
     }
-    let {
-      protocol,
-      host
-    } = window.location;
-    let url = new URL(action, protocol + "//" + host);
+    if (formData && encType === "text/plain") {
+      body = formData;
+      formData = void 0;
+    }
     return {
-      url,
-      method,
+      action,
+      method: method.toLowerCase(),
       encType,
-      formData
+      formData,
+      body
     };
   }
-  var _excluded = ["onClick", "relative", "reloadDocument", "replace", "state", "target", "to", "preventScrollReset"];
-  var _excluded2 = ["aria-current", "caseSensitive", "className", "end", "style", "to", "children"];
-  var _excluded3 = ["reloadDocument", "replace", "method", "action", "onSubmit", "fetcherKey", "routeId", "relative"];
-  function HashRouter(_ref2) {
+  var _excluded = ["onClick", "relative", "reloadDocument", "replace", "state", "target", "to", "preventScrollReset", "viewTransition"];
+  var _excluded2 = ["aria-current", "caseSensitive", "className", "end", "style", "to", "viewTransition", "children"];
+  var _excluded3 = ["fetcherKey", "navigate", "reloadDocument", "replace", "state", "method", "action", "onSubmit", "relative", "preventScrollReset", "viewTransition"];
+  var REACT_ROUTER_VERSION = "6";
+  try {
+    window.__reactRouterVersion = REACT_ROUTER_VERSION;
+  } catch (e) {
+  }
+  var ViewTransitionContext = /* @__PURE__ */ React3.createContext({
+    isTransitioning: false
+  });
+  if (true) {
+    ViewTransitionContext.displayName = "ViewTransition";
+  }
+  var FetchersContext = /* @__PURE__ */ React3.createContext(/* @__PURE__ */ new Map());
+  if (true) {
+    FetchersContext.displayName = "Fetchers";
+  }
+  var START_TRANSITION2 = "startTransition";
+  var startTransitionImpl2 = React3[START_TRANSITION2];
+  var FLUSH_SYNC = "flushSync";
+  var flushSyncImpl = ReactDOM[FLUSH_SYNC];
+  var USE_ID = "useId";
+  var useIdImpl = React3[USE_ID];
+  function HashRouter(_ref5) {
     let {
       basename,
       children,
+      future,
       window: window2
-    } = _ref2;
+    } = _ref5;
     let historyRef = React3.useRef();
     if (historyRef.current == null) {
       historyRef.current = createHashHistory({
@@ -29875,61 +30811,104 @@
       });
     }
     let history = historyRef.current;
-    let [state, setState] = React3.useState({
+    let [state, setStateImpl] = React3.useState({
       action: history.action,
       location: history.location
     });
-    React3.useLayoutEffect(() => history.listen(setState), [history]);
+    let {
+      v7_startTransition
+    } = future || {};
+    let setState = React3.useCallback((newState) => {
+      v7_startTransition && startTransitionImpl2 ? startTransitionImpl2(() => setStateImpl(newState)) : setStateImpl(newState);
+    }, [setStateImpl, v7_startTransition]);
+    React3.useLayoutEffect(() => history.listen(setState), [history, setState]);
+    React3.useEffect(() => logV6DeprecationWarnings(future), [future]);
     return /* @__PURE__ */ React3.createElement(Router, {
       basename,
       children,
       location: state.location,
       navigationType: state.action,
-      navigator: history
+      navigator: history,
+      future
     });
   }
-  function HistoryRouter(_ref3) {
+  function HistoryRouter(_ref6) {
     let {
       basename,
       children,
+      future,
       history
-    } = _ref3;
-    const [state, setState] = React3.useState({
+    } = _ref6;
+    let [state, setStateImpl] = React3.useState({
       action: history.action,
       location: history.location
     });
-    React3.useLayoutEffect(() => history.listen(setState), [history]);
+    let {
+      v7_startTransition
+    } = future || {};
+    let setState = React3.useCallback((newState) => {
+      v7_startTransition && startTransitionImpl2 ? startTransitionImpl2(() => setStateImpl(newState)) : setStateImpl(newState);
+    }, [setStateImpl, v7_startTransition]);
+    React3.useLayoutEffect(() => history.listen(setState), [history, setState]);
+    React3.useEffect(() => logV6DeprecationWarnings(future), [future]);
     return /* @__PURE__ */ React3.createElement(Router, {
       basename,
       children,
       location: state.location,
       navigationType: state.action,
-      navigator: history
+      navigator: history,
+      future
     });
   }
   if (true) {
     HistoryRouter.displayName = "unstable_HistoryRouter";
   }
-  var Link = /* @__PURE__ */ React3.forwardRef(function LinkWithRef(_ref4, ref) {
+  var isBrowser = typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined";
+  var ABSOLUTE_URL_REGEX = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
+  var Link = /* @__PURE__ */ React3.forwardRef(function LinkWithRef(_ref7, ref) {
     let {
       onClick,
       relative,
       reloadDocument,
-      replace,
+      replace: replace2,
       state,
       target,
       to,
-      preventScrollReset
-    } = _ref4, rest = _objectWithoutPropertiesLoose(_ref4, _excluded);
+      preventScrollReset,
+      viewTransition
+    } = _ref7, rest = _objectWithoutPropertiesLoose(_ref7, _excluded);
+    let {
+      basename
+    } = React3.useContext(NavigationContext);
+    let absoluteHref;
+    let isExternal = false;
+    if (typeof to === "string" && ABSOLUTE_URL_REGEX.test(to)) {
+      absoluteHref = to;
+      if (isBrowser) {
+        try {
+          let currentUrl = new URL(window.location.href);
+          let targetUrl = to.startsWith("//") ? new URL(currentUrl.protocol + to) : new URL(to);
+          let path = stripBasename(targetUrl.pathname, basename);
+          if (targetUrl.origin === currentUrl.origin && path != null) {
+            to = path + targetUrl.search + targetUrl.hash;
+          } else {
+            isExternal = true;
+          }
+        } catch (e) {
+          true ? warning(false, '<Link to="' + to + '"> contains an invalid URL which will probably break when clicked - please update to a valid URL path.') : void 0;
+        }
+      }
+    }
     let href = useHref(to, {
       relative
     });
     let internalOnClick = useLinkClickHandler(to, {
-      replace,
+      replace: replace2,
       state,
       target,
       preventScrollReset,
-      relative
+      relative,
+      viewTransition
     });
     function handleClick(event) {
       if (onClick)
@@ -29938,17 +30917,20 @@
         internalOnClick(event);
       }
     }
-    return /* @__PURE__ */ React3.createElement("a", _extends3({}, rest, {
-      href,
-      onClick: reloadDocument ? onClick : handleClick,
-      ref,
-      target
-    }));
+    return (
+      // eslint-disable-next-line jsx-a11y/anchor-has-content
+      /* @__PURE__ */ React3.createElement("a", _extends3({}, rest, {
+        href: absoluteHref || href,
+        onClick: isExternal || reloadDocument ? onClick : handleClick,
+        ref,
+        target
+      }))
+    );
   });
   if (true) {
     Link.displayName = "Link";
   }
-  var NavLink = /* @__PURE__ */ React3.forwardRef(function NavLinkWithRef(_ref5, ref) {
+  var NavLink = /* @__PURE__ */ React3.forwardRef(function NavLinkWithRef(_ref8, ref) {
     let {
       "aria-current": ariaCurrentProp = "page",
       caseSensitive = false,
@@ -29956,86 +30938,95 @@
       end = false,
       style: styleProp,
       to,
+      viewTransition,
       children
-    } = _ref5, rest = _objectWithoutPropertiesLoose(_ref5, _excluded2);
-    let path = useResolvedPath(to);
-    let match2 = useMatch({
-      path: path.pathname,
-      end,
-      caseSensitive
+    } = _ref8, rest = _objectWithoutPropertiesLoose(_ref8, _excluded2);
+    let path = useResolvedPath(to, {
+      relative: rest.relative
     });
+    let location2 = useLocation();
     let routerState = React3.useContext(DataRouterStateContext);
-    let nextLocation = routerState == null ? void 0 : routerState.navigation.location;
-    let nextPath = useResolvedPath(nextLocation || "");
-    let nextMatch = React3.useMemo(() => nextLocation ? matchPath({
-      path: path.pathname,
-      end,
-      caseSensitive
-    }, nextPath.pathname) : null, [nextLocation, path.pathname, caseSensitive, end, nextPath.pathname]);
-    let isPending = nextMatch != null;
-    let isActive = match2 != null;
+    let {
+      navigator: navigator2,
+      basename
+    } = React3.useContext(NavigationContext);
+    let isTransitioning = routerState != null && // Conditional usage is OK here because the usage of a data router is static
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useViewTransitionState(path) && viewTransition === true;
+    let toPathname = navigator2.encodeLocation ? navigator2.encodeLocation(path).pathname : path.pathname;
+    let locationPathname = location2.pathname;
+    let nextLocationPathname = routerState && routerState.navigation && routerState.navigation.location ? routerState.navigation.location.pathname : null;
+    if (!caseSensitive) {
+      locationPathname = locationPathname.toLowerCase();
+      nextLocationPathname = nextLocationPathname ? nextLocationPathname.toLowerCase() : null;
+      toPathname = toPathname.toLowerCase();
+    }
+    if (nextLocationPathname && basename) {
+      nextLocationPathname = stripBasename(nextLocationPathname, basename) || nextLocationPathname;
+    }
+    const endSlashPosition = toPathname !== "/" && toPathname.endsWith("/") ? toPathname.length - 1 : toPathname.length;
+    let isActive = locationPathname === toPathname || !end && locationPathname.startsWith(toPathname) && locationPathname.charAt(endSlashPosition) === "/";
+    let isPending = nextLocationPathname != null && (nextLocationPathname === toPathname || !end && nextLocationPathname.startsWith(toPathname) && nextLocationPathname.charAt(toPathname.length) === "/");
+    let renderProps = {
+      isActive,
+      isPending,
+      isTransitioning
+    };
     let ariaCurrent = isActive ? ariaCurrentProp : void 0;
     let className;
     if (typeof classNameProp === "function") {
-      className = classNameProp({
-        isActive,
-        isPending
-      });
+      className = classNameProp(renderProps);
     } else {
-      className = [classNameProp, isActive ? "active" : null, isPending ? "pending" : null].filter(Boolean).join(" ");
+      className = [classNameProp, isActive ? "active" : null, isPending ? "pending" : null, isTransitioning ? "transitioning" : null].filter(Boolean).join(" ");
     }
-    let style = typeof styleProp === "function" ? styleProp({
-      isActive,
-      isPending
-    }) : styleProp;
+    let style = typeof styleProp === "function" ? styleProp(renderProps) : styleProp;
     return /* @__PURE__ */ React3.createElement(Link, _extends3({}, rest, {
       "aria-current": ariaCurrent,
       className,
       ref,
       style,
-      to
-    }), typeof children === "function" ? children({
-      isActive,
-      isPending
-    }) : children);
+      to,
+      viewTransition
+    }), typeof children === "function" ? children(renderProps) : children);
   });
   if (true) {
     NavLink.displayName = "NavLink";
   }
-  var Form = /* @__PURE__ */ React3.forwardRef((props2, ref) => {
-    return /* @__PURE__ */ React3.createElement(FormImpl, _extends3({}, props2, {
-      ref
-    }));
-  });
-  if (true) {
-    Form.displayName = "Form";
-  }
-  var FormImpl = /* @__PURE__ */ React3.forwardRef((_ref6, forwardedRef) => {
+  var Form = /* @__PURE__ */ React3.forwardRef((_ref9, forwardedRef) => {
     let {
+      fetcherKey,
+      navigate,
       reloadDocument,
-      replace,
+      replace: replace2,
+      state,
       method = defaultMethod,
       action,
       onSubmit,
-      fetcherKey,
-      routeId,
-      relative
-    } = _ref6, props2 = _objectWithoutPropertiesLoose(_ref6, _excluded3);
-    let submit = useSubmitImpl(fetcherKey, routeId);
-    let formMethod = method.toLowerCase() === "get" ? "get" : "post";
+      relative,
+      preventScrollReset,
+      viewTransition
+    } = _ref9, props2 = _objectWithoutPropertiesLoose(_ref9, _excluded3);
+    let submit = useSubmit();
     let formAction = useFormAction(action, {
       relative
     });
+    let formMethod = method.toLowerCase() === "get" ? "get" : "post";
     let submitHandler = (event) => {
       onSubmit && onSubmit(event);
       if (event.defaultPrevented)
         return;
       event.preventDefault();
       let submitter = event.nativeEvent.submitter;
+      let submitMethod = (submitter == null ? void 0 : submitter.getAttribute("formmethod")) || method;
       submit(submitter || event.currentTarget, {
-        method,
-        replace,
-        relative
+        fetcherKey,
+        method: submitMethod,
+        navigate,
+        replace: replace2,
+        state,
+        relative,
+        preventScrollReset,
+        viewTransition
       });
     };
     return /* @__PURE__ */ React3.createElement("form", _extends3({
@@ -30048,11 +31039,11 @@
   if (true) {
     Form.displayName = "Form";
   }
-  function ScrollRestoration(_ref7) {
+  function ScrollRestoration(_ref10) {
     let {
       getKey,
       storageKey
-    } = _ref7;
+    } = _ref10;
     useScrollRestoration({
       getKey,
       storageKey
@@ -30062,13 +31053,41 @@
   if (true) {
     ScrollRestoration.displayName = "ScrollRestoration";
   }
+  var DataRouterHook2;
+  (function(DataRouterHook3) {
+    DataRouterHook3["UseScrollRestoration"] = "useScrollRestoration";
+    DataRouterHook3["UseSubmit"] = "useSubmit";
+    DataRouterHook3["UseSubmitFetcher"] = "useSubmitFetcher";
+    DataRouterHook3["UseFetcher"] = "useFetcher";
+    DataRouterHook3["useViewTransitionState"] = "useViewTransitionState";
+  })(DataRouterHook2 || (DataRouterHook2 = {}));
+  var DataRouterStateHook2;
+  (function(DataRouterStateHook3) {
+    DataRouterStateHook3["UseFetcher"] = "useFetcher";
+    DataRouterStateHook3["UseFetchers"] = "useFetchers";
+    DataRouterStateHook3["UseScrollRestoration"] = "useScrollRestoration";
+  })(DataRouterStateHook2 || (DataRouterStateHook2 = {}));
+  function getDataRouterConsoleError2(hookName) {
+    return hookName + " must be used within a data router.  See https://reactrouter.com/v6/routers/picking-a-router.";
+  }
+  function useDataRouterContext2(hookName) {
+    let ctx = React3.useContext(DataRouterContext);
+    !ctx ? true ? invariant(false, getDataRouterConsoleError2(hookName)) : invariant(false) : void 0;
+    return ctx;
+  }
+  function useDataRouterState2(hookName) {
+    let state = React3.useContext(DataRouterStateContext);
+    !state ? true ? invariant(false, getDataRouterConsoleError2(hookName)) : invariant(false) : void 0;
+    return state;
+  }
   function useLinkClickHandler(to, _temp) {
     let {
       target,
       replace: replaceProp,
       state,
       preventScrollReset,
-      relative
+      relative,
+      viewTransition
     } = _temp === void 0 ? {} : _temp;
     let navigate = useNavigate();
     let location2 = useLocation();
@@ -30078,153 +31097,217 @@
     return React3.useCallback((event) => {
       if (shouldProcessLinkClick(event, target)) {
         event.preventDefault();
-        let replace = replaceProp !== void 0 ? replaceProp : createPath(location2) === createPath(path);
+        let replace2 = replaceProp !== void 0 ? replaceProp : createPath(location2) === createPath(path);
         navigate(to, {
-          replace,
+          replace: replace2,
           state,
           preventScrollReset,
-          relative
+          relative,
+          viewTransition
         });
       }
-    }, [location2, navigate, path, replaceProp, state, target, to, preventScrollReset, relative]);
+    }, [location2, navigate, path, replaceProp, state, target, to, preventScrollReset, relative, viewTransition]);
   }
-  function useSubmitImpl(fetcherKey, routeId) {
-    let dataRouterContext = React3.useContext(DataRouterContext);
-    !dataRouterContext ? true ? invariant(false, "useSubmitImpl must be used within a Data Router") : invariant(false) : void 0;
+  function validateClientSideSubmission() {
+    if (typeof document === "undefined") {
+      throw new Error("You are calling submit during the server render. Try calling submit within a `useEffect` or callback instead.");
+    }
+  }
+  var fetcherId = 0;
+  var getUniqueFetcherId = () => "__" + String(++fetcherId) + "__";
+  function useSubmit() {
     let {
       router
-    } = dataRouterContext;
-    let defaultAction = useFormAction();
+    } = useDataRouterContext2(DataRouterHook2.UseSubmit);
+    let {
+      basename
+    } = React3.useContext(NavigationContext);
+    let currentRouteId = useRouteId();
     return React3.useCallback(function(target, options) {
       if (options === void 0) {
         options = {};
       }
-      if (typeof document === "undefined") {
-        throw new Error("You are calling submit during the server render. Try calling submit within a `useEffect` or callback instead.");
-      }
+      validateClientSideSubmission();
       let {
+        action,
         method,
         encType,
         formData,
-        url
-      } = getFormSubmissionInfo(target, defaultAction, options);
-      let href = url.pathname + url.search;
-      let opts = {
-        replace: options.replace,
-        formData,
-        formMethod: method,
-        formEncType: encType
-      };
-      if (fetcherKey) {
-        !(routeId != null) ? true ? invariant(false, "No routeId available for useFetcher()") : invariant(false) : void 0;
-        router.fetch(fetcherKey, routeId, href, opts);
+        body
+      } = getFormSubmissionInfo(target, basename);
+      if (options.navigate === false) {
+        let key = options.fetcherKey || getUniqueFetcherId();
+        router.fetch(key, currentRouteId, options.action || action, {
+          preventScrollReset: options.preventScrollReset,
+          formData,
+          body,
+          formMethod: options.method || method,
+          formEncType: options.encType || encType,
+          flushSync: options.flushSync
+        });
       } else {
-        router.navigate(href, opts);
+        router.navigate(options.action || action, {
+          preventScrollReset: options.preventScrollReset,
+          formData,
+          body,
+          formMethod: options.method || method,
+          formEncType: options.encType || encType,
+          replace: options.replace,
+          state: options.state,
+          fromRouteId: currentRouteId,
+          flushSync: options.flushSync,
+          viewTransition: options.viewTransition
+        });
       }
-    }, [defaultAction, router, fetcherKey, routeId]);
+    }, [router, basename, currentRouteId]);
   }
   function useFormAction(action, _temp2) {
     let {
       relative
     } = _temp2 === void 0 ? {} : _temp2;
+    let {
+      basename
+    } = React3.useContext(NavigationContext);
     let routeContext = React3.useContext(RouteContext);
     !routeContext ? true ? invariant(false, "useFormAction must be used inside a RouteContext") : invariant(false) : void 0;
     let [match2] = routeContext.matches.slice(-1);
-    let resolvedAction = action != null ? action : ".";
-    let path = useResolvedPath(resolvedAction, {
+    let path = _extends3({}, useResolvedPath(action ? action : ".", {
       relative
-    });
+    }));
     let location2 = useLocation();
     if (action == null) {
       path.search = location2.search;
-      path.hash = location2.hash;
-      if (match2.route.index) {
-        let params = new URLSearchParams(path.search);
+      let params = new URLSearchParams(path.search);
+      let indexValues = params.getAll("index");
+      let hasNakedIndexParam = indexValues.some((v) => v === "");
+      if (hasNakedIndexParam) {
         params.delete("index");
-        path.search = params.toString() ? "?" + params.toString() : "";
+        indexValues.filter((v) => v).forEach((v) => params.append("index", v));
+        let qs = params.toString();
+        path.search = qs ? "?" + qs : "";
       }
     }
     if ((!action || action === ".") && match2.route.index) {
       path.search = path.search ? path.search.replace(/^\?/, "?index&") : "?index";
     }
+    if (basename !== "/") {
+      path.pathname = path.pathname === "/" ? basename : joinPaths([basename, path.pathname]);
+    }
     return createPath(path);
   }
   var SCROLL_RESTORATION_STORAGE_KEY = "react-router-scroll-positions";
   var savedScrollPositions = {};
-  function useScrollRestoration(_temp3) {
+  function useScrollRestoration(_temp4) {
     let {
       getKey,
       storageKey
-    } = _temp3 === void 0 ? {} : _temp3;
-    let location2 = useLocation();
-    let matches = useMatches();
-    let navigation = useNavigation();
-    let dataRouterContext = React3.useContext(DataRouterContext);
-    !dataRouterContext ? true ? invariant(false, "useScrollRestoration must be used within a DataRouterContext") : invariant(false) : void 0;
+    } = _temp4 === void 0 ? {} : _temp4;
     let {
       router
-    } = dataRouterContext;
-    let state = React3.useContext(DataRouterStateContext);
-    !(router != null && state != null) ? true ? invariant(false, "useScrollRestoration must be used within a DataRouterStateContext") : invariant(false) : void 0;
+    } = useDataRouterContext2(DataRouterHook2.UseScrollRestoration);
     let {
       restoreScrollPosition,
       preventScrollReset
-    } = state;
+    } = useDataRouterState2(DataRouterStateHook2.UseScrollRestoration);
+    let {
+      basename
+    } = React3.useContext(NavigationContext);
+    let location2 = useLocation();
+    let matches = useMatches();
+    let navigation = useNavigation();
     React3.useEffect(() => {
       window.history.scrollRestoration = "manual";
       return () => {
         window.history.scrollRestoration = "auto";
       };
     }, []);
-    useBeforeUnload(React3.useCallback(() => {
+    usePageHide(React3.useCallback(() => {
       if (navigation.state === "idle") {
         let key = (getKey ? getKey(location2, matches) : null) || location2.key;
         savedScrollPositions[key] = window.scrollY;
       }
-      sessionStorage.setItem(storageKey || SCROLL_RESTORATION_STORAGE_KEY, JSON.stringify(savedScrollPositions));
+      try {
+        sessionStorage.setItem(storageKey || SCROLL_RESTORATION_STORAGE_KEY, JSON.stringify(savedScrollPositions));
+      } catch (error) {
+        true ? warning(false, "Failed to save scroll positions in sessionStorage, <ScrollRestoration /> will not work properly (" + error + ").") : void 0;
+      }
       window.history.scrollRestoration = "auto";
     }, [storageKey, getKey, navigation.state, location2, matches]));
-    React3.useLayoutEffect(() => {
-      try {
-        let sessionPositions = sessionStorage.getItem(storageKey || SCROLL_RESTORATION_STORAGE_KEY);
-        if (sessionPositions) {
-          savedScrollPositions = JSON.parse(sessionPositions);
+    if (typeof document !== "undefined") {
+      React3.useLayoutEffect(() => {
+        try {
+          let sessionPositions = sessionStorage.getItem(storageKey || SCROLL_RESTORATION_STORAGE_KEY);
+          if (sessionPositions) {
+            savedScrollPositions = JSON.parse(sessionPositions);
+          }
+        } catch (e) {
         }
-      } catch (e) {
-      }
-    }, [storageKey]);
-    React3.useLayoutEffect(() => {
-      let disableScrollRestoration = router == null ? void 0 : router.enableScrollRestoration(savedScrollPositions, () => window.scrollY, getKey);
-      return () => disableScrollRestoration && disableScrollRestoration();
-    }, [router, getKey]);
-    React3.useLayoutEffect(() => {
-      if (restoreScrollPosition === false) {
-        return;
-      }
-      if (typeof restoreScrollPosition === "number") {
-        window.scrollTo(0, restoreScrollPosition);
-        return;
-      }
-      if (location2.hash) {
-        let el = document.getElementById(location2.hash.slice(1));
-        if (el) {
-          el.scrollIntoView();
+      }, [storageKey]);
+      React3.useLayoutEffect(() => {
+        let getKeyWithoutBasename = getKey && basename !== "/" ? (location3, matches2) => getKey(
+          // Strip the basename to match useLocation()
+          _extends3({}, location3, {
+            pathname: stripBasename(location3.pathname, basename) || location3.pathname
+          }),
+          matches2
+        ) : getKey;
+        let disableScrollRestoration = router == null ? void 0 : router.enableScrollRestoration(savedScrollPositions, () => window.scrollY, getKeyWithoutBasename);
+        return () => disableScrollRestoration && disableScrollRestoration();
+      }, [router, basename, getKey]);
+      React3.useLayoutEffect(() => {
+        if (restoreScrollPosition === false) {
           return;
         }
-      }
-      if (preventScrollReset === true) {
-        return;
-      }
-      window.scrollTo(0, 0);
-    }, [location2, restoreScrollPosition, preventScrollReset]);
+        if (typeof restoreScrollPosition === "number") {
+          window.scrollTo(0, restoreScrollPosition);
+          return;
+        }
+        if (location2.hash) {
+          let el = document.getElementById(decodeURIComponent(location2.hash.slice(1)));
+          if (el) {
+            el.scrollIntoView();
+            return;
+          }
+        }
+        if (preventScrollReset === true) {
+          return;
+        }
+        window.scrollTo(0, 0);
+      }, [location2, restoreScrollPosition, preventScrollReset]);
+    }
   }
-  function useBeforeUnload(callback) {
+  function usePageHide(callback, options) {
+    let {
+      capture
+    } = options || {};
     React3.useEffect(() => {
-      window.addEventListener("beforeunload", callback);
+      let opts = capture != null ? {
+        capture
+      } : void 0;
+      window.addEventListener("pagehide", callback, opts);
       return () => {
-        window.removeEventListener("beforeunload", callback);
+        window.removeEventListener("pagehide", callback, opts);
       };
-    }, [callback]);
+    }, [callback, capture]);
+  }
+  function useViewTransitionState(to, opts) {
+    if (opts === void 0) {
+      opts = {};
+    }
+    let vtContext = React3.useContext(ViewTransitionContext);
+    !(vtContext != null) ? true ? invariant(false, "`useViewTransitionState` must be used within `react-router-dom`'s `RouterProvider`.  Did you accidentally import `RouterProvider` from `react-router`?") : invariant(false) : void 0;
+    let {
+      basename
+    } = useDataRouterContext2(DataRouterHook2.useViewTransitionState);
+    let path = useResolvedPath(to, {
+      relative: opts.relative
+    });
+    if (!vtContext.isTransitioning) {
+      return false;
+    }
+    let currentPath = stripBasename(vtContext.currentLocation.pathname, basename) || vtContext.currentLocation.pathname;
+    let nextPath = stripBasename(vtContext.nextLocation.pathname, basename) || vtContext.nextLocation.pathname;
+    return matchPath(path.pathname, nextPath) != null || matchPath(path.pathname, currentPath) != null;
   }
 
   // src/components/App.tsx
@@ -30392,7 +31475,7 @@
         console.warn("Starting with v2.0.0-beta.1 date-fns doesn't accept strings as date arguments. Please use `parseISO` to parse strings. See: https://github.com/date-fns/date-fns/blob/master/docs/upgradeGuide.md#string-arguments");
         console.warn(new Error().stack);
       }
-      return new Date(NaN);
+      return /* @__PURE__ */ new Date(NaN);
     }
   }
 
@@ -30508,11 +31591,11 @@
     requiredArgs(1, arguments);
     var date = toDate(dirtyDate);
     var year = date.getUTCFullYear();
-    var fourthOfJanuaryOfNextYear = new Date(0);
+    var fourthOfJanuaryOfNextYear = /* @__PURE__ */ new Date(0);
     fourthOfJanuaryOfNextYear.setUTCFullYear(year + 1, 0, 4);
     fourthOfJanuaryOfNextYear.setUTCHours(0, 0, 0, 0);
     var startOfNextYear = startOfUTCISOWeek(fourthOfJanuaryOfNextYear);
-    var fourthOfJanuaryOfThisYear = new Date(0);
+    var fourthOfJanuaryOfThisYear = /* @__PURE__ */ new Date(0);
     fourthOfJanuaryOfThisYear.setUTCFullYear(year, 0, 4);
     fourthOfJanuaryOfThisYear.setUTCHours(0, 0, 0, 0);
     var startOfThisYear = startOfUTCISOWeek(fourthOfJanuaryOfThisYear);
@@ -30529,7 +31612,7 @@
   function startOfUTCISOWeekYear(dirtyDate) {
     requiredArgs(1, arguments);
     var year = getUTCISOWeekYear(dirtyDate);
-    var fourthOfJanuary = new Date(0);
+    var fourthOfJanuary = /* @__PURE__ */ new Date(0);
     fourthOfJanuary.setUTCFullYear(year, 0, 4);
     fourthOfJanuary.setUTCHours(0, 0, 0, 0);
     var date = startOfUTCISOWeek(fourthOfJanuary);
@@ -30581,11 +31664,11 @@
     if (!(firstWeekContainsDate >= 1 && firstWeekContainsDate <= 7)) {
       throw new RangeError("firstWeekContainsDate must be between 1 and 7 inclusively");
     }
-    var firstWeekOfNextYear = new Date(0);
+    var firstWeekOfNextYear = /* @__PURE__ */ new Date(0);
     firstWeekOfNextYear.setUTCFullYear(year + 1, 0, firstWeekContainsDate);
     firstWeekOfNextYear.setUTCHours(0, 0, 0, 0);
     var startOfNextYear = startOfUTCWeek(firstWeekOfNextYear, options);
-    var firstWeekOfThisYear = new Date(0);
+    var firstWeekOfThisYear = /* @__PURE__ */ new Date(0);
     firstWeekOfThisYear.setUTCFullYear(year, 0, firstWeekContainsDate);
     firstWeekOfThisYear.setUTCHours(0, 0, 0, 0);
     var startOfThisYear = startOfUTCWeek(firstWeekOfThisYear, options);
@@ -30605,7 +31688,7 @@
     var defaultOptions2 = getDefaultOptions();
     var firstWeekContainsDate = toInteger((_ref = (_ref2 = (_ref3 = (_options$firstWeekCon = options === null || options === void 0 ? void 0 : options.firstWeekContainsDate) !== null && _options$firstWeekCon !== void 0 ? _options$firstWeekCon : options === null || options === void 0 ? void 0 : (_options$locale = options.locale) === null || _options$locale === void 0 ? void 0 : (_options$locale$optio = _options$locale.options) === null || _options$locale$optio === void 0 ? void 0 : _options$locale$optio.firstWeekContainsDate) !== null && _ref3 !== void 0 ? _ref3 : defaultOptions2.firstWeekContainsDate) !== null && _ref2 !== void 0 ? _ref2 : (_defaultOptions$local = defaultOptions2.locale) === null || _defaultOptions$local === void 0 ? void 0 : (_defaultOptions$local2 = _defaultOptions$local.options) === null || _defaultOptions$local2 === void 0 ? void 0 : _defaultOptions$local2.firstWeekContainsDate) !== null && _ref !== void 0 ? _ref : 1);
     var year = getUTCWeekYear(dirtyDate, options);
-    var firstWeek = new Date(0);
+    var firstWeek = /* @__PURE__ */ new Date(0);
     firstWeek.setUTCFullYear(year, 0, firstWeekContainsDate);
     firstWeek.setUTCHours(0, 0, 0, 0);
     var date = startOfUTCWeek(firstWeek, options);
@@ -30635,18 +31718,22 @@
   // node_modules/date-fns/esm/_lib/format/lightFormatters/index.js
   init_react_shim();
   var formatters = {
+    // Year
     y: function(date, token) {
       var signedYear = date.getUTCFullYear();
       var year = signedYear > 0 ? signedYear : 1 - signedYear;
       return addLeadingZeros(token === "yy" ? year % 100 : year, token.length);
     },
+    // Month
     M: function(date, token) {
       var month = date.getUTCMonth();
       return token === "M" ? String(month + 1) : addLeadingZeros(month + 1, 2);
     },
+    // Day of the month
     d: function(date, token) {
       return addLeadingZeros(date.getUTCDate(), token.length);
     },
+    // AM or PM
     a: function(date, token) {
       var dayPeriodEnumValue = date.getUTCHours() / 12 >= 1 ? "pm" : "am";
       switch (token) {
@@ -30662,18 +31749,23 @@
           return dayPeriodEnumValue === "am" ? "a.m." : "p.m.";
       }
     },
+    // Hour [1-12]
     h: function(date, token) {
       return addLeadingZeros(date.getUTCHours() % 12 || 12, token.length);
     },
+    // Hour [0-23]
     H: function(date, token) {
       return addLeadingZeros(date.getUTCHours(), token.length);
     },
+    // Minute
     m: function(date, token) {
       return addLeadingZeros(date.getUTCMinutes(), token.length);
     },
+    // Second
     s: function(date, token) {
       return addLeadingZeros(date.getUTCSeconds(), token.length);
     },
+    // Fraction of second
     S: function(date, token) {
       var numberOfDigits = token.length;
       var milliseconds = date.getUTCMilliseconds();
@@ -30695,6 +31787,7 @@
     night: "night"
   };
   var formatters2 = {
+    // Era
     G: function(date, token, localize2) {
       var era = date.getUTCFullYear() > 0 ? 1 : 0;
       switch (token) {
@@ -30715,6 +31808,7 @@
           });
       }
     },
+    // Year
     y: function(date, token, localize2) {
       if (token === "yo") {
         var signedYear = date.getUTCFullYear();
@@ -30725,6 +31819,7 @@
       }
       return lightFormatters_default.y(date, token);
     },
+    // Local week-numbering year
     Y: function(date, token, localize2, options) {
       var signedWeekYear = getUTCWeekYear(date, options);
       var weekYear = signedWeekYear > 0 ? signedWeekYear : 1 - signedWeekYear;
@@ -30739,14 +31834,25 @@
       }
       return addLeadingZeros(weekYear, token.length);
     },
+    // ISO week-numbering year
     R: function(date, token) {
       var isoWeekYear = getUTCISOWeekYear(date);
       return addLeadingZeros(isoWeekYear, token.length);
     },
+    // Extended year. This is a single number designating the year of this calendar system.
+    // The main difference between `y` and `u` localizers are B.C. years:
+    // | Year | `y` | `u` |
+    // |------|-----|-----|
+    // | AC 1 |   1 |   1 |
+    // | BC 1 |   1 |   0 |
+    // | BC 2 |   2 |  -1 |
+    // Also `yy` always returns the last two digits of a year,
+    // while `uu` pads single digit years to 2 characters and returns other years unchanged.
     u: function(date, token) {
       var year = date.getUTCFullYear();
       return addLeadingZeros(year, token.length);
     },
+    // Quarter
     Q: function(date, token, localize2) {
       var quarter = Math.ceil((date.getUTCMonth() + 1) / 3);
       switch (token) {
@@ -30776,6 +31882,7 @@
           });
       }
     },
+    // Stand-alone quarter
     q: function(date, token, localize2) {
       var quarter = Math.ceil((date.getUTCMonth() + 1) / 3);
       switch (token) {
@@ -30805,6 +31912,7 @@
           });
       }
     },
+    // Month
     M: function(date, token, localize2) {
       var month = date.getUTCMonth();
       switch (token) {
@@ -30833,6 +31941,7 @@
           });
       }
     },
+    // Stand-alone month
     L: function(date, token, localize2) {
       var month = date.getUTCMonth();
       switch (token) {
@@ -30862,6 +31971,7 @@
           });
       }
     },
+    // Local week of year
     w: function(date, token, localize2, options) {
       var week = getUTCWeek(date, options);
       if (token === "wo") {
@@ -30871,6 +31981,7 @@
       }
       return addLeadingZeros(week, token.length);
     },
+    // ISO week of year
     I: function(date, token, localize2) {
       var isoWeek = getUTCISOWeek(date);
       if (token === "Io") {
@@ -30880,6 +31991,7 @@
       }
       return addLeadingZeros(isoWeek, token.length);
     },
+    // Day of the month
     d: function(date, token, localize2) {
       if (token === "do") {
         return localize2.ordinalNumber(date.getUTCDate(), {
@@ -30888,6 +32000,7 @@
       }
       return lightFormatters_default.d(date, token);
     },
+    // Day of year
     D: function(date, token, localize2) {
       var dayOfYear = getUTCDayOfYear(date);
       if (token === "Do") {
@@ -30897,6 +32010,7 @@
       }
       return addLeadingZeros(dayOfYear, token.length);
     },
+    // Day of week
     E: function(date, token, localize2) {
       var dayOfWeek = date.getUTCDay();
       switch (token) {
@@ -30925,6 +32039,7 @@
           });
       }
     },
+    // Local day of week
     e: function(date, token, localize2, options) {
       var dayOfWeek = date.getUTCDay();
       var localDayOfWeek = (dayOfWeek - options.weekStartsOn + 8) % 7 || 7;
@@ -30960,6 +32075,7 @@
           });
       }
     },
+    // Stand-alone local day of week
     c: function(date, token, localize2, options) {
       var dayOfWeek = date.getUTCDay();
       var localDayOfWeek = (dayOfWeek - options.weekStartsOn + 8) % 7 || 7;
@@ -30995,6 +32111,7 @@
           });
       }
     },
+    // ISO day of week
     i: function(date, token, localize2) {
       var dayOfWeek = date.getUTCDay();
       var isoDayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek;
@@ -31030,6 +32147,7 @@
           });
       }
     },
+    // AM or PM
     a: function(date, token, localize2) {
       var hours = date.getUTCHours();
       var dayPeriodEnumValue = hours / 12 >= 1 ? "pm" : "am";
@@ -31058,6 +32176,7 @@
           });
       }
     },
+    // AM, PM, midnight, noon
     b: function(date, token, localize2) {
       var hours = date.getUTCHours();
       var dayPeriodEnumValue;
@@ -31093,6 +32212,7 @@
           });
       }
     },
+    // in the morning, in the afternoon, in the evening, at night
     B: function(date, token, localize2) {
       var hours = date.getUTCHours();
       var dayPeriodEnumValue;
@@ -31126,6 +32246,7 @@
           });
       }
     },
+    // Hour [1-12]
     h: function(date, token, localize2) {
       if (token === "ho") {
         var hours = date.getUTCHours() % 12;
@@ -31137,6 +32258,7 @@
       }
       return lightFormatters_default.h(date, token);
     },
+    // Hour [0-23]
     H: function(date, token, localize2) {
       if (token === "Ho") {
         return localize2.ordinalNumber(date.getUTCHours(), {
@@ -31145,6 +32267,7 @@
       }
       return lightFormatters_default.H(date, token);
     },
+    // Hour [0-11]
     K: function(date, token, localize2) {
       var hours = date.getUTCHours() % 12;
       if (token === "Ko") {
@@ -31154,6 +32277,7 @@
       }
       return addLeadingZeros(hours, token.length);
     },
+    // Hour [1-24]
     k: function(date, token, localize2) {
       var hours = date.getUTCHours();
       if (hours === 0)
@@ -31165,6 +32289,7 @@
       }
       return addLeadingZeros(hours, token.length);
     },
+    // Minute
     m: function(date, token, localize2) {
       if (token === "mo") {
         return localize2.ordinalNumber(date.getUTCMinutes(), {
@@ -31173,6 +32298,7 @@
       }
       return lightFormatters_default.m(date, token);
     },
+    // Second
     s: function(date, token, localize2) {
       if (token === "so") {
         return localize2.ordinalNumber(date.getUTCSeconds(), {
@@ -31181,9 +32307,11 @@
       }
       return lightFormatters_default.s(date, token);
     },
+    // Fraction of second
     S: function(date, token) {
       return lightFormatters_default.S(date, token);
     },
+    // Timezone (ISO-8601. If offset is 0, output is always `'Z'`)
     X: function(date, token, _localize, options) {
       var originalDate = options._originalDate || date;
       var timezoneOffset = originalDate.getTimezoneOffset();
@@ -31202,6 +32330,7 @@
           return formatTimezone(timezoneOffset, ":");
       }
     },
+    // Timezone (ISO-8601. If offset is 0, output is `'+00:00'` or equivalent)
     x: function(date, token, _localize, options) {
       var originalDate = options._originalDate || date;
       var timezoneOffset = originalDate.getTimezoneOffset();
@@ -31217,6 +32346,7 @@
           return formatTimezone(timezoneOffset, ":");
       }
     },
+    // Timezone (GMT)
     O: function(date, token, _localize, options) {
       var originalDate = options._originalDate || date;
       var timezoneOffset = originalDate.getTimezoneOffset();
@@ -31230,6 +32360,7 @@
           return "GMT" + formatTimezone(timezoneOffset, ":");
       }
     },
+    // Timezone (specific non-location)
     z: function(date, token, _localize, options) {
       var originalDate = options._originalDate || date;
       var timezoneOffset = originalDate.getTimezoneOffset();
@@ -31243,11 +32374,13 @@
           return "GMT" + formatTimezone(timezoneOffset, ":");
       }
     },
+    // Seconds timestamp
     t: function(date, token, _localize, options) {
       var originalDate = options._originalDate || date;
       var timestamp = Math.floor(originalDate.getTime() / 1e3);
       return addLeadingZeros(timestamp, token.length);
     },
+    // Milliseconds timestamp
     T: function(date, token, _localize, options) {
       var originalDate = options._originalDate || date;
       var timestamp = originalDate.getTime();
@@ -32027,7 +33160,7 @@
       if (flags.timestampIsSet) {
         return date;
       }
-      var convertedDate = new Date(0);
+      var convertedDate = /* @__PURE__ */ new Date(0);
       convertedDate.setFullYear(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
       convertedDate.setHours(date.getUTCHours(), date.getUTCMinutes(), date.getUTCSeconds(), date.getUTCMilliseconds());
       return convertedDate;
@@ -32129,24 +33262,42 @@
   init_react_shim();
   var numericPatterns = {
     month: /^(1[0-2]|0?\d)/,
+    // 0 to 12
     date: /^(3[0-1]|[0-2]?\d)/,
+    // 0 to 31
     dayOfYear: /^(36[0-6]|3[0-5]\d|[0-2]?\d?\d)/,
+    // 0 to 366
     week: /^(5[0-3]|[0-4]?\d)/,
+    // 0 to 53
     hour23h: /^(2[0-3]|[0-1]?\d)/,
+    // 0 to 23
     hour24h: /^(2[0-4]|[0-1]?\d)/,
+    // 0 to 24
     hour11h: /^(1[0-1]|0?\d)/,
+    // 0 to 11
     hour12h: /^(1[0-2]|0?\d)/,
+    // 0 to 12
     minute: /^[0-5]?\d/,
+    // 0 to 59
     second: /^[0-5]?\d/,
+    // 0 to 59
     singleDigit: /^\d/,
+    // 0 to 9
     twoDigits: /^\d{1,2}/,
+    // 0 to 99
     threeDigits: /^\d{1,3}/,
+    // 0 to 999
     fourDigits: /^\d{1,4}/,
+    // 0 to 9999
     anyDigitsSigned: /^-?\d+/,
     singleDigitSigned: /^-?\d/,
+    // 0 to 9, -0 to -9
     twoDigitsSigned: /^-?\d{1,2}/,
+    // 0 to 99, -0 to -99
     threeDigitsSigned: /^-?\d{1,3}/,
+    // 0 to 999, -0 to -999
     fourDigitsSigned: /^-?\d{1,4}/
+    // 0 to 9999, -0 to -9999
   };
   var timezonePatterns = {
     basicOptionalMinutes: /^([+-])(\d{2})(\d{2})?|Z/,
@@ -32388,7 +33539,7 @@
       return parseNDigitsSigned(token.length, dateString);
     }
     set(_date, _flags, value) {
-      var firstWeekOfYear = new Date(0);
+      var firstWeekOfYear = /* @__PURE__ */ new Date(0);
       firstWeekOfYear.setUTCFullYear(value, 0, 4);
       firstWeekOfYear.setUTCHours(0, 0, 0, 0);
       return startOfUTCISOWeek(firstWeekOfYear);
@@ -33843,7 +34994,7 @@
       if (dateString === "") {
         return toDate(dirtyReferenceDate);
       } else {
-        return new Date(NaN);
+        return /* @__PURE__ */ new Date(NaN);
       }
     }
     var subFnOptions = {
@@ -33890,7 +35041,7 @@
         if (!parseResult) {
           token = _token;
           return {
-            v: new Date(NaN)
+            v: /* @__PURE__ */ new Date(NaN)
           };
         }
         setters.push(parseResult.setter);
@@ -33909,7 +35060,7 @@
         } else {
           token = _token;
           return {
-            v: new Date(NaN)
+            v: /* @__PURE__ */ new Date(NaN)
           };
         }
       }
@@ -33921,7 +35072,7 @@
         return _ret.v;
     }
     if (dateString.length > 0 && notWhitespaceRegExp.test(dateString)) {
-      return new Date(NaN);
+      return /* @__PURE__ */ new Date(NaN);
     }
     var uniquePrioritySetters = setters.map(function(setter2) {
       return setter2.priority;
@@ -33940,13 +35091,13 @@
     });
     var date = toDate(dirtyReferenceDate);
     if (isNaN(date.getTime())) {
-      return new Date(NaN);
+      return /* @__PURE__ */ new Date(NaN);
     }
     var utcDate = subMilliseconds(date, getTimezoneOffsetInMilliseconds(date));
     var flags = {};
     for (var setter of uniquePrioritySetters) {
       if (!setter.validate(utcDate, subFnOptions)) {
-        return new Date(NaN);
+        return /* @__PURE__ */ new Date(NaN);
       }
       var result = setter.set(utcDate, flags, subFnOptions);
       if (Array.isArray(result)) {
@@ -34033,12 +35184,12 @@
     const setValue = (type2, val) => {
       const newValue = new Date(value);
       if (type2 === "date") {
-        const newDate = parse(val, ISO_DATE_FORMAT, new Date());
+        const newDate = parse(val, ISO_DATE_FORMAT, /* @__PURE__ */ new Date());
         newValue.setDate(newDate.getDate());
         newValue.setMonth(newDate.getMonth());
         newValue.setFullYear(newDate.getFullYear());
       } else {
-        const newDate = parse(val, ISO_TIME_FORMAT, new Date());
+        const newDate = parse(val, ISO_TIME_FORMAT, /* @__PURE__ */ new Date());
         newValue.setHours(newDate.getHours());
         newValue.setMinutes(newDate.getMinutes());
       }
@@ -34600,6 +35751,14 @@
               return JSON.stringify(res, replacer, space);
             });
           }
+          /**
+           * Also sync but throws on non-sync result.
+           * @param {Any} obj
+           * @param {JSONReplacer|string[]} replacer
+           * @param {number|string} space
+           * @param {object} opts
+           * @returns {string}
+           */
         }, {
           key: "stringifySync",
           value: function stringifySync(obj, replacer, space, opts) {
@@ -34609,6 +35768,14 @@
               sync: true
             }));
           }
+          /**
+           *
+           * @param {Any} obj
+           * @param {JSONReplacer|string[]} replacer
+           * @param {number|string} space
+           * @param {object} opts
+           * @returns {Promise<string>}
+           */
         }, {
           key: "stringifyAsync",
           value: function stringifyAsync(obj, replacer, space, opts) {
@@ -34618,6 +35785,15 @@
               sync: false
             }));
           }
+          /**
+           * Parse Typeson back into an obejct.
+           * Initial arguments works identical to those of `JSON.parse()`.
+           * @param {string} text
+           * @param {function} reviver This JSON reviver has nothing to do with
+           *   our revivers.
+           * @param {object} opts
+           * @returns {external:JSON}
+           */
         }, {
           key: "parse",
           value: function parse2(text, reviver, opts) {
@@ -34626,6 +35802,14 @@
             });
             return this.revive(JSON.parse(text, reviver), opts);
           }
+          /**
+          * Also sync but throws on non-sync result.
+          * @param {string} text
+          * @param {function} reviver This JSON reviver has nothing to do with
+          *   our revivers.
+          * @param {object} opts
+          * @returns {external:JSON}
+          */
         }, {
           key: "parseSync",
           value: function parseSync(text, reviver, opts) {
@@ -34635,6 +35819,13 @@
               sync: true
             }));
           }
+          /**
+          * @param {string} text
+          * @param {function} reviver This JSON reviver has nothing to do with
+          *   our revivers.
+          * @param {object} opts
+          * @returns {Promise} Resolves to `external:JSON`
+          */
         }, {
           key: "parseAsync",
           value: function parseAsync(text, reviver, opts) {
@@ -34644,6 +35835,13 @@
               sync: false
             }));
           }
+          /**
+           *
+           * @param {Any} obj
+           * @param {object} stateObj
+           * @param {object} [opts={}]
+           * @returns {string[]|false}
+           */
         }, {
           key: "specialTypeNames",
           value: function specialTypeNames(obj, stateObj) {
@@ -34651,6 +35849,13 @@
             opts.returnTypeNames = true;
             return this.encapsulate(obj, stateObj, opts);
           }
+          /**
+           *
+           * @param {Any} obj
+           * @param {PlainObject} stateObj
+           * @param {PlainObject} [opts={}]
+           * @returns {Promise|GenericArray|PlainObject|string|false}
+           */
         }, {
           key: "rootTypeName",
           value: function rootTypeName(obj, stateObj) {
@@ -34658,6 +35863,16 @@
             opts.iterateNone = true;
             return this.encapsulate(obj, stateObj, opts);
           }
+          /**
+           * Encapsulate a complex object into a plain Object by replacing
+           * registered types with plain objects representing the types data.
+           *
+           * This method is used internally by `Typeson.stringify()`.
+           * @param {Any} obj - Object to encapsulate.
+           * @param {PlainObject} stateObj
+           * @param {PlainObject} opts
+           * @returns {Promise|GenericArray|PlainObject|string|false}
+           */
         }, {
           key: "encapsulate",
           value: function encapsulate(obj, stateObj, opts) {
@@ -34681,7 +35896,9 @@
                 if (opts.returnTypeNames) {
                   return _toConsumableArray(new Set(typeNames));
                 }
-                if (!ret2 || !isPlainObject(ret2) || hasOwn$1.call(ret2, "$types")) {
+                if (!ret2 || !isPlainObject(ret2) || // Also need to handle if this is an object with its
+                //   own `$types` property (to avoid ambiguity)
+                hasOwn$1.call(ret2, "$types")) {
                   ret2 = {
                     $: ret2,
                     $types: {
@@ -34813,7 +36030,7 @@
                   if (stateObj2.replaced) {
                     ret2 = value;
                   } else {
-                    ret2 = replace(keypath, value, stateObj2, promisesData, false, resolvingTypesonPromise, runObserver);
+                    ret2 = replace2(keypath, value, stateObj2, promisesData, false, resolvingTypesonPromise, runObserver);
                   }
                   if (ret2 !== value) {
                     observerData = {
@@ -34853,7 +36070,15 @@
               }
               var isPlainObj = isPlainObject(value);
               var isArr = isArray2(value);
-              var replaced = (isPlainObj || isArr) && (!that.plainObjectReplacers.length || stateObj2.replaced) || stateObj2.iterateIn ? value : replace(keypath, value, stateObj2, promisesData, isPlainObj || isArr, null, runObserver);
+              var replaced = (
+                // Running replace will cause infinite loop as will test
+                //   positive again
+                (isPlainObj || isArr) && (!that.plainObjectReplacers.length || stateObj2.replaced) || stateObj2.iterateIn ? (
+                  // Optimization: if plain object and no plain-object
+                  //   replacers, don't try finding a replacer
+                  value
+                ) : replace2(keypath, value, stateObj2, promisesData, isPlainObj || isArr, null, runObserver)
+              );
               var clone;
               if (replaced !== value) {
                 ret2 = replaced;
@@ -34966,7 +36191,7 @@
               }
               return clone;
             }
-            function replace(keypath, value, stateObj2, promisesData, plainObject, resolvingTypesonPromise, runObserver) {
+            function replace2(keypath, value, stateObj2, promisesData, plainObject, resolvingTypesonPromise, runObserver) {
               var replacers = plainObject ? that.plainObjectReplacers : that.nonplainObjectReplacers;
               var i = replacers.length;
               while (i--) {
@@ -35006,6 +36231,13 @@
               throw new TypeError("Async method requested but sync result obtained");
             }() : opts.stringification && sync ? [finish(ret)] : sync ? finish(ret) : Promise.resolve(finish(ret));
           }
+          /**
+           * Also sync but throws on non-sync result.
+           * @param {*} obj
+           * @param {object} stateObj
+           * @param {object} opts
+           * @returns {*}
+           */
         }, {
           key: "encapsulateSync",
           value: function encapsulateSync(obj, stateObj, opts) {
@@ -35015,6 +36247,12 @@
               sync: true
             }));
           }
+          /**
+           * @param {*} obj
+           * @param {object} stateObj
+           * @param {object} opts
+           * @returns {*}
+           */
         }, {
           key: "encapsulateAsync",
           value: function encapsulateAsync(obj, stateObj, opts) {
@@ -35024,6 +36262,16 @@
               sync: false
             }));
           }
+          /**
+           * Revive an encapsulated object.
+           * This method is used internally by `Typeson.parse()`.
+           * @param {object} obj - Object to revive. If it has `$types` member, the
+           *   properties that are listed there will be replaced with its true type
+           *   instead of just plain objects.
+           * @param {object} opts
+           * @throws TypeError If mismatch between sync/async type and result
+           * @returns {Promise|*} If async, returns a Promise that resolves to `*`
+           */
         }, {
           key: "revive",
           value: function revive(obj, opts) {
@@ -35108,6 +36356,7 @@
                   return void 0;
                 },
                 void 0
+                // This argument must be explicit
               );
             }
             var revivalPromises = [];
@@ -35182,6 +36431,7 @@
               if (revivalPromises.length) {
                 ret = TypesonPromise.resolve(ret).then(function(r) {
                   return TypesonPromise.all([
+                    // May be a TypesonPromise or not
                     r
                   ].concat(revivalPromises));
                 }).then(function(_ref9) {
@@ -35196,6 +36446,12 @@
               throw new TypeError("Async method requested but sync result obtained");
             }() : sync ? checkUndefined(ret) : Promise.resolve(checkUndefined(ret));
           }
+          /**
+           * Also sync but throws on non-sync result.
+           * @param {Any} obj
+           * @param {object} opts
+           * @returns {Any}
+           */
         }, {
           key: "reviveSync",
           value: function reviveSync(obj, opts) {
@@ -35205,6 +36461,11 @@
               sync: true
             }));
           }
+          /**
+          * @param {Any} obj
+          * @param {object} opts
+          * @returns {Promise} Resolves to `*`
+          */
         }, {
           key: "reviveAsync",
           value: function reviveAsync(obj, opts) {
@@ -35214,6 +36475,15 @@
               sync: false
             }));
           }
+          /**
+           * Register types.
+           * For examples on how to use this method, see
+           *   {@link https://github.com/dfahlander/typeson-registry/tree/master/types}.
+           * @param {object.<string,Function[]>[]} typeSpecSets - Types and
+           *   their functions [test, encapsulate, revive];
+           * @param {object} opts
+           * @returns {Typeson}
+           */
         }, {
           key: "register",
           value: function register(typeSpecSets, opts) {
@@ -35247,7 +36517,7 @@
                     test: function test2(x) {
                       return x && x.constructor === Class;
                     },
-                    replace: function replace2(x) {
+                    replace: function replace3(x) {
                       return _objectSpread2({}, x);
                     },
                     revive: function revive2(x) {
@@ -35255,10 +36525,10 @@
                     }
                   };
                 } else if (isArray2(spec)) {
-                  var _spec = spec, _spec2 = _slicedToArray(_spec, 3), test = _spec2[0], replace = _spec2[1], revive = _spec2[2];
+                  var _spec = spec, _spec2 = _slicedToArray(_spec, 3), test = _spec2[0], replace2 = _spec2[1], revive = _spec2[2];
                   spec = {
                     test,
-                    replace,
+                    replace: replace2,
                     revive
                   };
                 }
@@ -35650,7 +36920,7 @@
               d2(Object.assign(n3 || g2, { keypath: t3, value: r3, cyclic: i3, stateObj: u2, promisesData: s3, resolvingTypesonPromise: v3, awaitingTypesonPromise: hasConstructorOf(r3, e) }, { type: o2 }));
             } : null;
             if (["string", "boolean", "number", "undefined"].includes(m2))
-              return void 0 === r3 || Number.isNaN(r3) || r3 === Number.NEGATIVE_INFINITY || r3 === Number.POSITIVE_INFINITY ? (h3 = u2.replaced ? r3 : replace(t3, r3, u2, s3, false, v3, O2)) !== r3 && (g2 = { replaced: h3 }) : h3 = r3, O2 && O2(), h3;
+              return void 0 === r3 || Number.isNaN(r3) || r3 === Number.NEGATIVE_INFINITY || r3 === Number.POSITIVE_INFINITY ? (h3 = u2.replaced ? r3 : replace2(t3, r3, u2, s3, false, v3, O2)) !== r3 && (g2 = { replaced: h3 }) : h3 = r3, O2 && O2(), h3;
             if (null === r3)
               return O2 && O2(), r3;
             if (i3 && !u2.iterateIn && !u2.iterateUnsetNumeric && r3 && "object" === _typeof(r3)) {
@@ -35659,7 +36929,7 @@
                 return l2[t3] = "#", O2 && O2({ cyclicKeypath: y2[_2] }), "#" + y2[_2];
               true === i3 && (p2.push(r3), y2.push(t3));
             }
-            var j2, S2 = isPlainObject(r3), T2 = a(r3), w2 = (S2 || T2) && (!f2.plainObjectReplacers.length || u2.replaced) || u2.iterateIn ? r3 : replace(t3, r3, u2, s3, S2 || T2, null, O2);
+            var j2, S2 = isPlainObject(r3), T2 = a(r3), w2 = (S2 || T2) && (!f2.plainObjectReplacers.length || u2.replaced) || u2.iterateIn ? r3 : replace2(t3, r3, u2, s3, S2 || T2, null, O2);
             if (w2 !== r3 ? (h3 = w2, g2 = { replaced: w2 }) : "" === t3 && hasConstructorOf(r3, e) ? (s3.push([t3, r3, i3, u2, void 0, void 0, u2.type]), h3 = r3) : T2 && "object" !== u2.iterateIn || "array" === u2.iterateIn ? (j2 = new Array(r3.length), g2 = { clone: j2 }) : (["function", "symbol"].includes(_typeof(r3)) || "toJSON" in r3 || hasConstructorOf(r3, e) || hasConstructorOf(r3, Promise) || hasConstructorOf(r3, ArrayBuffer)) && !S2 && "object" !== u2.iterateIn ? h3 = r3 : (j2 = {}, u2.addLength && (j2.length = r3.length), g2 = { clone: j2 }), O2 && O2(), n2.iterateNone)
               return j2 || h3;
             if (!j2)
@@ -35698,7 +36968,7 @@
             }
             return j2;
           }
-          function replace(e2, t3, r3, n3, i3, o2, a2) {
+          function replace2(e2, t3, r3, n3, i3, o2, a2) {
             for (var c2 = i3 ? f2.plainObjectReplacers : f2.nonplainObjectReplacers, u2 = c2.length; u2--; ) {
               var p3 = c2[u2];
               if (p3.test(t3, r3)) {
@@ -35829,7 +37099,7 @@
                 var c2 = n2;
                 n2 = { test: function test(e4) {
                   return e4 && e4.constructor === c2;
-                }, replace: function replace(e4) {
+                }, replace: function replace2(e4) {
                   return _objectSpread2({}, e4);
                 }, revive: function revive(e4) {
                   return Object.assign(Object.create(c2.prototype), e4);
@@ -35864,7 +37134,7 @@
       }, s.JSON_TYPES = ["null", "boolean", "number", "string", "array", "object"];
       for (var l = { userObject: { test: function test(e2, t2) {
         return s.isUserObject(e2);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return function _objectSpread2$1(e3) {
           for (var t2 = 1; t2 < arguments.length; t2++) {
             var r2 = null != arguments[t2] ? arguments[t2] : {};
@@ -35882,7 +37152,7 @@
         return !!Array.isArray(e2) && (Object.keys(e2).some(function(e3) {
           return String(Number.parseInt(e3)) !== e3;
         }) && (t2.iterateIn = "object", t2.addLength = true), true);
-      }, replace: function replace(e2, t2) {
+      }, replace: function replace2(e2, t2) {
         return t2.iterateUnsetNumeric = true, e2;
       }, revive: function revive(e2) {
         if (Array.isArray(e2))
@@ -35894,74 +37164,74 @@
         }), t2;
       } } }, { sparseUndefined: { test: function test(e2, t2) {
         return void 0 === e2 && false === t2.ownKeys;
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return 0;
       }, revive: function revive(e2) {
       } } }], y = { undef: { test: function test(e2, t2) {
         return void 0 === e2 && (t2.ownKeys || !("ownKeys" in t2));
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return 0;
       }, revive: function revive(e2) {
         return new s.Undefined();
       } } }, v = { StringObject: { test: function test(e2) {
         return "String" === s.toStringTag(e2) && "object" === _typeof$1(e2);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return String(e2);
       }, revive: function revive(e2) {
         return new String(e2);
       } }, BooleanObject: { test: function test(e2) {
         return "Boolean" === s.toStringTag(e2) && "object" === _typeof$1(e2);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return Boolean(e2);
       }, revive: function revive(e2) {
         return new Boolean(e2);
       } }, NumberObject: { test: function test(e2) {
         return "Number" === s.toStringTag(e2) && "object" === _typeof$1(e2);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return Number(e2);
       }, revive: function revive(e2) {
         return new Number(e2);
       } } }, b = [{ nan: { test: function test(e2) {
         return Number.isNaN(e2);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return "NaN";
       }, revive: function revive(e2) {
         return Number.NaN;
       } } }, { infinity: { test: function test(e2) {
         return e2 === Number.POSITIVE_INFINITY;
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return "Infinity";
       }, revive: function revive(e2) {
         return Number.POSITIVE_INFINITY;
       } } }, { negativeInfinity: { test: function test(e2) {
         return e2 === Number.NEGATIVE_INFINITY;
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return "-Infinity";
       }, revive: function revive(e2) {
         return Number.NEGATIVE_INFINITY;
       } } }], d = { date: { test: function test(e2) {
         return "Date" === s.toStringTag(e2);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         var t2 = e2.getTime();
         return Number.isNaN(t2) ? "NaN" : t2;
       }, revive: function revive(e2) {
         return "NaN" === e2 ? new Date(Number.NaN) : new Date(e2);
       } } }, h = { regexp: { test: function test(e2) {
         return "RegExp" === s.toStringTag(e2);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return { source: e2.source, flags: (e2.global ? "g" : "") + (e2.ignoreCase ? "i" : "") + (e2.multiline ? "m" : "") + (e2.sticky ? "y" : "") + (e2.unicode ? "u" : "") };
       }, revive: function revive(e2) {
         var t2 = e2.source, r2 = e2.flags;
         return new RegExp(t2, r2);
       } } }, g = { map: { test: function test(e2) {
         return "Map" === s.toStringTag(e2);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return _toConsumableArray$1(e2.entries());
       }, revive: function revive(e2) {
         return new Map(e2);
       } } }, m = { set: { test: function test(e2) {
         return "Set" === s.toStringTag(e2);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return _toConsumableArray$1(e2.values());
       }, revive: function revive(e2) {
         return new Set(e2);
@@ -35980,7 +37250,7 @@
         return u2;
       }, w = { arraybuffer: { test: function test(e2) {
         return "ArrayBuffer" === s.toStringTag(e2);
-      }, replace: function replace(e2, t2) {
+      }, replace: function replace2(e2, t2) {
         t2.buffers || (t2.buffers = []);
         var r2 = t2.buffers.indexOf(e2);
         return r2 > -1 ? { index: r2 } : (t2.buffers.push(e2), S(e2));
@@ -35994,7 +37264,7 @@
         var t2 = e2, r2 = A[t2];
         r2 && (P[e2.toLowerCase()] = { test: function test(e3) {
           return s.toStringTag(e3) === t2;
-        }, replace: function replace(e3, t3) {
+        }, replace: function replace2(e3, t3) {
           var r3 = e3.buffer, n2 = e3.byteOffset, i2 = e3.length;
           t3.buffers || (t3.buffers = []);
           var o2 = t3.buffers.indexOf(r3);
@@ -36007,7 +37277,7 @@
       });
       var I = { dataview: { test: function test(e2) {
         return "DataView" === s.toStringTag(e2);
-      }, replace: function replace(e2, t2) {
+      }, replace: function replace2(e2, t2) {
         var r2 = e2.buffer, n2 = e2.byteOffset, i2 = e2.byteLength;
         t2.buffers || (t2.buffers = []);
         var o2 = t2.buffers.indexOf(r2);
@@ -36018,19 +37288,19 @@
         return "index" in e2 ? r2 = t2.buffers[a2] : (r2 = T(o2), t2.buffers.push(r2)), new DataView(r2, n2, i2);
       } } }, C = { IntlCollator: { test: function test(e2) {
         return s.hasConstructorOf(e2, Intl.Collator);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return e2.resolvedOptions();
       }, revive: function revive(e2) {
         return new Intl.Collator(e2.locale, e2);
       } }, IntlDateTimeFormat: { test: function test(e2) {
         return s.hasConstructorOf(e2, Intl.DateTimeFormat);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return e2.resolvedOptions();
       }, revive: function revive(e2) {
         return new Intl.DateTimeFormat(e2.locale, e2);
       } }, IntlNumberFormat: { test: function test(e2) {
         return s.hasConstructorOf(e2, Intl.NumberFormat);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return e2.resolvedOptions();
       }, revive: function revive(e2) {
         return new Intl.NumberFormat(e2.locale, e2);
@@ -36042,7 +37312,7 @@
       }
       var N = { file: { test: function test(e2) {
         return "File" === s.toStringTag(e2);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         var t2 = new XMLHttpRequest();
         if (t2.overrideMimeType("text/plain; charset=x-user-defined"), t2.open("GET", URL.createObjectURL(e2), false), t2.send(), 200 !== t2.status && 0 !== t2.status)
           throw new Error("Bad File access: " + t2.status);
@@ -36061,13 +37331,13 @@
         });
       } } }, k = { bigint: { test: function test(e2) {
         return "bigint" == typeof e2;
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return String(e2);
       }, revive: function revive(e2) {
         return BigInt(e2);
       } } }, E = { bigintObject: { test: function test(e2) {
         return "object" === _typeof$1(e2) && s.hasConstructorOf(e2, BigInt);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return String(e2);
       }, revive: function revive(e2) {
         return new Object(BigInt(e2));
@@ -36087,13 +37357,13 @@
       } } };
       return [l, y, p, v, b, d, h, { imagedata: { test: function test(e2) {
         return "ImageData" === s.toStringTag(e2);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         return { array: _toConsumableArray$1(e2.data), width: e2.width, height: e2.height };
       }, revive: function revive(e2) {
         return new ImageData(new Uint8ClampedArray(e2.array), e2.width, e2.height);
       } } }, { imagebitmap: { test: function test(e2) {
         return "ImageBitmap" === s.toStringTag(e2) || e2 && e2.dataset && "ImageBitmap" === e2.dataset.toStringTag;
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         var t2 = document.createElement("canvas");
         return t2.getContext("2d").drawImage(e2, 0, 0), t2.toDataURL();
       }, revive: function revive(e2) {
@@ -36108,7 +37378,7 @@
         }), n2.src = e2, createImageBitmap(t2);
       } } }, N, { file: N.file, filelist: { test: function test(e2) {
         return "FileList" === s.toStringTag(e2);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         for (var t2 = [], r2 = 0; r2 < e2.length; r2++)
           t2[r2] = e2.item(r2);
         return t2;
@@ -36127,7 +37397,7 @@
         }())(e2);
       } } }, { blob: { test: function test(e2) {
         return "Blob" === s.toStringTag(e2);
-      }, replace: function replace(e2) {
+      }, replace: function replace2(e2) {
         var t2 = new XMLHttpRequest();
         if (t2.overrideMimeType("text/plain; charset=x-user-defined"), t2.open("GET", URL.createObjectURL(e2), false), t2.send(), 200 !== t2.status && 0 !== t2.status)
           throw new Error("Bad Blob access: " + t2.status);
@@ -36160,6 +37430,7 @@
     var bytes = new Uint8Array(
       arraybuffer,
       byteOffset || 0,
+      // Default needed for Safari
       lngth
     );
     var len = bytes.length;
@@ -36324,7 +37595,10 @@
               }
             }
             blobsToAwait = [];
-            return [2];
+            return [
+              2
+              /*return*/
+            ];
         }
       });
     });
@@ -36467,7 +37741,10 @@
                                 _c.label = 8;
                               case 8:
                                 progress.completedRows += values.length;
-                                return [2];
+                                return [
+                                  2
+                                  /*return*/
+                                ];
                             }
                           });
                         };
@@ -36487,7 +37764,10 @@
                         if (progress.completedTables < progress.totalTables) {
                           slices.push(",");
                         }
-                        return [2];
+                        return [
+                          2
+                          /*return*/
+                        ];
                     }
                   });
                 };
@@ -36512,7 +37792,10 @@
                     return progressCallback(progress);
                   });
                 }
-                return [2];
+                return [
+                  2
+                  /*return*/
+                ];
             }
           });
         });
@@ -36571,7 +37854,10 @@
             return [3, 7];
           case 6:
             TSON.finalize();
-            return [7];
+            return [
+              7
+              /*endfinally*/
+            ];
           case 7:
             return [2, new Blob(slices, { type: "text/json" })];
         }
@@ -36636,39 +37922,68 @@
         NULL3: S++,
         NUMBER_DECIMAL_POINT: S++,
         NUMBER_DIGIT: S++
+        // [0-9]
       };
       for (var s_ in clarinet.STATE)
         clarinet.STATE[clarinet.STATE[s_]] = s_;
       S = clarinet.STATE;
       const Char = {
         tab: 9,
+        // \t
         lineFeed: 10,
+        // \n
         carriageReturn: 13,
+        // \r
         space: 32,
+        // " "
         doubleQuote: 34,
+        // "
         plus: 43,
+        // +
         comma: 44,
+        // ,
         minus: 45,
+        // -
         period: 46,
+        // .
         _0: 48,
+        // 0
         _9: 57,
+        // 9
         colon: 58,
+        // :
         E: 69,
+        // E
         openBracket: 91,
+        // [
         backslash: 92,
+        // \
         closeBracket: 93,
+        // ]
         a: 97,
+        // a
         b: 98,
+        // b
         e: 101,
+        // e 
         f: 102,
+        // f
         l: 108,
+        // l
         n: 110,
+        // n
         r: 114,
+        // r
         s: 115,
+        // s
         t: 116,
+        // t
         u: 117,
+        // u
         openBrace: 123,
+        // {
         closeBrace: 125
+        // }
       };
       if (!Object.create) {
         Object.create = function(o) {
@@ -37502,7 +38817,10 @@
                           progress.completedTables += 1;
                         }
                         sourceRows.splice(0, rows.length);
-                        return [2];
+                        return [
+                          2
+                          /*return*/
+                        ];
                     }
                   });
                 };
@@ -37543,7 +38861,10 @@
               case 9:
                 return [3, 0];
               case 10:
-                return [2];
+                return [
+                  2
+                  /*return*/
+                ];
             }
           });
         });
@@ -37617,7 +38938,10 @@
                 return progressCallback(progress);
               });
             }
-            return [2];
+            return [
+              2
+              /*return*/
+            ];
         }
       });
     });
@@ -37844,23 +39168,17 @@
   var CreateSession = () => {
     const games = useGames();
     const locations = useLocations();
-    const [title, setTitle] = (0, import_react2.useState)("");
-    const [start, setStart] = (0, import_react2.useState)(new Date());
+    const [start, setStart] = (0, import_react2.useState)(/* @__PURE__ */ new Date());
     const [locationId, setLocationId] = (0, import_react2.useState)("");
     const [gameId, setGameId] = (0, import_react2.useState)("");
     const navigate = useNavigate();
     const handleSubmit = async (e) => {
       e.preventDefault();
       const _id = v4_default();
-      db.sessions.add({
-        _id,
-        title,
-        start: start.toISOString(),
-        locationId,
-        gameId,
-        playerIds: []
-      });
       const game = await db.games.get(gameId);
+      if (!game) {
+        throw new Error("Couldn't identify game");
+      }
       game?.template?.rounds?.forEach((round, index) => {
         db.rounds.add({
           sessionId: _id,
@@ -37869,20 +39187,19 @@
           colour: round.colour
         });
       });
+      db.sessions.add({
+        _id,
+        title: game?.name,
+        start: start.toISOString(),
+        locationId,
+        gameId,
+        playerIds: []
+      });
       navigate(`/sessions/${_id}`);
     };
     return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(AppBar_default, { variant: "small", title: "New session", backTo: "/" }),
       /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(Page_default, { children: /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("form", { onSubmit: handleSubmit, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
-          TextField_default,
-          {
-            required: true,
-            label: "Session title",
-            value: title,
-            onChange: (e) => setTitle(e.target.value)
-          }
-        ),
         /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
           TextField_default,
           {
@@ -40784,8 +42101,8 @@
     const games = useGames();
     const locations = useLocations();
     const [title, setTitle] = (0, import_react10.useState)("");
-    const [start, setStart] = (0, import_react10.useState)(new Date());
-    const [end, setEnd] = (0, import_react10.useState)(new Date());
+    const [start, setStart] = (0, import_react10.useState)(/* @__PURE__ */ new Date());
+    const [end, setEnd] = (0, import_react10.useState)(/* @__PURE__ */ new Date());
     const [locationId, setLocationId] = (0, import_react10.useState)("");
     const [gameId, setGameId] = (0, import_react10.useState)("");
     const [session, setSession, deleteSession] = useSession(id);
@@ -40827,15 +42144,6 @@
         }
       ),
       /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Page_default, { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)("form", { onSubmit: handleSubmit, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
-          TextField_default,
-          {
-            required: true,
-            label: "Session title",
-            value: title,
-            onChange: (e) => setTitle(e.target.value)
-          }
-        ),
         /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
           TextField_default,
           {
@@ -41599,15 +42907,27 @@
   var import_jsx_runtime42 = __toESM(require_jsx_runtime());
   var App = () => {
     const ready = true;
-    return ready ? /* @__PURE__ */ (0, import_jsx_runtime42.jsxs)("div", { className: "container", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime42.jsxs)(Routes, { children: [
+    return ready ? /* @__PURE__ */ (0, import_jsx_runtime42.jsxs)("div", { className: "o-app-flex-container", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime42.jsx)("div", { className: "o-app-flex-content", children: /* @__PURE__ */ (0, import_jsx_runtime42.jsxs)(Routes, { children: [
         /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Route, { path: "/", element: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Sessions_default, {}) }),
         /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Route, { path: "/games", element: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Games_default, {}) }),
         /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Route, { path: "/games/:id", element: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(EditGame_default, {}) }),
         /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Route, { path: "/database", element: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Database_default, {}) }),
         /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Route, { path: "/players/:id", element: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(EditPlayer_default, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Route, { path: "/locations/:id", element: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(EditLocation_default, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Route, { path: "/sessions/new", element: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(CreateSession_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
+          Route,
+          {
+            path: "/locations/:id",
+            element: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(EditLocation_default, {})
+          }
+        ),
+        /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
+          Route,
+          {
+            path: "/sessions/new",
+            element: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(CreateSession_default, {})
+          }
+        ),
         /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Route, { path: "/sessions/:id", element: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(ViewSession_default, {}) }),
         /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(
           Route,
@@ -41630,7 +42950,7 @@
             element: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(FullPageError_default, { children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)("p", { children: "Page not found" }) })
           }
         )
-      ] }),
+      ] }) }),
       /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(NavigationTray_default, {})
     ] }) : /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(Loading_default, {});
   };
@@ -41654,4 +42974,115 @@
     });
   }
 })();
+/*! Bundled license information:
+
+react/cjs/react.development.js:
+  (**
+   * @license React
+   * react.development.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
+
+scheduler/cjs/scheduler.development.js:
+  (**
+   * @license React
+   * scheduler.development.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
+
+react-dom/cjs/react-dom.development.js:
+  (**
+   * @license React
+   * react-dom.development.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
+  (**
+   * Checks if an event is supported in the current execution environment.
+   *
+   * NOTE: This will not work correctly for non-generic events such as `change`,
+   * `reset`, `load`, `error`, and `select`.
+   *
+   * Borrows from Modernizr.
+   *
+   * @param {string} eventNameSuffix Event name, e.g. "click".
+   * @return {boolean} True if the event is supported.
+   * @internal
+   * @license Modernizr 3.0.0pre (Custom Build) | MIT
+   *)
+
+react/cjs/react-jsx-runtime.development.js:
+  (**
+   * @license React
+   * react-jsx-runtime.development.js
+   *
+   * Copyright (c) Facebook, Inc. and its affiliates.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE file in the root directory of this source tree.
+   *)
+
+@remix-run/router/dist/router.js:
+  (**
+   * @remix-run/router v1.23.0
+   *
+   * Copyright (c) Remix Software Inc.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE.md file in the root directory of this source tree.
+   *
+   * @license MIT
+   *)
+
+react-router/dist/index.js:
+  (**
+   * React Router v6.30.1
+   *
+   * Copyright (c) Remix Software Inc.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE.md file in the root directory of this source tree.
+   *
+   * @license MIT
+   *)
+
+react-router-dom/dist/index.js:
+  (**
+   * React Router DOM v6.30.1
+   *
+   * Copyright (c) Remix Software Inc.
+   *
+   * This source code is licensed under the MIT license found in the
+   * LICENSE.md file in the root directory of this source tree.
+   *
+   * @license MIT
+   *)
+
+dexie-export-import/dist/dexie-export-import.mjs:
+  (*! *****************************************************************************
+  Copyright (c) Microsoft Corporation.
+  
+  Permission to use, copy, modify, and/or distribute this software for any
+  purpose with or without fee is hereby granted.
+  
+  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
+  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
+  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
+  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
+  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
+  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
+  PERFORMANCE OF THIS SOFTWARE.
+  ***************************************************************************** *)
+*/
 //# sourceMappingURL=index.js.map

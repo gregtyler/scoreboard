@@ -429,8 +429,16 @@ a {
   text-align: center;
   margin: 1rem;
 }
+.o-app-flex-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+.o-app-flex-content {
+  flex: 1;
+  overflow: auto;
+}
 .o-canvas {
-  margin-bottom: 96px;
   padding-left: 16px;
   padding-right: 16px;
 }
@@ -673,10 +681,7 @@ option {
 
 /* src/components/navigation/navigation.css */
 .c-navigation-tray {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: relative;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
