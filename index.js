@@ -2627,6 +2627,7 @@
             }
             switch (typeof value) {
               case "function":
+              // $FlowIssue symbol is perfectly valid here
               case "symbol":
                 return true;
               case "boolean": {
@@ -3641,6 +3642,7 @@
                 return "SuspenseList";
               case TracingMarkerComponent:
                 return "TracingMarker";
+              // The display name for this tags come from the user-provided type:
               case ClassComponent:
               case FunctionComponent:
               case IncompleteClassComponent:
@@ -4638,6 +4640,10 @@
               return typeof props2.is === "string";
             }
             switch (tagName) {
+              // These are reserved SVG and MathML elements.
+              // We don't mind this list too much because we expect it to never grow.
+              // The alternative is to track the namespace in a few places which is convoluted.
+              // https://w3c.github.io/webcomponents/spec/custom/#custom-elements-core-concepts
               case "annotation-xml":
               case "color-profile":
               case "font-face":
@@ -7467,6 +7473,7 @@
           }
           function getEventPriority(domEventName) {
             switch (domEventName) {
+              // Used by SimpleEventPlugin:
               case "cancel":
               case "click":
               case "close":
@@ -7502,14 +7509,20 @@
               case "touchend":
               case "touchstart":
               case "volumechange":
+              // Used by polyfills:
+              // eslint-disable-next-line no-fallthrough
               case "change":
               case "selectionchange":
               case "textInput":
               case "compositionstart":
               case "compositionend":
               case "compositionupdate":
+              // Only enableCreateEventHandleAPI:
+              // eslint-disable-next-line no-fallthrough
               case "beforeblur":
               case "afterblur":
+              // Not used by React but could be by user code:
+              // eslint-disable-next-line no-fallthrough
               case "beforeinput":
               case "blur":
               case "fullscreenchange":
@@ -7534,6 +7547,8 @@
               case "toggle":
               case "touchmove":
               case "wheel":
+              // Not used by React but could be by user code:
+              // eslint-disable-next-line no-fallthrough
               case "mouseenter":
               case "mouseleave":
               case "pointerenter":
@@ -7765,8 +7780,7 @@
             button: 0,
             buttons: 0,
             relatedTarget: function(event) {
-              if (event.relatedTarget === void 0)
-                return event.fromElement === event.srcElement ? event.toElement : event.fromElement;
+              if (event.relatedTarget === void 0) return event.fromElement === event.srcElement ? event.toElement : event.fromElement;
               return event.relatedTarget;
             },
             movementX: function(event) {
@@ -8482,43 +8496,42 @@
             var indexWithinFocus = 0;
             var node = outerNode;
             var parentNode = null;
-            outer:
+            outer: while (true) {
+              var next = null;
               while (true) {
-                var next = null;
-                while (true) {
-                  if (node === anchorNode && (anchorOffset === 0 || node.nodeType === TEXT_NODE)) {
-                    start = length + anchorOffset;
-                  }
-                  if (node === focusNode && (focusOffset === 0 || node.nodeType === TEXT_NODE)) {
-                    end = length + focusOffset;
-                  }
-                  if (node.nodeType === TEXT_NODE) {
-                    length += node.nodeValue.length;
-                  }
-                  if ((next = node.firstChild) === null) {
-                    break;
-                  }
-                  parentNode = node;
-                  node = next;
+                if (node === anchorNode && (anchorOffset === 0 || node.nodeType === TEXT_NODE)) {
+                  start = length + anchorOffset;
                 }
-                while (true) {
-                  if (node === outerNode) {
-                    break outer;
-                  }
-                  if (parentNode === anchorNode && ++indexWithinAnchor === anchorOffset) {
-                    start = length;
-                  }
-                  if (parentNode === focusNode && ++indexWithinFocus === focusOffset) {
-                    end = length;
-                  }
-                  if ((next = node.nextSibling) !== null) {
-                    break;
-                  }
-                  node = parentNode;
-                  parentNode = node.parentNode;
+                if (node === focusNode && (focusOffset === 0 || node.nodeType === TEXT_NODE)) {
+                  end = length + focusOffset;
                 }
+                if (node.nodeType === TEXT_NODE) {
+                  length += node.nodeValue.length;
+                }
+                if ((next = node.firstChild) === null) {
+                  break;
+                }
+                parentNode = node;
                 node = next;
               }
+              while (true) {
+                if (node === outerNode) {
+                  break outer;
+                }
+                if (parentNode === anchorNode && ++indexWithinAnchor === anchorOffset) {
+                  start = length;
+                }
+                if (parentNode === focusNode && ++indexWithinFocus === focusOffset) {
+                  end = length;
+                }
+                if ((next = node.nextSibling) !== null) {
+                  break;
+                }
+                node = parentNode;
+                parentNode = node.parentNode;
+              }
+              node = next;
+            }
             if (start === -1 || end === -1) {
               return null;
             }
@@ -8721,6 +8734,7 @@
           function extractEvents$3(dispatchQueue, domEventName, targetInst, nativeEvent, nativeEventTarget, eventSystemFlags, targetContainer) {
             var targetNode = targetInst ? getNodeFromInstance(targetInst) : window;
             switch (domEventName) {
+              // Track the input node that has focus.
               case "focusin":
                 if (isTextInputElement(targetNode) || targetNode.contentEditable === "true") {
                   activeElement$1 = targetNode;
@@ -8733,6 +8747,8 @@
                 activeElementInst$1 = null;
                 lastSelection = null;
                 break;
+              // Don't fire the event while the user is dragging. This matches the
+              // semantics of the native select event.
               case "mousedown":
                 mouseDown = true;
                 break;
@@ -8742,10 +8758,20 @@
                 mouseDown = false;
                 constructSelectEvent(dispatchQueue, nativeEvent, nativeEventTarget);
                 break;
+              // Chrome and IE fire non-standard event when selection is changed (and
+              // sometimes when it hasn't). IE's event fires out of order with respect
+              // to key and input events on deletion, so we discard it.
+              //
+              // Firefox doesn't support selectionchange, so check selection status
+              // after each key entry. The selection changes after keydown and before
+              // keyup, but we check on keydown as well in the case of holding down a
+              // key, when multiple keydown events are fired but only one keyup is.
+              // This is also our approach for IE handling, for the reason above.
               case "selectionchange":
                 if (skipSelectionChangeEvent) {
                   break;
                 }
+              // falls through
               case "keydown":
               case "keyup":
                 constructSelectEvent(dispatchQueue, nativeEvent, nativeEventTarget);
@@ -8828,6 +8854,7 @@
                 if (getEventCharCode(nativeEvent) === 0) {
                   return;
                 }
+              /* falls through */
               case "keydown":
               case "keyup":
                 SyntheticEventCtor = SyntheticKeyboardEvent;
@@ -8848,11 +8875,14 @@
                 if (nativeEvent.button === 2) {
                   return;
                 }
+              /* falls through */
               case "auxclick":
               case "dblclick":
               case "mousedown":
               case "mousemove":
               case "mouseup":
+              // TODO: Disabled elements should not respond to mouse events
+              /* falls through */
               case "mouseout":
               case "mouseover":
               case "contextmenu":
@@ -9060,45 +9090,44 @@
               var targetContainerNode = targetContainer;
               if (targetInst !== null) {
                 var node = targetInst;
-                mainLoop:
-                  while (true) {
-                    if (node === null) {
-                      return;
-                    }
-                    var nodeTag = node.tag;
-                    if (nodeTag === HostRoot || nodeTag === HostPortal) {
-                      var container = node.stateNode.containerInfo;
-                      if (isMatchingRootContainer(container, targetContainerNode)) {
-                        break;
-                      }
-                      if (nodeTag === HostPortal) {
-                        var grandNode = node.return;
-                        while (grandNode !== null) {
-                          var grandTag = grandNode.tag;
-                          if (grandTag === HostRoot || grandTag === HostPortal) {
-                            var grandContainer = grandNode.stateNode.containerInfo;
-                            if (isMatchingRootContainer(grandContainer, targetContainerNode)) {
-                              return;
-                            }
-                          }
-                          grandNode = grandNode.return;
-                        }
-                      }
-                      while (container !== null) {
-                        var parentNode = getClosestInstanceFromNode(container);
-                        if (parentNode === null) {
-                          return;
-                        }
-                        var parentTag = parentNode.tag;
-                        if (parentTag === HostComponent || parentTag === HostText) {
-                          node = ancestorInst = parentNode;
-                          continue mainLoop;
-                        }
-                        container = container.parentNode;
-                      }
-                    }
-                    node = node.return;
+                mainLoop: while (true) {
+                  if (node === null) {
+                    return;
                   }
+                  var nodeTag = node.tag;
+                  if (nodeTag === HostRoot || nodeTag === HostPortal) {
+                    var container = node.stateNode.containerInfo;
+                    if (isMatchingRootContainer(container, targetContainerNode)) {
+                      break;
+                    }
+                    if (nodeTag === HostPortal) {
+                      var grandNode = node.return;
+                      while (grandNode !== null) {
+                        var grandTag = grandNode.tag;
+                        if (grandTag === HostRoot || grandTag === HostPortal) {
+                          var grandContainer = grandNode.stateNode.containerInfo;
+                          if (isMatchingRootContainer(grandContainer, targetContainerNode)) {
+                            return;
+                          }
+                        }
+                        grandNode = grandNode.return;
+                      }
+                    }
+                    while (container !== null) {
+                      var parentNode = getClosestInstanceFromNode(container);
+                      if (parentNode === null) {
+                        return;
+                      }
+                      var parentTag = parentNode.tag;
+                      if (parentTag === HostComponent || parentTag === HostText) {
+                        node = ancestorInst = parentNode;
+                        continue mainLoop;
+                      }
+                      container = container.parentNode;
+                    }
+                  }
+                  node = node.return;
+                }
               }
             }
             batchedUpdates(function() {
@@ -9378,10 +9407,8 @@
                 } else if (typeof nextProp === "number") {
                   setTextContent(domElement, "" + nextProp);
                 }
-              } else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING)
-                ;
-              else if (propKey === AUTOFOCUS)
-                ;
+              } else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING) ;
+              else if (propKey === AUTOFOCUS) ;
               else if (registrationNameDependencies.hasOwnProperty(propKey)) {
                 if (nextProp != null) {
                   if (typeof nextProp !== "function") {
@@ -9597,12 +9624,9 @@
                     styleUpdates[styleName] = "";
                   }
                 }
-              } else if (propKey === DANGEROUSLY_SET_INNER_HTML || propKey === CHILDREN)
-                ;
-              else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING)
-                ;
-              else if (propKey === AUTOFOCUS)
-                ;
+              } else if (propKey === DANGEROUSLY_SET_INNER_HTML || propKey === CHILDREN) ;
+              else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING) ;
+              else if (propKey === AUTOFOCUS) ;
               else if (registrationNameDependencies.hasOwnProperty(propKey)) {
                 if (!updatePayload) {
                   updatePayload = [];
@@ -9661,8 +9685,7 @@
                 if (typeof nextProp === "string" || typeof nextProp === "number") {
                   (updatePayload = updatePayload || []).push(propKey, "" + nextProp);
                 }
-              } else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING)
-                ;
+              } else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING) ;
               else if (registrationNameDependencies.hasOwnProperty(propKey)) {
                 if (nextProp != null) {
                   if (typeof nextProp !== "function") {
@@ -9773,6 +9796,8 @@
               for (var _i = 0; _i < attributes.length; _i++) {
                 var name = attributes[_i].name.toLowerCase();
                 switch (name) {
+                  // Controlled attributes are not validated
+                  // TODO: Only ignore them on controlled tags.
                   case "value":
                     break;
                   case "checked":
@@ -9819,12 +9844,10 @@
               typeof isCustomComponentTag === "boolean") {
                 var serverValue = void 0;
                 var propertyInfo = isCustomComponentTag && enableCustomElementPropertySupport ? null : getPropertyInfo(propKey);
-                if (rawProps[SUPPRESS_HYDRATION_WARNING] === true)
-                  ;
+                if (rawProps[SUPPRESS_HYDRATION_WARNING] === true) ;
                 else if (propKey === SUPPRESS_CONTENT_EDITABLE_WARNING || propKey === SUPPRESS_HYDRATION_WARNING || // Controlled attributes are not validated
                 // TODO: Only ignore them on controlled tags.
-                propKey === "value" || propKey === "checked" || propKey === "selected")
-                  ;
+                propKey === "value" || propKey === "checked" || propKey === "selected") ;
                 else if (propKey === DANGEROUSLY_SET_INNER_HTML) {
                   var serverHTML = domElement.innerHTML;
                   var nextHtml = nextProp ? nextProp[HTML$1] : void 0;
@@ -10042,24 +10065,37 @@
             };
             var isTagValidWithParent = function(tag, parentTag) {
               switch (parentTag) {
+                // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-inselect
                 case "select":
                   return tag === "option" || tag === "optgroup" || tag === "#text";
                 case "optgroup":
                   return tag === "option" || tag === "#text";
+                // Strictly speaking, seeing an <option> doesn't mean we're in a <select>
+                // but
                 case "option":
                   return tag === "#text";
+                // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-intd
+                // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-incaption
+                // No special behavior since these rules fall back to "in body" mode for
+                // all except special table nodes which cause bad parsing behavior anyway.
+                // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-intr
                 case "tr":
                   return tag === "th" || tag === "td" || tag === "style" || tag === "script" || tag === "template";
+                // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-intbody
                 case "tbody":
                 case "thead":
                 case "tfoot":
                   return tag === "tr" || tag === "style" || tag === "script" || tag === "template";
+                // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-incolgroup
                 case "colgroup":
                   return tag === "col" || tag === "template";
+                // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-intable
                 case "table":
                   return tag === "caption" || tag === "colgroup" || tag === "tbody" || tag === "tfoot" || tag === "thead" || tag === "style" || tag === "script" || tag === "template";
+                // https://html.spec.whatwg.org/multipage/syntax.html#parsing-main-inhead
                 case "head":
                   return tag === "base" || tag === "basefont" || tag === "bgsound" || tag === "link" || tag === "meta" || tag === "title" || tag === "noscript" || tag === "noframes" || tag === "style" || tag === "script" || tag === "template";
+                // https://html.spec.whatwg.org/multipage/semantics.html#the-html-element
                 case "html":
                   return tag === "head" || tag === "body" || tag === "frameset";
                 case "frameset":
@@ -10620,8 +10656,7 @@
             {
               if (instance.nodeType === ELEMENT_NODE) {
                 warnForDeletedHydratableElement(parentContainer, instance);
-              } else if (instance.nodeType === COMMENT_NODE)
-                ;
+              } else if (instance.nodeType === COMMENT_NODE) ;
               else {
                 warnForDeletedHydratableText(parentContainer, instance);
               }
@@ -10633,8 +10668,7 @@
               if (parentNode !== null) {
                 if (instance.nodeType === ELEMENT_NODE) {
                   warnForDeletedHydratableElement(parentNode, instance);
-                } else if (instance.nodeType === COMMENT_NODE)
-                  ;
+                } else if (instance.nodeType === COMMENT_NODE) ;
                 else {
                   warnForDeletedHydratableText(parentNode, instance);
                 }
@@ -10646,8 +10680,7 @@
               if (isConcurrentMode || parentProps[SUPPRESS_HYDRATION_WARNING$1] !== true) {
                 if (instance.nodeType === ELEMENT_NODE) {
                   warnForDeletedHydratableElement(parentInstance, instance);
-                } else if (instance.nodeType === COMMENT_NODE)
-                  ;
+                } else if (instance.nodeType === COMMENT_NODE) ;
                 else {
                   warnForDeletedHydratableText(parentInstance, instance);
                 }
@@ -10667,15 +10700,13 @@
           function didNotFindHydratableInstanceWithinSuspenseInstance(parentInstance, type2, props2) {
             {
               var parentNode = parentInstance.parentNode;
-              if (parentNode !== null)
-                warnForInsertedHydratedElement(parentNode, type2);
+              if (parentNode !== null) warnForInsertedHydratedElement(parentNode, type2);
             }
           }
           function didNotFindHydratableTextInstanceWithinSuspenseInstance(parentInstance, text) {
             {
               var parentNode = parentInstance.parentNode;
-              if (parentNode !== null)
-                warnForInsertedHydratedText(parentNode, text);
+              if (parentNode !== null) warnForInsertedHydratedText(parentNode, text);
             }
           }
           function didNotFindHydratableInstance(parentType, parentProps, parentInstance, type2, props2, isConcurrentMode) {
@@ -11262,8 +11293,7 @@
                 }
                 case SuspenseComponent: {
                   var suspenseState = returnFiber.memoizedState;
-                  if (suspenseState.dehydrated !== null)
-                    didNotHydrateInstanceWithinSuspenseInstance(suspenseState.dehydrated, instance);
+                  if (suspenseState.dehydrated !== null) didNotHydrateInstanceWithinSuspenseInstance(suspenseState.dehydrated, instance);
                   break;
                 }
               }
@@ -11342,18 +11372,17 @@
                 case SuspenseComponent: {
                   var suspenseState = returnFiber.memoizedState;
                   var _parentInstance = suspenseState.dehydrated;
-                  if (_parentInstance !== null)
-                    switch (fiber.tag) {
-                      case HostComponent:
-                        var _type2 = fiber.type;
-                        var _props2 = fiber.pendingProps;
-                        didNotFindHydratableInstanceWithinSuspenseInstance(_parentInstance, _type2);
-                        break;
-                      case HostText:
-                        var _text2 = fiber.pendingProps;
-                        didNotFindHydratableTextInstanceWithinSuspenseInstance(_parentInstance, _text2);
-                        break;
-                    }
+                  if (_parentInstance !== null) switch (fiber.tag) {
+                    case HostComponent:
+                      var _type2 = fiber.type;
+                      var _props2 = fiber.pendingProps;
+                      didNotFindHydratableInstanceWithinSuspenseInstance(_parentInstance, _type2);
+                      break;
+                    case HostText:
+                      var _text2 = fiber.pendingProps;
+                      didNotFindHydratableTextInstanceWithinSuspenseInstance(_parentInstance, _text2);
+                      break;
+                  }
                   break;
                 }
                 default:
@@ -11885,8 +11914,7 @@
                       var update = createUpdate(NoTimestamp, lane);
                       update.tag = ForceUpdate;
                       var updateQueue = fiber.updateQueue;
-                      if (updateQueue === null)
-                        ;
+                      if (updateQueue === null) ;
                       else {
                         var sharedQueue = updateQueue.shared;
                         var pending = sharedQueue.pending;
@@ -11972,8 +12000,7 @@
               }
             }
             var value = context._currentValue;
-            if (lastFullyObservedContext === context)
-              ;
+            if (lastFullyObservedContext === context) ;
             else {
               var contextItem = {
                 context,
@@ -12270,6 +12297,7 @@
               case CaptureUpdate: {
                 workInProgress2.flags = workInProgress2.flags & ~ShouldCapture | DidCapture;
               }
+              // Intentional fallthrough
               case UpdateState: {
                 var _payload = update.payload;
                 var partialState;
@@ -17932,8 +17960,7 @@
               while (node !== null) {
                 if (node.tag === HostComponent || node.tag === HostText) {
                   appendInitialChild(parent, node.stateNode);
-                } else if (node.tag === HostPortal)
-                  ;
+                } else if (node.tag === HostPortal) ;
                 else if (node.child !== null) {
                   node.child.return = node;
                   node = node.child;
@@ -18887,20 +18914,19 @@
                       onPostCommit(id, phase, passiveEffectDuration, commitTime2);
                     }
                     var parentFiber = finishedWork.return;
-                    outer:
-                      while (parentFiber !== null) {
-                        switch (parentFiber.tag) {
-                          case HostRoot:
-                            var root2 = parentFiber.stateNode;
-                            root2.passiveEffectDuration += passiveEffectDuration;
-                            break outer;
-                          case Profiler:
-                            var parentStateNode = parentFiber.stateNode;
-                            parentStateNode.passiveEffectDuration += passiveEffectDuration;
-                            break outer;
-                        }
-                        parentFiber = parentFiber.return;
+                    outer: while (parentFiber !== null) {
+                      switch (parentFiber.tag) {
+                        case HostRoot:
+                          var root2 = parentFiber.stateNode;
+                          root2.passiveEffectDuration += passiveEffectDuration;
+                          break outer;
+                        case Profiler:
+                          var parentStateNode = parentFiber.stateNode;
+                          parentStateNode.passiveEffectDuration += passiveEffectDuration;
+                          break outer;
                       }
+                      parentFiber = parentFiber.return;
+                    }
                     break;
                   }
                 }
@@ -19047,20 +19073,19 @@
                       }
                       enqueuePendingPassiveProfilerEffect(finishedWork);
                       var parentFiber = finishedWork.return;
-                      outer:
-                        while (parentFiber !== null) {
-                          switch (parentFiber.tag) {
-                            case HostRoot:
-                              var root2 = parentFiber.stateNode;
-                              root2.effectDuration += effectDuration;
-                              break outer;
-                            case Profiler:
-                              var parentStateNode = parentFiber.stateNode;
-                              parentStateNode.effectDuration += effectDuration;
-                              break outer;
-                          }
-                          parentFiber = parentFiber.return;
+                      outer: while (parentFiber !== null) {
+                        switch (parentFiber.tag) {
+                          case HostRoot:
+                            var root2 = parentFiber.stateNode;
+                            root2.effectDuration += effectDuration;
+                            break outer;
+                          case Profiler:
+                            var parentStateNode = parentFiber.stateNode;
+                            parentStateNode.effectDuration += effectDuration;
+                            break outer;
                         }
+                        parentFiber = parentFiber.return;
+                      }
                     }
                   }
                   break;
@@ -19152,8 +19177,7 @@
                       captureCommitPhaseError(finishedWork, finishedWork.return, error2);
                     }
                   }
-                } else if ((node.tag === OffscreenComponent || node.tag === LegacyHiddenComponent) && node.memoizedState !== null && node !== finishedWork)
-                  ;
+                } else if ((node.tag === OffscreenComponent || node.tag === LegacyHiddenComponent) && node.memoizedState !== null && node !== finishedWork) ;
                 else if (node.child !== null) {
                   node.child.return = node;
                   node = node.child;
@@ -19271,31 +19295,30 @@
           }
           function getHostSibling(fiber) {
             var node = fiber;
-            siblings:
-              while (true) {
-                while (node.sibling === null) {
-                  if (node.return === null || isHostParent(node.return)) {
-                    return null;
-                  }
-                  node = node.return;
+            siblings: while (true) {
+              while (node.sibling === null) {
+                if (node.return === null || isHostParent(node.return)) {
+                  return null;
                 }
-                node.sibling.return = node.return;
-                node = node.sibling;
-                while (node.tag !== HostComponent && node.tag !== HostText && node.tag !== DehydratedFragment) {
-                  if (node.flags & Placement) {
-                    continue siblings;
-                  }
-                  if (node.child === null || node.tag === HostPortal) {
-                    continue siblings;
-                  } else {
-                    node.child.return = node;
-                    node = node.child;
-                  }
+                node = node.return;
+              }
+              node.sibling.return = node.return;
+              node = node.sibling;
+              while (node.tag !== HostComponent && node.tag !== HostText && node.tag !== DehydratedFragment) {
+                if (node.flags & Placement) {
+                  continue siblings;
                 }
-                if (!(node.flags & Placement)) {
-                  return node.stateNode;
+                if (node.child === null || node.tag === HostPortal) {
+                  continue siblings;
+                } else {
+                  node.child.return = node;
+                  node = node.child;
                 }
               }
+              if (!(node.flags & Placement)) {
+                return node.stateNode;
+              }
+            }
           }
           function commitPlacement(finishedWork) {
             var parentFiber = getHostParentFiber(finishedWork);
@@ -19317,6 +19340,7 @@
                 insertOrAppendPlacementNodeIntoContainer(finishedWork, _before, _parent);
                 break;
               }
+              // eslint-disable-next-line-no-fallthrough
               default:
                 throw new Error("Invalid host parent fiber. This error is likely caused by a bug in React. Please file an issue.");
             }
@@ -19331,8 +19355,7 @@
               } else {
                 appendChildToContainer(parent, stateNode);
               }
-            } else if (tag === HostPortal)
-              ;
+            } else if (tag === HostPortal) ;
             else {
               var child = node.child;
               if (child !== null) {
@@ -19355,8 +19378,7 @@
               } else {
                 appendChild(parent, stateNode);
               }
-            } else if (tag === HostPortal)
-              ;
+            } else if (tag === HostPortal) ;
             else {
               var child = node.child;
               if (child !== null) {
@@ -19374,27 +19396,26 @@
           function commitDeletionEffects(root2, returnFiber, deletedFiber) {
             {
               var parent = returnFiber;
-              findParent:
-                while (parent !== null) {
-                  switch (parent.tag) {
-                    case HostComponent: {
-                      hostParent = parent.stateNode;
-                      hostParentIsContainer = false;
-                      break findParent;
-                    }
-                    case HostRoot: {
-                      hostParent = parent.stateNode.containerInfo;
-                      hostParentIsContainer = true;
-                      break findParent;
-                    }
-                    case HostPortal: {
-                      hostParent = parent.stateNode.containerInfo;
-                      hostParentIsContainer = true;
-                      break findParent;
-                    }
+              findParent: while (parent !== null) {
+                switch (parent.tag) {
+                  case HostComponent: {
+                    hostParent = parent.stateNode;
+                    hostParentIsContainer = false;
+                    break findParent;
                   }
-                  parent = parent.return;
+                  case HostRoot: {
+                    hostParent = parent.stateNode.containerInfo;
+                    hostParentIsContainer = true;
+                    break findParent;
+                  }
+                  case HostPortal: {
+                    hostParent = parent.stateNode.containerInfo;
+                    hostParentIsContainer = true;
+                    break findParent;
+                  }
                 }
+                parent = parent.return;
+              }
               if (hostParent === null) {
                 throw new Error("Expected to find a host parent. This error is likely caused by a bug in React. Please file an issue.");
               }
@@ -19419,6 +19440,7 @@
                   safelyDetachRef(deletedFiber, nearestMountedAncestor);
                 }
               }
+              // eslint-disable-next-line-no-fallthrough
               case HostText: {
                 {
                   var prevHostParent = hostParent;
@@ -20680,6 +20702,9 @@
               case RootFatalErrored: {
                 throw new Error("Root did not complete. This is a bug in React.");
               }
+              // Flow knows about invariant, so it complains if I add a break
+              // statement, but eslint doesn't know about invariant, so it complains
+              // if I do. eslint-disable-next-line no-fallthrough
               case RootErrored: {
                 commitRoot(root2, workInProgressRootRecoverableErrors, workInProgressTransitions);
                 break;
@@ -22306,67 +22331,71 @@
             } else if (typeof type2 === "string") {
               fiberTag = HostComponent;
             } else {
-              getTag:
-                switch (type2) {
-                  case REACT_FRAGMENT_TYPE:
-                    return createFiberFromFragment(pendingProps.children, mode, lanes, key);
-                  case REACT_STRICT_MODE_TYPE:
-                    fiberTag = Mode;
-                    mode |= StrictLegacyMode;
-                    if ((mode & ConcurrentMode) !== NoMode) {
-                      mode |= StrictEffectsMode;
-                    }
-                    break;
-                  case REACT_PROFILER_TYPE:
-                    return createFiberFromProfiler(pendingProps, mode, lanes, key);
-                  case REACT_SUSPENSE_TYPE:
-                    return createFiberFromSuspense(pendingProps, mode, lanes, key);
-                  case REACT_SUSPENSE_LIST_TYPE:
-                    return createFiberFromSuspenseList(pendingProps, mode, lanes, key);
-                  case REACT_OFFSCREEN_TYPE:
-                    return createFiberFromOffscreen(pendingProps, mode, lanes, key);
-                  case REACT_LEGACY_HIDDEN_TYPE:
-                  case REACT_SCOPE_TYPE:
-                  case REACT_CACHE_TYPE:
-                  case REACT_TRACING_MARKER_TYPE:
-                  case REACT_DEBUG_TRACING_MODE_TYPE:
-                  default: {
-                    if (typeof type2 === "object" && type2 !== null) {
-                      switch (type2.$$typeof) {
-                        case REACT_PROVIDER_TYPE:
-                          fiberTag = ContextProvider;
-                          break getTag;
-                        case REACT_CONTEXT_TYPE:
-                          fiberTag = ContextConsumer;
-                          break getTag;
-                        case REACT_FORWARD_REF_TYPE:
-                          fiberTag = ForwardRef;
-                          {
-                            resolvedType = resolveForwardRefForHotReloading(resolvedType);
-                          }
-                          break getTag;
-                        case REACT_MEMO_TYPE:
-                          fiberTag = MemoComponent;
-                          break getTag;
-                        case REACT_LAZY_TYPE:
-                          fiberTag = LazyComponent;
-                          resolvedType = null;
-                          break getTag;
-                      }
-                    }
-                    var info = "";
-                    {
-                      if (type2 === void 0 || typeof type2 === "object" && type2 !== null && Object.keys(type2).length === 0) {
-                        info += " You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.";
-                      }
-                      var ownerName = owner ? getComponentNameFromFiber(owner) : null;
-                      if (ownerName) {
-                        info += "\n\nCheck the render method of `" + ownerName + "`.";
-                      }
-                    }
-                    throw new Error("Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) " + ("but got: " + (type2 == null ? type2 : typeof type2) + "." + info));
+              getTag: switch (type2) {
+                case REACT_FRAGMENT_TYPE:
+                  return createFiberFromFragment(pendingProps.children, mode, lanes, key);
+                case REACT_STRICT_MODE_TYPE:
+                  fiberTag = Mode;
+                  mode |= StrictLegacyMode;
+                  if ((mode & ConcurrentMode) !== NoMode) {
+                    mode |= StrictEffectsMode;
                   }
+                  break;
+                case REACT_PROFILER_TYPE:
+                  return createFiberFromProfiler(pendingProps, mode, lanes, key);
+                case REACT_SUSPENSE_TYPE:
+                  return createFiberFromSuspense(pendingProps, mode, lanes, key);
+                case REACT_SUSPENSE_LIST_TYPE:
+                  return createFiberFromSuspenseList(pendingProps, mode, lanes, key);
+                case REACT_OFFSCREEN_TYPE:
+                  return createFiberFromOffscreen(pendingProps, mode, lanes, key);
+                case REACT_LEGACY_HIDDEN_TYPE:
+                // eslint-disable-next-line no-fallthrough
+                case REACT_SCOPE_TYPE:
+                // eslint-disable-next-line no-fallthrough
+                case REACT_CACHE_TYPE:
+                // eslint-disable-next-line no-fallthrough
+                case REACT_TRACING_MARKER_TYPE:
+                // eslint-disable-next-line no-fallthrough
+                case REACT_DEBUG_TRACING_MODE_TYPE:
+                // eslint-disable-next-line no-fallthrough
+                default: {
+                  if (typeof type2 === "object" && type2 !== null) {
+                    switch (type2.$$typeof) {
+                      case REACT_PROVIDER_TYPE:
+                        fiberTag = ContextProvider;
+                        break getTag;
+                      case REACT_CONTEXT_TYPE:
+                        fiberTag = ContextConsumer;
+                        break getTag;
+                      case REACT_FORWARD_REF_TYPE:
+                        fiberTag = ForwardRef;
+                        {
+                          resolvedType = resolveForwardRefForHotReloading(resolvedType);
+                        }
+                        break getTag;
+                      case REACT_MEMO_TYPE:
+                        fiberTag = MemoComponent;
+                        break getTag;
+                      case REACT_LAZY_TYPE:
+                        fiberTag = LazyComponent;
+                        resolvedType = null;
+                        break getTag;
+                    }
+                  }
+                  var info = "";
+                  {
+                    if (type2 === void 0 || typeof type2 === "object" && type2 !== null && Object.keys(type2).length === 0) {
+                      info += " You likely forgot to export your component from the file it's defined in, or you might have mixed up default and named imports.";
+                    }
+                    var ownerName = owner ? getComponentNameFromFiber(owner) : null;
+                    if (ownerName) {
+                      info += "\n\nCheck the render method of `" + ownerName + "`.";
+                    }
+                  }
+                  throw new Error("Element type is invalid: expected a string (for built-in components) or a class/function (for composite components) " + ("but got: " + (type2 == null ? type2 : typeof type2) + "." + info));
                 }
+              }
             }
             var fiber = createFiber(fiberTag, pendingProps, key, mode);
             fiber.elementType = type2;
@@ -28696,13 +28725,13 @@
           };
         }
       };
-      Dexie$1 = class {
+      Dexie$1 = class _Dexie$1 {
         constructor(name, options) {
           this._middlewares = {};
           this.verno = 0;
-          const deps = Dexie$1.dependencies;
+          const deps = _Dexie$1.dependencies;
           this._options = options = {
-            addons: Dexie$1.addons,
+            addons: _Dexie$1.addons,
             autoOpen: true,
             indexedDB: deps.indexedDB,
             IDBKeyRange: deps.IDBKeyRange,
@@ -28742,7 +28771,7 @@
           this.on = Events(this, "populate", "blocked", "versionchange", "close", { ready: [promisableChain, nop] });
           this.on.ready.subscribe = override(this.on.ready.subscribe, (subscribe) => {
             return (subscriber, bSticky) => {
-              Dexie$1.vip(() => {
+              _Dexie$1.vip(() => {
                 const state2 = this._state;
                 if (state2.openComplete) {
                   if (!state2.dbOpenError)
@@ -29375,8 +29404,7 @@
   }
   function warning(cond, message) {
     if (!cond) {
-      if (typeof console !== "undefined")
-        console.warn(message);
+      if (typeof console !== "undefined") console.warn(message);
       try {
         throw new Error(message);
       } catch (e) {
@@ -29417,10 +29445,8 @@
       search = "",
       hash = ""
     } = _ref;
-    if (search && search !== "?")
-      pathname += search.charAt(0) === "?" ? search : "?" + search;
-    if (hash && hash !== "#")
-      pathname += hash.charAt(0) === "#" ? hash : "#" + hash;
+    if (search && search !== "?") pathname += search.charAt(0) === "?" ? search : "?" + search;
+    if (hash && hash !== "#") pathname += hash.charAt(0) === "#" ? hash : "#" + hash;
     return pathname;
   }
   function parsePath(path) {
@@ -29482,8 +29508,7 @@
     function push2(to, state) {
       action = Action.Push;
       let location2 = createLocation(history.location, to, state);
-      if (validateLocation)
-        validateLocation(location2, to);
+      if (validateLocation) validateLocation(location2, to);
       index = getIndex() + 1;
       let historyState = getHistoryState(location2, index);
       let url = history.createHref(location2);
@@ -29506,8 +29531,7 @@
     function replace2(to, state) {
       action = Action.Replace;
       let location2 = createLocation(history.location, to, state);
-      if (validateLocation)
-        validateLocation(location2, to);
+      if (validateLocation) validateLocation(location2, to);
       index = getIndex();
       let historyState = getHistoryState(location2, index);
       let url = history.createHref(location2);
@@ -29662,8 +29686,7 @@
   }
   function explodeOptionalSegments(path) {
     let segments = path.split("/");
-    if (segments.length === 0)
-      return [];
+    if (segments.length === 0) return [];
     let [first, ...rest] = segments;
     let isOptional = first.endsWith("?");
     let required = first.replace(/\?$/, "");
@@ -29767,8 +29790,7 @@
     }
     let [matcher, compiledParams] = compilePath(pattern.path, pattern.caseSensitive, pattern.end);
     let match2 = pathname.match(matcher);
-    if (!match2)
-      return null;
+    if (!match2) return null;
     let matchedPathname = match2[0];
     let pathnameBase = matchedPathname.replace(/(.)\/+$/, "$1");
     let captureGroups = match2.slice(1);
@@ -29821,8 +29843,7 @@
       regexpSource += "\\/*$";
     } else if (path !== "" && path !== "/") {
       regexpSource += "(?:(?=\\/|$))";
-    } else
-      ;
+    } else ;
     let matcher = new RegExp(regexpSource, caseSensitive ? void 0 : "i");
     return [matcher, params];
   }
@@ -29835,8 +29856,7 @@
     }
   }
   function stripBasename(pathname, basename) {
-    if (basename === "/")
-      return pathname;
+    if (basename === "/") return pathname;
     if (!pathname.toLowerCase().startsWith(basename.toLowerCase())) {
       return null;
     }
@@ -29868,8 +29888,7 @@
     let relativeSegments = relativePath.split("/");
     relativeSegments.forEach((segment) => {
       if (segment === "..") {
-        if (segments.length > 1)
-          segments.pop();
+        if (segments.length > 1) segments.pop();
       } else if (segment !== ".") {
         segments.push(segment);
       }
@@ -30084,8 +30103,7 @@
         options = {};
       }
       true ? warning(activeRef.current, navigateEffectWarning) : void 0;
-      if (!activeRef.current)
-        return;
+      if (!activeRef.current) return;
       if (typeof to === "number") {
         navigator2.go(to);
         return;
@@ -30481,8 +30499,7 @@
         options = {};
       }
       true ? warning(activeRef.current, navigateEffectWarning) : void 0;
-      if (!activeRef.current)
-        return;
+      if (!activeRef.current) return;
       if (typeof to === "number") {
         router.navigate(to);
       } else {
@@ -30657,15 +30674,13 @@
     return _extends3.apply(this, arguments);
   }
   function _objectWithoutPropertiesLoose(source, excluded) {
-    if (source == null)
-      return {};
+    if (source == null) return {};
     var target = {};
     var sourceKeys = Object.keys(source);
     var key, i;
     for (i = 0; i < sourceKeys.length; i++) {
       key = sourceKeys[i];
-      if (excluded.indexOf(key) >= 0)
-        continue;
+      if (excluded.indexOf(key) >= 0) continue;
       target[key] = source[key];
     }
     return target;
@@ -30911,8 +30926,7 @@
       viewTransition
     });
     function handleClick(event) {
-      if (onClick)
-        onClick(event);
+      if (onClick) onClick(event);
       if (!event.defaultPrevented) {
         internalOnClick(event);
       }
@@ -31013,8 +31027,7 @@
     let formMethod = method.toLowerCase() === "get" ? "get" : "post";
     let submitHandler = (event) => {
       onSubmit && onSubmit(event);
-      if (event.defaultPrevented)
-        return;
+      if (event.defaultPrevented) return;
       event.preventDefault();
       let submitter = event.nativeEvent.submitter;
       let submitMethod = (submitter == null ? void 0 : submitter.getAttribute("formmethod")) || method;
@@ -31401,10 +31414,8 @@
   }) => {
     const navigate = useNavigate();
     const handleClick = (e) => {
-      if (onClick)
-        onClick(e);
-      if (to && !e.defaultPrevented)
-        navigate(to);
+      if (onClick) onClick(e);
+      if (to && !e.defaultPrevented) navigate(to);
     };
     return /* @__PURE__ */ (0, import_jsx_runtime2.jsxs)(
       "button",
@@ -31791,16 +31802,19 @@
     G: function(date, token, localize2) {
       var era = date.getUTCFullYear() > 0 ? 1 : 0;
       switch (token) {
+        // AD, BC
         case "G":
         case "GG":
         case "GGG":
           return localize2.era(era, {
             width: "abbreviated"
           });
+        // A, B
         case "GGGGG":
           return localize2.era(era, {
             width: "narrow"
           });
+        // Anno Domini, Before Christ
         case "GGGG":
         default:
           return localize2.era(era, {
@@ -31856,24 +31870,30 @@
     Q: function(date, token, localize2) {
       var quarter = Math.ceil((date.getUTCMonth() + 1) / 3);
       switch (token) {
+        // 1, 2, 3, 4
         case "Q":
           return String(quarter);
+        // 01, 02, 03, 04
         case "QQ":
           return addLeadingZeros(quarter, 2);
+        // 1st, 2nd, 3rd, 4th
         case "Qo":
           return localize2.ordinalNumber(quarter, {
             unit: "quarter"
           });
+        // Q1, Q2, Q3, Q4
         case "QQQ":
           return localize2.quarter(quarter, {
             width: "abbreviated",
             context: "formatting"
           });
+        // 1, 2, 3, 4 (narrow quarter; could be not numerical)
         case "QQQQQ":
           return localize2.quarter(quarter, {
             width: "narrow",
             context: "formatting"
           });
+        // 1st quarter, 2nd quarter, ...
         case "QQQQ":
         default:
           return localize2.quarter(quarter, {
@@ -31886,24 +31906,30 @@
     q: function(date, token, localize2) {
       var quarter = Math.ceil((date.getUTCMonth() + 1) / 3);
       switch (token) {
+        // 1, 2, 3, 4
         case "q":
           return String(quarter);
+        // 01, 02, 03, 04
         case "qq":
           return addLeadingZeros(quarter, 2);
+        // 1st, 2nd, 3rd, 4th
         case "qo":
           return localize2.ordinalNumber(quarter, {
             unit: "quarter"
           });
+        // Q1, Q2, Q3, Q4
         case "qqq":
           return localize2.quarter(quarter, {
             width: "abbreviated",
             context: "standalone"
           });
+        // 1, 2, 3, 4 (narrow quarter; could be not numerical)
         case "qqqqq":
           return localize2.quarter(quarter, {
             width: "narrow",
             context: "standalone"
           });
+        // 1st quarter, 2nd quarter, ...
         case "qqqq":
         default:
           return localize2.quarter(quarter, {
@@ -31919,20 +31945,24 @@
         case "M":
         case "MM":
           return lightFormatters_default.M(date, token);
+        // 1st, 2nd, ..., 12th
         case "Mo":
           return localize2.ordinalNumber(month + 1, {
             unit: "month"
           });
+        // Jan, Feb, ..., Dec
         case "MMM":
           return localize2.month(month, {
             width: "abbreviated",
             context: "formatting"
           });
+        // J, F, ..., D
         case "MMMMM":
           return localize2.month(month, {
             width: "narrow",
             context: "formatting"
           });
+        // January, February, ..., December
         case "MMMM":
         default:
           return localize2.month(month, {
@@ -31945,24 +31975,30 @@
     L: function(date, token, localize2) {
       var month = date.getUTCMonth();
       switch (token) {
+        // 1, 2, ..., 12
         case "L":
           return String(month + 1);
+        // 01, 02, ..., 12
         case "LL":
           return addLeadingZeros(month + 1, 2);
+        // 1st, 2nd, ..., 12th
         case "Lo":
           return localize2.ordinalNumber(month + 1, {
             unit: "month"
           });
+        // Jan, Feb, ..., Dec
         case "LLL":
           return localize2.month(month, {
             width: "abbreviated",
             context: "standalone"
           });
+        // J, F, ..., D
         case "LLLLL":
           return localize2.month(month, {
             width: "narrow",
             context: "standalone"
           });
+        // January, February, ..., December
         case "LLLL":
         default:
           return localize2.month(month, {
@@ -32014,6 +32050,7 @@
     E: function(date, token, localize2) {
       var dayOfWeek = date.getUTCDay();
       switch (token) {
+        // Tue
         case "E":
         case "EE":
         case "EEE":
@@ -32021,16 +32058,19 @@
             width: "abbreviated",
             context: "formatting"
           });
+        // T
         case "EEEEE":
           return localize2.day(dayOfWeek, {
             width: "narrow",
             context: "formatting"
           });
+        // Tu
         case "EEEEEE":
           return localize2.day(dayOfWeek, {
             width: "short",
             context: "formatting"
           });
+        // Tuesday
         case "EEEE":
         default:
           return localize2.day(dayOfWeek, {
@@ -32044,10 +32084,13 @@
       var dayOfWeek = date.getUTCDay();
       var localDayOfWeek = (dayOfWeek - options.weekStartsOn + 8) % 7 || 7;
       switch (token) {
+        // Numerical value (Nth day of week with current locale or weekStartsOn)
         case "e":
           return String(localDayOfWeek);
+        // Padded numerical value
         case "ee":
           return addLeadingZeros(localDayOfWeek, 2);
+        // 1st, 2nd, ..., 7th
         case "eo":
           return localize2.ordinalNumber(localDayOfWeek, {
             unit: "day"
@@ -32057,16 +32100,19 @@
             width: "abbreviated",
             context: "formatting"
           });
+        // T
         case "eeeee":
           return localize2.day(dayOfWeek, {
             width: "narrow",
             context: "formatting"
           });
+        // Tu
         case "eeeeee":
           return localize2.day(dayOfWeek, {
             width: "short",
             context: "formatting"
           });
+        // Tuesday
         case "eeee":
         default:
           return localize2.day(dayOfWeek, {
@@ -32080,10 +32126,13 @@
       var dayOfWeek = date.getUTCDay();
       var localDayOfWeek = (dayOfWeek - options.weekStartsOn + 8) % 7 || 7;
       switch (token) {
+        // Numerical value (same as in `e`)
         case "c":
           return String(localDayOfWeek);
+        // Padded numerical value
         case "cc":
           return addLeadingZeros(localDayOfWeek, token.length);
+        // 1st, 2nd, ..., 7th
         case "co":
           return localize2.ordinalNumber(localDayOfWeek, {
             unit: "day"
@@ -32093,16 +32142,19 @@
             width: "abbreviated",
             context: "standalone"
           });
+        // T
         case "ccccc":
           return localize2.day(dayOfWeek, {
             width: "narrow",
             context: "standalone"
           });
+        // Tu
         case "cccccc":
           return localize2.day(dayOfWeek, {
             width: "short",
             context: "standalone"
           });
+        // Tuesday
         case "cccc":
         default:
           return localize2.day(dayOfWeek, {
@@ -32116,29 +32168,36 @@
       var dayOfWeek = date.getUTCDay();
       var isoDayOfWeek = dayOfWeek === 0 ? 7 : dayOfWeek;
       switch (token) {
+        // 2
         case "i":
           return String(isoDayOfWeek);
+        // 02
         case "ii":
           return addLeadingZeros(isoDayOfWeek, token.length);
+        // 2nd
         case "io":
           return localize2.ordinalNumber(isoDayOfWeek, {
             unit: "day"
           });
+        // Tue
         case "iii":
           return localize2.day(dayOfWeek, {
             width: "abbreviated",
             context: "formatting"
           });
+        // T
         case "iiiii":
           return localize2.day(dayOfWeek, {
             width: "narrow",
             context: "formatting"
           });
+        // Tu
         case "iiiiii":
           return localize2.day(dayOfWeek, {
             width: "short",
             context: "formatting"
           });
+        // Tuesday
         case "iiii":
         default:
           return localize2.day(dayOfWeek, {
@@ -32250,8 +32309,7 @@
     h: function(date, token, localize2) {
       if (token === "ho") {
         var hours = date.getUTCHours() % 12;
-        if (hours === 0)
-          hours = 12;
+        if (hours === 0) hours = 12;
         return localize2.ordinalNumber(hours, {
           unit: "hour"
         });
@@ -32280,8 +32338,7 @@
     // Hour [1-24]
     k: function(date, token, localize2) {
       var hours = date.getUTCHours();
-      if (hours === 0)
-        hours = 24;
+      if (hours === 0) hours = 24;
       if (token === "ko") {
         return localize2.ordinalNumber(hours, {
           unit: "hour"
@@ -32319,13 +32376,21 @@
         return "Z";
       }
       switch (token) {
+        // Hours and optional minutes
         case "X":
           return formatTimezoneWithOptionalMinutes(timezoneOffset);
+        // Hours, minutes and optional seconds without `:` delimiter
+        // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+        // so this token always has the same output as `XX`
         case "XXXX":
         case "XX":
           return formatTimezone(timezoneOffset);
+        // Hours, minutes and optional seconds with `:` delimiter
+        // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+        // so this token always has the same output as `XXX`
         case "XXXXX":
         case "XXX":
+        // Hours and minutes with `:` delimiter
         default:
           return formatTimezone(timezoneOffset, ":");
       }
@@ -32335,13 +32400,21 @@
       var originalDate = options._originalDate || date;
       var timezoneOffset = originalDate.getTimezoneOffset();
       switch (token) {
+        // Hours and optional minutes
         case "x":
           return formatTimezoneWithOptionalMinutes(timezoneOffset);
+        // Hours, minutes and optional seconds without `:` delimiter
+        // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+        // so this token always has the same output as `xx`
         case "xxxx":
         case "xx":
           return formatTimezone(timezoneOffset);
+        // Hours, minutes and optional seconds with `:` delimiter
+        // Note: neither ISO-8601 nor JavaScript supports seconds in timezone offsets
+        // so this token always has the same output as `xxx`
         case "xxxxx":
         case "xxx":
+        // Hours and minutes with `:` delimiter
         default:
           return formatTimezone(timezoneOffset, ":");
       }
@@ -32351,10 +32424,12 @@
       var originalDate = options._originalDate || date;
       var timezoneOffset = originalDate.getTimezoneOffset();
       switch (token) {
+        // Short
         case "O":
         case "OO":
         case "OOO":
           return "GMT" + formatTimezoneShort(timezoneOffset, ":");
+        // Long
         case "OOOO":
         default:
           return "GMT" + formatTimezone(timezoneOffset, ":");
@@ -32365,10 +32440,12 @@
       var originalDate = options._originalDate || date;
       var timezoneOffset = originalDate.getTimezoneOffset();
       switch (token) {
+        // Short
         case "z":
         case "zz":
         case "zzz":
           return "GMT" + formatTimezoneShort(timezoneOffset, ":");
+        // Long
         case "zzzz":
         default:
           return "GMT" + formatTimezone(timezoneOffset, ":");
@@ -32884,12 +32961,10 @@
     return function(string) {
       var options = arguments.length > 1 && arguments[1] !== void 0 ? arguments[1] : {};
       var matchResult = string.match(args.matchPattern);
-      if (!matchResult)
-        return null;
+      if (!matchResult) return null;
       var matchedString = matchResult[0];
       var parseResult = string.match(args.parsePattern);
-      if (!parseResult)
-        return null;
+      if (!parseResult) return null;
       var value = args.valueCallback ? args.valueCallback(parseResult[0]) : parseResult[0];
       value = options.valueCallback ? options.valueCallback(value) : value;
       var rest = string.slice(matchedString.length);
@@ -33221,6 +33296,7 @@
     }
     parse(dateString, token, match2) {
       switch (token) {
+        // AD, BC
         case "G":
         case "GG":
         case "GGG":
@@ -33229,10 +33305,12 @@
           }) || match2.era(dateString, {
             width: "narrow"
           });
+        // A, B
         case "GGGGG":
           return match2.era(dateString, {
             width: "narrow"
           });
+        // Anno Domini, Before Christ
         case "GGGG":
         default:
           return match2.era(dateString, {
@@ -33593,13 +33671,16 @@
     }
     parse(dateString, token, match2) {
       switch (token) {
+        // 1, 2, 3, 4
         case "Q":
         case "QQ":
           return parseNDigits(token.length, dateString);
+        // 1st, 2nd, 3rd, 4th
         case "Qo":
           return match2.ordinalNumber(dateString, {
             unit: "quarter"
           });
+        // Q1, Q2, Q3, Q4
         case "QQQ":
           return match2.quarter(dateString, {
             width: "abbreviated",
@@ -33608,11 +33689,13 @@
             width: "narrow",
             context: "formatting"
           });
+        // 1, 2, 3, 4 (narrow quarter; could be not numerical)
         case "QQQQQ":
           return match2.quarter(dateString, {
             width: "narrow",
             context: "formatting"
           });
+        // 1st quarter, 2nd quarter, ...
         case "QQQQ":
         default:
           return match2.quarter(dateString, {
@@ -33655,13 +33738,16 @@
     }
     parse(dateString, token, match2) {
       switch (token) {
+        // 1, 2, 3, 4
         case "q":
         case "qq":
           return parseNDigits(token.length, dateString);
+        // 1st, 2nd, 3rd, 4th
         case "qo":
           return match2.ordinalNumber(dateString, {
             unit: "quarter"
           });
+        // Q1, Q2, Q3, Q4
         case "qqq":
           return match2.quarter(dateString, {
             width: "abbreviated",
@@ -33670,11 +33756,13 @@
             width: "narrow",
             context: "standalone"
           });
+        // 1, 2, 3, 4 (narrow quarter; could be not numerical)
         case "qqqqq":
           return match2.quarter(dateString, {
             width: "narrow",
             context: "standalone"
           });
+        // 1st quarter, 2nd quarter, ...
         case "qqqq":
         default:
           return match2.quarter(dateString, {
@@ -33720,14 +33808,18 @@
         return value - 1;
       };
       switch (token) {
+        // 1, 2, ..., 12
         case "M":
           return mapValue(parseNumericPattern(numericPatterns.month, dateString), valueCallback);
+        // 01, 02, ..., 12
         case "MM":
           return mapValue(parseNDigits(2, dateString), valueCallback);
+        // 1st, 2nd, ..., 12th
         case "Mo":
           return mapValue(match2.ordinalNumber(dateString, {
             unit: "month"
           }), valueCallback);
+        // Jan, Feb, ..., Dec
         case "MMM":
           return match2.month(dateString, {
             width: "abbreviated",
@@ -33736,11 +33828,13 @@
             width: "narrow",
             context: "formatting"
           });
+        // J, F, ..., D
         case "MMMMM":
           return match2.month(dateString, {
             width: "narrow",
             context: "formatting"
           });
+        // January, February, ..., December
         case "MMMM":
         default:
           return match2.month(dateString, {
@@ -33786,14 +33880,18 @@
         return value - 1;
       };
       switch (token) {
+        // 1, 2, ..., 12
         case "L":
           return mapValue(parseNumericPattern(numericPatterns.month, dateString), valueCallback);
+        // 01, 02, ..., 12
         case "LL":
           return mapValue(parseNDigits(2, dateString), valueCallback);
+        // 1st, 2nd, ..., 12th
         case "Lo":
           return mapValue(match2.ordinalNumber(dateString, {
             unit: "month"
           }), valueCallback);
+        // Jan, Feb, ..., Dec
         case "LLL":
           return match2.month(dateString, {
             width: "abbreviated",
@@ -33802,11 +33900,13 @@
             width: "narrow",
             context: "standalone"
           });
+        // J, F, ..., D
         case "LLLLL":
           return match2.month(dateString, {
             width: "narrow",
             context: "standalone"
           });
+        // January, February, ..., December
         case "LLLL":
         default:
           return match2.month(dateString, {
@@ -34063,6 +34163,7 @@
     }
     parse(dateString, token, match2) {
       switch (token) {
+        // Tue
         case "E":
         case "EE":
         case "EEE":
@@ -34076,11 +34177,13 @@
             width: "narrow",
             context: "formatting"
           });
+        // T
         case "EEEEE":
           return match2.day(dateString, {
             width: "narrow",
             context: "formatting"
           });
+        // Tu
         case "EEEEEE":
           return match2.day(dateString, {
             width: "short",
@@ -34089,6 +34192,7 @@
             width: "narrow",
             context: "formatting"
           });
+        // Tuesday
         case "EEEE":
         default:
           return match2.day(dateString, {
@@ -34138,13 +34242,16 @@
         return (value + options.weekStartsOn + 6) % 7 + wholeWeekDays;
       };
       switch (token) {
+        // 3
         case "e":
         case "ee":
           return mapValue(parseNDigits(token.length, dateString), valueCallback);
+        // 3rd
         case "eo":
           return mapValue(match2.ordinalNumber(dateString, {
             unit: "day"
           }), valueCallback);
+        // Tue
         case "eee":
           return match2.day(dateString, {
             width: "abbreviated",
@@ -34156,11 +34263,13 @@
             width: "narrow",
             context: "formatting"
           });
+        // T
         case "eeeee":
           return match2.day(dateString, {
             width: "narrow",
             context: "formatting"
           });
+        // Tu
         case "eeeeee":
           return match2.day(dateString, {
             width: "short",
@@ -34169,6 +34278,7 @@
             width: "narrow",
             context: "formatting"
           });
+        // Tuesday
         case "eeee":
         default:
           return match2.day(dateString, {
@@ -34218,13 +34328,16 @@
         return (value + options.weekStartsOn + 6) % 7 + wholeWeekDays;
       };
       switch (token) {
+        // 3
         case "c":
         case "cc":
           return mapValue(parseNDigits(token.length, dateString), valueCallback);
+        // 3rd
         case "co":
           return mapValue(match2.ordinalNumber(dateString, {
             unit: "day"
           }), valueCallback);
+        // Tue
         case "ccc":
           return match2.day(dateString, {
             width: "abbreviated",
@@ -34236,11 +34349,13 @@
             width: "narrow",
             context: "standalone"
           });
+        // T
         case "ccccc":
           return match2.day(dateString, {
             width: "narrow",
             context: "standalone"
           });
+        // Tu
         case "cccccc":
           return match2.day(dateString, {
             width: "short",
@@ -34249,6 +34364,7 @@
             width: "narrow",
             context: "standalone"
           });
+        // Tuesday
         case "cccc":
         default:
           return match2.day(dateString, {
@@ -34320,13 +34436,16 @@
         return value;
       };
       switch (token) {
+        // 2
         case "i":
         case "ii":
           return parseNDigits(token.length, dateString);
+        // 2nd
         case "io":
           return match2.ordinalNumber(dateString, {
             unit: "day"
           });
+        // Tue
         case "iii":
           return mapValue(match2.day(dateString, {
             width: "abbreviated",
@@ -34338,11 +34457,13 @@
             width: "narrow",
             context: "formatting"
           }), valueCallback);
+        // T
         case "iiiii":
           return mapValue(match2.day(dateString, {
             width: "narrow",
             context: "formatting"
           }), valueCallback);
+        // Tu
         case "iiiiii":
           return mapValue(match2.day(dateString, {
             width: "short",
@@ -34351,6 +34472,7 @@
             width: "narrow",
             context: "formatting"
           }), valueCallback);
+        // Tuesday
         case "iiii":
         default:
           return mapValue(match2.day(dateString, {
@@ -35068,8 +35190,7 @@
     };
     for (var token of tokens) {
       var _ret = _loop(token);
-      if (typeof _ret === "object")
-        return _ret.v;
+      if (typeof _ret === "object") return _ret.v;
     }
     if (dateString.length > 0 && notWhitespaceRegExp.test(dateString)) {
       return /* @__PURE__ */ new Date(NaN);
@@ -35306,8 +35427,7 @@
   }
   function __generator(thisArg, body) {
     var _ = { label: 0, sent: function() {
-      if (t[0] & 1)
-        throw t[1];
+      if (t[0] & 1) throw t[1];
       return t[1];
     }, trys: [], ops: [] }, f, y, t, g;
     return g = { next: verb(0), "throw": verb(1), "return": verb(2) }, typeof Symbol === "function" && (g[Symbol.iterator] = function() {
@@ -35319,64 +35439,58 @@
       };
     }
     function step(op) {
-      if (f)
-        throw new TypeError("Generator is already executing.");
-      while (_)
-        try {
-          if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done)
-            return t;
-          if (y = 0, t)
-            op = [op[0] & 2, t.value];
-          switch (op[0]) {
-            case 0:
-            case 1:
+      if (f) throw new TypeError("Generator is already executing.");
+      while (_) try {
+        if (f = 1, y && (t = op[0] & 2 ? y["return"] : op[0] ? y["throw"] || ((t = y["return"]) && t.call(y), 0) : y.next) && !(t = t.call(y, op[1])).done) return t;
+        if (y = 0, t) op = [op[0] & 2, t.value];
+        switch (op[0]) {
+          case 0:
+          case 1:
+            t = op;
+            break;
+          case 4:
+            _.label++;
+            return { value: op[1], done: false };
+          case 5:
+            _.label++;
+            y = op[1];
+            op = [0];
+            continue;
+          case 7:
+            op = _.ops.pop();
+            _.trys.pop();
+            continue;
+          default:
+            if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
+              _ = 0;
+              continue;
+            }
+            if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
+              _.label = op[1];
+              break;
+            }
+            if (op[0] === 6 && _.label < t[1]) {
+              _.label = t[1];
               t = op;
               break;
-            case 4:
-              _.label++;
-              return { value: op[1], done: false };
-            case 5:
-              _.label++;
-              y = op[1];
-              op = [0];
-              continue;
-            case 7:
-              op = _.ops.pop();
-              _.trys.pop();
-              continue;
-            default:
-              if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) {
-                _ = 0;
-                continue;
-              }
-              if (op[0] === 3 && (!t || op[1] > t[0] && op[1] < t[3])) {
-                _.label = op[1];
-                break;
-              }
-              if (op[0] === 6 && _.label < t[1]) {
-                _.label = t[1];
-                t = op;
-                break;
-              }
-              if (t && _.label < t[2]) {
-                _.label = t[2];
-                _.ops.push(op);
-                break;
-              }
-              if (t[2])
-                _.ops.pop();
-              _.trys.pop();
-              continue;
-          }
-          op = body.call(thisArg, _);
-        } catch (e) {
-          op = [6, e];
-          y = 0;
-        } finally {
-          f = t = 0;
+            }
+            if (t && _.label < t[2]) {
+              _.label = t[2];
+              _.ops.push(op);
+              break;
+            }
+            if (t[2]) _.ops.pop();
+            _.trys.pop();
+            continue;
         }
-      if (op[0] & 5)
-        throw op[1];
+        op = body.call(thisArg, _);
+      } catch (e) {
+        op = [6, e];
+        y = 0;
+      } finally {
+        f = t = 0;
+      }
+      if (op[0] & 5) throw op[1];
       return { value: op[0] ? op[1] : void 0, done: true };
     }
   }
@@ -35479,16 +35593,13 @@
           var descriptor = props2[i];
           descriptor.enumerable = descriptor.enumerable || false;
           descriptor.configurable = true;
-          if ("value" in descriptor)
-            descriptor.writable = true;
+          if ("value" in descriptor) descriptor.writable = true;
           Object.defineProperty(target, descriptor.key, descriptor);
         }
       }
       function _createClass(Constructor, protoProps, staticProps) {
-        if (protoProps)
-          _defineProperties(Constructor.prototype, protoProps);
-        if (staticProps)
-          _defineProperties(Constructor, staticProps);
+        if (protoProps) _defineProperties(Constructor.prototype, protoProps);
+        if (staticProps) _defineProperties(Constructor, staticProps);
         return Constructor;
       }
       function _defineProperty34(obj, key, value) {
@@ -35508,10 +35619,9 @@
         var keys3 = Object.keys(object);
         if (Object.getOwnPropertySymbols) {
           var symbols = Object.getOwnPropertySymbols(object);
-          if (enumerableOnly)
-            symbols = symbols.filter(function(sym) {
-              return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-            });
+          if (enumerableOnly) symbols = symbols.filter(function(sym) {
+            return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+          });
           keys3.push.apply(keys3, symbols);
         }
         return keys3;
@@ -35541,18 +35651,15 @@
       }
       function _arrayWithoutHoles(arr) {
         if (Array.isArray(arr)) {
-          for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++)
-            arr2[i] = arr[i];
+          for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
           return arr2;
         }
       }
       function _arrayWithHoles(arr) {
-        if (Array.isArray(arr))
-          return arr;
+        if (Array.isArray(arr)) return arr;
       }
       function _iterableToArray(iter2) {
-        if (Symbol.iterator in Object(iter2) || Object.prototype.toString.call(iter2) === "[object Arguments]")
-          return Array.from(iter2);
+        if (Symbol.iterator in Object(iter2) || Object.prototype.toString.call(iter2) === "[object Arguments]") return Array.from(iter2);
       }
       function _iterableToArrayLimit(arr, i) {
         if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
@@ -35565,19 +35672,16 @@
         try {
           for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
             _arr.push(_s.value);
-            if (i && _arr.length === i)
-              break;
+            if (i && _arr.length === i) break;
           }
         } catch (err) {
           _d = true;
           _e = err;
         } finally {
           try {
-            if (!_n && _i["return"] != null)
-              _i["return"]();
+            if (!_n && _i["return"] != null) _i["return"]();
           } finally {
-            if (_d)
-              throw _e;
+            if (_d) throw _e;
           }
         }
         return _arr;
@@ -36603,8 +36707,7 @@
         })(e2);
       }
       function _classCallCheck$1(e2, t2) {
-        if (!(e2 instanceof t2))
-          throw new TypeError("Cannot call a class as a function");
+        if (!(e2 instanceof t2)) throw new TypeError("Cannot call a class as a function");
       }
       function _defineProperties$1(e2, t2) {
         for (var r2 = 0; r2 < t2.length; r2++) {
@@ -36627,30 +36730,23 @@
       }
       function _toConsumableArray$1(e2) {
         return function _arrayWithoutHoles$1(e3) {
-          if (Array.isArray(e3))
-            return _arrayLikeToArray$1(e3);
+          if (Array.isArray(e3)) return _arrayLikeToArray$1(e3);
         }(e2) || function _iterableToArray$1(e3) {
-          if ("undefined" != typeof Symbol && Symbol.iterator in Object(e3))
-            return Array.from(e3);
+          if ("undefined" != typeof Symbol && Symbol.iterator in Object(e3)) return Array.from(e3);
         }(e2) || function _unsupportedIterableToArray$1(e3, t2) {
-          if (!e3)
-            return;
-          if ("string" == typeof e3)
-            return _arrayLikeToArray$1(e3, t2);
+          if (!e3) return;
+          if ("string" == typeof e3) return _arrayLikeToArray$1(e3, t2);
           var r2 = Object.prototype.toString.call(e3).slice(8, -1);
           "Object" === r2 && e3.constructor && (r2 = e3.constructor.name);
-          if ("Map" === r2 || "Set" === r2)
-            return Array.from(e3);
-          if ("Arguments" === r2 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r2))
-            return _arrayLikeToArray$1(e3, t2);
+          if ("Map" === r2 || "Set" === r2) return Array.from(e3);
+          if ("Arguments" === r2 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r2)) return _arrayLikeToArray$1(e3, t2);
         }(e2) || function _nonIterableSpread$1() {
           throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
         }();
       }
       function _arrayLikeToArray$1(e2, t2) {
         (null == t2 || t2 > e2.length) && (t2 = e2.length);
-        for (var r2 = 0, n2 = new Array(t2); r2 < t2; r2++)
-          n2[r2] = e2[r2];
+        for (var r2 = 0, n2 = new Array(t2); r2 < t2; r2++) n2[r2] = e2[r2];
         return n2;
       }
       function _typeof(e2) {
@@ -36661,8 +36757,7 @@
         })(e2);
       }
       function _classCallCheck(e2, t2) {
-        if (!(e2 instanceof t2))
-          throw new TypeError("Cannot call a class as a function");
+        if (!(e2 instanceof t2)) throw new TypeError("Cannot call a class as a function");
       }
       function _defineProperties(e2, t2) {
         for (var r2 = 0; r2 < t2.length; r2++) {
@@ -36696,23 +36791,19 @@
       }
       function _slicedToArray(e2, t2) {
         return function _arrayWithHoles(e3) {
-          if (Array.isArray(e3))
-            return e3;
+          if (Array.isArray(e3)) return e3;
         }(e2) || function _iterableToArrayLimit(e3, t3) {
-          if ("undefined" == typeof Symbol || !(Symbol.iterator in Object(e3)))
-            return;
+          if ("undefined" == typeof Symbol || !(Symbol.iterator in Object(e3))) return;
           var r2 = [], n2 = true, i2 = false, o2 = void 0;
           try {
-            for (var a2, c2 = e3[Symbol.iterator](); !(n2 = (a2 = c2.next()).done) && (r2.push(a2.value), !t3 || r2.length !== t3); n2 = true)
-              ;
+            for (var a2, c2 = e3[Symbol.iterator](); !(n2 = (a2 = c2.next()).done) && (r2.push(a2.value), !t3 || r2.length !== t3); n2 = true) ;
           } catch (e4) {
             i2 = true, o2 = e4;
           } finally {
             try {
               n2 || null == c2.return || c2.return();
             } finally {
-              if (i2)
-                throw o2;
+              if (i2) throw o2;
             }
           }
           return r2;
@@ -36722,27 +36813,23 @@
       }
       function _toConsumableArray(e2) {
         return function _arrayWithoutHoles(e3) {
-          if (Array.isArray(e3))
-            return _arrayLikeToArray(e3);
+          if (Array.isArray(e3)) return _arrayLikeToArray(e3);
         }(e2) || function _iterableToArray(e3) {
-          if ("undefined" != typeof Symbol && Symbol.iterator in Object(e3))
-            return Array.from(e3);
+          if ("undefined" != typeof Symbol && Symbol.iterator in Object(e3)) return Array.from(e3);
         }(e2) || _unsupportedIterableToArray(e2) || function _nonIterableSpread() {
           throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
         }();
       }
       function _unsupportedIterableToArray(e2, t2) {
         if (e2) {
-          if ("string" == typeof e2)
-            return _arrayLikeToArray(e2, t2);
+          if ("string" == typeof e2) return _arrayLikeToArray(e2, t2);
           var r2 = Object.prototype.toString.call(e2).slice(8, -1);
           return "Object" === r2 && e2.constructor && (r2 = e2.constructor.name), "Map" === r2 || "Set" === r2 ? Array.from(e2) : "Arguments" === r2 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r2) ? _arrayLikeToArray(e2, t2) : void 0;
         }
       }
       function _arrayLikeToArray(e2, t2) {
         (null == t2 || t2 > e2.length) && (t2 = e2.length);
-        for (var r2 = 0, n2 = new Array(t2); r2 < t2; r2++)
-          n2[r2] = e2[r2];
+        for (var r2 = 0, n2 = new Array(t2); r2 < t2; r2++) n2[r2] = e2[r2];
         return n2;
       }
       var e = function TypesonPromise(e2) {
@@ -36784,11 +36871,9 @@
         return t.call(e2).slice(8, -1);
       }
       function hasConstructorOf(e2, t2) {
-        if (!e2 || "object" !== _typeof(e2))
-          return false;
+        if (!e2 || "object" !== _typeof(e2)) return false;
         var o2 = n(e2);
-        if (!o2)
-          return null === t2;
+        if (!o2) return null === t2;
         var a2 = r.call(o2, "constructor") && o2.constructor;
         return "function" != typeof a2 ? null === t2 : t2 === a2 || (null !== t2 && i.call(a2) === i.call(t2) || "function" == typeof t2 && "string" == typeof a2.__typeson__type__ && a2.__typeson__type__ === t2.__typeson__type__);
       }
@@ -36805,8 +36890,7 @@
         return e2.replace(/~1/g, ".").replace(/~0/g, "~");
       }
       function getByKeyPath2(e2, t2) {
-        if ("" === t2)
-          return e2;
+        if ("" === t2) return e2;
         var r2 = t2.indexOf(".");
         if (r2 > -1) {
           var n2 = e2[unescapeKeyPathComponent(t2.slice(0, r2))];
@@ -36815,8 +36899,7 @@
         return e2[unescapeKeyPathComponent(t2)];
       }
       function setAtKeyPath(e2, t2, r2) {
-        if ("" === t2)
-          return r2;
+        if ("" === t2) return r2;
         var n2 = t2.indexOf(".");
         return n2 > -1 ? setAtKeyPath(e2[unescapeKeyPathComponent(t2.slice(0, n2))], t2.slice(n2 + 1), r2) : (e2[unescapeKeyPathComponent(t2)] = r2, e2);
       }
@@ -36826,8 +36909,7 @@
       var o = Object.keys, a = Array.isArray, c = {}.hasOwnProperty, u = ["type", "replaced", "iterateIn", "iterateUnsetNumeric"];
       function _async(e2) {
         return function() {
-          for (var t2 = [], r2 = 0; r2 < arguments.length; r2++)
-            t2[r2] = arguments[r2];
+          for (var t2 = [], r2 = 0; r2 < arguments.length; r2++) t2[r2] = arguments[r2];
           try {
             return Promise.resolve(e2.apply(this, t2));
           } catch (e3) {
@@ -36836,8 +36918,7 @@
         };
       }
       function nestedPathsFirst(e2, t2) {
-        if ("" === e2.keypath)
-          return -1;
+        if ("" === e2.keypath) return -1;
         var r2 = e2.keypath.match(/\./g) || 0, n2 = t2.keypath.match(/\./g) || 0;
         return r2 && (r2 = r2.length), n2 && (n2 = n2.length), r2 > n2 ? -1 : r2 < n2 ? 1 : e2.keypath < t2.keypath ? -1 : e2.keypath > t2.keypath;
       }
@@ -36880,10 +36961,9 @@
                   var r4 = e2();
                   return r4 && r4.then ? r4.then(t4) : t4(r4);
                 }(function() {
-                  if (s3 && d3)
-                    return _await(b3.p, function(e2) {
-                      return p3[y3] = e2, o2 = true, i2(t3, a2);
-                    });
+                  if (s3 && d3) return _await(b3.p, function(e2) {
+                    return p3[y3] = e2, o2 = true, i2(t3, a2);
+                  });
                 }, function(e2) {
                   return o2 ? e2 : (s3 ? p3[y3] = b3 : t3 = d3 ? b3.p : b3, i2(t3, a2));
                 });
@@ -36894,14 +36974,11 @@
           }), s2 = (n2 = _objectSpread2(_objectSpread2({ sync: true }, this.options), n2)).sync, f2 = this, l2 = {}, p2 = [], y2 = [], v2 = [], b2 = !("cyclic" in n2) || n2.cyclic, d2 = n2.encapsulateObserver, h2 = _encapsulate("", t2, b2, r2 || {}, v2);
           function finish(e2) {
             var t3 = Object.values(l2);
-            if (n2.iterateNone)
-              return t3.length ? t3[0] : Typeson.getJSONType(e2);
+            if (n2.iterateNone) return t3.length ? t3[0] : Typeson.getJSONType(e2);
             if (t3.length) {
-              if (n2.returnTypeNames)
-                return _toConsumableArray(new Set(t3));
+              if (n2.returnTypeNames) return _toConsumableArray(new Set(t3));
               e2 && isPlainObject(e2) && !c.call(e2, "$types") ? e2.$types = l2 : e2 = { $: e2, $types: { $: l2 } };
-            } else
-              isObject(e2) && c.call(e2, "$types") && (e2 = { $: e2, $types: true });
+            } else isObject(e2) && c.call(e2, "$types") && (e2 = { $: e2, $types: true });
             return !n2.returnTypeNames && e2;
           }
           function _adaptBuiltinStateObjectProperties(e2, t3, r3) {
@@ -36919,21 +36996,16 @@
               var o2 = b3 || u2.type || Typeson.getJSONType(r3);
               d2(Object.assign(n3 || g2, { keypath: t3, value: r3, cyclic: i3, stateObj: u2, promisesData: s3, resolvingTypesonPromise: v3, awaitingTypesonPromise: hasConstructorOf(r3, e) }, { type: o2 }));
             } : null;
-            if (["string", "boolean", "number", "undefined"].includes(m2))
-              return void 0 === r3 || Number.isNaN(r3) || r3 === Number.NEGATIVE_INFINITY || r3 === Number.POSITIVE_INFINITY ? (h3 = u2.replaced ? r3 : replace2(t3, r3, u2, s3, false, v3, O2)) !== r3 && (g2 = { replaced: h3 }) : h3 = r3, O2 && O2(), h3;
-            if (null === r3)
-              return O2 && O2(), r3;
+            if (["string", "boolean", "number", "undefined"].includes(m2)) return void 0 === r3 || Number.isNaN(r3) || r3 === Number.NEGATIVE_INFINITY || r3 === Number.POSITIVE_INFINITY ? (h3 = u2.replaced ? r3 : replace2(t3, r3, u2, s3, false, v3, O2)) !== r3 && (g2 = { replaced: h3 }) : h3 = r3, O2 && O2(), h3;
+            if (null === r3) return O2 && O2(), r3;
             if (i3 && !u2.iterateIn && !u2.iterateUnsetNumeric && r3 && "object" === _typeof(r3)) {
               var _2 = p2.indexOf(r3);
-              if (!(_2 < 0))
-                return l2[t3] = "#", O2 && O2({ cyclicKeypath: y2[_2] }), "#" + y2[_2];
+              if (!(_2 < 0)) return l2[t3] = "#", O2 && O2({ cyclicKeypath: y2[_2] }), "#" + y2[_2];
               true === i3 && (p2.push(r3), y2.push(t3));
             }
             var j2, S2 = isPlainObject(r3), T2 = a(r3), w2 = (S2 || T2) && (!f2.plainObjectReplacers.length || u2.replaced) || u2.iterateIn ? r3 : replace2(t3, r3, u2, s3, S2 || T2, null, O2);
-            if (w2 !== r3 ? (h3 = w2, g2 = { replaced: w2 }) : "" === t3 && hasConstructorOf(r3, e) ? (s3.push([t3, r3, i3, u2, void 0, void 0, u2.type]), h3 = r3) : T2 && "object" !== u2.iterateIn || "array" === u2.iterateIn ? (j2 = new Array(r3.length), g2 = { clone: j2 }) : (["function", "symbol"].includes(_typeof(r3)) || "toJSON" in r3 || hasConstructorOf(r3, e) || hasConstructorOf(r3, Promise) || hasConstructorOf(r3, ArrayBuffer)) && !S2 && "object" !== u2.iterateIn ? h3 = r3 : (j2 = {}, u2.addLength && (j2.length = r3.length), g2 = { clone: j2 }), O2 && O2(), n2.iterateNone)
-              return j2 || h3;
-            if (!j2)
-              return h3;
+            if (w2 !== r3 ? (h3 = w2, g2 = { replaced: w2 }) : "" === t3 && hasConstructorOf(r3, e) ? (s3.push([t3, r3, i3, u2, void 0, void 0, u2.type]), h3 = r3) : T2 && "object" !== u2.iterateIn || "array" === u2.iterateIn ? (j2 = new Array(r3.length), g2 = { clone: j2 }) : (["function", "symbol"].includes(_typeof(r3)) || "toJSON" in r3 || hasConstructorOf(r3, e) || hasConstructorOf(r3, Promise) || hasConstructorOf(r3, ArrayBuffer)) && !S2 && "object" !== u2.iterateIn ? h3 = r3 : (j2 = {}, u2.addLength && (j2.length = r3.length), g2 = { clone: j2 }), O2 && O2(), n2.iterateNone) return j2 || h3;
+            if (!j2) return h3;
             if (u2.iterateIn) {
               var A2 = function _loop(n3) {
                 var o2 = { ownKeys: c.call(r3, n3) };
@@ -36942,17 +37014,15 @@
                   hasConstructorOf(a2, e) ? s3.push([o3, a2, Boolean(i3), u2, j2, n3, u2.type]) : void 0 !== a2 && (j2[n3] = a2);
                 });
               };
-              for (var P2 in r3)
-                A2(P2);
+              for (var P2 in r3) A2(P2);
               O2 && O2({ endIterateIn: true, end: true });
-            } else
-              o(r3).forEach(function(n3) {
-                var o2 = t3 + (t3 ? "." : "") + escapeKeyPathComponent(n3);
-                _adaptBuiltinStateObjectProperties(u2, { ownKeys: true }, function() {
-                  var t4 = _encapsulate(o2, r3[n3], Boolean(i3), u2, s3, v3);
-                  hasConstructorOf(t4, e) ? s3.push([o2, t4, Boolean(i3), u2, j2, n3, u2.type]) : void 0 !== t4 && (j2[n3] = t4);
-                });
-              }), O2 && O2({ endIterateOwn: true, end: true });
+            } else o(r3).forEach(function(n3) {
+              var o2 = t3 + (t3 ? "." : "") + escapeKeyPathComponent(n3);
+              _adaptBuiltinStateObjectProperties(u2, { ownKeys: true }, function() {
+                var t4 = _encapsulate(o2, r3[n3], Boolean(i3), u2, s3, v3);
+                hasConstructorOf(t4, e) ? s3.push([o2, t4, Boolean(i3), u2, j2, n3, u2.type]) : void 0 !== t4 && (j2[n3] = t4);
+              });
+            }), O2 && O2({ endIterateOwn: true, end: true });
             if (u2.iterateUnsetNumeric) {
               for (var I2 = r3.length, C2 = function _loop2(n3) {
                 if (!(n3 in r3)) {
@@ -36962,8 +37032,7 @@
                     hasConstructorOf(t4, e) ? s3.push([o2, t4, Boolean(i3), u2, j2, n3, u2.type]) : void 0 !== t4 && (j2[n3] = t4);
                   });
                 }
-              }, N2 = 0; N2 < I2; N2++)
-                C2(N2);
+              }, N2 = 0; N2 < I2; N2++) C2(N2);
               O2 && O2({ endIterateUnsetNumeric: true, end: true });
             }
             return j2;
@@ -36993,17 +37062,14 @@
           return this.encapsulate(e2, t2, _objectSpread2(_objectSpread2({ throwOnBadSyncType: true }, r2), {}, { sync: false }));
         } }, { key: "revive", value: function revive(t2, r2) {
           var n2 = t2 && t2.$types;
-          if (!n2)
-            return t2;
-          if (true === n2)
-            return t2.$;
+          if (!n2) return t2;
+          if (true === n2) return t2.$;
           var i2 = (r2 = _objectSpread2(_objectSpread2({ sync: true }, this.options), r2)).sync, c2 = [], u2 = {}, s2 = true;
           n2.$ && isPlainObject(n2.$) && (t2 = t2.$, n2 = n2.$, s2 = false);
           var l2 = this;
           function executeReviver(e2, t3) {
             var r3 = _slicedToArray(l2.revivers[e2] || [], 1)[0];
-            if (!r3)
-              throw new Error("Unregistered type: " + e2);
+            if (!r3) throw new Error("Unregistered type: " + e2);
             return i2 && !("revive" in r3) ? t3 : r3[i2 && r3.revive ? "revive" : !i2 && r3.reviveAsync ? "reviveAsync" : "revive"](t3, u2);
           }
           var p2 = [];
@@ -37017,22 +37083,19 @@
               "#" !== o2 && [].concat(o2).forEach(function(e3) {
                 _slicedToArray(l2.revivers[e3] || [null, {}], 2)[1].plain && (r3.push({ keypath: i3, type: e3 }), delete n2[i3]);
               });
-            }), r3.length)
-              return r3.sort(nestedPathsFirst).reduce(function reducer(r4, n3) {
-                var i3 = n3.keypath, o2 = n3.type;
-                if (isThenable(r4))
-                  return r4.then(function(e2) {
-                    return reducer(e2, { keypath: i3, type: o2 });
-                  });
-                var a2 = getByKeyPath2(t2, i3);
-                if (hasConstructorOf(a2 = executeReviver(o2, a2), e))
-                  return a2.then(function(e2) {
-                    var r5 = setAtKeyPath(t2, i3, e2);
-                    r5 === e2 && (t2 = r5);
-                  });
-                var c3 = setAtKeyPath(t2, i3, a2);
-                c3 === a2 && (t2 = c3);
-              }, void 0);
+            }), r3.length) return r3.sort(nestedPathsFirst).reduce(function reducer(r4, n3) {
+              var i3 = n3.keypath, o2 = n3.type;
+              if (isThenable(r4)) return r4.then(function(e2) {
+                return reducer(e2, { keypath: i3, type: o2 });
+              });
+              var a2 = getByKeyPath2(t2, i3);
+              if (hasConstructorOf(a2 = executeReviver(o2, a2), e)) return a2.then(function(e2) {
+                var r5 = setAtKeyPath(t2, i3, e2);
+                r5 === e2 && (t2 = r5);
+              });
+              var c3 = setAtKeyPath(t2, i3, a2);
+              c3 === a2 && (t2 = c3);
+            }, void 0);
           }();
           return hasConstructorOf(v2, e) ? y2 = v2.then(function() {
             return t2;
@@ -37050,13 +37113,11 @@
                   })) : a2(o2);
                 }), r3 = b2; c2.length; ) {
                   var d2 = _slicedToArray(c2[0], 4), h2 = d2[0], g2 = d2[1], m2 = d2[2], O2 = d2[3], _2 = getByKeyPath2(h2, g2);
-                  if (void 0 === _2)
-                    break;
+                  if (void 0 === _2) break;
                   m2[O2] = _2, c2.splice(0, 1);
                 }
               }
-              if (!y3)
-                return r3;
+              if (!y3) return r3;
               if ("#" === y3) {
                 var j2 = getByKeyPath2(i3, r3.slice(1));
                 return void 0 === j2 && c2.push([i3, r3.slice(1), u3, l3]), j2;
@@ -37083,15 +37144,12 @@
         } }, { key: "register", value: function register(e2, t2) {
           return t2 = t2 || {}, [].concat(e2).forEach(function R(e3) {
             var r2 = this;
-            if (a(e3))
-              return e3.map(function(e4) {
-                return R.call(r2, e4);
-              });
+            if (a(e3)) return e3.map(function(e4) {
+              return R.call(r2, e4);
+            });
             e3 && o(e3).forEach(function(r3) {
-              if ("#" === r3)
-                throw new TypeError("# cannot be used as a type name as it is reserved for cyclic objects");
-              if (Typeson.JSON_TYPES.includes(r3))
-                throw new TypeError("Plain JSON object types are reserved as type names");
+              if ("#" === r3) throw new TypeError("# cannot be used as a type name as it is reserved for cyclic objects");
+              if (Typeson.JSON_TYPES.includes(r3)) throw new TypeError("Plain JSON object types are reserved as type names");
               var n2 = e3[r3], i2 = n2 && n2.testPlainObjects ? this.plainObjectReplacers : this.nonplainObjectReplacers, o2 = i2.filter(function(e4) {
                 return e4.type === r3;
               });
@@ -37125,8 +37183,7 @@
         _classCallCheck(this, Undefined);
       };
       f.__typeson__type__ = "TypesonUndefined", s.Undefined = f, s.Promise = e, s.isThenable = isThenable, s.toStringTag = toStringTag2, s.hasConstructorOf = hasConstructorOf, s.isObject = isObject, s.isPlainObject = isPlainObject, s.isUserObject = function isUserObject(e2) {
-        if (!e2 || "Object" !== toStringTag2(e2))
-          return false;
+        if (!e2 || "Object" !== toStringTag2(e2)) return false;
         var t2 = n(e2);
         return !t2 || (hasConstructorOf(e2, Object) || isUserObject(t2));
       }, s.escapeKeyPathComponent = escapeKeyPathComponent, s.unescapeKeyPathComponent = unescapeKeyPathComponent, s.getByKeyPath = getByKeyPath2, s.getJSONType = function getJSONType(e2) {
@@ -37155,8 +37212,7 @@
       }, replace: function replace2(e2, t2) {
         return t2.iterateUnsetNumeric = true, e2;
       }, revive: function revive(e2) {
-        if (Array.isArray(e2))
-          return e2;
+        if (Array.isArray(e2)) return e2;
         var t2 = [];
         return Object.keys(e2).forEach(function(r2) {
           var n2 = e2[r2];
@@ -37235,18 +37291,15 @@
         return _toConsumableArray$1(e2.values());
       }, revive: function revive(e2) {
         return new Set(e2);
-      } } }, O = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", _ = new Uint8Array(256), j = 0; j < O.length; j++)
-        _[O.charCodeAt(j)] = j;
+      } } }, O = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", _ = new Uint8Array(256), j = 0; j < O.length; j++) _[O.charCodeAt(j)] = j;
       var S = function encode3(e2, t2, r2) {
         null == r2 && (r2 = e2.byteLength);
-        for (var n2 = new Uint8Array(e2, t2 || 0, r2), i2 = n2.length, o2 = "", a2 = 0; a2 < i2; a2 += 3)
-          o2 += O[n2[a2] >> 2], o2 += O[(3 & n2[a2]) << 4 | n2[a2 + 1] >> 4], o2 += O[(15 & n2[a2 + 1]) << 2 | n2[a2 + 2] >> 6], o2 += O[63 & n2[a2 + 2]];
+        for (var n2 = new Uint8Array(e2, t2 || 0, r2), i2 = n2.length, o2 = "", a2 = 0; a2 < i2; a2 += 3) o2 += O[n2[a2] >> 2], o2 += O[(3 & n2[a2]) << 4 | n2[a2 + 1] >> 4], o2 += O[(15 & n2[a2 + 1]) << 2 | n2[a2 + 2] >> 6], o2 += O[63 & n2[a2 + 2]];
         return i2 % 3 == 2 ? o2 = o2.slice(0, -1) + "=" : i2 % 3 == 1 && (o2 = o2.slice(0, -2) + "=="), o2;
       }, T = function decode3(e2) {
         var t2, r2, n2, i2, o2 = e2.length, a2 = 0.75 * e2.length, c2 = 0;
         "=" === e2[e2.length - 1] && (a2--, "=" === e2[e2.length - 2] && a2--);
-        for (var u2 = new ArrayBuffer(a2), s2 = new Uint8Array(u2), f2 = 0; f2 < o2; f2 += 4)
-          t2 = _[e2.charCodeAt(f2)], r2 = _[e2.charCodeAt(f2 + 1)], n2 = _[e2.charCodeAt(f2 + 2)], i2 = _[e2.charCodeAt(f2 + 3)], s2[c2++] = t2 << 2 | r2 >> 4, s2[c2++] = (15 & r2) << 4 | n2 >> 2, s2[c2++] = (3 & n2) << 6 | 63 & i2;
+        for (var u2 = new ArrayBuffer(a2), s2 = new Uint8Array(u2), f2 = 0; f2 < o2; f2 += 4) t2 = _[e2.charCodeAt(f2)], r2 = _[e2.charCodeAt(f2 + 1)], n2 = _[e2.charCodeAt(f2 + 2)], i2 = _[e2.charCodeAt(f2 + 3)], s2[c2++] = t2 << 2 | r2 >> 4, s2[c2++] = (15 & r2) << 4 | n2 >> 2, s2[c2++] = (3 & n2) << 6 | 63 & i2;
         return u2;
       }, w = { arraybuffer: { test: function test(e2) {
         return "ArrayBuffer" === s.toStringTag(e2);
@@ -37255,8 +37308,7 @@
         var r2 = t2.buffers.indexOf(e2);
         return r2 > -1 ? { index: r2 } : (t2.buffers.push(e2), S(e2));
       }, revive: function revive(e2, t2) {
-        if (t2.buffers || (t2.buffers = []), "object" === _typeof$1(e2))
-          return t2.buffers[e2.index];
+        if (t2.buffers || (t2.buffers = []), "object" === _typeof$1(e2)) return t2.buffers[e2.index];
         var r2 = T(e2);
         return t2.buffers.push(r2), r2;
       } } }, A = "undefined" == typeof self ? commonjsGlobal : self, P = {};
@@ -37306,16 +37358,14 @@
         return new Intl.NumberFormat(e2.locale, e2);
       } } };
       function string2arraybuffer(e2) {
-        for (var t2 = new Uint8Array(e2.length), r2 = 0; r2 < e2.length; r2++)
-          t2[r2] = e2.charCodeAt(r2);
+        for (var t2 = new Uint8Array(e2.length), r2 = 0; r2 < e2.length; r2++) t2[r2] = e2.charCodeAt(r2);
         return t2.buffer;
       }
       var N = { file: { test: function test(e2) {
         return "File" === s.toStringTag(e2);
       }, replace: function replace2(e2) {
         var t2 = new XMLHttpRequest();
-        if (t2.overrideMimeType("text/plain; charset=x-user-defined"), t2.open("GET", URL.createObjectURL(e2), false), t2.send(), 200 !== t2.status && 0 !== t2.status)
-          throw new Error("Bad File access: " + t2.status);
+        if (t2.overrideMimeType("text/plain; charset=x-user-defined"), t2.open("GET", URL.createObjectURL(e2), false), t2.send(), 200 !== t2.status && 0 !== t2.status) throw new Error("Bad File access: " + t2.status);
         return { type: e2.type, stringContents: t2.responseText, name: e2.name, lastModified: e2.lastModified };
       }, revive: function revive(e2) {
         var t2 = e2.name, r2 = e2.type, n2 = e2.stringContents, i2 = e2.lastModified;
@@ -37379,8 +37429,7 @@
       } } }, N, { file: N.file, filelist: { test: function test(e2) {
         return "FileList" === s.toStringTag(e2);
       }, replace: function replace2(e2) {
-        for (var t2 = [], r2 = 0; r2 < e2.length; r2++)
-          t2[r2] = e2.item(r2);
+        for (var t2 = [], r2 = 0; r2 < e2.length; r2++) t2[r2] = e2.item(r2);
         return t2;
       }, revive: function revive(e2) {
         return new (function() {
@@ -37399,8 +37448,7 @@
         return "Blob" === s.toStringTag(e2);
       }, replace: function replace2(e2) {
         var t2 = new XMLHttpRequest();
-        if (t2.overrideMimeType("text/plain; charset=x-user-defined"), t2.open("GET", URL.createObjectURL(e2), false), t2.send(), 200 !== t2.status && 0 !== t2.status)
-          throw new Error("Bad Blob access: " + t2.status);
+        if (t2.overrideMimeType("text/plain; charset=x-user-defined"), t2.open("GET", URL.createObjectURL(e2), false), t2.send(), 200 !== t2.status && 0 !== t2.status) throw new Error("Bad Blob access: " + t2.status);
         return { type: e2.type, stringContents: t2.responseText };
       }, revive: function revive(e2) {
         var t2 = e2.type, r2 = e2.stringContents;
@@ -37679,8 +37727,7 @@
                                   }
                                 }
                                 mayHaveMoreRows = values.length === LIMIT;
-                                if (!inbound)
-                                  return [3, 4];
+                                if (!inbound) return [3, 4];
                                 filteredValues = filter ? values.filter(function(value) {
                                   return filter(tableName2, value);
                                 }) : values;
@@ -37690,8 +37737,7 @@
                                 tsonValues = transformedValues.map(function(value) {
                                   return TSON.encapsulate(value);
                                 });
-                                if (!TSON.mustFinalize())
-                                  return [3, 3];
+                                if (!TSON.mustFinalize()) return [3, 3];
                                 return [4, Dexie$1.waitFor(TSON.finalize(tsonValues))];
                               case 2:
                                 _c.sent();
@@ -37725,8 +37771,7 @@
                                 tsonTuples = keyvals.map(function(tuple) {
                                   return TSON.encapsulate(tuple);
                                 });
-                                if (!TSON.mustFinalize())
-                                  return [3, 7];
+                                if (!TSON.mustFinalize()) return [3, 7];
                                 return [4, Dexie$1.waitFor(TSON.finalize(tsonTuples))];
                               case 6:
                                 _c.sent();
@@ -37750,8 +37795,7 @@
                         };
                         _b.label = 1;
                       case 1:
-                        if (!mayHaveMoreRows)
-                          return [3, 3];
+                        if (!mayHaveMoreRows) return [3, 3];
                         return [5, _loop_2()];
                       case 2:
                         state_1 = _b.sent();
@@ -37774,8 +37818,7 @@
                 _i = 0, tables_1 = tables;
                 _a.label = 2;
               case 2:
-                if (!(_i < tables_1.length))
-                  return [3, 5];
+                if (!(_i < tables_1.length)) return [3, 5];
                 tableName = tables_1[_i].name;
                 return [5, _loop_1(tableName)];
               case 3:
@@ -37839,8 +37882,7 @@
             _a.label = 1;
           case 1:
             _a.trys.push([1, , 6, 7]);
-            if (!options.noTransaction)
-              return [3, 3];
+            if (!options.noTransaction) return [3, 3];
             return [4, exportAll()];
           case 2:
             _a.sent();
@@ -37924,8 +37966,7 @@
         NUMBER_DIGIT: S++
         // [0-9]
       };
-      for (var s_ in clarinet.STATE)
-        clarinet.STATE[clarinet.STATE[s_]] = s_;
+      for (var s_ in clarinet.STATE) clarinet.STATE[clarinet.STATE[s_]] = s_;
       S = clarinet.STATE;
       const Char = {
         tab: 9,
@@ -38002,9 +38043,7 @@
       if (!Object.keys) {
         Object.keys = function(o) {
           var a = [];
-          for (var i in o)
-            if (o.hasOwnProperty(i))
-              a.push(i);
+          for (var i in o) if (o.hasOwnProperty(i)) a.push(i);
           return a;
         };
       }
@@ -38032,8 +38071,7 @@
       }
       var stringTokenPattern = /[\\"\n]/g;
       function CParser(opt) {
-        if (!(this instanceof CParser))
-          return new CParser(opt);
+        if (!(this instanceof CParser)) return new CParser(opt);
         var parser = this;
         clearBuffers(parser);
         parser.bufferCheckPosition = clarinet.MAX_BUFFER_LENGTH;
@@ -38074,8 +38112,7 @@
         return new CStream(opt);
       }
       function CStream(opt) {
-        if (!(this instanceof CStream))
-          return new CStream(opt);
+        if (!(this instanceof CStream)) return new CStream(opt);
         this._parser = new CParser(opt);
         this.writable = true;
         this.readable = true;
@@ -38134,12 +38171,9 @@
             continue;
           }
           if (this.bytes_remaining === 0 && n >= 128) {
-            if (n >= 194 && n <= 223)
-              this.bytes_in_sequence = 2;
-            if (n >= 224 && n <= 239)
-              this.bytes_in_sequence = 3;
-            if (n >= 240 && n <= 244)
-              this.bytes_in_sequence = 4;
+            if (n >= 194 && n <= 223) this.bytes_in_sequence = 2;
+            if (n >= 224 && n <= 239) this.bytes_in_sequence = 3;
+            if (n >= 240 && n <= 244) this.bytes_in_sequence = 4;
             if (this.bytes_in_sequence + i > data.length) {
               for (var k = 0; k <= data.length - 1 - i; k++) {
                 this.temp_buffs[this.bytes_in_sequence][k] = data[i + k];
@@ -38155,8 +38189,7 @@
             }
           }
           for (var p = i; p < data.length; p++) {
-            if (data[p] >= 128)
-              break;
+            if (data[p] >= 128) break;
           }
           this.string = data.slice(i, p).toString();
           this._parser.write(this.string);
@@ -38166,8 +38199,7 @@
         }
       };
       CStream.prototype.end = function(chunk) {
-        if (chunk && chunk.length)
-          this._parser.write(chunk.toString());
+        if (chunk && chunk.length) this._parser.write(chunk.toString());
         this._parser.end();
         return true;
       };
@@ -38187,10 +38219,8 @@
         this.emit("close");
       };
       function emit(parser, event, data) {
-        if (clarinet.INFO)
-          console.log("-- emit", event, data);
-        if (parser[event])
-          parser[event](data);
+        if (clarinet.INFO) console.log("-- emit", event, data);
+        if (parser[event]) parser[event](data);
       }
       function emitNode(parser, event, data) {
         closeValue(parser);
@@ -38212,10 +38242,8 @@
         if (text === void 0) {
           return text;
         }
-        if (opt.trim)
-          text = text.trim();
-        if (opt.normalize)
-          text = text.replace(/\s+/g, " ");
+        if (opt.trim) text = text.trim();
+        if (opt.normalize) text = text.replace(/\s+/g, " ");
         return text;
       }
       function error(parser, er) {
@@ -38241,50 +38269,37 @@
       }
       function write(chunk) {
         var parser = this;
-        if (this.error)
-          throw this.error;
-        if (parser.closed)
-          return error(
-            parser,
-            "Cannot write after close. Assign an onready handler."
-          );
-        if (chunk === null)
-          return end(parser);
+        if (this.error) throw this.error;
+        if (parser.closed) return error(
+          parser,
+          "Cannot write after close. Assign an onready handler."
+        );
+        if (chunk === null) return end(parser);
         var i = 0, c = chunk.charCodeAt(0), p = parser.p;
-        if (clarinet.DEBUG)
-          console.log("write -> [" + chunk + "]");
+        if (clarinet.DEBUG) console.log("write -> [" + chunk + "]");
         while (c) {
           p = c;
           parser.c = c = chunk.charCodeAt(i++);
-          if (p !== c)
-            parser.p = p;
-          else
-            p = parser.p;
-          if (!c)
-            break;
-          if (clarinet.DEBUG)
-            console.log(i, c, clarinet.STATE[parser.state]);
+          if (p !== c) parser.p = p;
+          else p = parser.p;
+          if (!c) break;
+          if (clarinet.DEBUG) console.log(i, c, clarinet.STATE[parser.state]);
           parser.position++;
           if (c === Char.lineFeed) {
             parser.line++;
             parser.column = 0;
-          } else
-            parser.column++;
+          } else parser.column++;
           switch (parser.state) {
             case S.BEGIN:
-              if (c === Char.openBrace)
-                parser.state = S.OPEN_OBJECT;
-              else if (c === Char.openBracket)
-                parser.state = S.OPEN_ARRAY;
+              if (c === Char.openBrace) parser.state = S.OPEN_OBJECT;
+              else if (c === Char.openBracket) parser.state = S.OPEN_ARRAY;
               else if (!isWhitespace(c))
                 error(parser, "Non-whitespace before {[.");
               continue;
             case S.OPEN_KEY:
             case S.OPEN_OBJECT:
-              if (isWhitespace(c))
-                continue;
-              if (parser.state === S.OPEN_KEY)
-                parser.stack.push(S.CLOSE_KEY);
+              if (isWhitespace(c)) continue;
+              if (parser.state === S.OPEN_KEY) parser.stack.push(S.CLOSE_KEY);
               else {
                 if (c === Char.closeBrace) {
                   emit(parser, "onopenobject");
@@ -38293,26 +38308,21 @@
                   this.depth--;
                   parser.state = parser.stack.pop() || S.VALUE;
                   continue;
-                } else
-                  parser.stack.push(S.CLOSE_OBJECT);
+                } else parser.stack.push(S.CLOSE_OBJECT);
               }
-              if (c === Char.doubleQuote)
-                parser.state = S.STRING;
-              else
-                error(parser, 'Malformed object key should start with "');
+              if (c === Char.doubleQuote) parser.state = S.STRING;
+              else error(parser, 'Malformed object key should start with "');
               continue;
             case S.CLOSE_KEY:
             case S.CLOSE_OBJECT:
-              if (isWhitespace(c))
-                continue;
+              if (isWhitespace(c)) continue;
               parser.state === S.CLOSE_KEY ? "key" : "object";
               if (c === Char.colon) {
                 if (parser.state === S.CLOSE_OBJECT) {
                   parser.stack.push(S.CLOSE_OBJECT);
                   closeValue(parser, "onopenobject");
                   this.depth++;
-                } else
-                  closeValue(parser, "onkey");
+                } else closeValue(parser, "onkey");
                 parser.state = S.VALUE;
               } else if (c === Char.closeBrace) {
                 emitNode(parser, "oncloseobject");
@@ -38323,13 +38333,12 @@
                   parser.stack.push(S.CLOSE_OBJECT);
                 closeValue(parser);
                 parser.state = S.OPEN_KEY;
-              } else
-                error(parser, "Bad object");
+              } else error(parser, "Bad object");
               continue;
             case S.OPEN_ARRAY:
+            // after an array there always a value
             case S.VALUE:
-              if (isWhitespace(c))
-                continue;
+              if (isWhitespace(c)) continue;
               if (parser.state === S.OPEN_ARRAY) {
                 emit(parser, "onopenarray");
                 this.depth++;
@@ -38343,25 +38352,18 @@
                   parser.stack.push(S.CLOSE_ARRAY);
                 }
               }
-              if (c === Char.doubleQuote)
-                parser.state = S.STRING;
-              else if (c === Char.openBrace)
-                parser.state = S.OPEN_OBJECT;
-              else if (c === Char.openBracket)
-                parser.state = S.OPEN_ARRAY;
-              else if (c === Char.t)
-                parser.state = S.TRUE;
-              else if (c === Char.f)
-                parser.state = S.FALSE;
-              else if (c === Char.n)
-                parser.state = S.NULL;
+              if (c === Char.doubleQuote) parser.state = S.STRING;
+              else if (c === Char.openBrace) parser.state = S.OPEN_OBJECT;
+              else if (c === Char.openBracket) parser.state = S.OPEN_ARRAY;
+              else if (c === Char.t) parser.state = S.TRUE;
+              else if (c === Char.f) parser.state = S.FALSE;
+              else if (c === Char.n) parser.state = S.NULL;
               else if (c === Char.minus) {
                 parser.numberNode += "-";
               } else if (Char._0 <= c && c <= Char._9) {
                 parser.numberNode += String.fromCharCode(c);
                 parser.state = S.NUMBER_DIGIT;
-              } else
-                error(parser, "Bad value");
+              } else error(parser, "Bad value");
               continue;
             case S.CLOSE_ARRAY:
               if (c === Char.comma) {
@@ -38374,170 +38376,145 @@
                 parser.state = parser.stack.pop() || S.VALUE;
               } else if (isWhitespace(c))
                 continue;
-              else
-                error(parser, "Bad array");
+              else error(parser, "Bad array");
               continue;
             case S.STRING:
               if (parser.textNode === void 0) {
                 parser.textNode = "";
               }
               var starti = i - 1, slashed = parser.slashed, unicodeI = parser.unicodeI;
-              STRING_BIGLOOP:
-                while (true) {
-                  if (clarinet.DEBUG)
-                    console.log(
-                      i,
-                      c,
-                      clarinet.STATE[parser.state],
-                      slashed
-                    );
-                  while (unicodeI > 0) {
-                    parser.unicodeS += String.fromCharCode(c);
-                    c = chunk.charCodeAt(i++);
-                    parser.position++;
-                    if (unicodeI === 4) {
-                      parser.textNode += String.fromCharCode(parseInt(parser.unicodeS, 16));
-                      unicodeI = 0;
-                      starti = i - 1;
-                    } else {
-                      unicodeI++;
-                    }
-                    if (!c)
-                      break STRING_BIGLOOP;
-                  }
-                  if (c === Char.doubleQuote && !slashed) {
-                    parser.state = parser.stack.pop() || S.VALUE;
-                    parser.textNode += chunk.substring(starti, i - 1);
-                    parser.position += i - 1 - starti;
-                    break;
-                  }
-                  if (c === Char.backslash && !slashed) {
-                    slashed = true;
-                    parser.textNode += chunk.substring(starti, i - 1);
-                    parser.position += i - 1 - starti;
-                    c = chunk.charCodeAt(i++);
-                    parser.position++;
-                    if (!c)
-                      break;
-                  }
-                  if (slashed) {
-                    slashed = false;
-                    if (c === Char.n) {
-                      parser.textNode += "\n";
-                    } else if (c === Char.r) {
-                      parser.textNode += "\r";
-                    } else if (c === Char.t) {
-                      parser.textNode += "	";
-                    } else if (c === Char.f) {
-                      parser.textNode += "\f";
-                    } else if (c === Char.b) {
-                      parser.textNode += "\b";
-                    } else if (c === Char.u) {
-                      unicodeI = 1;
-                      parser.unicodeS = "";
-                    } else {
-                      parser.textNode += String.fromCharCode(c);
-                    }
-                    c = chunk.charCodeAt(i++);
-                    parser.position++;
+              STRING_BIGLOOP: while (true) {
+                if (clarinet.DEBUG)
+                  console.log(
+                    i,
+                    c,
+                    clarinet.STATE[parser.state],
+                    slashed
+                  );
+                while (unicodeI > 0) {
+                  parser.unicodeS += String.fromCharCode(c);
+                  c = chunk.charCodeAt(i++);
+                  parser.position++;
+                  if (unicodeI === 4) {
+                    parser.textNode += String.fromCharCode(parseInt(parser.unicodeS, 16));
+                    unicodeI = 0;
                     starti = i - 1;
-                    if (!c)
-                      break;
-                    else
-                      continue;
+                  } else {
+                    unicodeI++;
                   }
-                  stringTokenPattern.lastIndex = i;
-                  var reResult = stringTokenPattern.exec(chunk);
-                  if (reResult === null) {
-                    i = chunk.length + 1;
-                    parser.textNode += chunk.substring(starti, i - 1);
-                    parser.position += i - 1 - starti;
-                    break;
-                  }
-                  i = reResult.index + 1;
-                  c = chunk.charCodeAt(reResult.index);
-                  if (!c) {
-                    parser.textNode += chunk.substring(starti, i - 1);
-                    parser.position += i - 1 - starti;
-                    break;
-                  }
+                  if (!c) break STRING_BIGLOOP;
                 }
+                if (c === Char.doubleQuote && !slashed) {
+                  parser.state = parser.stack.pop() || S.VALUE;
+                  parser.textNode += chunk.substring(starti, i - 1);
+                  parser.position += i - 1 - starti;
+                  break;
+                }
+                if (c === Char.backslash && !slashed) {
+                  slashed = true;
+                  parser.textNode += chunk.substring(starti, i - 1);
+                  parser.position += i - 1 - starti;
+                  c = chunk.charCodeAt(i++);
+                  parser.position++;
+                  if (!c) break;
+                }
+                if (slashed) {
+                  slashed = false;
+                  if (c === Char.n) {
+                    parser.textNode += "\n";
+                  } else if (c === Char.r) {
+                    parser.textNode += "\r";
+                  } else if (c === Char.t) {
+                    parser.textNode += "	";
+                  } else if (c === Char.f) {
+                    parser.textNode += "\f";
+                  } else if (c === Char.b) {
+                    parser.textNode += "\b";
+                  } else if (c === Char.u) {
+                    unicodeI = 1;
+                    parser.unicodeS = "";
+                  } else {
+                    parser.textNode += String.fromCharCode(c);
+                  }
+                  c = chunk.charCodeAt(i++);
+                  parser.position++;
+                  starti = i - 1;
+                  if (!c) break;
+                  else continue;
+                }
+                stringTokenPattern.lastIndex = i;
+                var reResult = stringTokenPattern.exec(chunk);
+                if (reResult === null) {
+                  i = chunk.length + 1;
+                  parser.textNode += chunk.substring(starti, i - 1);
+                  parser.position += i - 1 - starti;
+                  break;
+                }
+                i = reResult.index + 1;
+                c = chunk.charCodeAt(reResult.index);
+                if (!c) {
+                  parser.textNode += chunk.substring(starti, i - 1);
+                  parser.position += i - 1 - starti;
+                  break;
+                }
+              }
               parser.slashed = slashed;
               parser.unicodeI = unicodeI;
               continue;
             case S.TRUE:
-              if (c === Char.r)
-                parser.state = S.TRUE2;
-              else
-                error(parser, "Invalid true started with t" + c);
+              if (c === Char.r) parser.state = S.TRUE2;
+              else error(parser, "Invalid true started with t" + c);
               continue;
             case S.TRUE2:
-              if (c === Char.u)
-                parser.state = S.TRUE3;
-              else
-                error(parser, "Invalid true started with tr" + c);
+              if (c === Char.u) parser.state = S.TRUE3;
+              else error(parser, "Invalid true started with tr" + c);
               continue;
             case S.TRUE3:
               if (c === Char.e) {
                 emit(parser, "onvalue", true);
                 parser.state = parser.stack.pop() || S.VALUE;
-              } else
-                error(parser, "Invalid true started with tru" + c);
+              } else error(parser, "Invalid true started with tru" + c);
               continue;
             case S.FALSE:
-              if (c === Char.a)
-                parser.state = S.FALSE2;
-              else
-                error(parser, "Invalid false started with f" + c);
+              if (c === Char.a) parser.state = S.FALSE2;
+              else error(parser, "Invalid false started with f" + c);
               continue;
             case S.FALSE2:
-              if (c === Char.l)
-                parser.state = S.FALSE3;
-              else
-                error(parser, "Invalid false started with fa" + c);
+              if (c === Char.l) parser.state = S.FALSE3;
+              else error(parser, "Invalid false started with fa" + c);
               continue;
             case S.FALSE3:
-              if (c === Char.s)
-                parser.state = S.FALSE4;
-              else
-                error(parser, "Invalid false started with fal" + c);
+              if (c === Char.s) parser.state = S.FALSE4;
+              else error(parser, "Invalid false started with fal" + c);
               continue;
             case S.FALSE4:
               if (c === Char.e) {
                 emit(parser, "onvalue", false);
                 parser.state = parser.stack.pop() || S.VALUE;
-              } else
-                error(parser, "Invalid false started with fals" + c);
+              } else error(parser, "Invalid false started with fals" + c);
               continue;
             case S.NULL:
-              if (c === Char.u)
-                parser.state = S.NULL2;
-              else
-                error(parser, "Invalid null started with n" + c);
+              if (c === Char.u) parser.state = S.NULL2;
+              else error(parser, "Invalid null started with n" + c);
               continue;
             case S.NULL2:
-              if (c === Char.l)
-                parser.state = S.NULL3;
-              else
-                error(parser, "Invalid null started with nu" + c);
+              if (c === Char.l) parser.state = S.NULL3;
+              else error(parser, "Invalid null started with nu" + c);
               continue;
             case S.NULL3:
               if (c === Char.l) {
                 emit(parser, "onvalue", null);
                 parser.state = parser.stack.pop() || S.VALUE;
-              } else
-                error(parser, "Invalid null started with nul" + c);
+              } else error(parser, "Invalid null started with nul" + c);
               continue;
             case S.NUMBER_DECIMAL_POINT:
               if (c === Char.period) {
                 parser.numberNode += ".";
                 parser.state = S.NUMBER_DIGIT;
-              } else
-                error(parser, "Leading zero not followed by .");
+              } else error(parser, "Leading zero not followed by .");
               continue;
             case S.NUMBER_DIGIT:
-              if (Char._0 <= c && c <= Char._9)
-                parser.numberNode += String.fromCharCode(c);
+              if (Char._0 <= c && c <= Char._9) parser.numberNode += String.fromCharCode(c);
               else if (c === Char.period) {
                 if (parser.numberNode.indexOf(".") !== -1)
                   error(parser, "Invalid number has two dots");
@@ -38800,8 +38777,7 @@
                         }), rows.map(function(row) {
                           return row[1];
                         })], keys2 = _c[0], values = _c[1];
-                        if (!options.overwriteValues)
-                          return [3, 2];
+                        if (!options.overwriteValues) return [3, 2];
                         return [4, table2.bulkPut(values, keys2)];
                       case 1:
                         _d.sent();
@@ -38827,8 +38803,7 @@
                 _i2 = 0, _a2 = dbExport.data;
                 _b.label = 1;
               case 1:
-                if (!(_i2 < _a2.length))
-                  return [3, 4];
+                if (!(_i2 < _a2.length)) return [3, 4];
                 tableExport = _a2[_i2];
                 return [5, _loop_1(tableExport)];
               case 2:
@@ -38843,10 +38818,8 @@
                 while (dbExport.data.length > 0 && dbExport.data[0].rows && !dbExport.data[0].rows.incomplete) {
                   dbExport.data.splice(0, 1);
                 }
-                if (!(!jsonStream.done() && !jsonStream.eof()))
-                  return [3, 8];
-                if (!readBlobsSynchronously2)
-                  return [3, 5];
+                if (!(!jsonStream.done() && !jsonStream.eof())) return [3, 8];
+                if (!readBlobsSynchronously2) return [3, 5];
                 jsonStream.pullSync(CHUNK_SIZE);
                 return [3, 7];
               case 5:
@@ -38902,13 +38875,11 @@
                 return progressCallback(progress);
               });
             }
-            if (!options.clearTablesBeforeImport)
-              return [3, 5];
+            if (!options.clearTablesBeforeImport) return [3, 5];
             _i = 0, _a = db2.tables;
             _b.label = 2;
           case 2:
-            if (!(_i < _a.length))
-              return [3, 5];
+            if (!(_i < _a.length)) return [3, 5];
             table = _a[_i];
             if (skipTables.includes(table.name))
               return [3, 4];
@@ -38920,8 +38891,7 @@
             _i++;
             return [3, 2];
           case 5:
-            if (!options.noTransaction)
-              return [3, 7];
+            if (!options.noTransaction) return [3, 7];
             return [4, importAll()];
           case 6:
             _b.sent();
@@ -38955,8 +38925,7 @@
             stream = "slice" in exportedData ? JsonStream(exportedData) : exportedData;
             _a.label = 1;
           case 1:
-            if (!!stream.eof())
-              return [3, 3];
+            if (!!stream.eof()) return [3, 3];
             return [4, stream.pullAsync(CHUNK_SIZE)];
           case 2:
             _a.sent();
@@ -39006,6 +38975,12 @@
 
   // src/data/db.ts
   var MySubClassedDexie = class extends Dexie$1 {
+    games;
+    locations;
+    players;
+    sessions;
+    rounds;
+    scores;
     constructor() {
       super("scoreboard");
       this.version(2).stores({
@@ -39055,8 +39030,7 @@
   function useSessions() {
     return (0, import_dexie_react_hooks.useLiveQuery)(async () => {
       const sessions = await db.sessions.toCollection().sortBy("start");
-      if (sessions === void 0)
-        return [];
+      if (sessions === void 0) return [];
       return Promise.all(
         sessions.map(async (session) => {
           const [game, location2, players, rounds] = await Promise.all([
@@ -39082,8 +39056,7 @@
   function useSession(id) {
     const session = (0, import_dexie_react_hooks.useLiveQuery)(async () => {
       const sess = await db.sessions.get(id);
-      if (typeof sess === "undefined")
-        throw new Error("Session not found");
+      if (typeof sess === "undefined") throw new Error("Session not found");
       const [game, location2, players, rounds] = await Promise.all([
         db.games.get(sess.gameId),
         db.locations.get(sess.locationId),
@@ -39111,10 +39084,8 @@
         playerIds: newSession.playerIds,
         customWinner: newSession.customWinner
       };
-      if (newSession.end)
-        data.end = newSession.end;
-      if (newSession.labels)
-        data.labels = newSession.labels;
+      if (newSession.end) data.end = newSession.end;
+      if (newSession.labels) data.labels = newSession.labels;
       db.sessions.put(data, id);
     }
     async function deleteSession() {
@@ -39143,8 +39114,7 @@
     );
     const totals = (0, import_react.useMemo)(
       () => scores?.reduce((sums, score) => {
-        if (!sums[score.playerId])
-          sums[score.playerId] = 0;
+        if (!sums[score.playerId]) sums[score.playerId] = 0;
         sums[score.playerId] += score.value;
         return sums;
       }, {}),
@@ -39440,8 +39410,7 @@
     const [name, setName] = (0, import_react5.useState)("");
     const [colour, setColour] = (0, import_react5.useState)("");
     const handleSave = () => {
-      if (name)
-        onSave(name, colour);
+      if (name) onSave(name, colour);
       onClose();
     };
     return /* @__PURE__ */ (0, import_jsx_runtime18.jsxs)(
@@ -39494,8 +39463,7 @@
     const [name, setName] = (0, import_react6.useState)(initialLabel);
     const [colour, setColour] = (0, import_react6.useState)(initialColour);
     const handleSave = () => {
-      if (name)
-        onSave(name, colour);
+      if (name) onSave(name, colour);
       onClose();
     };
     return /* @__PURE__ */ (0, import_jsx_runtime19.jsxs)(
@@ -39573,8 +39541,7 @@
         }
       }
     }, [game]);
-    if (!game)
-      return null;
+    if (!game) return null;
     const setRound = (index, label, colour) => {
       setRounds(
         rounds.map(
@@ -42115,8 +42082,7 @@
         setLocationId(session.locationId);
       }
     }, [session]);
-    if (!session)
-      return null;
+    if (!session) return null;
     const handleSubmit = () => {
       setSession({
         ...session,
@@ -42402,8 +42368,7 @@
         }
       });
     } else if (scoreMode === "CUSTOM" /* Custom */) {
-      if (session.customWinner)
-        winners.push(session.customWinner);
+      if (session.customWinner) winners.push(session.customWinner);
     }
     return /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(Table_default, { ...props2, children: [
       /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("thead", { children: [
@@ -42473,8 +42438,7 @@
     const [addRoundModalOpen, setAddRoundModalOpen] = (0, import_react13.useState)(false);
     const [editPlayersModalOpen, setEditPlayersModalOpen] = (0, import_react13.useState)(false);
     const [winnerModalOpen, setWinnerModalOpen] = (0, import_react13.useState)(false);
-    if (!session)
-      return null;
+    if (!session) return null;
     const handleAddRound = (label) => {
       db.rounds.add({
         sessionId: id,
@@ -42808,8 +42772,7 @@
       return /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(FullPageError_default, { title: "Game not found" });
     }
     const [session] = useSession(id);
-    if (!session)
-      return null;
+    if (!session) return null;
     return /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
         AppBar_default,
@@ -42959,8 +42922,7 @@
   // src/index.tsx
   var import_jsx_runtime43 = __toESM(require_jsx_runtime());
   var rootElement = document.getElementById("root");
-  if (rootElement === null)
-    throw new Error("Cannot find #root to bind to");
+  if (rootElement === null) throw new Error("Cannot find #root to bind to");
   (0, import_client.createRoot)(rootElement).render(
     /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(import_react15.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(HashRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(App_default, {}) }) })
   );
