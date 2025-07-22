@@ -20,33 +20,41 @@ const App = () => {
   const ready = true;
 
   return ready ? (
-    <div className="container">
-      <Routes>
-        <Route path="/" element={<Sessions></Sessions>} />
-        <Route path="/games" element={<Games></Games>} />
-        <Route path="/games/:id" element={<EditGame></EditGame>} />
-        <Route path="/database" element={<Database></Database>} />
-        <Route path="/players/:id" element={<EditPlayer></EditPlayer>} />
-        <Route path="/locations/:id" element={<EditLocation></EditLocation>} />
-        <Route path="/sessions/new" element={<CreateSession></CreateSession>} />
-        <Route path="/sessions/:id" element={<ViewSession></ViewSession>} />
-        <Route
-          path="/sessions/:id/edit"
-          element={<EditSession></EditSession>}
-        />
-        <Route
-          path="/sessions/:id/scores"
-          element={<EditSessionScores></EditSessionScores>}
-        />
-        <Route
-          path="*"
-          element={
-            <FullPageError>
-              <p>Page not found</p>
-            </FullPageError>
-          }
-        />
-      </Routes>
+    <div className="o-app-flex-container">
+      <div className="o-app-flex-content">
+        <Routes>
+          <Route path="/" element={<Sessions></Sessions>} />
+          <Route path="/games" element={<Games></Games>} />
+          <Route path="/games/:id" element={<EditGame></EditGame>} />
+          <Route path="/database" element={<Database></Database>} />
+          <Route path="/players/:id" element={<EditPlayer></EditPlayer>} />
+          <Route
+            path="/locations/:id"
+            element={<EditLocation></EditLocation>}
+          />
+          <Route
+            path="/sessions/new"
+            element={<CreateSession></CreateSession>}
+          />
+          <Route path="/sessions/:id" element={<ViewSession></ViewSession>} />
+          <Route
+            path="/sessions/:id/edit"
+            element={<EditSession></EditSession>}
+          />
+          <Route
+            path="/sessions/:id/scores"
+            element={<EditSessionScores></EditSessionScores>}
+          />
+          <Route
+            path="*"
+            element={
+              <FullPageError>
+                <p>Page not found</p>
+              </FullPageError>
+            }
+          />
+        </Routes>
+      </div>
       <NavigationTray></NavigationTray>
     </div>
   ) : (
