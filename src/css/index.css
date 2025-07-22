@@ -43,8 +43,18 @@ a {
   margin: 1rem;
 }
 
+.o-app-flex-container {
+  display: flex;
+  flex-direction: column;
+  height: 100vh;
+}
+
+.o-app-flex-content {
+  flex: 1;
+  overflow: auto;
+}
+
 .o-canvas {
-  margin-bottom: 96px;
   padding-left: 16px;
   padding-right: 16px;
 }
