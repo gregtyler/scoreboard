@@ -25719,7 +25719,7 @@
   var import_react15 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
-  // node_modules/react-router/dist/development/chunk-EF7DTUVF.mjs
+  // node_modules/react-router/dist/development/chunk-ZYFC6VSF.mjs
   init_react_shim();
   var React2 = __toESM(require_react(), 1);
   var React22 = __toESM(require_react(), 1);
@@ -25985,6 +25985,7 @@
       pathname,
       params,
       data: loaderData[route.id],
+      loaderData: loaderData[route.id],
       handle: route.handle
     };
   }
@@ -26707,68 +26708,71 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       }
     }
-    return renderedMatches.reduceRight((outlet, match2, index) => {
-      let error;
-      let shouldRenderHydrateFallback = false;
-      let errorElement = null;
-      let hydrateFallbackElement = null;
-      if (dataRouterState) {
-        error = errors && match2.route.id ? errors[match2.route.id] : void 0;
-        errorElement = match2.route.errorElement || defaultErrorElement;
-        if (renderFallback) {
-          if (fallbackIndex < 0 && index === 0) {
-            warningOnce(
-              "route-fallback",
-              false,
-              "No `HydrateFallback` element provided to render during initial hydration"
-            );
-            shouldRenderHydrateFallback = true;
-            hydrateFallbackElement = null;
-          } else if (fallbackIndex === index) {
-            shouldRenderHydrateFallback = true;
-            hydrateFallbackElement = match2.route.hydrateFallbackElement || null;
+    return renderedMatches.reduceRight(
+      (outlet, match2, index) => {
+        let error;
+        let shouldRenderHydrateFallback = false;
+        let errorElement = null;
+        let hydrateFallbackElement = null;
+        if (dataRouterState) {
+          error = errors && match2.route.id ? errors[match2.route.id] : void 0;
+          errorElement = match2.route.errorElement || defaultErrorElement;
+          if (renderFallback) {
+            if (fallbackIndex < 0 && index === 0) {
+              warningOnce(
+                "route-fallback",
+                false,
+                "No `HydrateFallback` element provided to render during initial hydration"
+              );
+              shouldRenderHydrateFallback = true;
+              hydrateFallbackElement = null;
+            } else if (fallbackIndex === index) {
+              shouldRenderHydrateFallback = true;
+              hydrateFallbackElement = match2.route.hydrateFallbackElement || null;
+            }
           }
         }
-      }
-      let matches2 = parentMatches.concat(renderedMatches.slice(0, index + 1));
-      let getChildren = () => {
-        let children;
-        if (error) {
-          children = errorElement;
-        } else if (shouldRenderHydrateFallback) {
-          children = hydrateFallbackElement;
-        } else if (match2.route.Component) {
-          children = /* @__PURE__ */ React22.createElement(match2.route.Component, null);
-        } else if (match2.route.element) {
-          children = match2.route.element;
-        } else {
-          children = outlet;
-        }
-        return /* @__PURE__ */ React22.createElement(
-          RenderedRoute,
+        let matches2 = parentMatches.concat(renderedMatches.slice(0, index + 1));
+        let getChildren = () => {
+          let children;
+          if (error) {
+            children = errorElement;
+          } else if (shouldRenderHydrateFallback) {
+            children = hydrateFallbackElement;
+          } else if (match2.route.Component) {
+            children = /* @__PURE__ */ React22.createElement(match2.route.Component, null);
+          } else if (match2.route.element) {
+            children = match2.route.element;
+          } else {
+            children = outlet;
+          }
+          return /* @__PURE__ */ React22.createElement(
+            RenderedRoute,
+            {
+              match: match2,
+              routeContext: {
+                outlet,
+                matches: matches2,
+                isDataRoute: dataRouterState != null
+              },
+              children
+            }
+          );
+        };
+        return dataRouterState && (match2.route.ErrorBoundary || match2.route.errorElement || index === 0) ? /* @__PURE__ */ React22.createElement(
+          RenderErrorBoundary,
           {
-            match: match2,
-            routeContext: {
-              outlet,
-              matches: matches2,
-              isDataRoute: dataRouterState != null
-            },
-            children
+            location: dataRouterState.location,
+            revalidation: dataRouterState.revalidation,
+            component: errorElement,
+            error,
+            children: getChildren(),
+            routeContext: { outlet: null, matches: matches2, isDataRoute: true }
           }
-        );
-      };
-      return dataRouterState && (match2.route.ErrorBoundary || match2.route.errorElement || index === 0) ? /* @__PURE__ */ React22.createElement(
-        RenderErrorBoundary,
-        {
-          location: dataRouterState.location,
-          revalidation: dataRouterState.revalidation,
-          component: errorElement,
-          error,
-          children: getChildren(),
-          routeContext: { outlet: null, matches: matches2, isDataRoute: true }
-        }
-      ) : getChildren();
-    }, null);
+        ) : getChildren();
+      },
+      null
+    );
   }
   function getDataRouterConsoleError(hookName) {
     return `${hookName} must be used within a data router.  See https://reactrouter.com/en/main/routers/picking-a-router.`;
@@ -26877,7 +26881,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }) {
     return useRoutesImpl(routes, void 0, state, future);
   }
-  function Route(_props) {
+  function Route(props) {
     invariant(
       false,
       `A <Route> is only ever to be used as the child of <Routes> element, never rendered directly. Please wrap your <Route> in a <Routes>.`
@@ -27365,10 +27369,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
     };
   }
-  function PrefetchPageLinks({
-    page,
-    ...dataLinkProps
-  }) {
+  function PrefetchPageLinks({ page, ...linkProps }) {
     let { router } = useDataRouterContext2();
     let matches = React8.useMemo(
       () => matchRoutes(router.routes, page, router.basename),
@@ -27377,7 +27378,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     if (!matches) {
       return null;
     }
-    return /* @__PURE__ */ React8.createElement(PrefetchPageLinksImpl, { page, matches, ...dataLinkProps });
+    return /* @__PURE__ */ React8.createElement(PrefetchPageLinksImpl, { page, matches, ...linkProps });
   }
   function useKeyedPrefetchLinks(matches) {
     let { manifest, routeModules } = useFrameworkContext();
@@ -27476,7 +27477,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return /* @__PURE__ */ React8.createElement(React8.Fragment, null, dataHrefs.map((href) => /* @__PURE__ */ React8.createElement("link", { key: href, rel: "prefetch", as: "fetch", href, ...linkProps })), moduleHrefs.map((href) => /* @__PURE__ */ React8.createElement("link", { key: href, rel: "modulepreload", href, ...linkProps })), keyedPrefetchLinks.map(({ key, link }) => (
       // these don't spread `linkProps` because they are full link descriptors
       // already with their own props
-      /* @__PURE__ */ React8.createElement("link", { key, ...link })
+      /* @__PURE__ */ React8.createElement("link", { key, nonce: linkProps.nonce, ...link })
     )));
   }
   function mergeRefs(...refs) {
@@ -27494,7 +27495,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   try {
     if (isBrowser) {
       window.__reactRouterVersion = // @ts-expect-error
-      "7.7.0";
+      "7.8.0";
     }
   } catch (e) {
   }
@@ -28057,7 +28058,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       };
     }, [callback, capture]);
   }
-  function useViewTransitionState(to, opts = {}) {
+  function useViewTransitionState(to, { relative } = {}) {
     let vtContext = React10.useContext(ViewTransitionContext);
     invariant(
       vtContext != null,
@@ -28067,7 +28068,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       "useViewTransitionState"
       /* useViewTransitionState */
     );
-    let path = useResolvedPath(to, { relative: opts.relative });
+    let path = useResolvedPath(to, { relative });
     if (!vtContext.isTransitioning) {
       return false;
     }
@@ -39435,9 +39436,9 @@ dexie/dist/dexie.js:
   PERFORMANCE OF THIS SOFTWARE.
   ***************************************************************************** *)
 
-react-router/dist/development/chunk-EF7DTUVF.mjs:
+react-router/dist/development/chunk-ZYFC6VSF.mjs:
   (**
-   * react-router v7.7.0
+   * react-router v7.8.0
    *
    * Copyright (c) Remix Software Inc.
    *
@@ -39449,7 +39450,7 @@ react-router/dist/development/chunk-EF7DTUVF.mjs:
 
 react-router/dist/development/index.mjs:
   (**
-   * react-router v7.7.0
+   * react-router v7.8.0
    *
    * Copyright (c) Remix Software Inc.
    *
