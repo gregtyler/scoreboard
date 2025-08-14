@@ -12,10 +12,6 @@
   var __commonJS = (cb, mod) => function __require() {
     return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
   };
-  var __export = (target, all) => {
-    for (var name in all)
-      __defProp(target, name, { get: all[name], enumerable: true });
-  };
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
       for (let key of __getOwnPropNames(from))
@@ -32,7 +28,6 @@
     isNodeMode || !mod || !mod.__esModule ? __defProp(target, "default", { value: mod, enumerable: true }) : target,
     mod
   ));
-  var __toCommonJS = (mod) => __copyProps(__defProp({}, "__esModule", { value: true }), mod);
 
   // node_modules/react/cjs/react.development.js
   var require_react_development = __commonJS({
@@ -1320,7 +1315,7 @@
           return dispatcher;
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var React12 = require_react(), Internals = {
+        var React13 = require_react(), Internals = {
           d: {
             f: noop,
             r: function() {
@@ -1338,7 +1333,7 @@
           },
           p: 0,
           findDOMNode: null
-        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), ReactSharedInternals = React12.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
+        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), ReactSharedInternals = React13.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
         "function" === typeof Map && null != Map.prototype && "function" === typeof Map.prototype.forEach && "function" === typeof Set && null != Set.prototype && "function" === typeof Set.prototype.clear && "function" === typeof Set.prototype.forEach || console.error(
           "React depends on Map and Set built-in types. Make sure that you load a polyfill in older browsers. https://reactjs.org/link/react-polyfills"
         );
@@ -2882,7 +2877,7 @@
           "number" === type && getActiveElement(node.ownerDocument) === node || node.defaultValue === "" + value || (node.defaultValue = "" + value);
         }
         function validateOptionProps(element, props) {
-          null == props.value && ("object" === typeof props.children && null !== props.children ? React12.Children.forEach(props.children, function(child) {
+          null == props.value && ("object" === typeof props.children && null !== props.children ? React13.Children.forEach(props.children, function(child) {
             null == child || "string" === typeof child || "number" === typeof child || "bigint" === typeof child || didWarnInvalidChild || (didWarnInvalidChild = true, console.error(
               "Cannot infer the option value of complex children. Pass a `value` prop or use a plain string as children to <option>."
             ));
@@ -16464,14 +16459,14 @@
           ));
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var Scheduler = require_scheduler(), React12 = require_react(), ReactDOM = require_react_dom(), assign = Object.assign, REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_PROVIDER_TYPE = Symbol.for("react.provider"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
+        var Scheduler = require_scheduler(), React13 = require_react(), ReactDOM = require_react_dom(), assign = Object.assign, REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_PROVIDER_TYPE = Symbol.for("react.provider"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
         Symbol.for("react.scope");
         var REACT_ACTIVITY_TYPE = Symbol.for("react.activity");
         Symbol.for("react.legacy_hidden");
         Symbol.for("react.tracing_marker");
         var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel");
         Symbol.for("react.view_transition");
-        var MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), isArrayImpl = Array.isArray, ReactSharedInternals = React12.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
+        var MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), isArrayImpl = Array.isArray, ReactSharedInternals = React13.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
           pending: false,
           data: null,
           method: null,
@@ -19185,7 +19180,7 @@
           }
         };
         (function() {
-          var isomorphicReactPackageVersion = React12.version;
+          var isomorphicReactPackageVersion = React13.version;
           if ("19.1.0" !== isomorphicReactPackageVersion)
             throw Error(
               'Incompatible React versions: The "react" and "react-dom" packages must have the exact same version. Instead got:\n  - react:      ' + (isomorphicReactPackageVersion + "\n  - react-dom:  19.1.0\nLearn more: https://react.dev/warnings/version-mismatch")
@@ -19540,20 +19535,20 @@
         function validateChildKeys(node) {
           "object" === typeof node && null !== node && node.$$typeof === REACT_ELEMENT_TYPE && node._store && (node._store.validated = 1);
         }
-        var React12 = require_react(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler");
+        var React13 = require_react(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler");
         Symbol.for("react.provider");
-        var REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React12.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
+        var REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React13.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
           return null;
         };
-        React12 = {
+        React13 = {
           "react-stack-bottom-frame": function(callStackForError) {
             return callStackForError();
           }
         };
         var specialPropKeyWarningShown;
         var didWarnAboutElementRef = {};
-        var unknownOwnerDebugStack = React12["react-stack-bottom-frame"].bind(
-          React12,
+        var unknownOwnerDebugStack = React13["react-stack-bottom-frame"].bind(
+          React13,
           UnknownOwner
         )();
         var unknownOwnerDebugTask = createTask(getTaskName(UnknownOwner));
@@ -20749,7 +20744,7 @@
             });
           }
         }
-        var DEXIE_VERSION = "4.0.11";
+        var DEXIE_VERSION = "4.2.0";
         var maxString = String.fromCharCode(65535);
         var minKey = -Infinity;
         var INVALID_KEY_ARGUMENT = "Invalid key provided. Keys must be of type string, number, Date or Array<string | number | Date>.";
@@ -20782,7 +20777,7 @@
           };
         }
         function Entity2() {
-          throw exceptions.Type();
+          throw exceptions.Type("Entity instances must never be new:ed. Instances are generated by the framework bypassing the constructor.");
         }
         function cmp2(a, b) {
           try {
@@ -20858,6 +20853,21 @@
           if (ArrayBuffer.isView(a))
             return new Uint8Array(a.buffer, a.byteOffset, a.byteLength);
           return new Uint8Array(a);
+        }
+        function builtInDeletionTrigger(table, keys2, res) {
+          var yProps = table.schema.yProps;
+          if (!yProps)
+            return res;
+          if (keys2 && res.numFailures > 0)
+            keys2 = keys2.filter(function(_, i) {
+              return !res.failures[i];
+            });
+          return Promise.all(yProps.map(function(_a2) {
+            var updatesTable = _a2.updatesTable;
+            return keys2 ? table.db.table(updatesTable).where("k").anyOf(keys2).delete() : table.db.table(updatesTable).clear();
+          })).then(function() {
+            return res;
+          });
         }
         var Table3 = function() {
           function Table4() {
@@ -21088,15 +21098,19 @@
           Table4.prototype.delete = function(key) {
             var _this = this;
             return this._trans("readwrite", function(trans) {
-              return _this.core.mutate({ trans, type: "delete", keys: [key] });
-            }).then(function(res) {
-              return res.numFailures ? DexiePromise.reject(res.failures[0]) : void 0;
+              return _this.core.mutate({ trans, type: "delete", keys: [key] }).then(function(res) {
+                return builtInDeletionTrigger(_this, [key], res);
+              }).then(function(res) {
+                return res.numFailures ? DexiePromise.reject(res.failures[0]) : void 0;
+              });
             });
           };
           Table4.prototype.clear = function() {
             var _this = this;
             return this._trans("readwrite", function(trans) {
-              return _this.core.mutate({ trans, type: "deleteRange", range: AnyRange });
+              return _this.core.mutate({ trans, type: "deleteRange", range: AnyRange }).then(function(res) {
+                return builtInDeletionTrigger(_this, null, res);
+              });
             }).then(function(res) {
               return res.numFailures ? DexiePromise.reject(res.failures[0]) : void 0;
             });
@@ -21224,7 +21238,9 @@
             var _this = this;
             var numKeys = keys2.length;
             return this._trans("readwrite", function(trans) {
-              return _this.core.mutate({ trans, type: "delete", keys: keys2 });
+              return _this.core.mutate({ trans, type: "delete", keys: keys2 }).then(function(res) {
+                return builtInDeletionTrigger(_this, keys2, res);
+              });
             }).then(function(_a2) {
               var numFailures = _a2.numFailures, lastResult = _a2.lastResult, failures = _a2.failures;
               if (numFailures === 0)
@@ -21779,41 +21795,44 @@
                   totalFailures.push(failures[pos]);
                 }
               };
+              var isUnconditionalDelete = changes === deleteCallback;
               return _this.clone().primaryKeys().then(function(keys2) {
-                var criteria = isPlainKeyRange(ctx) && ctx.limit === Infinity && (typeof changes !== "function" || changes === deleteCallback) && {
+                var criteria = isPlainKeyRange(ctx) && ctx.limit === Infinity && (typeof changes !== "function" || isUnconditionalDelete) && {
                   index: ctx.index,
                   range: ctx.range
                 };
                 var nextChunk = function(offset) {
                   var count = Math.min(limit, keys2.length - offset);
-                  return coreTable.getMany({
+                  var keysInChunk = keys2.slice(offset, offset + count);
+                  return (isUnconditionalDelete ? Promise.resolve([]) : coreTable.getMany({
                     trans,
-                    keys: keys2.slice(offset, offset + count),
+                    keys: keysInChunk,
                     cache: "immutable"
-                  }).then(function(values) {
+                  })).then(function(values) {
                     var addValues = [];
                     var putValues = [];
                     var putKeys = outbound ? [] : null;
-                    var deleteKeys = [];
-                    for (var i = 0; i < count; ++i) {
-                      var origValue = values[i];
-                      var ctx_1 = {
-                        value: deepClone(origValue),
-                        primKey: keys2[offset + i]
-                      };
-                      if (modifyer.call(ctx_1, ctx_1.value, ctx_1) !== false) {
-                        if (ctx_1.value == null) {
-                          deleteKeys.push(keys2[offset + i]);
-                        } else if (!outbound && cmp2(extractKey(origValue), extractKey(ctx_1.value)) !== 0) {
-                          deleteKeys.push(keys2[offset + i]);
-                          addValues.push(ctx_1.value);
-                        } else {
-                          putValues.push(ctx_1.value);
-                          if (outbound)
-                            putKeys.push(keys2[offset + i]);
+                    var deleteKeys = isUnconditionalDelete ? keysInChunk : [];
+                    if (!isUnconditionalDelete)
+                      for (var i = 0; i < count; ++i) {
+                        var origValue = values[i];
+                        var ctx_1 = {
+                          value: deepClone(origValue),
+                          primKey: keys2[offset + i]
+                        };
+                        if (modifyer.call(ctx_1, ctx_1.value, ctx_1) !== false) {
+                          if (ctx_1.value == null) {
+                            deleteKeys.push(keys2[offset + i]);
+                          } else if (!outbound && cmp2(extractKey(origValue), extractKey(ctx_1.value)) !== 0) {
+                            deleteKeys.push(keys2[offset + i]);
+                            addValues.push(ctx_1.value);
+                          } else {
+                            putValues.push(ctx_1.value);
+                            if (outbound)
+                              putKeys.push(keys2[offset + i]);
+                          }
                         }
                       }
-                    }
                     return Promise.resolve(addValues.length > 0 && coreTable.mutate({ trans, type: "add", values: addValues }).then(function(res) {
                       for (var pos in res.failures) {
                         deleteKeys.splice(parseInt(pos), 1);
@@ -21832,12 +21851,14 @@
                         return applyMutateResult(putValues.length, res);
                       });
                     }).then(function() {
-                      return (deleteKeys.length > 0 || criteria && changes === deleteCallback) && coreTable.mutate({
+                      return (deleteKeys.length > 0 || criteria && isUnconditionalDelete) && coreTable.mutate({
                         trans,
                         type: "delete",
                         keys: deleteKeys,
                         criteria,
                         isAdditionalChunk: offset > 0
+                      }).then(function(res) {
+                        return builtInDeletionTrigger(ctx.table, deleteKeys, res);
                       }).then(function(res) {
                         return applyMutateResult(deleteKeys.length, res);
                       });
@@ -21856,16 +21877,13 @@
           };
           Collection2.prototype.delete = function() {
             var ctx = this._ctx, range = ctx.range;
-            if (isPlainKeyRange(ctx) && (ctx.isPrimKey || range.type === 3)) {
+            if (isPlainKeyRange(ctx) && !ctx.table.schema.yProps && (ctx.isPrimKey || range.type === 3)) {
               return this._write(function(trans) {
                 var primaryKey = ctx.table.core.schema.primaryKey;
                 var coreRange = range;
                 return ctx.table.core.count({ trans, query: { index: primaryKey, range: coreRange } }).then(function(count) {
                   return ctx.table.core.mutate({ trans, type: "deleteRange", range: coreRange }).then(function(_a2) {
-                    var failures = _a2.failures;
-                    _a2.lastResult;
-                    _a2.results;
-                    var numFailures = _a2.numFailures;
+                    var failures = _a2.failures, numFailures = _a2.numFailures;
                     if (numFailures)
                       throw new ModifyError("Could not delete some values", Object.keys(failures).map(function(pos) {
                         return failures[pos];
@@ -22506,6 +22524,15 @@
         function createTransactionConstructor(db2) {
           return makeClassConstructor(Transaction.prototype, function Transaction2(mode, storeNames, dbschema, chromeTransactionDurability, parent) {
             var _this = this;
+            if (mode !== "readonly")
+              storeNames.forEach(function(storeName) {
+                var _a2;
+                var yProps = (_a2 = dbschema[storeName]) === null || _a2 === void 0 ? void 0 : _a2.yProps;
+                if (yProps)
+                  storeNames = storeNames.concat(yProps.map(function(p) {
+                    return p.updatesTable;
+                  }));
+              });
             this.db = db2;
             this.mode = mode;
             this.storeNames = storeNames;
@@ -22538,7 +22565,7 @@
             });
           });
         }
-        function createIndexSpec(name, keyPath, unique, multi, auto, compound, isPrimKey) {
+        function createIndexSpec(name, keyPath, unique, multi, auto, compound, isPrimKey, type2) {
           return {
             name,
             keyPath,
@@ -22546,7 +22573,8 @@
             multi,
             auto,
             compound,
-            src: (unique && !isPrimKey ? "&" : "") + (multi ? "*" : "") + (auto ? "++" : "") + nameFromKeyPath(keyPath)
+            src: (unique && !isPrimKey ? "&" : "") + (multi ? "*" : "") + (auto ? "++" : "") + nameFromKeyPath(keyPath),
+            type: type2
           };
         }
         function nameFromKeyPath(keyPath) {
@@ -23303,30 +23331,44 @@
         }
         function parseIndexSyntax(primKeyAndIndexes) {
           return primKeyAndIndexes.split(",").map(function(index, indexNum) {
-            index = index.trim();
+            var _a2;
+            var typeSplit = index.split(":");
+            var type2 = (_a2 = typeSplit[1]) === null || _a2 === void 0 ? void 0 : _a2.trim();
+            index = typeSplit[0].trim();
             var name = index.replace(/([&*]|\+\+)/g, "");
             var keyPath = /^\[/.test(name) ? name.match(/^\[(.*)\]$/)[1].split("+") : name;
-            return createIndexSpec(name, keyPath || null, /\&/.test(index), /\*/.test(index), /\+\+/.test(index), isArray(keyPath), indexNum === 0);
+            return createIndexSpec(name, keyPath || null, /\&/.test(index), /\*/.test(index), /\+\+/.test(index), isArray(keyPath), indexNum === 0, type2);
           });
         }
         var Version = function() {
           function Version2() {
           }
+          Version2.prototype._createTableSchema = function(name, primKey, indexes) {
+            return createTableSchema(name, primKey, indexes);
+          };
+          Version2.prototype._parseIndexSyntax = function(primKeyAndIndexes) {
+            return parseIndexSyntax(primKeyAndIndexes);
+          };
           Version2.prototype._parseStoresSpec = function(stores, outSchema) {
+            var _this = this;
             keys(stores).forEach(function(tableName) {
               if (stores[tableName] !== null) {
-                var indexes = parseIndexSyntax(stores[tableName]);
+                var indexes = _this._parseIndexSyntax(stores[tableName]);
                 var primKey = indexes.shift();
+                if (!primKey) {
+                  throw new exceptions.Schema("Invalid schema for table " + tableName + ": " + stores[tableName]);
+                }
                 primKey.unique = true;
                 if (primKey.multi)
-                  throw new exceptions.Schema("Primary key cannot be multi-valued");
+                  throw new exceptions.Schema("Primary key cannot be multiEntry*");
                 indexes.forEach(function(idx) {
                   if (idx.auto)
                     throw new exceptions.Schema("Only primary key can be marked as autoIncrement (++)");
                   if (!idx.keyPath)
                     throw new exceptions.Schema("Index must have a name and cannot be an empty string");
                 });
-                outSchema[tableName] = createTableSchema(tableName, primKey, indexes);
+                var tblSchema = _this._createTableSchema(tableName, primKey, indexes);
+                outSchema[tableName] = tblSchema;
               }
             });
           };
@@ -24900,6 +24942,17 @@
             this._state = state;
             this.name = name;
             this.on = Events(this, "populate", "blocked", "versionchange", "close", { ready: [promisableChain, nop] });
+            this.once = function(event, callback) {
+              var fn = function() {
+                var args = [];
+                for (var _i = 0; _i < arguments.length; _i++) {
+                  args[_i] = arguments[_i];
+                }
+                _this.on(event).unsubscribe(fn);
+                callback.apply(_this, args);
+              };
+              return _this.on(event, fn);
+            };
             this.on.ready.subscribe = override(this.on.ready.subscribe, function(subscribe) {
               return function(subscriber, bSticky) {
                 Dexie3.vip(function() {
@@ -25054,6 +25107,7 @@
             );
           };
           Dexie3.prototype._close = function() {
+            this.on.close.fire(new CustomEvent("close"));
             var state = this._state;
             var idx = connections.indexOf(this);
             if (idx >= 0)
@@ -25541,182 +25595,9 @@
     }
   });
 
-  // node_modules/dexie/import-wrapper.mjs
-  var import_wrapper_exports = {};
-  __export(import_wrapper_exports, {
-    Dexie: () => Dexie,
-    Entity: () => Entity,
-    PropModification: () => PropModification,
-    RangeSet: () => RangeSet,
-    add: () => add,
-    cmp: () => cmp,
-    default: () => import_wrapper_default,
-    liveQuery: () => liveQuery,
-    mergeRanges: () => mergeRanges,
-    rangesOverlap: () => rangesOverlap,
-    remove: () => remove,
-    replacePrefix: () => replacePrefix
-  });
-  var import_dexie, DexieSymbol, Dexie, liveQuery, mergeRanges, rangesOverlap, RangeSet, cmp, Entity, PropModification, replacePrefix, add, remove, import_wrapper_default;
-  var init_import_wrapper = __esm({
-    "node_modules/dexie/import-wrapper.mjs"() {
-      init_react_shim();
-      import_dexie = __toESM(require_dexie(), 1);
-      DexieSymbol = Symbol.for("Dexie");
-      Dexie = globalThis[DexieSymbol] || (globalThis[DexieSymbol] = import_dexie.default);
-      if (import_dexie.default.semVer !== Dexie.semVer) {
-        throw new Error(`Two different versions of Dexie loaded in the same app: ${import_dexie.default.semVer} and ${Dexie.semVer}`);
-      }
-      ({
-        liveQuery,
-        mergeRanges,
-        rangesOverlap,
-        RangeSet,
-        cmp,
-        Entity,
-        PropModification,
-        replacePrefix,
-        add,
-        remove
-      } = Dexie);
-      import_wrapper_default = Dexie;
-    }
-  });
-
-  // node_modules/dexie-react-hooks/dist/dexie-react-hooks.js
-  var require_dexie_react_hooks = __commonJS({
-    "node_modules/dexie-react-hooks/dist/dexie-react-hooks.js"(exports, module) {
-      init_react_shim();
-      (function(global2, factory) {
-        typeof exports === "object" && typeof module !== "undefined" ? factory(exports, (init_import_wrapper(), __toCommonJS(import_wrapper_exports)), require_react()) : typeof define === "function" && define.amd ? define(["exports", "dexie", "react"], factory) : (global2 = typeof globalThis !== "undefined" ? globalThis : global2 || self, factory(global2.DexieReactHooks = {}, global2.Dexie, global2.React));
-      })(exports, function(exports2, dexie, React12) {
-        "use strict";
-        function _interopDefaultLegacy(e) {
-          return e && typeof e === "object" && "default" in e ? e : { "default": e };
-        }
-        var React__default = /* @__PURE__ */ _interopDefaultLegacy(React12);
-        function useObservable(observableFactory, arg2, arg3) {
-          var deps;
-          var defaultResult;
-          if (typeof observableFactory === "function") {
-            deps = arg2 || [];
-            defaultResult = arg3;
-          } else {
-            deps = [];
-            defaultResult = arg2;
-          }
-          var monitor = React__default["default"].useRef({
-            hasResult: false,
-            result: defaultResult,
-            error: null
-          });
-          var _a = React__default["default"].useReducer(function(x) {
-            return x + 1;
-          }, 0);
-          _a[0];
-          var triggerUpdate = _a[1];
-          var observable = React__default["default"].useMemo(function() {
-            var observable2 = typeof observableFactory === "function" ? observableFactory() : observableFactory;
-            if (!observable2 || typeof observable2.subscribe !== "function") {
-              if (observableFactory === observable2) {
-                throw new TypeError("Given argument to useObservable() was neither a valid observable nor a function.");
-              } else {
-                throw new TypeError("Observable factory given to useObservable() did not return a valid observable.");
-              }
-            }
-            if (!monitor.current.hasResult) {
-              if (typeof observable2.getValue === "function") {
-                monitor.current.result = observable2.getValue();
-                monitor.current.hasResult = true;
-              } else {
-                var subscription = observable2.subscribe(function(val) {
-                  monitor.current.result = val;
-                  monitor.current.hasResult = true;
-                });
-                if (typeof subscription === "function") {
-                  subscription();
-                } else {
-                  subscription.unsubscribe();
-                }
-              }
-            }
-            return observable2;
-          }, deps);
-          React__default["default"].useDebugValue(monitor.current.result);
-          React__default["default"].useEffect(function() {
-            var subscription = observable.subscribe(function(val) {
-              var current = monitor.current;
-              if (current.error !== null || current.result !== val) {
-                current.error = null;
-                current.result = val;
-                current.hasResult = true;
-                triggerUpdate();
-              }
-            }, function(err) {
-              var current = monitor.current;
-              if (current.error !== err) {
-                current.error = err;
-                triggerUpdate();
-              }
-            });
-            return typeof subscription === "function" ? subscription : subscription.unsubscribe.bind(subscription);
-          }, deps);
-          if (monitor.current.error)
-            throw monitor.current.error;
-          return monitor.current.result;
-        }
-        function useLiveQuery3(querier, deps, defaultResult) {
-          return useObservable(function() {
-            return dexie.liveQuery(querier);
-          }, deps || [], defaultResult);
-        }
-        function usePermissions(firstArg, table, obj) {
-          if (!firstArg)
-            throw new TypeError("Invalid arguments to usePermissions(): undefined or null");
-          var db2;
-          if (arguments.length >= 3) {
-            if (!("transaction" in firstArg)) {
-              throw new TypeError("Invalid arguments to usePermission(db, table, obj): 1st arg must be a Dexie instance");
-            }
-            if (typeof table !== "string")
-              throw new TypeError("Invalid arguments to usePermission(db, table, obj): 2nd arg must be string");
-            if (!obj || typeof obj !== "object")
-              throw new TypeError("Invalid arguments to usePermission(db, table, obj): 3rd arg must be an object");
-            db2 = firstArg;
-          } else {
-            if (firstArg instanceof dexie.Dexie)
-              throw new TypeError("Invalid arguments to usePermission(db, table, obj): Missing table and obj arguments.");
-            if (typeof firstArg.table === "function" && typeof firstArg.db === "object") {
-              db2 = firstArg.db;
-              obj = firstArg;
-              table = firstArg.table();
-            } else {
-              throw new TypeError("Invalid arguments to usePermissions(). Expected usePermissions(entity: DexieCloudEntity) or usePermissions(db: Dexie, table: string, obj: DexieCloudObject)");
-            }
-          }
-          if (!("cloud" in db2))
-            throw new Error("usePermissions() is only for Dexie Cloud but there's no dexie-cloud-addon active in given db.");
-          if (!("permissions" in db2["cloud"]))
-            throw new Error("usePermissions() requires a newer version of dexie-cloud-addon. Please upgrade it.");
-          return useObservable(
-            // @ts-ignore
-            function() {
-              return db2.cloud.permissions(obj, table);
-            },
-            [obj.realmId, obj.owner, table]
-          );
-        }
-        exports2.useLiveQuery = useLiveQuery3;
-        exports2.useObservable = useObservable;
-        exports2.usePermissions = usePermissions;
-        Object.defineProperty(exports2, "__esModule", { value: true });
-      });
-    }
-  });
-
   // src/index.tsx
   init_react_shim();
-  var import_react15 = __toESM(require_react());
+  var import_react16 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // node_modules/react-router/dist/development/chunk-ZYFC6VSF.mjs
@@ -28085,7 +27966,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/pages/CreateSession.tsx
   init_react_shim();
-  var import_react2 = __toESM(require_react());
+  var import_react3 = __toESM(require_react());
 
   // node_modules/uuid/dist/esm-browser/index.js
   init_react_shim();
@@ -31822,11 +31703,32 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/data/db.ts
   init_react_shim();
-  init_import_wrapper();
+
+  // node_modules/dexie/import-wrapper.mjs
+  init_react_shim();
+  var import_dexie = __toESM(require_dexie(), 1);
+  var DexieSymbol = Symbol.for("Dexie");
+  var Dexie = globalThis[DexieSymbol] || (globalThis[DexieSymbol] = import_dexie.default);
+  if (import_dexie.default.semVer !== Dexie.semVer) {
+    throw new Error(`Two different versions of Dexie loaded in the same app: ${import_dexie.default.semVer} and ${Dexie.semVer}`);
+  }
+  var {
+    liveQuery,
+    mergeRanges,
+    rangesOverlap,
+    RangeSet,
+    cmp,
+    Entity,
+    PropModification,
+    replacePrefix,
+    add,
+    remove,
+    DexieYProvider
+  } = Dexie;
+  var import_wrapper_default = Dexie;
 
   // node_modules/dexie-export-import/dist/dexie-export-import.mjs
   init_react_shim();
-  init_import_wrapper();
   function __awaiter(thisArg, _arguments, P, generator) {
     function adopt(value) {
       return value instanceof P ? value : new P(function(resolve) {
@@ -35395,9 +35297,94 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return importDB(blob, options);
   };
 
+  // node_modules/dexie-react-hooks/dist/dexie-react-hooks.mjs
+  init_react_shim();
+  var import_react = __toESM(require_react(), 1);
+  function useObservable(observableFactory, arg2, arg3) {
+    var deps;
+    var defaultResult;
+    if (typeof observableFactory === "function") {
+      deps = arg2 || [];
+      defaultResult = arg3;
+    } else {
+      deps = [];
+      defaultResult = arg2;
+    }
+    var monitor = import_react.default.useRef({
+      hasResult: false,
+      result: defaultResult,
+      error: null
+    });
+    var _a = import_react.default.useReducer(function(x) {
+      return x + 1;
+    }, 0);
+    _a[0];
+    var triggerUpdate = _a[1];
+    var observable = import_react.default.useMemo(function() {
+      var observable2 = typeof observableFactory === "function" ? observableFactory() : observableFactory;
+      if (!observable2 || typeof observable2.subscribe !== "function") {
+        if (observableFactory === observable2) {
+          throw new TypeError("Given argument to useObservable() was neither a valid observable nor a function.");
+        } else {
+          throw new TypeError("Observable factory given to useObservable() did not return a valid observable.");
+        }
+      }
+      if (!monitor.current.hasResult && typeof window !== "undefined") {
+        if (typeof observable2.hasValue !== "function" || observable2.hasValue()) {
+          if (typeof observable2.getValue === "function") {
+            monitor.current.result = observable2.getValue();
+            monitor.current.hasResult = true;
+          } else {
+            var subscription = observable2.subscribe(function(val) {
+              monitor.current.result = val;
+              monitor.current.hasResult = true;
+            });
+            if (typeof subscription === "function") {
+              subscription();
+            } else {
+              subscription.unsubscribe();
+            }
+          }
+        }
+      }
+      return observable2;
+    }, deps);
+    import_react.default.useDebugValue(monitor.current.result);
+    import_react.default.useEffect(function() {
+      var subscription = observable.subscribe(function(val) {
+        var current = monitor.current;
+        if (current.error !== null || current.result !== val) {
+          current.error = null;
+          current.result = val;
+          current.hasResult = true;
+          triggerUpdate();
+        }
+      }, function(err) {
+        var current = monitor.current;
+        if (current.error !== err) {
+          current.error = err;
+          triggerUpdate();
+        }
+      });
+      return typeof subscription === "function" ? subscription : subscription.unsubscribe.bind(subscription);
+    }, deps);
+    if (monitor.current.error)
+      throw monitor.current.error;
+    return monitor.current.result;
+  }
+  function useLiveQuery(querier, deps, defaultResult) {
+    return useObservable(function() {
+      return Dexie.liveQuery(querier);
+    }, deps || [], defaultResult);
+  }
+  var fr = typeof FinalizationRegistry !== "undefined" && new FinalizationRegistry(function(doc) {
+    var DexieYProvider2 = Dexie["DexieYProvider"];
+    if (DexieYProvider2)
+      DexieYProvider2.release(doc);
+  });
+
   // src/data/db.ts
-  var import_dexie_react_hooks = __toESM(require_dexie_react_hooks());
-  var import_react = __toESM(require_react());
+  var import_react2 = __toESM(require_react());
 
   // src/data/sync.ts
   init_react_shim();
@@ -35427,37 +35414,37 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   var db = new MySubClassedDexie();
   function useGames() {
-    return (0, import_dexie_react_hooks.useLiveQuery)(() => db.games.toCollection().sortBy("name")) ?? [];
+    return useLiveQuery(() => db.games.toCollection().sortBy("name")) ?? [];
   }
   function useGame(id) {
-    const game = (0, import_dexie_react_hooks.useLiveQuery)(() => db.games.get(id));
+    const game = useLiveQuery(() => db.games.get(id));
     function setGame(newGame) {
       db.games.put(newGame, id);
     }
     return [game, setGame];
   }
   function usePlayers() {
-    return (0, import_dexie_react_hooks.useLiveQuery)(() => db.players.toCollection().sortBy("name")) ?? [];
+    return useLiveQuery(() => db.players.toCollection().sortBy("name")) ?? [];
   }
   function usePlayer(id) {
-    const player = (0, import_dexie_react_hooks.useLiveQuery)(() => db.players.get(id));
+    const player = useLiveQuery(() => db.players.get(id));
     function setPlayer(newPlayer) {
       db.players.put(newPlayer, id);
     }
     return [player, setPlayer];
   }
   function useLocations() {
-    return (0, import_dexie_react_hooks.useLiveQuery)(() => db.locations.toCollection().sortBy("name")) ?? [];
+    return useLiveQuery(() => db.locations.toCollection().sortBy("name")) ?? [];
   }
   function useLocation2(id) {
-    const location2 = (0, import_dexie_react_hooks.useLiveQuery)(() => db.locations.get(id));
+    const location2 = useLiveQuery(() => db.locations.get(id));
     function setLocation(newLocation) {
       db.locations.put(newLocation, id);
     }
     return [location2, setLocation];
   }
   function useSessions() {
-    return (0, import_dexie_react_hooks.useLiveQuery)(async () => {
+    return useLiveQuery(async () => {
       const sessions = await db.sessions.toCollection().sortBy("start");
       if (sessions === void 0) return [];
       return Promise.all(
@@ -35483,7 +35470,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }) ?? [];
   }
   function useSession(id) {
-    const session = (0, import_dexie_react_hooks.useLiveQuery)(async () => {
+    const session = useLiveQuery(async () => {
       const sess = await db.sessions.get(id);
       if (typeof sess === "undefined") throw new Error("Session not found");
       const [game, location2, players, rounds] = await Promise.all([
@@ -35536,12 +35523,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return [session, setSession, deleteSession];
   }
   function useTotalScores(sessionId) {
-    const scores = (0, import_dexie_react_hooks.useLiveQuery)(
+    const scores = useLiveQuery(
       () => db.scores.where({
         sessionId
       }).toArray()
     );
-    const totals = (0, import_react.useMemo)(
+    const totals = (0, import_react2.useMemo)(
       () => scores?.reduce((sums, score) => {
         if (!sums[score.playerId]) sums[score.playerId] = 0;
         sums[score.playerId] += score.value;
@@ -35567,9 +35554,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var CreateSession = () => {
     const games = useGames();
     const locations = useLocations();
-    const [start, setStart] = (0, import_react2.useState)(/* @__PURE__ */ new Date());
-    const [locationId, setLocationId] = (0, import_react2.useState)("");
-    const [gameId, setGameId] = (0, import_react2.useState)("");
+    const [start, setStart] = (0, import_react3.useState)(/* @__PURE__ */ new Date());
+    const [locationId, setLocationId] = (0, import_react3.useState)("");
+    const [gameId, setGameId] = (0, import_react3.useState)("");
     const navigate = useNavigate();
     const handleSubmit = async (e) => {
       e.preventDefault();
@@ -35682,10 +35669,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/components/tabs/Tabs.tsx
   init_react_shim();
-  var import_react3 = __toESM(require_react());
+  var import_react4 = __toESM(require_react());
   var import_jsx_runtime14 = __toESM(require_jsx_runtime());
   var Tabs = ({ children, tabs }) => {
-    const [currentTab, setCurrentTab] = (0, import_react3.useState)(0);
+    const [currentTab, setCurrentTab] = (0, import_react4.useState)(0);
     return /* @__PURE__ */ (0, import_jsx_runtime14.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "c-tabs__container", children: tabs.map((label, index) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
         "div",
@@ -35696,7 +35683,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         },
         index
       )) }),
-      import_react3.Children.toArray(children).map((child, index) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
+      import_react4.Children.toArray(children).map((child, index) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
         "div",
         {
           className: "c-tabs__panel",
@@ -35765,7 +35752,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/pages/EditGame.tsx
   init_react_shim();
-  var import_react7 = __toESM(require_react());
+  var import_react8 = __toESM(require_react());
 
   // src/components/FullPageError.tsx
   init_react_shim();
@@ -35785,11 +35772,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/components/modal/AddRoundModal.tsx
   init_react_shim();
-  var import_react5 = __toESM(require_react());
+  var import_react6 = __toESM(require_react());
 
   // src/components/modal/Modal.tsx
   init_react_shim();
-  var import_react4 = __toESM(require_react());
+  var import_react5 = __toESM(require_react());
   var import_react_dom = __toESM(require_react_dom());
   var import_jsx_runtime17 = __toESM(require_jsx_runtime());
   var Modal = ({
@@ -35800,9 +35787,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     open,
     ...props
   }) => {
-    const container = (0, import_react4.useRef)(document.createElement("div"));
+    const container = (0, import_react5.useRef)(document.createElement("div"));
     const id = Math.random().toString(36).substring(2);
-    (0, import_react4.useEffect)(() => {
+    (0, import_react5.useEffect)(() => {
       document.body.appendChild(container.current);
       return () => {
         document.body.removeChild(container.current);
@@ -35836,8 +35823,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/components/modal/AddRoundModal.tsx
   var import_jsx_runtime18 = __toESM(require_jsx_runtime());
   var AddRoundModal = ({ onSave, onClose, ...props }) => {
-    const [name, setName] = (0, import_react5.useState)("");
-    const [colour, setColour] = (0, import_react5.useState)("");
+    const [name, setName] = (0, import_react6.useState)("");
+    const [colour, setColour] = (0, import_react6.useState)("");
     const handleSave = () => {
       if (name) onSave(name, colour);
       onClose();
@@ -35880,7 +35867,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/components/modal/EditRoundModal.tsx
   init_react_shim();
-  var import_react6 = __toESM(require_react());
+  var import_react7 = __toESM(require_react());
   var import_jsx_runtime19 = __toESM(require_jsx_runtime());
   var EditRoundModal = ({
     onSave,
@@ -35889,8 +35876,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     colour: initialColour,
     ...props
   }) => {
-    const [name, setName] = (0, import_react6.useState)(initialLabel);
-    const [colour, setColour] = (0, import_react6.useState)(initialColour);
+    const [name, setName] = (0, import_react7.useState)(initialLabel);
+    const [colour, setColour] = (0, import_react7.useState)(initialColour);
     const handleSave = () => {
       if (name) onSave(name, colour);
       onClose();
@@ -35953,14 +35940,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     if (typeof id !== "string") {
       return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(FullPageError_default, { title: "Game not found" });
     }
-    const [name, setName] = (0, import_react7.useState)("");
-    const [image, setImage] = (0, import_react7.useState)("");
-    const [scoreMode, setScoreMode] = (0, import_react7.useState)("CUSTOM" /* Custom */);
-    const [rounds, setRounds] = (0, import_react7.useState)([]);
-    const [addRoundModalOpen, setAddRoundModalOpen] = (0, import_react7.useState)(false);
-    const [editRoundActive, setEditRoundActive] = (0, import_react7.useState)(-1);
+    const [name, setName] = (0, import_react8.useState)("");
+    const [image, setImage] = (0, import_react8.useState)("");
+    const [scoreMode, setScoreMode] = (0, import_react8.useState)("CUSTOM" /* Custom */);
+    const [rounds, setRounds] = (0, import_react8.useState)([]);
+    const [addRoundModalOpen, setAddRoundModalOpen] = (0, import_react8.useState)(false);
+    const [editRoundActive, setEditRoundActive] = (0, import_react8.useState)(-1);
     const [game, setGame] = useGame(id);
-    (0, import_react7.useEffect)(() => {
+    (0, import_react8.useEffect)(() => {
       if (game) {
         setName(game.name);
         setImage(game.image ?? "");
@@ -36113,7 +36100,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/pages/EditLocation.tsx
   init_react_shim();
-  var import_react8 = __toESM(require_react());
+  var import_react9 = __toESM(require_react());
 
   // src/data/_icons.ts
   init_react_shim();
@@ -38365,10 +38352,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     if (typeof id !== "string") {
       return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(FullPageError_default, { backTo: "/database", children: /* @__PURE__ */ (0, import_jsx_runtime21.jsx)("p", { children: "Location not found" }) });
     }
-    const [name, setName] = (0, import_react8.useState)("");
-    const [icon, setIcon] = (0, import_react8.useState)(void 0);
+    const [name, setName] = (0, import_react9.useState)("");
+    const [icon, setIcon] = (0, import_react9.useState)(void 0);
     const [location2, setLocation] = useLocation2(id);
-    (0, import_react8.useEffect)(() => {
+    (0, import_react9.useEffect)(() => {
       if (location2) {
         setName(location2.name);
         setIcon(location2.icon);
@@ -38428,7 +38415,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/pages/EditPlayer.tsx
   init_react_shim();
-  var import_react9 = __toESM(require_react());
+  var import_react10 = __toESM(require_react());
   var import_jsx_runtime22 = __toESM(require_jsx_runtime());
   var EditPlayer = ({ ...props }) => {
     const { id } = useParams();
@@ -38436,9 +38423,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     if (typeof id !== "string") {
       return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(FullPageError_default, { backTo: "/database", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("p", { children: "Player not found" }) });
     }
-    const [name, setName] = (0, import_react9.useState)("");
+    const [name, setName] = (0, import_react10.useState)("");
     const [player, setPlayer] = usePlayer(id);
-    (0, import_react9.useEffect)(() => {
+    (0, import_react10.useEffect)(() => {
       if (player) {
         setName(player.name);
       }
@@ -38486,7 +38473,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/pages/EditSession.tsx
   init_react_shim();
-  var import_react10 = __toESM(require_react());
+  var import_react11 = __toESM(require_react());
   var import_jsx_runtime23 = __toESM(require_jsx_runtime());
   var EditSession = () => {
     const { id } = useParams();
@@ -38496,13 +38483,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     const games = useGames();
     const locations = useLocations();
-    const [title, setTitle] = (0, import_react10.useState)("");
-    const [start, setStart] = (0, import_react10.useState)(/* @__PURE__ */ new Date());
-    const [end, setEnd] = (0, import_react10.useState)(/* @__PURE__ */ new Date());
-    const [locationId, setLocationId] = (0, import_react10.useState)("");
-    const [gameId, setGameId] = (0, import_react10.useState)("");
+    const [title, setTitle] = (0, import_react11.useState)("");
+    const [start, setStart] = (0, import_react11.useState)(/* @__PURE__ */ new Date());
+    const [end, setEnd] = (0, import_react11.useState)(/* @__PURE__ */ new Date());
+    const [locationId, setLocationId] = (0, import_react11.useState)("");
+    const [gameId, setGameId] = (0, import_react11.useState)("");
     const [session, setSession, deleteSession] = useSession(id);
-    (0, import_react10.useEffect)(() => {
+    (0, import_react11.useEffect)(() => {
       if (session) {
         setTitle(session.title);
         setStart(new Date(session.start));
@@ -38594,16 +38581,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/pages/EditSessionScores.tsx
   init_react_shim();
-  var import_react13 = __toESM(require_react());
+  var import_react14 = __toESM(require_react());
 
   // src/components/modal/EditPlayersModal.tsx
   init_react_shim();
-  var import_react11 = __toESM(require_react());
+  var import_react12 = __toESM(require_react());
   var import_jsx_runtime24 = __toESM(require_jsx_runtime());
   var EditPlayersModal = ({ playerIds, onSave, onClose, ...props }) => {
-    const [ids, setIds] = (0, import_react11.useState)(playerIds);
+    const [ids, setIds] = (0, import_react12.useState)(playerIds);
     const allPlayers = usePlayers();
-    const players = (0, import_react11.useMemo)(() => {
+    const players = (0, import_react12.useMemo)(() => {
       return allPlayers.filter((x) => ids.includes(x._id));
     }, [ids, allPlayers]);
     const handleSave = () => {
@@ -38653,12 +38640,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/components/modal/WinnerModal.tsx
   init_react_shim();
-  var import_react12 = __toESM(require_react());
+  var import_react13 = __toESM(require_react());
   var import_jsx_runtime25 = __toESM(require_jsx_runtime());
   var WinnerModal = ({ playerIds, onSave, onClose, ...props }) => {
-    const [ids] = (0, import_react12.useState)(playerIds);
+    const [ids] = (0, import_react13.useState)(playerIds);
     const allPlayers = usePlayers();
-    const players = (0, import_react12.useMemo)(() => {
+    const players = (0, import_react13.useMemo)(() => {
       return allPlayers.filter((x) => ids.includes(x._id));
     }, [ids, allPlayers]);
     const handleSave = (playerId) => {
@@ -38712,7 +38699,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/components/score-table/ScoreTableCell.tsx
   init_react_shim();
-  var import_dexie_react_hooks2 = __toESM(require_dexie_react_hooks());
 
   // src/components/table/TableCellInput.tsx
   init_react_shim();
@@ -38734,7 +38720,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // src/components/score-table/ScoreTableCell.tsx
   var import_jsx_runtime28 = __toESM(require_jsx_runtime());
   var ScoreTableCell = ({ round, playerId, editable }) => {
-    const score = (0, import_dexie_react_hooks2.useLiveQuery)(
+    const score = useLiveQuery(
       () => db.scores.get({
         sessionId: round.sessionId,
         roundIndex: round.index,
@@ -38864,9 +38850,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       return /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(FullPageError_default, { title: "Game not found" });
     }
     const [session, setSession] = useSession(id);
-    const [addRoundModalOpen, setAddRoundModalOpen] = (0, import_react13.useState)(false);
-    const [editPlayersModalOpen, setEditPlayersModalOpen] = (0, import_react13.useState)(false);
-    const [winnerModalOpen, setWinnerModalOpen] = (0, import_react13.useState)(false);
+    const [addRoundModalOpen, setAddRoundModalOpen] = (0, import_react14.useState)(false);
+    const [editPlayersModalOpen, setEditPlayersModalOpen] = (0, import_react14.useState)(false);
+    const [winnerModalOpen, setWinnerModalOpen] = (0, import_react14.useState)(false);
     if (!session) return null;
     const handleAddRound = (label) => {
       db.rounds.add({
@@ -38973,7 +38959,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/pages/Games.tsx
   init_react_shim();
-  var import_react14 = __toESM(require_react());
+  var import_react15 = __toESM(require_react());
 
   // src/components/card/Card.tsx
   init_react_shim();
@@ -39023,7 +39009,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const navigate = useNavigate();
     const games = useGames();
     const sessions = useSessions();
-    const [plays, setPlays] = (0, import_react14.useState)({});
+    const [plays, setPlays] = (0, import_react15.useState)({});
     async function addGame() {
       const id = v4_default();
       await db.games.add({
@@ -39033,7 +39019,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       });
       navigate(`/games/${id}`);
     }
-    (0, import_react14.useEffect)(() => {
+    (0, import_react15.useEffect)(() => {
       const newPlays = games?.reduce(
         (obj, game) => ({
           ...obj,
@@ -39353,7 +39339,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var rootElement = document.getElementById("root");
   if (rootElement === null) throw new Error("Cannot find #root to bind to");
   (0, import_client.createRoot)(rootElement).render(
-    /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(import_react15.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(HashRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(App_default, {}) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(import_react16.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(HashRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime43.jsx)(App_default, {}) }) })
   );
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").then((reg) => {
