@@ -37,10 +37,12 @@ const Games = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
         ...obj,
         [game._id]: sessions.filter((x) => x.gameId === game._id).length,
       }),
-      {}
+      {},
     );
 
-    setPlays(newPlays);
+    if (Object.keys(newPlays).length > 0) {
+      setPlays(newPlays);
+    }
   }, [games, sessions]);
 
   return (
