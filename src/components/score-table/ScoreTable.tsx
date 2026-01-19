@@ -1,4 +1,4 @@
-import { TableHTMLAttributes, useState } from "react";
+import { TableHTMLAttributes, useEffect, useState } from "react";
 
 import { db, useTotalScores } from "../../data/db";
 import { ScoreMode, SessionWithRelations } from "../../data/types";
@@ -18,6 +18,26 @@ const ScoreTable = ({ session, editable = false, ...props }: Props) => {
   const [editRoundActive, setEditRoundActive] = useState(-1);
 
   const { scoreMode } = session;
+
+  useEffect(() => {
+    let wakeLock: WakeLockSentinel | null = null;
+
+    try {
+      navigator.wakeLock.request("screen").then((lock) => {
+        wakeLock = lock;
+      });
+    } catch (err) {
+      // no worries
+    }
+
+    return () => {
+      if (wakeLock) {
+        wakeLock.release().then(() => {
+          wakeLock = null;
+        });
+      }
+    };
+  });
 
   let winners: string[] = [];
   if (scoreMode === ScoreMode.Highest) {
