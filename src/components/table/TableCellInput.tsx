@@ -8,7 +8,7 @@ const TableCellInput = ({
     <input
       {...props}
       className="c-text-field__input"
-      style={{ padding: "20px 12px", width: "100%", textAlign: "center" }}
+      style={{ padding: "0 12px", textAlign: "right" }}
       value={value}
     />
   </td>

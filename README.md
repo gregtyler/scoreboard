@@ -10,8 +10,7 @@
 - Default browser "back" action from "Edit game" doesn't work
   - Cannot recreate yet
 - Screen should stay on
-- The board should be landscape-able
-  - It is, but need sticky headers and less padding on fields and footer
+- Sticky headers on score table header and footer
 
 ### Ideas
 
