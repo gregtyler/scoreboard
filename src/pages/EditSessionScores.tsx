@@ -4,7 +4,6 @@ import { useParams } from "react-router-dom";
 import Button from "../components/button/Button";
 import ButtonStrip from "../components/form/ButtonStrip";
 import FullPageError from "../components/FullPageError";
-import AddRoundModal from "../components/modal/AddRoundModal";
 import EditPlayersModal from "../components/modal/EditPlayersModal";
 import WinnerModal from "../components/modal/WinnerModal";
 import AppBar from "../components/navigation/AppBar";
@@ -20,23 +19,10 @@ const EditSessionScores = () => {
   }
 
   const [session, setSession] = useSession(id);
-  const [addRoundModalOpen, setAddRoundModalOpen] = useState(false);
   const [editPlayersModalOpen, setEditPlayersModalOpen] = useState(false);
   const [winnerModalOpen, setWinnerModalOpen] = useState(false);
 
   if (!session) return null;
-
-  const handleAddRound = (label: string) => {
-    db.rounds.add({
-      sessionId: id,
-      index: session.rounds.length,
-      label,
-    });
-  };
-
-  const handleRemoveRound = (index: number) => {
-    db.rounds.delete([session._id, index]);
-  };
 
   const handleEditPlayers = (playerIds: string[]) => {
     setSession({
@@ -52,6 +38,22 @@ const EditSessionScores = () => {
     });
   };
 
+  const addRound = () => {
+    let lastRound = 0;
+    session.rounds.forEach((round) => {
+      const match = round.label?.match(/^#(\d+)$/);
+      if (match) {
+        lastRound = Math.max(lastRound, parseInt(match[1], 10));
+      }
+    });
+
+    db.rounds.add({
+      sessionId: id,
+      index: session.rounds.length,
+      label: `#${lastRound + 1}`,
+    });
+  };
+
   return (
     <div>
       <AppBar
@@ -61,11 +63,7 @@ const EditSessionScores = () => {
       ></AppBar>
       <Page>
         <ButtonStrip className="c-button-strip--align-left">
-          <Button
-            variant="tonal"
-            onClick={() => setAddRoundModalOpen(true)}
-            icon="add"
-          >
+          <Button variant="tonal" onClick={() => addRound()} icon="add">
             Add round
           </Button>
           <Button
@@ -86,18 +84,8 @@ const EditSessionScores = () => {
           )}
         </ButtonStrip>
 
-        <ScoreTable
-          session={session}
-          onRemoveRound={handleRemoveRound}
-          editable
-        ></ScoreTable>
+        <ScoreTable session={session} editable></ScoreTable>
 
-        <AddRoundModal
-          open={addRoundModalOpen}
-          onClose={() => setAddRoundModalOpen(false)}
-          onSave={handleAddRound}
-          key={`add-round-${addRoundModalOpen}`}
-        ></AddRoundModal>
         <EditPlayersModal
           open={editPlayersModalOpen}
           onClose={() => setEditPlayersModalOpen(false)}

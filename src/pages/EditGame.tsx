@@ -14,7 +14,6 @@ import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
 import List from "../components/list/List";
 import ListItem from "../components/list/ListItem";
-import AddRoundModal from "../components/modal/AddRoundModal";
 import EditRoundModal from "../components/modal/EditRoundModal";
 import AppBar from "../components/navigation/AppBar";
 import { db, useGame } from "../data/db";
@@ -35,7 +34,6 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
   const [scoreMode, setScoreMode] = useState<ScoreMode>(ScoreMode.Custom);
   const [rounds, setRounds] = useState<{ label: string; colour: string }[]>([]);
 
-  const [addRoundModalOpen, setAddRoundModalOpen] = useState(false);
   const [editRoundActive, setEditRoundActive] = useState(-1);
 
   const [game, setGame] = useGame(id);
@@ -61,8 +59,16 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
     );
   };
 
-  const addRound = (label: string, colour: string) => {
-    setRounds([...rounds, { label, colour }]);
+  const addRound = () => {
+    let lastRound = 0;
+    rounds.forEach((round) => {
+      const match = round.label?.match(/^#(\d+)$/);
+      if (match) {
+        lastRound = Math.max(lastRound, parseInt(match[1], 10));
+      }
+    });
+
+    setRounds([...rounds, { label: `#${lastRound + 1}`, colour: "#ffffff" }]);
   };
 
   const removeRound = (index: number) => {
@@ -146,6 +152,7 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
             open={editRoundActive !== -1}
             onClose={() => setEditRoundActive(-1)}
             onSave={(label, colour) => setRound(editRoundActive, label, colour)}
+            onDelete={() => removeRound(editRoundActive)}
             key={`edit-round-${editRoundActive}`}
           ></EditRoundModal>
           <List>
@@ -171,17 +178,7 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
             ))}
           </List>
 
-          <AddRoundModal
-            open={addRoundModalOpen}
-            onClose={() => setAddRoundModalOpen(false)}
-            onSave={addRound}
-            key={`add-round-${addRoundModalOpen}`}
-          ></AddRoundModal>
-          <Button
-            variant="outlined"
-            onClick={() => setAddRoundModalOpen(true)}
-            icon="add"
-          >
+          <Button variant="outlined" onClick={addRound} icon="add">
             Add
           </Button>
 

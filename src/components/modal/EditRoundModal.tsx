@@ -9,10 +9,12 @@ interface Props extends ModalProps {
   label: string;
   colour: string;
   onSave: (label: string, colour: string) => void;
+  onDelete: () => void;
 }
 
 const EditRoundModal = ({
   onSave,
+  onDelete,
   onClose,
   label: initialLabel,
   colour: initialColour,
@@ -26,12 +28,25 @@ const EditRoundModal = ({
     onClose();
   };
 
+  const handleDelete = () => {
+    if (confirm("Are you sure you want to delete this round?")) {
+      onDelete();
+      onClose();
+    }
+  };
+
   return (
     <Modal
       title="Edit round"
       buttons={
         <>
-          <Button onClick={onClose}>Cancel</Button>
+          <Button
+            onClick={handleDelete}
+            style={{ color: "var(--md-sys-color-error)" }}
+            icon="delete"
+          >
+            Delete
+          </Button>
           <Button onClick={handleSave} disabled={name === ""}>
             Save changes
           </Button>
