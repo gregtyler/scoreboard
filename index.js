@@ -39145,7 +39145,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }),
         {}
       );
-      setPlays(newPlays);
+      if (Object.keys(newPlays).length > 0) {
+        setPlays(newPlays);
+      }
     }, [games, sessions]);
     return /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)("div", { ...props, children: [
       /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
