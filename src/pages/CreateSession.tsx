@@ -9,12 +9,42 @@ import TextField from "../components/form/TextField";
 import AppBar from "../components/navigation/AppBar";
 import { db, useGames } from "../data/db";
 import Page from "./Page";
+import { Game, ScoreMode, translateScoreMode } from "../data/types";
+
+export async function extractScoreMode(
+  boardType: string,
+): Promise<[ScoreMode, Game | undefined]> {
+  let scoreMode = ScoreMode.Custom;
+  let game = undefined;
+  if (boardType.startsWith("custom:")) {
+    const customType = boardType.split(":")[1];
+    if (
+      customType !== ScoreMode.Highest &&
+      customType !== ScoreMode.Lowest &&
+      customType !== ScoreMode.Custom
+    ) {
+      throw new Error("Invalid score mode");
+    }
+
+    scoreMode = customType;
+  } else {
+    game = await db.games.get(boardType);
+
+    if (!game) {
+      throw new Error("Game not found");
+    }
+
+    scoreMode = game.scoreMode;
+  }
+
+  return [scoreMode, game];
+}
 
 const CreateSession = () => {
   const games = useGames();
 
   const [start, setStart] = useState(new Date());
-  const [gameId, setGameId] = useState("");
+  const [boardType, setBoardType] = useState("");
   const [title, setTitle] = useState("");
 
   const navigate = useNavigate();
@@ -24,25 +54,25 @@ const CreateSession = () => {
 
     const _id = uuidv4();
 
-    const game = await db.games.get(gameId);
-    if (!game) {
-      throw new Error("Couldn't identify game");
-    }
+    const [scoreMode, game] = await extractScoreMode(boardType);
 
-    game?.template?.rounds?.forEach((round, index) => {
-      db.rounds.add({
-        sessionId: _id,
-        index: index,
-        label: round.label,
-        colour: round.colour,
+    if (game) {
+      game.template?.rounds?.forEach((round, index) => {
+        db.rounds.add({
+          sessionId: _id,
+          index: index,
+          label: round.label,
+          colour: round.colour,
+        });
       });
-    });
+    }
 
     db.sessions.add({
       _id,
       title,
       start: start.toISOString(),
-      gameId,
+      gameId: game?._id,
+      scoreMode,
       playerIds: [],
     });
 
@@ -66,10 +96,25 @@ const CreateSession = () => {
           <TextField
             required
             label="Game"
-            value={gameId}
-            options={games.map((x) => [x._id, x.name])}
+            value={boardType}
+            options={[
+              [
+                `custom:${ScoreMode.Highest}`,
+                translateScoreMode(ScoreMode.Highest),
+              ],
+              [
+                `custom:${ScoreMode.Lowest}`,
+                translateScoreMode(ScoreMode.Lowest),
+              ],
+              [
+                `custom:${ScoreMode.Custom}`,
+                translateScoreMode(ScoreMode.Custom),
+              ],
+              ["", "--------------------------"],
+              ...games.map((x) => [x._id, x.name]),
+            ]}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setGameId(e.target.value)
+              setBoardType(e.target.value)
             }
           ></TextField>
 

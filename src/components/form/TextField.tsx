@@ -9,6 +9,7 @@ interface Props extends InputHTMLAttributes<HTMLElement> {
   supportText?: string;
   options?: [string, string][];
   backgroundColor?: string;
+  hidden?: boolean;
 }
 
 const TextField = ({
@@ -20,12 +21,13 @@ const TextField = ({
   supportText,
   options,
   backgroundColor,
+  hidden,
   ...props
 }: Props) => {
   const id = `f-id-${Math.random().toString(36).substring(2)}`;
 
   return (
-    <div className="c-text-field__container">
+    <div className="c-text-field__container" hidden={hidden}>
       <label
         className="c-text-field"
         htmlFor={id}

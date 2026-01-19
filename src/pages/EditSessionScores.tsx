@@ -75,7 +75,7 @@ const EditSessionScores = () => {
           >
             Edit players
           </Button>
-          {session.game.scoreMode === ScoreMode.Custom && (
+          {session.scoreMode === ScoreMode.Custom && (
             <Button
               variant="tonal"
               onClick={() => setWinnerModalOpen(true)}

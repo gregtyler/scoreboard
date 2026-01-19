@@ -4,7 +4,7 @@ import {
   FormHTMLAttributes,
   MouseEvent,
   useEffect,
-  useState
+  useState,
 } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
@@ -18,7 +18,7 @@ import AddRoundModal from "../components/modal/AddRoundModal";
 import EditRoundModal from "../components/modal/EditRoundModal";
 import AppBar from "../components/navigation/AppBar";
 import { db, useGame } from "../data/db";
-import { ScoreMode } from "../data/types";
+import { ScoreMode, translateScoreMode } from "../data/types";
 import { isEnumValue } from "../lib/isEnumValue";
 import Page from "./Page";
 
@@ -56,8 +56,8 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
   const setRound = (index: number, label: string, colour: string) => {
     setRounds(
       rounds.map((round, i) =>
-        i === index ? { ...round, label, colour } : round
-      )
+        i === index ? { ...round, label, colour } : round,
+      ),
     );
   };
 
@@ -126,9 +126,9 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
             label="How is the winner decided?"
             value={scoreMode}
             options={[
-              [ScoreMode.Highest, "Highest score"],
-              [ScoreMode.Lowest, "Lowest score"],
-              [ScoreMode.Custom, "Manually select"],
+              [ScoreMode.Highest, translateScoreMode(ScoreMode.Highest)],
+              [ScoreMode.Lowest, translateScoreMode(ScoreMode.Lowest)],
+              [ScoreMode.Custom, translateScoreMode(ScoreMode.Custom)],
             ]}
             onChange={(e: ChangeEvent<HTMLInputElement>) => {
               const v = e.target.value;

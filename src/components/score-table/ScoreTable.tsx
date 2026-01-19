@@ -21,7 +21,7 @@ const ScoreTable = ({
 }: Props) => {
   const totalScores = useTotalScores(session._id);
 
-  const { scoreMode } = session.game;
+  const { scoreMode } = session;
 
   let winners: string[] = [];
   if (scoreMode === ScoreMode.Highest) {
@@ -89,7 +89,7 @@ const ScoreTable = ({
                     icon="delete"
                     onClick={() =>
                       confirm(
-                        `Are you sure you want to remove ${round.label}?`
+                        `Are you sure you want to remove ${round.label}?`,
                       ) && onRemoveRound(index)
                     }
                   />
@@ -107,18 +107,19 @@ const ScoreTable = ({
           </tr>
         ))}
       </tbody>
-      {scoreMode && [ScoreMode.Highest, ScoreMode.Lowest].includes(scoreMode) && (
-        <tfoot>
-          <tr>
-            <th>Total</th>
-            {session.players.map((player) => (
-              <td key={player._id}>
-                <strong>{totalScores[player._id]}</strong>
-              </td>
-            ))}
-          </tr>
-        </tfoot>
-      )}
+      {scoreMode &&
+        [ScoreMode.Highest, ScoreMode.Lowest].includes(scoreMode) && (
+          <tfoot>
+            <tr>
+              <th>Total</th>
+              {session.players.map((player) => (
+                <td key={player._id}>
+                  <strong>{totalScores[player._id]}</strong>
+                </td>
+              ))}
+            </tr>
+          </tfoot>
+        )}
     </Table>
   );
 };

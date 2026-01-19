@@ -33,8 +33,8 @@ const ViewSession = () => {
         }
       ></AppBar>
       <Page>
-        <Card image={session.game.image} orientation="vertical">
-          <div className="headline-small">{session.game.name}</div>
+        <Card image={session.game?.image} orientation="vertical">
+          <div className="headline-small">{session.title}</div>
           <div className="c-card__body">
             <span style={{ opacity: 0.6 }}>Played on</span>{" "}
             <DateTime

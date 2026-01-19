@@ -7,7 +7,7 @@ import CardGrid from "../components/card/CardGrid";
 import DateTime from "../components/DateTime";
 import AppBar from "../components/navigation/AppBar";
 import { useGames, useSessions } from "../data/db";
-import { Session } from "../data/types";
+import { Session, translateScoreMode } from "../data/types";
 import Page from "./Page";
 
 const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
@@ -15,10 +15,7 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
   const sessions = useSessions();
 
   const sortByDate = (a: Session, b: Session) => {
-    return (
-      new Date(b.start).getTime() -
-      new Date(a.start).getTime()
-    );
+    return new Date(b.start).getTime() - new Date(a.start).getTime();
   };
 
   const sortedSessions = sessions.slice().sort(sortByDate);
@@ -33,25 +30,14 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
       <Page>
         <CardGrid>
           {sortedSessions.map((session) => {
-            const game = games.find((x) => x._id === session.game._id);
-
-            if (typeof game === "undefined") {
-              return (
-                <div
-                  style={{
-                    backgroundColor: "var(--md-sys-color-error)",
-                    color: "var(--md-sys-color-on-error)",
-                  }}
-                >
-                  Cannot find game with ID
-                </div>
-              );
-            }
+            const game = session.game
+              ? (games.find((x) => x._id === session.game?._id) ?? null)
+              : null;
 
             return (
               <Card
                 key={session._id}
-                image={game.image}
+                image={game?.image}
                 linkTo={`/sessions/${session._id}`}
                 buttons={
                   <IconButton
@@ -62,7 +48,9 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
               >
                 <div className="body-large">{session.title}</div>
                 <div className="body-medium c-card__meta">
-                  {game.name} &bull; {session.playerIds.length} players
+                  {game ? game.name : translateScoreMode(session.scoreMode)}
+                  {" • "}
+                  {session.playerIds.length} players
                   <div>
                     <DateTime
                       dateStyle="short"

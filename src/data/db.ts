@@ -8,6 +8,7 @@ import {
   Player,
   Round,
   Score,
+  ScoreMode,
   Session,
   SessionWithRelations,
 } from "./types";
@@ -22,6 +23,24 @@ export class MySubClassedDexie extends Dexie {
 
   constructor() {
     super("scoreboard");
+    this.version(4)
+      .stores({
+        sessions: "_id, scoreMode",
+      })
+      .upgrade((tx) => {
+        return tx
+          .table("sessions")
+          .toCollection()
+          .modify(async (session) => {
+            const game = await this.games.get(session.gameId);
+            if (game) {
+              session.scoreMode = game.scoreMode;
+            } else {
+              session.scoreMode = ScoreMode.Custom;
+            }
+          });
+      });
+
     this.version(3)
       .stores({
         sessions: "_id, gameId",
@@ -91,14 +110,10 @@ export function useSessions(): SessionWithRelations[] {
       return Promise.all(
         sessions.map(async (session) => {
           const [game, players, rounds] = await Promise.all([
-            db.games.get(session.gameId),
+            session.gameId ? db.games.get(session.gameId) : undefined,
             db.players.where("_id").anyOf(session.playerIds).toArray(),
             db.rounds.where({ sessionId: session._id }).sortBy("index"),
           ]);
-
-          if (game === undefined) {
-            throw new Error("Not found");
-          }
 
           return {
             ...session,
@@ -119,14 +134,10 @@ export function useSession(
     if (typeof sess === "undefined") throw new Error("Session not found");
 
     const [game, players, rounds] = await Promise.all([
-      db.games.get(sess.gameId),
+      sess.gameId ? db.games.get(sess.gameId) : undefined,
       db.players.where("_id").anyOf(sess.playerIds).toArray(),
       db.rounds.where({ sessionId: sess._id }).sortBy("index"),
     ]);
-
-    if (game === undefined) {
-      throw new Error("Not found");
-    }
 
     return {
       ...sess,
@@ -142,6 +153,7 @@ export function useSession(
       title: newSession.title,
       start: newSession.start,
       gameId: newSession.gameId,
+      scoreMode: newSession.scoreMode,
       playerIds: newSession.playerIds,
       customWinner: newSession.customWinner,
     };

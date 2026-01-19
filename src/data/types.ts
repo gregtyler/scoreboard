@@ -10,6 +10,19 @@ export enum ScoreMode {
   Custom = "CUSTOM",
 }
 
+export function translateScoreMode(mode: ScoreMode): string {
+  switch (mode) {
+    case ScoreMode.Highest:
+      return "Highest score wins";
+    case ScoreMode.Lowest:
+      return "Lowest score wins";
+    case ScoreMode.Custom:
+      return "Manually select winner";
+    default:
+      return "Unknown";
+  }
+}
+
 export type Game = {
   _id: string;
   name: string;
@@ -30,13 +43,14 @@ export type Session = {
   title: string;
   start: string;
   labels?: string[];
-  gameId: string;
+  gameId?: string;
+  scoreMode: ScoreMode;
   playerIds: string[];
   customWinner?: string;
 };
 
 export interface SessionWithRelations extends Session {
-  game: Game;
+  game?: Game;
   players: Player[];
   rounds: Round[];
 }

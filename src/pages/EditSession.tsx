@@ -9,6 +9,8 @@ import FullPageError from "../components/FullPageError";
 import AppBar from "../components/navigation/AppBar";
 import { useGames, useSession } from "../data/db";
 import Page from "./Page";
+import { ScoreMode } from "../data/types";
+import { extractScoreMode } from "./CreateSession";
 
 const EditSession = () => {
   const { id } = useParams();
@@ -22,25 +24,33 @@ const EditSession = () => {
 
   const [title, setTitle] = useState("");
   const [start, setStart] = useState(new Date());
-  const [gameId, setGameId] = useState("");
+  const [boardType, setBoardType] = useState("");
 
   const [session, setSession, deleteSession] = useSession(id);
   useEffect(() => {
     if (session) {
       setTitle(session.title);
       setStart(new Date(session.start));
-      setGameId(session.gameId);
+
+      if (session.game) {
+        setBoardType(session.game._id);
+      } else if (session.scoreMode) {
+        setBoardType(`custom:${session.scoreMode}`);
+      }
     }
   }, [session]);
 
   if (!session) return null;
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
+    const [scoreMode, game] = await extractScoreMode(boardType);
+
     setSession({
       ...session,
       title,
       start: start.toISOString(),
-      gameId,
+      gameId: game?._id,
+      scoreMode,
     });
 
     navigate(`/sessions/${session._id}`);
@@ -74,10 +84,25 @@ const EditSession = () => {
           <TextField
             required
             label="Game"
-            value={gameId}
-            options={games.map((x) => [x._id, x.name])}
+            value={boardType}
+            options={[
+              [
+                `custom:${ScoreMode.Highest}`,
+                translateScoreMode(ScoreMode.Highest),
+              ],
+              [
+                `custom:${ScoreMode.Lowest}`,
+                translateScoreMode(ScoreMode.Lowest),
+              ],
+              [
+                `custom:${ScoreMode.Custom}`,
+                translateScoreMode(ScoreMode.Custom),
+              ],
+              ["", "--------------------------"],
+              ...games.map((x) => [x._id, x.name]),
+            ]}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setGameId(e.target.value)
+              setBoardType(e.target.value)
             }
           ></TextField>
 

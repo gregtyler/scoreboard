@@ -5,7 +5,7 @@
 - [x] "Location" should at least be optional
   - Its only purpose is to remember particular games, which you could get from the title
   - Replace it with a freetext "description" field
-- End date/time is pointless
+- [x] End date/time is pointless
 - Images are a faff — could they be auto-searched, or generated like avatars?
 - Games should have stats
 - Players should have stats
