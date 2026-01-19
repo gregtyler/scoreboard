@@ -40,7 +40,7 @@ const ViewSession = () => {
             <DateTime
               dateStyle="long"
               timeStyle="short"
-              dateTime={session.end || session.start}
+              dateTime={session.start}
             ></DateTime>
           </div>
           <div>

@@ -29,7 +29,6 @@ export type Session = {
   _id: string;
   title: string;
   start: string;
-  end?: string;
   labels?: string[];
   gameId: string;
   playerIds: string[];

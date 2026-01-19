@@ -16,8 +16,8 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
 
   const sortByDate = (a: Session, b: Session) => {
     return (
-      new Date(b.end || b.start).getTime() -
-      new Date(a.end || a.start).getTime()
+      new Date(b.start).getTime() -
+      new Date(a.start).getTime()
     );
   };
 
@@ -67,7 +67,7 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
                     <DateTime
                       dateStyle="short"
                       timeStyle="short"
-                      dateTime={session.end || session.start}
+                      dateTime={session.start}
                     ></DateTime>
                   </div>
                 </div>

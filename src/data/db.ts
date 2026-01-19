@@ -146,7 +146,6 @@ export function useSession(
       customWinner: newSession.customWinner,
     };
 
-    if (newSession.end) data.end = newSession.end;
     if (newSession.labels) data.labels = newSession.labels;
 
     db.sessions.put(data, id);

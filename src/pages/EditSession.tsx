@@ -22,7 +22,6 @@ const EditSession = () => {
 
   const [title, setTitle] = useState("");
   const [start, setStart] = useState(new Date());
-  const [end, setEnd] = useState(new Date());
   const [gameId, setGameId] = useState("");
 
   const [session, setSession, deleteSession] = useSession(id);
@@ -30,7 +29,6 @@ const EditSession = () => {
     if (session) {
       setTitle(session.title);
       setStart(new Date(session.start));
-      setEnd(new Date(session.end ?? session.start));
       setGameId(session.gameId);
     }
   }, [session]);
@@ -42,7 +40,6 @@ const EditSession = () => {
       ...session,
       title,
       start: start.toISOString(),
-      end: end.toISOString(),
       gameId,
     });
 
@@ -90,11 +87,6 @@ const EditSession = () => {
             onChange={(val: Date) => setStart(val)}
           ></DateField>
 
-          <DateField
-            label="End"
-            value={end}
-            onChange={(val: Date) => setEnd(val)}
-          ></DateField>
           <ButtonStrip>
             <div>
               <Button to={`/sessions/${session._id}`}>Cancel</Button>
