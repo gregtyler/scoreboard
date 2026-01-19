@@ -10,7 +10,6 @@
 - Default browser "back" action from "Edit game" doesn't work
   - Cannot recreate yet
 - Screen should stay on
-- Sticky headers on score table header and footer
 
 ### Ideas
 

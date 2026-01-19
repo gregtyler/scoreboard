@@ -88,7 +88,7 @@ const ScoreTable = ({ session, editable = false, ...props }: Props) => {
   return (
     <>
       <Table {...props}>
-        <thead>
+        <thead className="c-table__thead--sticky">
           <tr>
             <th></th>
             {session.players.map((player) => (

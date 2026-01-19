@@ -5,6 +5,10 @@
   box-sizing: border-box;
 }
 
+:root {
+  overscroll-behavior: none;
+}
+
 body {
   height: 100vh;
   margin: 0;
@@ -51,7 +55,6 @@ a {
 
 .o-app-flex-content {
   flex: 1;
-  overflow: auto;
 }
 
 .o-canvas {
