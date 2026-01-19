@@ -15,6 +15,7 @@ const CreateSession = () => {
 
   const [start, setStart] = useState(new Date());
   const [gameId, setGameId] = useState("");
+  const [title, setTitle] = useState("");
 
   const navigate = useNavigate();
 
@@ -39,7 +40,7 @@ const CreateSession = () => {
 
     db.sessions.add({
       _id,
-      title: game?.name,
+      title,
       start: start.toISOString(),
       gameId,
       playerIds: [],
@@ -53,6 +54,15 @@ const CreateSession = () => {
       <AppBar variant="small" title="New session" backTo="/"></AppBar>
       <Page>
         <form onSubmit={handleSubmit}>
+          <TextField
+            required
+            label="Title"
+            value={title}
+            onChange={(e: ChangeEvent<HTMLInputElement>) =>
+              setTitle(e.target.value)
+            }
+          ></TextField>
+
           <TextField
             required
             label="Game"
