@@ -397,6 +397,9 @@
 * {
   box-sizing: border-box;
 }
+:root {
+  overscroll-behavior: none;
+}
 body {
   height: 100vh;
   margin: 0;
@@ -436,7 +439,6 @@ a {
 }
 .o-app-flex-content {
   flex: 1;
-  overflow: auto;
 }
 .o-canvas {
   padding-left: 16px;
@@ -681,11 +683,16 @@ option {
 
 /* src/components/navigation/navigation.css */
 .c-navigation-tray {
-  position: relative;
+  position: sticky;
+  bottom: 0;
   display: flex;
   justify-content: space-evenly;
   align-items: center;
   background-color: var(--md-sys-color-surface);
+  z-index: 100;
+}
+.c-navigation-tray[hidden] {
+  position: relative;
 }
 .c-navigation-tray::before {
   content: "";
@@ -834,6 +841,8 @@ option {
   margin: 24px;
 }
 .c-modal__buttons {
+  display: flex;
+  align-items: center;
   margin: 24px;
   text-align: right;
 }
@@ -845,8 +854,7 @@ option {
 .c-table__wrapper {
   max-width: calc(100vw - 2 * 16px);
   border: 1px solid var(--md-sys-color-surface-variant);
-  border-radius: 12px;
-  overflow-x: auto;
+  border-radius: var(--table-radius);
   margin-top: 16px;
   margin-bottom: 16px;
 }
@@ -854,7 +862,16 @@ option {
   width: 100%;
   border-collapse: collapse;
 }
+.c-table thead {
+  background-color: var(--md-sys-color-surface);
+}
+.c-table__thead--sticky {
+  position: sticky;
+  top: 0;
+  z-index: 1;
+}
 .c-table thead th {
+  isolation: isolate;
   background-color: var(--md-sys-color-surface-1);
   color: var(--md-sys-color-on-surface-variant);
 }
