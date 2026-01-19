@@ -60,6 +60,7 @@ export type Round = {
   index: number;
   label?: string;
   colour?: string;
+  deleted?: boolean;
 };
 
 export type Score = {

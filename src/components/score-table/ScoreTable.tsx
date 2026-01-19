@@ -12,11 +12,7 @@ interface Props extends TableHTMLAttributes<HTMLTableElement> {
   editable?: boolean;
 }
 
-const ScoreTable = ({
-  session,
-  editable = false,
-  ...props
-}: Props) => {
+const ScoreTable = ({ session, editable = false, ...props }: Props) => {
   const totalScores = useTotalScores(session._id);
 
   const [editRoundActive, setEditRoundActive] = useState(-1);
@@ -49,9 +45,14 @@ const ScoreTable = ({
   }
 
   const setRound = (index: number, label: string, colour: string) => {
+    const round = session.rounds.find((r) => r.index === index);
+    if (!round) {
+      throw new Error("Round not found");
+    }
+
     db.rounds.put(
       {
-        ...session.rounds[index],
+        ...round,
         label,
         colour,
       },
@@ -59,8 +60,29 @@ const ScoreTable = ({
     );
   };
 
-  const removeRound = (index: number) => {
-    db.rounds.delete([session._id, index]);
+  const removeRound = async (index: number) => {
+    const round = session.rounds.find((r) => r.index === index);
+    if (!round) {
+      throw new Error("Round not found");
+    }
+
+    const scores = await db.scores
+      .where({
+        sessionId: round.sessionId,
+        roundIndex: round.index,
+      })
+      .toArray();
+    const scoresWithValues = scores.filter((score) => score.value > 0);
+    if (scoresWithValues.length > 0) {
+      alert("Remove scores for this round before deleting it");
+      return;
+    }
+
+    scores.forEach((score) => {
+      console.log([score.sessionId, score.roundIndex, score.playerId]);
+      db.scores.delete([score.sessionId, score.roundIndex, score.playerId]);
+    });
+    await db.rounds.delete([session._id, index]);
   };
 
   return (
@@ -88,35 +110,37 @@ const ScoreTable = ({
             )}
         </thead>
         <tbody>
-          {session.rounds.map((round, index) => (
-            <tr key={index}>
-              <th
-                onContextMenu={(e) => {
-                  if (!editable) return;
+          {session.rounds
+            .filter((round) => !round.deleted)
+            .map((round) => (
+              <tr key={round.index}>
+                <th
+                  onContextMenu={(e) => {
+                    if (!editable) return;
 
-                  e.preventDefault();
-                  setEditRoundActive(index);
-                }}
-              >
-                <div
-                  style={{
-                    fontSize: "var(--md-sys-typescale-caption-size)",
+                    e.preventDefault();
+                    setEditRoundActive(round.index);
                   }}
                 >
-                  {round.colour && <Avatar colour={round.colour}></Avatar>}{" "}
-                  {round.label ?? ""}
-                </div>
-              </th>
-              {session.players.map((player) => (
-                <ScoreTableCell
-                  key={player._id}
-                  round={round}
-                  playerId={player._id}
-                  editable={editable}
-                />
-              ))}
-            </tr>
-          ))}
+                  <div
+                    style={{
+                      fontSize: "var(--md-sys-typescale-caption-size)",
+                    }}
+                  >
+                    {round.colour && <Avatar colour={round.colour}></Avatar>}{" "}
+                    {round.label ?? ""}
+                  </div>
+                </th>
+                {session.players.map((player) => (
+                  <ScoreTableCell
+                    key={`${round.index}-${player._id}`}
+                    round={round}
+                    playerId={player._id}
+                    editable={editable}
+                  />
+                ))}
+              </tr>
+            ))}
         </tbody>
         {scoreMode &&
           [ScoreMode.Highest, ScoreMode.Lowest].includes(scoreMode) && (
@@ -134,8 +158,12 @@ const ScoreTable = ({
       </Table>
 
       <EditRoundModal
-        label={session.rounds[editRoundActive]?.label ?? ""}
-        colour={session.rounds[editRoundActive]?.colour ?? ""}
+        label={
+          session.rounds.find((r) => r.index === editRoundActive)?.label ?? ""
+        }
+        colour={
+          session.rounds.find((r) => r.index === editRoundActive)?.colour ?? ""
+        }
         open={editRoundActive !== -1}
         onClose={() => setEditRoundActive(-1)}
         onSave={(label, colour) => setRound(editRoundActive, label, colour)}

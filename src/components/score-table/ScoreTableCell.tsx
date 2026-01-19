@@ -17,7 +17,7 @@ const ScoreTableCell = ({ round, playerId, editable }: Props) => {
       sessionId: round.sessionId,
       roundIndex: round.index,
       playerId: playerId,
-    })
+    }),
   );
 
   const handleScoreChange = (e: ChangeEvent<HTMLInputElement>) => {
@@ -36,7 +36,7 @@ const ScoreTableCell = ({ round, playerId, editable }: Props) => {
   return editable ? (
     <TableCellInput
       type="number"
-      value={score?.value ?? ""}
+      value={score?.value}
       onChange={handleScoreChange}
     />
   ) : (
