@@ -2,13 +2,7 @@
   "$id": "https://gregtyler.co.uk/scoring.schema.json",
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "type": "object",
-  "required": [
-    "_id",
-    "title",
-    "game",
-    "players",
-    "rounds"
-  ],
+  "required": ["_id", "title", "game", "players", "rounds"],
   "properties": {
     "_id": {
       "type": "string",
@@ -27,9 +21,7 @@
       "oneOf": [
         {
           "type": "object",
-          "required": [
-            "_id"
-          ],
+          "required": ["_id"],
           "properties": {
             "_id": {
               "type": "string",
@@ -42,25 +34,6 @@
         }
       ]
     },
-    "location": {
-      "oneOf": [
-        {
-          "type": "object",
-          "required": [
-            "_id"
-          ],
-          "properties": {
-            "_id": {
-              "type": "string",
-              "format": "uuid"
-            }
-          }
-        },
-        {
-          "$ref": "#/definitions/location"
-        }
-      ]
-    },
     "players": {
       "type": "array",
       "items": {
@@ -69,9 +42,7 @@
             "oneOf": [
               {
                 "type": "object",
-                "required": [
-                  "_id"
-                ],
+                "required": ["_id"],
                 "properties": {
                   "_id": {
                     "type": "string",
@@ -85,7 +56,7 @@
             ]
           },
           {
-           	"type": "object",
+            "type": "object",
             "required": ["colour"],
             "properties": {
               "colour": {
@@ -104,26 +75,9 @@
     }
   },
   "definitions": {
-    "location": {
-      "type": "object",
-      "required": [
-        "name"
-      ],
-      "properties": {
-        "id": {
-          "type": "string",
-          "format": "uuid"
-        },
-        "name": {
-          "type": "string"
-        }
-      }
-    },
     "game": {
       "type": "object",
-      "required": [
-        "name"
-      ],
+      "required": ["name"],
       "properties": {
         "id": {
           "type": "string",
@@ -136,9 +90,7 @@
     },
     "player": {
       "type": "object",
-      "required": [
-        "name"
-      ],
+      "required": ["name"],
       "properties": {
         "id": {
           "type": "string",
@@ -151,9 +103,7 @@
     },
     "round": {
       "type": "object",
-      "required": [
-        "scores"
-      ],
+      "required": ["scores"],
       "properties": {
         "label": {
           "type": "string"
@@ -168,10 +118,7 @@
     },
     "playerScore": {
       "type": "object",
-      "required": [
-        "player",
-        "score"
-      ],
+      "required": ["player", "score"],
       "properties": {
         "player": {
           "type": "number"

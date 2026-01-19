@@ -4,17 +4,15 @@ import { v4 as uuidv4 } from "uuid";
 
 import Button from "../components/button/Button";
 import IconButton from "../components/button/IconButton";
-import Icon from "../components/Icon";
 import List from "../components/list/List";
 import ListItem from "../components/list/ListItem";
 import AppBar from "../components/navigation/AppBar";
 import Tab from "../components/tabs/Tab";
 import Tabs from "../components/tabs/Tabs";
-import { db, useLocations, usePlayers } from "../data/db";
+import { db, usePlayers } from "../data/db";
 import Page from "./Page";
 
 const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
-  const locations = useLocations();
   const players = usePlayers();
 
   const navigate = useNavigate();
@@ -28,20 +26,11 @@ const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
     navigate(`/players/${id}`);
   }
 
-  async function addLocation() {
-    const id = uuidv4();
-    await db.locations.add({
-      _id: id,
-      name: "",
-    });
-    navigate(`/locations/${id}`);
-  }
-
   return (
     <div {...props}>
       <AppBar variant="center" title="Database"></AppBar>
       <Page>
-        <Tabs tabs={["Players", "Locations"]}>
+        <Tabs tabs={["Players", "Settings"]}>
           <Tab>
             <List>
               {players.map((player) => (
@@ -63,24 +52,7 @@ const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
             </div>
           </Tab>
           <Tab>
-            <List>
-              {locations.map((location) => (
-                <ListItem
-                  key={location._id}
-                  avatar={location.icon ? <Icon>{location.icon}</Icon> : ""}
-                  action={
-                    <IconButton icon="edit" to={`/locations/${location._id}`} />
-                  }
-                >
-                  {location.name}
-                </ListItem>
-              ))}
-            </List>
-            <div style={{ textAlign: "center" }}>
-              <Button icon="add" onClick={addLocation}>
-                Add new location
-              </Button>
-            </div>
+            <div style={{ textAlign: "center" }}>Settings go here...</div>
           </Tab>
         </Tabs>
       </Page>

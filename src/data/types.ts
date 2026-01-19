@@ -1,6 +1,5 @@
 export type State = {
   games: Game[];
-  locations: Location[];
   players: Player[];
   sessions: Session[];
 };
@@ -21,12 +20,6 @@ export type Game = {
   };
 };
 
-export type Location = {
-  _id: string;
-  name: string;
-  icon?: string;
-};
-
 export type Player = {
   _id: string;
   name: string;
@@ -39,14 +32,12 @@ export type Session = {
   end?: string;
   labels?: string[];
   gameId: string;
-  locationId: string;
   playerIds: string[];
   customWinner?: string;
 };
 
 export interface SessionWithRelations extends Session {
   game: Game;
-  location: Location;
   players: Player[];
   rounds: Round[];
 }

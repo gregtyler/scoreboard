@@ -5,7 +5,6 @@ import { useEffect, useMemo, useState } from "react";
 
 import {
   Game,
-  Location,
   Player,
   Round,
   Score,
@@ -16,7 +15,6 @@ import { pull, push } from "./sync";
 
 export class MySubClassedDexie extends Dexie {
   games!: Table<Game>;
-  locations!: Table<Location>;
   players!: Table<Player>;
   sessions!: Table<Session>;
   rounds!: Table<Round>;
@@ -24,6 +22,20 @@ export class MySubClassedDexie extends Dexie {
 
   constructor() {
     super("scoreboard");
+    this.version(3)
+      .stores({
+        sessions: "_id, gameId",
+        locations: null,
+      })
+      .upgrade((tx) => {
+        return tx
+          .table("sessions")
+          .toCollection()
+          .modify((session) => {
+            delete session.locationId;
+          });
+      });
+
     this.version(2).stores({
       sessions: "_id, gameId, locationId",
     });
@@ -58,7 +70,7 @@ export function usePlayers() {
   return useLiveQuery(() => db.players.toCollection().sortBy("name")) ?? [];
 }
 export function usePlayer(
-  id: string
+  id: string,
 ): [Player | undefined, (player: Player) => void] {
   const player = useLiveQuery(() => db.players.get(id));
 
@@ -67,21 +79,6 @@ export function usePlayer(
   }
 
   return [player, setPlayer];
-}
-
-export function useLocations() {
-  return useLiveQuery(() => db.locations.toCollection().sortBy("name")) ?? [];
-}
-export function useLocation(
-  id: string
-): [Location | undefined, (location: Location) => void] {
-  const location = useLiveQuery(() => db.locations.get(id));
-
-  function setLocation(newLocation: Location) {
-    db.locations.put(newLocation, id);
-  }
-
-  return [location, setLocation];
 }
 
 export function useSessions(): SessionWithRelations[] {
@@ -93,51 +90,47 @@ export function useSessions(): SessionWithRelations[] {
 
       return Promise.all(
         sessions.map(async (session) => {
-          const [game, location, players, rounds] = await Promise.all([
+          const [game, players, rounds] = await Promise.all([
             db.games.get(session.gameId),
-            db.locations.get(session.locationId),
             db.players.where("_id").anyOf(session.playerIds).toArray(),
             db.rounds.where({ sessionId: session._id }).sortBy("index"),
           ]);
 
-          if (game === undefined || location === undefined) {
+          if (game === undefined) {
             throw new Error("Not found");
           }
 
           return {
             ...session,
             game,
-            location,
             players,
             rounds,
           };
-        })
+        }),
       );
     }) ?? []
   );
 }
 export function useSession(
-  id: string
+  id: string,
 ): [SessionWithRelations | undefined, (session: Session) => void, () => void] {
   const session = useLiveQuery(async () => {
     const sess = await db.sessions.get(id);
     if (typeof sess === "undefined") throw new Error("Session not found");
 
-    const [game, location, players, rounds] = await Promise.all([
+    const [game, players, rounds] = await Promise.all([
       db.games.get(sess.gameId),
-      db.locations.get(sess.locationId),
       db.players.where("_id").anyOf(sess.playerIds).toArray(),
       db.rounds.where({ sessionId: sess._id }).sortBy("index"),
     ]);
 
-    if (game === undefined || location === undefined) {
+    if (game === undefined) {
       throw new Error("Not found");
     }
 
     return {
       ...sess,
       game,
-      location,
       players,
       rounds,
     };
@@ -149,7 +142,6 @@ export function useSession(
       title: newSession.title,
       start: newSession.start,
       gameId: newSession.gameId,
-      locationId: newSession.locationId,
       playerIds: newSession.playerIds,
       customWinner: newSession.customWinner,
     };
@@ -169,10 +161,10 @@ export function useSession(
           score.sessionId,
           score.roundIndex,
           score.playerId,
-        ])
+        ]),
       );
       db.rounds.bulkDelete(
-        session.rounds.map((round) => [round.sessionId, round.index])
+        session.rounds.map((round) => [round.sessionId, round.index]),
       );
       db.sessions.delete(id);
     }
@@ -189,7 +181,7 @@ export function useTotalScores(sessionId: string): ScoreMap {
       .where({
         sessionId: sessionId,
       })
-      .toArray()
+      .toArray(),
   );
 
   const totals = useMemo(
@@ -201,7 +193,7 @@ export function useTotalScores(sessionId: string): ScoreMap {
 
         return sums;
       }, {} as ScoreMap),
-    [scores]
+    [scores],
   );
 
   return totals ?? {};

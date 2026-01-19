@@ -35,20 +35,14 @@ const ViewSession = () => {
       <Page>
         <Card image={session.game.image} orientation="vertical">
           <div className="headline-small">{session.game.name}</div>
-          {location && (
-            <div className="c-card__body">
-              <span style={{ opacity: 0.6 }}>Played at</span>{" "}
-              <Icon style={{ verticalAlign: "middle" }}>
-                {session.location.icon}
-              </Icon>{" "}
-              {session.location.name} <span style={{ opacity: 0.6 }}>on</span>{" "}
-              <DateTime
-                dateStyle="long"
-                timeStyle="short"
-                dateTime={session.end || session.start}
-              ></DateTime>
-            </div>
-          )}
+          <div className="c-card__body">
+            <span style={{ opacity: 0.6 }}>Played on</span>{" "}
+            <DateTime
+              dateStyle="long"
+              timeStyle="short"
+              dateTime={session.end || session.start}
+            ></DateTime>
+          </div>
           <div>
             <Chip
               onClick={() => navigate(`/sessions/${session._id}/scores`)}

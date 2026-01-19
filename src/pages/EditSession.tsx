@@ -7,7 +7,7 @@ import DateField from "../components/form/DateField";
 import TextField from "../components/form/TextField";
 import FullPageError from "../components/FullPageError";
 import AppBar from "../components/navigation/AppBar";
-import { useGames, useLocations, useSession, useSessions } from "../data/db";
+import { useGames, useSession } from "../data/db";
 import Page from "./Page";
 
 const EditSession = () => {
@@ -19,12 +19,10 @@ const EditSession = () => {
   }
 
   const games = useGames();
-  const locations = useLocations();
 
   const [title, setTitle] = useState("");
   const [start, setStart] = useState(new Date());
   const [end, setEnd] = useState(new Date());
-  const [locationId, setLocationId] = useState("");
   const [gameId, setGameId] = useState("");
 
   const [session, setSession, deleteSession] = useSession(id);
@@ -34,7 +32,6 @@ const EditSession = () => {
       setStart(new Date(session.start));
       setEnd(new Date(session.end ?? session.start));
       setGameId(session.gameId);
-      setLocationId(session.locationId);
     }
   }, [session]);
 
@@ -46,7 +43,6 @@ const EditSession = () => {
       title,
       start: start.toISOString(),
       end: end.toISOString(),
-      locationId,
       gameId,
     });
 
@@ -76,15 +72,6 @@ const EditSession = () => {
             options={games.map((x) => [x._id, x.name])}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setGameId(e.target.value)
-            }
-          ></TextField>
-          <TextField
-            required
-            label="Location"
-            value={locationId}
-            options={locations.map((x) => [x._id, x.name])}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setLocationId(e.target.value)
             }
           ></TextField>
 

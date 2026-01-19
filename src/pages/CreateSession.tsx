@@ -7,15 +7,13 @@ import ButtonStrip from "../components/form/ButtonStrip";
 import DateField from "../components/form/DateField";
 import TextField from "../components/form/TextField";
 import AppBar from "../components/navigation/AppBar";
-import { db, useGames, useLocations } from "../data/db";
+import { db, useGames } from "../data/db";
 import Page from "./Page";
 
 const CreateSession = () => {
   const games = useGames();
-  const locations = useLocations();
 
   const [start, setStart] = useState(new Date());
-  const [locationId, setLocationId] = useState("");
   const [gameId, setGameId] = useState("");
 
   const navigate = useNavigate();
@@ -43,7 +41,6 @@ const CreateSession = () => {
       _id,
       title: game?.name,
       start: start.toISOString(),
-      locationId,
       gameId,
       playerIds: [],
     });
@@ -63,15 +60,6 @@ const CreateSession = () => {
             options={games.map((x) => [x._id, x.name])}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
               setGameId(e.target.value)
-            }
-          ></TextField>
-          <TextField
-            required
-            label="Location"
-            value={locationId}
-            options={locations.map((x) => [x._id, x.name])}
-            onChange={(e: ChangeEvent<HTMLInputElement>) =>
-              setLocationId(e.target.value)
             }
           ></TextField>
 
