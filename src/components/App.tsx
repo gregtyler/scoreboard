@@ -1,7 +1,7 @@
 import { Route, Routes } from "react-router-dom";
 
 import CreateSession from "../pages/CreateSession";
-import Database from "../pages/Database";
+import Settings from "../pages/Settings";
 import EditGame from "../pages/EditGame";
 import EditPlayer from "../pages/EditPlayer";
 import EditSession from "../pages/EditSession";
@@ -24,7 +24,7 @@ const App = () => {
           <Route path="/" element={<Sessions></Sessions>} />
           <Route path="/games" element={<Games></Games>} />
           <Route path="/games/:id" element={<EditGame></EditGame>} />
-          <Route path="/database" element={<Database></Database>} />
+          <Route path="/settings" element={<Settings></Settings>} />
           <Route path="/players/:id" element={<EditPlayer></EditPlayer>} />
           <Route
             path="/sessions/new"

@@ -1,6 +1,7 @@
 import { HTMLAttributes } from "react";
 
 import AppBar from "./navigation/AppBar";
+import Page from "../pages/Page";
 
 interface Props extends HTMLAttributes<HTMLDivElement> {
   backTo?: string;
@@ -9,11 +10,11 @@ interface Props extends HTMLAttributes<HTMLDivElement> {
 const FullPageError = ({ title, children, backTo, ...props }: Props) => (
   <div {...props}>
     <AppBar
-      variant="large"
+      variant="center"
       title={title || "An error occurred"}
       backTo={backTo}
     ></AppBar>
-    {children}
+    <Page>{children}</Page>
   </div>
 );
 

@@ -23,6 +23,10 @@ export class MySubClassedDexie extends Dexie {
 
   constructor() {
     super("scoreboard");
+    this.version(5).stores({
+      players: "_id, &name",
+    });
+
     this.version(4)
       .stores({
         sessions: "_id, scoreMode",

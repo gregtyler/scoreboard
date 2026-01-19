@@ -22,7 +22,7 @@ const EditPlayer = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
 
   if (typeof id !== "string") {
     return (
-      <FullPageError backTo="/database">
+      <FullPageError backTo="/settings">
         <p>Player not found</p>
       </FullPageError>
     );
@@ -39,7 +39,7 @@ const EditPlayer = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
 
   if (typeof player === "undefined") {
     return (
-      <FullPageError backTo="/database">
+      <FullPageError backTo="/settings">
         <p>Player not found</p>
       </FullPageError>
     );
@@ -53,14 +53,14 @@ const EditPlayer = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
       name,
     });
 
-    navigate("/database");
+    navigate("/settings");
   };
 
   const handleDelete = (e: MouseEvent<Element>) => {
     e.preventDefault();
 
     db.players.delete(id);
-    navigate("/database");
+    navigate("/settings");
   };
 
   return (
@@ -68,7 +68,7 @@ const EditPlayer = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
       <AppBar
         variant="small"
         title="Edit player"
-        backTo="/database"
+        backTo="/settings"
         actions={<IconButton icon="delete" onClick={handleDelete}></IconButton>}
       ></AppBar>
       <Page>

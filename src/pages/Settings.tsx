@@ -12,7 +12,7 @@ import Tabs from "../components/tabs/Tabs";
 import { db, usePlayers } from "../data/db";
 import Page from "./Page";
 
-const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
+const Settings = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
   const players = usePlayers();
 
   const navigate = useNavigate();
@@ -28,7 +28,7 @@ const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
 
   return (
     <div {...props}>
-      <AppBar variant="center" title="Database"></AppBar>
+      <AppBar variant="center" title="Settings"></AppBar>
       <Page>
         <Tabs tabs={["Players", "Settings"]}>
           <Tab>
@@ -60,4 +60,4 @@ const Database = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
   );
 };
 
-export default Database;
+export default Settings;

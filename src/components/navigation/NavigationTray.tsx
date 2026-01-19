@@ -18,11 +18,11 @@ const NavigationTray = () => {
         </span>
         Games
       </NavigationTrayLink>
-      <NavigationTrayLink to="/database">
+      <NavigationTrayLink to="/settings">
         <span className="c-navigation-tray__icon o-interactive">
-          <Icon>database</Icon>
+          <Icon>settings</Icon>
         </span>
-        Database
+        Settings
       </NavigationTrayLink>
     </nav>
   );

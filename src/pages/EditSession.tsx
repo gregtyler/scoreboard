@@ -9,7 +9,7 @@ import FullPageError from "../components/FullPageError";
 import AppBar from "../components/navigation/AppBar";
 import { useGames, useSession } from "../data/db";
 import Page from "./Page";
-import { ScoreMode } from "../data/types";
+import { ScoreMode, translateScoreMode } from "../data/types";
 import { extractScoreMode } from "./CreateSession";
 
 const EditSession = () => {
