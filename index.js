@@ -30394,10 +30394,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   init_react_shim();
   var import_react3 = __toESM(require_react());
 
-  // node_modules/uuid/dist-browser/index.js
+  // node_modules/uuid/dist/index.js
   init_react_shim();
 
-  // node_modules/uuid/dist-browser/stringify.js
+  // node_modules/uuid/dist/stringify.js
   init_react_shim();
   var byteToHex = [];
   for (let i = 0; i < 256; ++i) {
@@ -30407,7 +30407,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
   }
 
-  // node_modules/uuid/dist-browser/rng.js
+  // node_modules/uuid/dist/rng.js
   init_react_shim();
   var getRandomValues;
   var rnds8 = new Uint8Array(16);
@@ -30421,15 +30421,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return getRandomValues(rnds8);
   }
 
-  // node_modules/uuid/dist-browser/v4.js
+  // node_modules/uuid/dist/v4.js
   init_react_shim();
 
-  // node_modules/uuid/dist-browser/native.js
+  // node_modules/uuid/dist/native.js
   init_react_shim();
   var randomUUID = typeof crypto !== "undefined" && crypto.randomUUID && crypto.randomUUID.bind(crypto);
   var native_default = { randomUUID };
 
-  // node_modules/uuid/dist-browser/v4.js
+  // node_modules/uuid/dist/v4.js
   function _v4(options, buf, offset) {
     options = options || {};
     const rnds = options.random ?? options.rng?.() ?? rng();
