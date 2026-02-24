@@ -21785,6 +21785,10 @@
           }
           return to.concat(ar || Array.prototype.slice.call(from));
         }
+        typeof SuppressedError === "function" ? SuppressedError : function(error, suppressed, message2) {
+          var e = new Error(message2);
+          return e.name = "SuppressedError", e.error = error, e.suppressed = suppressed, e;
+        };
         var _global2 = typeof globalThis !== "undefined" ? globalThis : typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : global;
         var keys = Object.keys;
         var isArray = Array.isArray;
@@ -22888,7 +22892,7 @@
             });
           }
         }
-        var DEXIE_VERSION = "4.2.0";
+        var DEXIE_VERSION = "4.3.0";
         var maxString = String.fromCharCode(65535);
         var minKey = -Infinity;
         var INVALID_KEY_ARGUMENT = "Invalid key provided. Keys must be of type string, number, Date or Array<string | number | Date>.";
@@ -23012,6 +23016,73 @@
           })).then(function() {
             return res;
           });
+        }
+        var PropModification2 = (function() {
+          function PropModification3(spec) {
+            this["@@propmod"] = spec;
+          }
+          PropModification3.prototype.execute = function(value) {
+            var _a2;
+            var spec = this["@@propmod"];
+            if (spec.add !== void 0) {
+              var term = spec.add;
+              if (isArray(term)) {
+                return __spreadArray(__spreadArray([], isArray(value) ? value : [], true), term, true).sort();
+              }
+              if (typeof term === "number")
+                return (Number(value) || 0) + term;
+              if (typeof term === "bigint") {
+                try {
+                  return BigInt(value) + term;
+                } catch (_b) {
+                  return BigInt(0) + term;
+                }
+              }
+              throw new TypeError("Invalid term ".concat(term));
+            }
+            if (spec.remove !== void 0) {
+              var subtrahend_1 = spec.remove;
+              if (isArray(subtrahend_1)) {
+                return isArray(value) ? value.filter(function(item) {
+                  return !subtrahend_1.includes(item);
+                }).sort() : [];
+              }
+              if (typeof subtrahend_1 === "number")
+                return Number(value) - subtrahend_1;
+              if (typeof subtrahend_1 === "bigint") {
+                try {
+                  return BigInt(value) - subtrahend_1;
+                } catch (_c) {
+                  return BigInt(0) - subtrahend_1;
+                }
+              }
+              throw new TypeError("Invalid subtrahend ".concat(subtrahend_1));
+            }
+            var prefixToReplace = (_a2 = spec.replacePrefix) === null || _a2 === void 0 ? void 0 : _a2[0];
+            if (prefixToReplace && typeof value === "string" && value.startsWith(prefixToReplace)) {
+              return spec.replacePrefix[1] + value.substring(prefixToReplace.length);
+            }
+            return value;
+          };
+          return PropModification3;
+        })();
+        function applyUpdateSpec(obj, changes) {
+          var keyPaths = keys(changes);
+          var numKeys = keyPaths.length;
+          var anythingModified = false;
+          for (var i = 0; i < numKeys; ++i) {
+            var keyPath = keyPaths[i];
+            var value = changes[keyPath];
+            var origValue = getByKeyPath(obj, keyPath);
+            if (value instanceof PropModification2) {
+              setByKeyPath(obj, keyPath, value.execute(origValue));
+              anythingModified = true;
+            } else if (origValue !== value) {
+              setByKeyPath(obj, keyPath, value);
+              anythingModified = true;
+            }
+          }
+          return anythingModified;
         }
         var Table3 = (function() {
           function Table4() {
@@ -23206,6 +23277,28 @@
                 }
               }
               return lastResult;
+            });
+          };
+          Table4.prototype.upsert = function(key, modifications) {
+            var _this = this;
+            var keyPath = this.schema.primKey.keyPath;
+            return this._trans("readwrite", function(trans) {
+              return _this.core.get({ trans, key }).then(function(existing) {
+                var obj = existing !== null && existing !== void 0 ? existing : {};
+                applyUpdateSpec(obj, modifications);
+                if (keyPath)
+                  setByKeyPath(obj, keyPath, key);
+                return _this.core.mutate({
+                  trans,
+                  type: "put",
+                  values: [obj],
+                  keys: [key],
+                  upsert: true,
+                  updates: { keys: [key], changeSpecs: [modifications] }
+                }).then(function(res) {
+                  return res.numFailures ? DexiePromise.reject(res.failures[0]) : !!existing;
+                });
+              });
             });
           };
           Table4.prototype.update = function(keyOrObject, modifications) {
@@ -23570,55 +23663,6 @@
             }
           });
         }
-        var PropModification2 = (function() {
-          function PropModification3(spec) {
-            this["@@propmod"] = spec;
-          }
-          PropModification3.prototype.execute = function(value) {
-            var _a2;
-            var spec = this["@@propmod"];
-            if (spec.add !== void 0) {
-              var term = spec.add;
-              if (isArray(term)) {
-                return __spreadArray(__spreadArray([], isArray(value) ? value : [], true), term, true).sort();
-              }
-              if (typeof term === "number")
-                return (Number(value) || 0) + term;
-              if (typeof term === "bigint") {
-                try {
-                  return BigInt(value) + term;
-                } catch (_b) {
-                  return BigInt(0) + term;
-                }
-              }
-              throw new TypeError("Invalid term ".concat(term));
-            }
-            if (spec.remove !== void 0) {
-              var subtrahend_1 = spec.remove;
-              if (isArray(subtrahend_1)) {
-                return isArray(value) ? value.filter(function(item) {
-                  return !subtrahend_1.includes(item);
-                }).sort() : [];
-              }
-              if (typeof subtrahend_1 === "number")
-                return Number(value) - subtrahend_1;
-              if (typeof subtrahend_1 === "bigint") {
-                try {
-                  return BigInt(value) - subtrahend_1;
-                } catch (_c) {
-                  return BigInt(0) - subtrahend_1;
-                }
-              }
-              throw new TypeError("Invalid subtrahend ".concat(subtrahend_1));
-            }
-            var prefixToReplace = (_a2 = spec.replacePrefix) === null || _a2 === void 0 ? void 0 : _a2[0];
-            if (prefixToReplace && typeof value === "string" && value.startsWith(prefixToReplace)) {
-              return spec.replacePrefix[1] + value.substring(prefixToReplace.length);
-            }
-            return value;
-          };
-          return PropModification3;
-        })();
         var Collection = (function() {
           function Collection2() {
           }
@@ -23898,23 +23942,8 @@
               if (typeof changes === "function") {
                 modifyer = changes;
               } else {
-                var keyPaths = keys(changes);
-                var numKeys = keyPaths.length;
                 modifyer = function(item) {
-                  var anythingModified = false;
-                  for (var i = 0; i < numKeys; ++i) {
-                    var keyPath = keyPaths[i];
-                    var val = changes[keyPath];
-                    var origVal = getByKeyPath(item, keyPath);
-                    if (val instanceof PropModification2) {
-                      setByKeyPath(item, keyPath, val.execute(origVal));
-                      anythingModified = true;
-                    } else if (origVal !== val) {
-                      setByKeyPath(item, keyPath, val);
-                      anythingModified = true;
-                    }
-                  }
-                  return anythingModified;
+                  return applyUpdateSpec(item, changes);
                 };
               }
               var coreTable = ctx.table.core;
@@ -25918,8 +25947,8 @@
                   state.vcFired = true;
                   db2.on("versionchange").fire(ev);
                 });
-                idbdb.onclose = wrap(function(ev) {
-                  db2.on("close").fire(ev);
+                idbdb.onclose = wrap(function() {
+                  db2.close({ disableAutoOpen: false });
                 });
                 if (wasCreated)
                   _onDatabaseCreated(db2._deps, dbName);
@@ -27721,17 +27750,17 @@
         var namedExports = /* @__PURE__ */ Object.freeze({
           __proto__: null,
           Dexie: Dexie$1,
-          liveQuery: liveQuery2,
           Entity: Entity2,
-          cmp: cmp2,
           PropModification: PropModification2,
-          replacePrefix: replacePrefix2,
-          add: add2,
-          remove: remove2,
-          "default": Dexie$1,
           RangeSet: RangeSet2,
+          add: add2,
+          cmp: cmp2,
+          default: Dexie$1,
+          liveQuery: liveQuery2,
           mergeRanges: mergeRanges2,
-          rangesOverlap: rangesOverlap2
+          rangesOverlap: rangesOverlap2,
+          remove: remove2,
+          replacePrefix: replacePrefix2
         });
         __assign(Dexie$1, namedExports, { default: Dexie$1 });
         return Dexie$1;
@@ -39560,20 +39589,6 @@ react/cjs/react-jsx-runtime.development.js:
    * This source code is licensed under the MIT license found in the
    * LICENSE file in the root directory of this source tree.
    *)
-
-dexie/dist/dexie.js:
-  (*! *****************************************************************************
-  Copyright (c) Microsoft Corporation.
-  Permission to use, copy, modify, and/or distribute this software for any
-  purpose with or without fee is hereby granted.
-  THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH
-  REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY
-  AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT,
-  INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM
-  LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR
-  OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR
-  PERFORMANCE OF THIS SOFTWARE.
-  ***************************************************************************** *)
 
 react-router/dist/development/chunk-LFPYN7LY.mjs:
 react-router/dist/development/index.mjs:
