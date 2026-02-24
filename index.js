@@ -499,7 +499,7 @@
           }
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, didWarnStateUpdateForUnmountedComponent = {}, ReactNoopUpdateQueue = {
+        var REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = /* @__PURE__ */ Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = /* @__PURE__ */ Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = /* @__PURE__ */ Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = /* @__PURE__ */ Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = /* @__PURE__ */ Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = /* @__PURE__ */ Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = /* @__PURE__ */ Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = /* @__PURE__ */ Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = /* @__PURE__ */ Symbol.for("react.memo"), REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = /* @__PURE__ */ Symbol.for("react.activity"), MAYBE_ITERATOR_SYMBOL = Symbol.iterator, didWarnStateUpdateForUnmountedComponent = {}, ReactNoopUpdateQueue = {
           isMounted: function() {
             return false;
           },
@@ -542,7 +542,7 @@
         deprecatedAPIs.constructor = PureComponent;
         assign(deprecatedAPIs, Component4.prototype);
         deprecatedAPIs.isPureReactComponent = true;
-        var isArrayImpl = Array.isArray, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = {
+        var isArrayImpl = Array.isArray, REACT_CLIENT_REFERENCE = /* @__PURE__ */ Symbol.for("react.client.reference"), ReactSharedInternals = {
           H: null,
           A: null,
           T: null,
@@ -1365,7 +1365,7 @@
           },
           p: 0,
           findDOMNode: null
-        }, REACT_PORTAL_TYPE = Symbol.for("react.portal"), ReactSharedInternals = React13.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
+        }, REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal"), ReactSharedInternals = React13.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE;
         "function" === typeof Map && null != Map.prototype && "function" === typeof Map.prototype.forEach && "function" === typeof Set && null != Set.prototype && "function" === typeof Set.prototype.clear && "function" === typeof Set.prototype.forEach || console.error(
           "React depends on Map and Set built-in types. Make sure that you load a polyfill in older browsers. https://reactjs.org/link/react-polyfills"
         );
@@ -18534,14 +18534,14 @@
           ));
         }
         "undefined" !== typeof __REACT_DEVTOOLS_GLOBAL_HOOK__ && "function" === typeof __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart && __REACT_DEVTOOLS_GLOBAL_HOOK__.registerInternalModuleStart(Error());
-        var Scheduler = require_scheduler(), React13 = require_react(), ReactDOM = require_react_dom(), assign = Object.assign, REACT_LEGACY_ELEMENT_TYPE = Symbol.for("react.element"), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy");
-        Symbol.for("react.scope");
-        var REACT_ACTIVITY_TYPE = Symbol.for("react.activity");
-        Symbol.for("react.legacy_hidden");
-        Symbol.for("react.tracing_marker");
-        var REACT_MEMO_CACHE_SENTINEL = Symbol.for("react.memo_cache_sentinel");
-        Symbol.for("react.view_transition");
-        var MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), isArrayImpl = Array.isArray, ReactSharedInternals = React13.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
+        var Scheduler = require_scheduler(), React13 = require_react(), ReactDOM = require_react_dom(), assign = Object.assign, REACT_LEGACY_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.element"), REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = /* @__PURE__ */ Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = /* @__PURE__ */ Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = /* @__PURE__ */ Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = /* @__PURE__ */ Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = /* @__PURE__ */ Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = /* @__PURE__ */ Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = /* @__PURE__ */ Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = /* @__PURE__ */ Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = /* @__PURE__ */ Symbol.for("react.memo"), REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy");
+        /* @__PURE__ */ Symbol.for("react.scope");
+        var REACT_ACTIVITY_TYPE = /* @__PURE__ */ Symbol.for("react.activity");
+        /* @__PURE__ */ Symbol.for("react.legacy_hidden");
+        /* @__PURE__ */ Symbol.for("react.tracing_marker");
+        var REACT_MEMO_CACHE_SENTINEL = /* @__PURE__ */ Symbol.for("react.memo_cache_sentinel");
+        /* @__PURE__ */ Symbol.for("react.view_transition");
+        var MAYBE_ITERATOR_SYMBOL = Symbol.iterator, REACT_CLIENT_REFERENCE = /* @__PURE__ */ Symbol.for("react.client.reference"), isArrayImpl = Array.isArray, ReactSharedInternals = React13.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, ReactDOMSharedInternals = ReactDOM.__DOM_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, NotPending = Object.freeze({
           pending: false,
           data: null,
           method: null,
@@ -21353,7 +21353,7 @@
           componentOrElement = null === componentOrElement ? null : componentOrElement.stateNode;
           return componentOrElement;
         };
-        if (!function() {
+        if (!(function() {
           var internals = {
             bundleType: 1,
             version: "19.2.0",
@@ -21376,7 +21376,7 @@
           internals.setRefreshHandler = setRefreshHandler;
           internals.getCurrentFiber = getCurrentFiberForDevTools;
           return injectInternals(internals);
-        }() && canUseDOM && window.top === window.self && (-1 < navigator.userAgent.indexOf("Chrome") && -1 === navigator.userAgent.indexOf("Edge") || -1 < navigator.userAgent.indexOf("Firefox"))) {
+        })() && canUseDOM && window.top === window.self && (-1 < navigator.userAgent.indexOf("Chrome") && -1 === navigator.userAgent.indexOf("Edge") || -1 < navigator.userAgent.indexOf("Firefox"))) {
           var protocol = window.location.protocol;
           /^(https?|file):$/.test(protocol) && console.info(
             "%cDownload the React DevTools for a better development experience: https://react.dev/link/react-devtools" + ("file:" === protocol ? "\nYou might need to use a local HTTP server (instead of file://): https://react.dev/link/react-devtools-faq" : ""),
@@ -21685,7 +21685,7 @@
         function isValidElement2(object) {
           return "object" === typeof object && null !== object && object.$$typeof === REACT_ELEMENT_TYPE;
         }
-        var React13 = require_react(), REACT_ELEMENT_TYPE = Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = Symbol.for("react.memo"), REACT_LAZY_TYPE = Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = Symbol.for("react.activity"), REACT_CLIENT_REFERENCE = Symbol.for("react.client.reference"), ReactSharedInternals = React13.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
+        var React13 = require_react(), REACT_ELEMENT_TYPE = /* @__PURE__ */ Symbol.for("react.transitional.element"), REACT_PORTAL_TYPE = /* @__PURE__ */ Symbol.for("react.portal"), REACT_FRAGMENT_TYPE = /* @__PURE__ */ Symbol.for("react.fragment"), REACT_STRICT_MODE_TYPE = /* @__PURE__ */ Symbol.for("react.strict_mode"), REACT_PROFILER_TYPE = /* @__PURE__ */ Symbol.for("react.profiler"), REACT_CONSUMER_TYPE = /* @__PURE__ */ Symbol.for("react.consumer"), REACT_CONTEXT_TYPE = /* @__PURE__ */ Symbol.for("react.context"), REACT_FORWARD_REF_TYPE = /* @__PURE__ */ Symbol.for("react.forward_ref"), REACT_SUSPENSE_TYPE = /* @__PURE__ */ Symbol.for("react.suspense"), REACT_SUSPENSE_LIST_TYPE = /* @__PURE__ */ Symbol.for("react.suspense_list"), REACT_MEMO_TYPE = /* @__PURE__ */ Symbol.for("react.memo"), REACT_LAZY_TYPE = /* @__PURE__ */ Symbol.for("react.lazy"), REACT_ACTIVITY_TYPE = /* @__PURE__ */ Symbol.for("react.activity"), REACT_CLIENT_REFERENCE = /* @__PURE__ */ Symbol.for("react.client.reference"), ReactSharedInternals = React13.__CLIENT_INTERNALS_DO_NOT_USE_OR_WARN_USERS_THEY_CANNOT_UPGRADE, hasOwnProperty = Object.prototype.hasOwnProperty, isArrayImpl = Array.isArray, createTask = console.createTask ? console.createTask : function() {
           return null;
         };
         React13 = {
@@ -21747,7 +21747,7 @@
       init_react_shim();
       (function(global2, factory) {
         typeof exports === "object" && typeof module !== "undefined" ? module.exports = factory() : typeof define === "function" && define.amd ? define(factory) : (global2 = typeof globalThis !== "undefined" ? globalThis : global2 || self, global2.Dexie = factory());
-      })(exports, function() {
+      })(exports, (function() {
         "use strict";
         var extendStatics = function(d, b) {
           extendStatics = Object.setPrototypeOf || { __proto__: [] } instanceof Array && function(d2, b2) {
@@ -22268,7 +22268,7 @@
           debug = value;
         }
         var INTERNAL = {};
-        var ZONE_ECHO_LIMIT = 100, _a$1 = typeof Promise === "undefined" ? [] : function() {
+        var ZONE_ECHO_LIMIT = 100, _a$1 = typeof Promise === "undefined" ? [] : (function() {
           var globalP = Promise.resolve();
           if (typeof crypto === "undefined" || !crypto.subtle)
             return [globalP, getProto(globalP), globalP];
@@ -22278,7 +22278,7 @@
             getProto(nativeP),
             globalP
           ];
-        }(), resolvedNativePromise = _a$1[0], nativePromiseProto = _a$1[1], resolvedGlobalPromise = _a$1[2], nativePromiseThen = nativePromiseProto && nativePromiseProto.then;
+        })(), resolvedNativePromise = _a$1[0], nativePromiseProto = _a$1[1], resolvedGlobalPromise = _a$1[2], nativePromiseThen = nativePromiseProto && nativePromiseProto.then;
         var NativePromise = resolvedNativePromise && resolvedNativePromise.constructor;
         var patchGlobalPromise = !!resolvedGlobalPromise;
         function schedulePhysicalTick() {
@@ -23013,7 +23013,7 @@
             return res;
           });
         }
-        var Table3 = function() {
+        var Table3 = (function() {
           function Table4() {
           }
           Table4.prototype._trans = function(mode, fn, writeLocked) {
@@ -23138,7 +23138,7 @@
             var _a2 = this, db2 = _a2.db, tableName = _a2.name;
             this.schema.mappedClass = constructor;
             if (constructor.prototype instanceof Entity2) {
-              constructor = function(_super) {
+              constructor = (function(_super) {
                 __extends(class_1, _super);
                 function class_1() {
                   return _super !== null && _super.apply(this, arguments) || this;
@@ -23154,7 +23154,7 @@
                   return tableName;
                 };
                 return class_1;
-              }(constructor);
+              })(constructor);
             }
             var inheritedProps = /* @__PURE__ */ new Set();
             for (var proto = constructor.prototype; proto; proto = getProto(proto)) {
@@ -23393,7 +23393,7 @@
             });
           };
           return Table4;
-        }();
+        })();
         function Events(ctx) {
           var evs = {};
           var rv = function(eventName, subscriber) {
@@ -23570,7 +23570,7 @@
             }
           });
         }
-        var PropModification2 = function() {
+        var PropModification2 = (function() {
           function PropModification3(spec) {
             this["@@propmod"] = spec;
           }
@@ -23618,8 +23618,8 @@
             return value;
           };
           return PropModification3;
-        }();
-        var Collection = function() {
+        })();
+        var Collection = (function() {
           function Collection2() {
           }
           Collection2.prototype._read = function(fn, cb) {
@@ -24040,7 +24040,7 @@
             return this.modify(deleteCallback);
           };
           return Collection2;
-        }();
+        })();
         var deleteCallback = function(value, ctx) {
           return ctx.value = null;
         };
@@ -24209,7 +24209,7 @@
             upper: value
           };
         }
-        var WhereClause = function() {
+        var WhereClause = (function() {
           function WhereClause2() {
           }
           Object.defineProperty(WhereClause2.prototype, "Collection", {
@@ -24463,7 +24463,7 @@
             }));
           };
           return WhereClause2;
-        }();
+        })();
         function createWhereClauseConstructor(db2) {
           return makeClassConstructor(WhereClause.prototype, function WhereClause2(table, index, orCollection) {
             this.db = db2;
@@ -24503,7 +24503,7 @@
         var DEXIE_STORAGE_MUTATED_EVENT_NAME = "storagemutated";
         var STORAGE_MUTATED_DOM_EVENT_NAME = "x-storagemutated-1";
         var globalEvents = Events(null, DEXIE_STORAGE_MUTATED_EVENT_NAME);
-        var Transaction = function() {
+        var Transaction = (function() {
           function Transaction2() {
           }
           Transaction2.prototype._lock = function() {
@@ -24664,7 +24664,7 @@
             return transactionBoundTable;
           };
           return Transaction2;
-        }();
+        })();
         function createTransactionConstructor(db2) {
           return makeClassConstructor(Transaction.prototype, function Transaction2(mode, storeNames, dbschema, chromeTransactionDurability, parent) {
             var _this = this;
@@ -25484,7 +25484,7 @@
             return createIndexSpec(name, keyPath || null, /\&/.test(index), /\*/.test(index), /\+\+/.test(index), isArray(keyPath), indexNum === 0, type2);
           });
         }
-        var Version = function() {
+        var Version = (function() {
           function Version2() {
           }
           Version2.prototype._createTableSchema = function(name, primKey, indexes) {
@@ -25538,7 +25538,7 @@
             return this;
           };
           return Version2;
-        }();
+        })();
         function createVersionConstructor(db2) {
           return makeClassConstructor(Version.prototype, function Version2(versionNumber) {
             this.db = db2;
@@ -27040,7 +27040,7 @@
             }
           });
         }
-        var Dexie$1 = function() {
+        var Dexie$1 = (function() {
           function Dexie3(name, options) {
             var _this = this;
             this._middlewares = {};
@@ -27405,9 +27405,9 @@
             return this._allTables[tableName];
           };
           return Dexie3;
-        }();
+        })();
         var symbolObservable = typeof Symbol !== "undefined" && "observable" in Symbol ? Symbol.observable : "@@observable";
-        var Observable = function() {
+        var Observable = (function() {
           function Observable2(subscribe) {
             this._subscribe = subscribe;
           }
@@ -27418,7 +27418,7 @@
             return this;
           };
           return Observable2;
-        }();
+        })();
         var domDeps;
         try {
           domDeps = {
@@ -27735,7 +27735,7 @@
         });
         __assign(Dexie$1, namedExports, { default: Dexie$1 });
         return Dexie$1;
-      });
+      }));
     }
   });
 
@@ -28433,7 +28433,6 @@
       to
     };
   }
-  var UninstrumentedSymbol = Symbol("Uninstrumented");
   var objectProtoNames = Object.getOwnPropertyNames(Object.prototype).sort().join("\0");
   var validMutationMethodsArr = [
     "POST",
@@ -28449,7 +28448,6 @@
     ...validMutationMethodsArr
   ];
   var validRequestMethods = new Set(validRequestMethodsArr);
-  var ResetLoaderDataSymbol = Symbol("ResetLoaderData");
   var DataRouterContext = React2.createContext(null);
   DataRouterContext.displayName = "DataRouter";
   var DataRouterStateContext = React2.createContext(null);
@@ -29356,7 +29354,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       throw new Error(message2);
     }
   }
-  var SingleFetchRedirectSymbol = Symbol("SingleFetchRedirect");
   function singleFetchUrl(reqUrl, basename, trailingSlashAware, extension) {
     let url = typeof reqUrl === "string" ? new URL(
       reqUrl,
@@ -30542,7 +30539,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var secondsInYear = secondsInDay * daysInYear;
   var secondsInMonth = secondsInYear / 12;
   var secondsInQuarter = secondsInMonth * 3;
-  var constructFromSymbol = Symbol.for("constructDateFrom");
+  var constructFromSymbol = /* @__PURE__ */ Symbol.for("constructDateFrom");
 
   // node_modules/date-fns/constructFrom.js
   function constructFrom(date, value) {
@@ -34140,7 +34137,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // node_modules/dexie/import-wrapper.mjs
   init_react_shim();
   var import_dexie = __toESM(require_dexie(), 1);
-  var DexieSymbol = Symbol.for("Dexie");
+  var DexieSymbol = /* @__PURE__ */ Symbol.for("Dexie");
   var Dexie = globalThis[DexieSymbol] || (globalThis[DexieSymbol] = import_dexie.default);
   if (import_dexie.default.semVer !== Dexie.semVer) {
     throw new Error(`Two different versions of Dexie loaded in the same app: ${import_dexie.default.semVer} and ${Dexie.semVer}`);
@@ -34305,7 +34302,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var typeson = createCommonjsModule(function(module, exports) {
     (function(global2, factory) {
       module.exports = factory();
-    })(commonjsGlobal, function() {
+    })(commonjsGlobal, (function() {
       function _typeof(obj) {
         if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") {
           _typeof = function(obj2) {
@@ -34596,7 +34593,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
         return as > bs ? -1 : as < bs ? 1 : a.keypath < b.keypath ? -1 : a.keypath > b.keypath;
       }
-      var Typeson = /* @__PURE__ */ function() {
+      var Typeson = /* @__PURE__ */ (function() {
         function Typeson2(options) {
           _classCallCheck(this, Typeson2);
           this.options = options;
@@ -34806,7 +34803,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                           promResults = _context2.sent;
                           _context2.next = 5;
                           return Promise.all(promResults.map(
-                            /* @__PURE__ */ function() {
+                            /* @__PURE__ */ (function() {
                               var _ref2 = _asyncToGenerator(
                                 /* @__PURE__ */ regeneratorRuntime.mark(function _callee(promResult) {
                                   var newPromisesData, _promisesData$splice, _promisesData$splice2, prData, _prData, keyPath, cyclic2, stateObj2, parentObj, key, detectedType, encaps, isTypesonPromise, encaps2;
@@ -34849,7 +34846,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                               return function(_x3) {
                                 return _ref2.apply(this, arguments);
                               };
-                            }()
+                            })()
                           ));
                         case 5:
                           return _context2.abrupt("return", ret2);
@@ -35093,11 +35090,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               }
               return value;
             }
-            return promisesDataRoot.length ? sync && opts.throwOnBadSyncType ? function() {
+            return promisesDataRoot.length ? sync && opts.throwOnBadSyncType ? (function() {
               throw new TypeError("Sync method requested but async result obtained");
-            }() : Promise.resolve(checkPromises(ret, promisesDataRoot)).then(finish) : !sync && opts.throwOnBadSyncType ? function() {
+            })() : Promise.resolve(checkPromises(ret, promisesDataRoot)).then(finish) : !sync && opts.throwOnBadSyncType ? (function() {
               throw new TypeError("Async method requested but sync result obtained");
-            }() : opts.stringification && sync ? [finish(ret)] : sync ? finish(ret) : Promise.resolve(finish(ret));
+            })() : opts.stringification && sync ? [finish(ret)] : sync ? finish(ret) : Promise.resolve(finish(ret));
           }
           /**
            * Also sync but throws on non-sync result.
@@ -35308,11 +35305,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 });
               }
             }
-            return isThenable(ret) ? sync && opts.throwOnBadSyncType ? function() {
+            return isThenable(ret) ? sync && opts.throwOnBadSyncType ? (function() {
               throw new TypeError("Sync method requested but async result obtained");
-            }() : hasConstructorOf(ret, TypesonPromise) ? ret.p.then(checkUndefined) : ret : !sync && opts.throwOnBadSyncType ? function() {
+            })() : hasConstructorOf(ret, TypesonPromise) ? ret.p.then(checkUndefined) : ret : !sync && opts.throwOnBadSyncType ? (function() {
               throw new TypeError("Async method requested but sync result obtained");
-            }() : sync ? checkUndefined(ret) : Promise.resolve(checkUndefined(ret));
+            })() : sync ? checkUndefined(ret) : Promise.resolve(checkUndefined(ret));
           }
           /**
            * Also sync but throws on non-sync result.
@@ -35438,7 +35435,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           }
         }]);
         return Typeson2;
-      }();
+      })();
       var Undefined = function Undefined2() {
         _classCallCheck(this, Undefined2);
       };
@@ -35457,12 +35454,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       Typeson.getJSONType = getJSONType;
       Typeson.JSON_TYPES = ["null", "boolean", "number", "string", "array", "object"];
       return Typeson;
-    });
+    }));
   });
   var structuredCloning = createCommonjsModule(function(module, exports) {
-    !function(e, t) {
+    !(function(e, t) {
       module.exports = t();
-    }(commonjsGlobal, function() {
+    })(commonjsGlobal, (function() {
       function _typeof$1(e2) {
         return (_typeof$1 = "function" == typeof Symbol && "symbol" == typeof Symbol.iterator ? function(e3) {
           return typeof e3;
@@ -35486,27 +35483,27 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         var r2 = Object.keys(e2);
         if (Object.getOwnPropertySymbols) {
           var n2 = Object.getOwnPropertySymbols(e2);
-          t2 && (n2 = n2.filter(function(t3) {
+          t2 && (n2 = n2.filter((function(t3) {
             return Object.getOwnPropertyDescriptor(e2, t3).enumerable;
-          })), r2.push.apply(r2, n2);
+          }))), r2.push.apply(r2, n2);
         }
         return r2;
       }
       function _toConsumableArray$1(e2) {
-        return function _arrayWithoutHoles$1(e3) {
+        return (function _arrayWithoutHoles$1(e3) {
           if (Array.isArray(e3)) return _arrayLikeToArray$1(e3);
-        }(e2) || function _iterableToArray$1(e3) {
+        })(e2) || (function _iterableToArray$1(e3) {
           if ("undefined" != typeof Symbol && Symbol.iterator in Object(e3)) return Array.from(e3);
-        }(e2) || function _unsupportedIterableToArray$1(e3, t2) {
+        })(e2) || (function _unsupportedIterableToArray$1(e3, t2) {
           if (!e3) return;
           if ("string" == typeof e3) return _arrayLikeToArray$1(e3, t2);
           var r2 = Object.prototype.toString.call(e3).slice(8, -1);
           "Object" === r2 && e3.constructor && (r2 = e3.constructor.name);
           if ("Map" === r2 || "Set" === r2) return Array.from(e3);
           if ("Arguments" === r2 || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(r2)) return _arrayLikeToArray$1(e3, t2);
-        }(e2) || function _nonIterableSpread$1() {
+        })(e2) || (function _nonIterableSpread$1() {
           throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-        }();
+        })();
       }
       function _arrayLikeToArray$1(e2, t2) {
         (null == t2 || t2 > e2.length) && (t2 = e2.length);
@@ -35536,27 +35533,27 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         var r2 = Object.keys(e2);
         if (Object.getOwnPropertySymbols) {
           var n2 = Object.getOwnPropertySymbols(e2);
-          t2 && (n2 = n2.filter(function(t3) {
+          t2 && (n2 = n2.filter((function(t3) {
             return Object.getOwnPropertyDescriptor(e2, t3).enumerable;
-          })), r2.push.apply(r2, n2);
+          }))), r2.push.apply(r2, n2);
         }
         return r2;
       }
       function _objectSpread2(e2) {
         for (var t2 = 1; t2 < arguments.length; t2++) {
           var r2 = null != arguments[t2] ? arguments[t2] : {};
-          t2 % 2 ? ownKeys(Object(r2), true).forEach(function(t3) {
+          t2 % 2 ? ownKeys(Object(r2), true).forEach((function(t3) {
             _defineProperty(e2, t3, r2[t3]);
-          }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e2, Object.getOwnPropertyDescriptors(r2)) : ownKeys(Object(r2)).forEach(function(t3) {
+          })) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e2, Object.getOwnPropertyDescriptors(r2)) : ownKeys(Object(r2)).forEach((function(t3) {
             Object.defineProperty(e2, t3, Object.getOwnPropertyDescriptor(r2, t3));
-          });
+          }));
         }
         return e2;
       }
       function _slicedToArray(e2, t2) {
-        return function _arrayWithHoles(e3) {
+        return (function _arrayWithHoles(e3) {
           if (Array.isArray(e3)) return e3;
-        }(e2) || function _iterableToArrayLimit(e3, t3) {
+        })(e2) || (function _iterableToArrayLimit(e3, t3) {
           if ("undefined" == typeof Symbol || !(Symbol.iterator in Object(e3))) return;
           var r2 = [], n2 = true, i2 = false, o2 = void 0;
           try {
@@ -35571,18 +35568,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             }
           }
           return r2;
-        }(e2, t2) || _unsupportedIterableToArray(e2, t2) || function _nonIterableRest() {
+        })(e2, t2) || _unsupportedIterableToArray(e2, t2) || (function _nonIterableRest() {
           throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-        }();
+        })();
       }
       function _toConsumableArray(e2) {
-        return function _arrayWithoutHoles(e3) {
+        return (function _arrayWithoutHoles(e3) {
           if (Array.isArray(e3)) return _arrayLikeToArray(e3);
-        }(e2) || function _iterableToArray(e3) {
+        })(e2) || (function _iterableToArray(e3) {
           if ("undefined" != typeof Symbol && Symbol.iterator in Object(e3)) return Array.from(e3);
-        }(e2) || _unsupportedIterableToArray(e2) || function _nonIterableSpread() {
+        })(e2) || _unsupportedIterableToArray(e2) || (function _nonIterableSpread() {
           throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-        }();
+        })();
       }
       function _unsupportedIterableToArray(e2, t2) {
         if (e2) {
@@ -35601,32 +35598,32 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       };
       e.__typeson__type__ = "TypesonPromise", "undefined" != typeof Symbol && (e.prototype[Symbol.toStringTag] = "TypesonPromise"), e.prototype.then = function(t2, r2) {
         var n2 = this;
-        return new e(function(e2, i2) {
-          n2.p.then(function(r3) {
+        return new e((function(e2, i2) {
+          n2.p.then((function(r3) {
             e2(t2 ? t2(r3) : r3);
-          }).catch(function(e3) {
+          })).catch((function(e3) {
             return r2 ? r2(e3) : Promise.reject(e3);
-          }).then(e2, i2);
-        });
+          })).then(e2, i2);
+        }));
       }, e.prototype.catch = function(e2) {
         return this.then(null, e2);
       }, e.resolve = function(t2) {
-        return new e(function(e2) {
+        return new e((function(e2) {
           e2(t2);
-        });
+        }));
       }, e.reject = function(t2) {
-        return new e(function(e2, r2) {
+        return new e((function(e2, r2) {
           r2(t2);
-        });
-      }, ["all", "race"].forEach(function(t2) {
+        }));
+      }, ["all", "race"].forEach((function(t2) {
         e[t2] = function(r2) {
-          return new e(function(e2, n2) {
-            Promise[t2](r2.map(function(e3) {
+          return new e((function(e2, n2) {
+            Promise[t2](r2.map((function(e3) {
               return e3 && e3.constructor && "TypesonPromise" === e3.constructor.__typeson__type__ ? e3.p : e3;
-            })).then(e2, n2);
-          });
+            }))).then(e2, n2);
+          }));
         };
-      });
+      }));
       var t = {}.toString, r = {}.hasOwnProperty, n = Object.getPrototypeOf, i = r.toString;
       function isThenable(e2, t2) {
         return isObject(e2) && "function" == typeof e2.then && (!t2 || "function" == typeof e2.catch);
@@ -35686,18 +35683,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         var r2 = e2.keypath.match(/\./g) || 0, n2 = t2.keypath.match(/\./g) || 0;
         return r2 && (r2 = r2.length), n2 && (n2 = n2.length), r2 > n2 ? -1 : r2 < n2 ? 1 : e2.keypath < t2.keypath ? -1 : e2.keypath > t2.keypath;
       }
-      var s = function() {
+      var s = (function() {
         function Typeson(e2) {
           _classCallCheck(this, Typeson), this.options = e2, this.plainObjectReplacers = [], this.nonplainObjectReplacers = [], this.revivers = {}, this.types = {};
         }
-        return function _createClass(e2, t2, r2) {
+        return (function _createClass(e2, t2, r2) {
           return t2 && _defineProperties(e2.prototype, t2), r2 && _defineProperties(e2, r2), e2;
-        }(Typeson, [{ key: "stringify", value: function stringify(e2, t2, r2, n2) {
+        })(Typeson, [{ key: "stringify", value: function stringify(e2, t2, r2, n2) {
           n2 = _objectSpread2(_objectSpread2(_objectSpread2({}, this.options), n2), {}, { stringification: true });
           var i2 = this.encapsulate(e2, null, n2);
-          return a(i2) ? JSON.stringify(i2[0], t2, r2) : i2.then(function(e3) {
+          return a(i2) ? JSON.stringify(i2[0], t2, r2) : i2.then((function(e3) {
             return JSON.stringify(e3, t2, r2);
-          });
+          }));
         } }, { key: "stringifySync", value: function stringifySync(e2, t2, r2, n2) {
           return this.stringify(e2, t2, r2, _objectSpread2(_objectSpread2({ throwOnBadSyncType: true }, n2), {}, { sync: true }));
         } }, { key: "stringifyAsync", value: function stringifyAsync(e2, t2, r2, n2) {
@@ -35715,27 +35712,27 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           var r2 = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : {};
           return r2.iterateNone = true, this.encapsulate(e2, t2, r2);
         } }, { key: "encapsulate", value: function encapsulate(t2, r2, n2) {
-          var i2 = _async(function(t3, r3) {
-            return _await(Promise.all(r3.map(function(e2) {
+          var i2 = _async((function(t3, r3) {
+            return _await(Promise.all(r3.map((function(e2) {
               return e2[1].p;
-            })), function(n3) {
-              return _await(Promise.all(n3.map(_async(function(n4) {
+            }))), (function(n3) {
+              return _await(Promise.all(n3.map(_async((function(n4) {
                 var o2 = false, a2 = [], c2 = _slicedToArray(r3.splice(0, 1), 1), u2 = _slicedToArray(c2[0], 7), s3 = u2[0], f3 = u2[2], l3 = u2[3], p3 = u2[4], y3 = u2[5], v3 = u2[6], b3 = _encapsulate(s3, n4, f3, l3, a2, true, v3), d3 = hasConstructorOf(b3, e);
-                return function _invoke(e2, t4) {
+                return (function _invoke(e2, t4) {
                   var r4 = e2();
                   return r4 && r4.then ? r4.then(t4) : t4(r4);
-                }(function() {
-                  if (s3 && d3) return _await(b3.p, function(e2) {
+                })((function() {
+                  if (s3 && d3) return _await(b3.p, (function(e2) {
                     return p3[y3] = e2, o2 = true, i2(t3, a2);
-                  });
-                }, function(e2) {
+                  }));
+                }), (function(e2) {
                   return o2 ? e2 : (s3 ? p3[y3] = b3 : t3 = d3 ? b3.p : b3, i2(t3, a2));
-                });
-              }))), function() {
+                }));
+              })))), (function() {
                 return t3;
-              });
-            });
-          }), s2 = (n2 = _objectSpread2(_objectSpread2({ sync: true }, this.options), n2)).sync, f2 = this, l2 = {}, p2 = [], y2 = [], v2 = [], b2 = !("cyclic" in n2) || n2.cyclic, d2 = n2.encapsulateObserver, h2 = _encapsulate("", t2, b2, r2 || {}, v2);
+              }));
+            }));
+          })), s2 = (n2 = _objectSpread2(_objectSpread2({ sync: true }, this.options), n2)).sync, f2 = this, l2 = {}, p2 = [], y2 = [], v2 = [], b2 = !("cyclic" in n2) || n2.cyclic, d2 = n2.encapsulateObserver, h2 = _encapsulate("", t2, b2, r2 || {}, v2);
           function finish(e2) {
             var t3 = Object.values(l2);
             if (n2.iterateNone) return t3.length ? t3[0] : Typeson.getJSONType(e2);
@@ -35747,13 +35744,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           }
           function _adaptBuiltinStateObjectProperties(e2, t3, r3) {
             Object.assign(e2, t3);
-            var n3 = u.map(function(t4) {
+            var n3 = u.map((function(t4) {
               var r4 = e2[t4];
               return delete e2[t4], r4;
-            });
-            r3(), u.forEach(function(t4, r4) {
+            }));
+            r3(), u.forEach((function(t4, r4) {
               e2[t4] = n3[r4];
-            });
+            }));
           }
           function _encapsulate(t3, r3, i3, u2, s3, v3, b3) {
             var h3, g2 = {}, m2 = _typeof(r3), O2 = d2 ? function(n3) {
@@ -35773,28 +35770,28 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             if (u2.iterateIn) {
               var A2 = function _loop(n3) {
                 var o2 = { ownKeys: c.call(r3, n3) };
-                _adaptBuiltinStateObjectProperties(u2, o2, function() {
+                _adaptBuiltinStateObjectProperties(u2, o2, (function() {
                   var o3 = t3 + (t3 ? "." : "") + escapeKeyPathComponent(n3), a2 = _encapsulate(o3, r3[n3], Boolean(i3), u2, s3, v3);
                   hasConstructorOf(a2, e) ? s3.push([o3, a2, Boolean(i3), u2, j2, n3, u2.type]) : void 0 !== a2 && (j2[n3] = a2);
-                });
+                }));
               };
               for (var P2 in r3) A2(P2);
               O2 && O2({ endIterateIn: true, end: true });
-            } else o(r3).forEach(function(n3) {
+            } else o(r3).forEach((function(n3) {
               var o2 = t3 + (t3 ? "." : "") + escapeKeyPathComponent(n3);
-              _adaptBuiltinStateObjectProperties(u2, { ownKeys: true }, function() {
+              _adaptBuiltinStateObjectProperties(u2, { ownKeys: true }, (function() {
                 var t4 = _encapsulate(o2, r3[n3], Boolean(i3), u2, s3, v3);
                 hasConstructorOf(t4, e) ? s3.push([o2, t4, Boolean(i3), u2, j2, n3, u2.type]) : void 0 !== t4 && (j2[n3] = t4);
-              });
-            }), O2 && O2({ endIterateOwn: true, end: true });
+              }));
+            })), O2 && O2({ endIterateOwn: true, end: true });
             if (u2.iterateUnsetNumeric) {
               for (var I2 = r3.length, C2 = function _loop2(n3) {
                 if (!(n3 in r3)) {
                   var o2 = t3 + (t3 ? "." : "") + n3;
-                  _adaptBuiltinStateObjectProperties(u2, { ownKeys: false }, function() {
+                  _adaptBuiltinStateObjectProperties(u2, { ownKeys: false }, (function() {
                     var t4 = _encapsulate(o2, void 0, Boolean(i3), u2, s3, v3);
                     hasConstructorOf(t4, e) ? s3.push([o2, t4, Boolean(i3), u2, j2, n3, u2.type]) : void 0 !== t4 && (j2[n3] = t4);
-                  });
+                  }));
                 }
               }, N2 = 0; N2 < I2; N2++) C2(N2);
               O2 && O2({ endIterateUnsetNumeric: true, end: true });
@@ -35815,11 +35812,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             }
             return t3;
           }
-          return v2.length ? s2 && n2.throwOnBadSyncType ? function() {
+          return v2.length ? s2 && n2.throwOnBadSyncType ? (function() {
             throw new TypeError("Sync method requested but async result obtained");
-          }() : Promise.resolve(i2(h2, v2)).then(finish) : !s2 && n2.throwOnBadSyncType ? function() {
+          })() : Promise.resolve(i2(h2, v2)).then(finish) : !s2 && n2.throwOnBadSyncType ? (function() {
             throw new TypeError("Async method requested but sync result obtained");
-          }() : n2.stringification && s2 ? [finish(h2)] : s2 ? finish(h2) : Promise.resolve(finish(h2));
+          })() : n2.stringification && s2 ? [finish(h2)] : s2 ? finish(h2) : Promise.resolve(finish(h2));
         } }, { key: "encapsulateSync", value: function encapsulateSync(e2, t2, r2) {
           return this.encapsulate(e2, t2, _objectSpread2(_objectSpread2({ throwOnBadSyncType: true }, r2), {}, { sync: true }));
         } }, { key: "encapsulateAsync", value: function encapsulateAsync(e2, t2, r2) {
@@ -35840,42 +35837,42 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           function checkUndefined(e2) {
             return hasConstructorOf(e2, f) ? void 0 : e2;
           }
-          var y2, v2 = function revivePlainObjects() {
+          var y2, v2 = (function revivePlainObjects() {
             var r3 = [];
-            if (Object.entries(n2).forEach(function(e2) {
+            if (Object.entries(n2).forEach((function(e2) {
               var t3 = _slicedToArray(e2, 2), i3 = t3[0], o2 = t3[1];
-              "#" !== o2 && [].concat(o2).forEach(function(e3) {
+              "#" !== o2 && [].concat(o2).forEach((function(e3) {
                 _slicedToArray(l2.revivers[e3] || [null, {}], 2)[1].plain && (r3.push({ keypath: i3, type: e3 }), delete n2[i3]);
-              });
-            }), r3.length) return r3.sort(nestedPathsFirst).reduce(function reducer(r4, n3) {
+              }));
+            })), r3.length) return r3.sort(nestedPathsFirst).reduce((function reducer(r4, n3) {
               var i3 = n3.keypath, o2 = n3.type;
-              if (isThenable(r4)) return r4.then(function(e2) {
+              if (isThenable(r4)) return r4.then((function(e2) {
                 return reducer(e2, { keypath: i3, type: o2 });
-              });
+              }));
               var a2 = getByKeyPath(t2, i3);
-              if (hasConstructorOf(a2 = executeReviver(o2, a2), e)) return a2.then(function(e2) {
+              if (hasConstructorOf(a2 = executeReviver(o2, a2), e)) return a2.then((function(e2) {
                 var r5 = setAtKeyPath(t2, i3, e2);
                 r5 === e2 && (t2 = r5);
-              });
+              }));
               var c3 = setAtKeyPath(t2, i3, a2);
               c3 === a2 && (t2 = c3);
-            }, void 0);
-          }();
-          return hasConstructorOf(v2, e) ? y2 = v2.then(function() {
+            }), void 0);
+          })();
+          return hasConstructorOf(v2, e) ? y2 = v2.then((function() {
             return t2;
-          }) : (y2 = function _revive(t3, r3, i3, u3, l3) {
+          })) : (y2 = (function _revive(t3, r3, i3, u3, l3) {
             if (!s2 || "$types" !== t3) {
               var y3 = n2[t3], v3 = a(r3);
               if (v3 || isPlainObject(r3)) {
                 var b2 = v3 ? new Array(r3.length) : {};
-                for (o(r3).forEach(function(n3) {
+                for (o(r3).forEach((function(n3) {
                   var o2 = _revive(t3 + (t3 ? "." : "") + escapeKeyPathComponent(n3), r3[n3], i3 || b2, b2, n3), a2 = function set(e2) {
                     return hasConstructorOf(e2, f) ? b2[n3] = void 0 : void 0 !== e2 && (b2[n3] = e2), e2;
                   };
-                  hasConstructorOf(o2, e) ? p2.push(o2.then(function(e2) {
+                  hasConstructorOf(o2, e) ? p2.push(o2.then((function(e2) {
                     return a2(e2);
-                  })) : a2(o2);
-                }), r3 = b2; c2.length; ) {
+                  }))) : a2(o2);
+                })), r3 = b2; c2.length; ) {
                   var d2 = _slicedToArray(c2[0], 4), h2 = d2[0], g2 = d2[1], m2 = d2[2], O2 = d2[3], _2 = getByKeyPath(h2, g2);
                   if (void 0 === _2) break;
                   m2[O2] = _2, c2.splice(0, 1);
@@ -35886,37 +35883,37 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 var j2 = getByKeyPath(i3, r3.slice(1));
                 return void 0 === j2 && c2.push([i3, r3.slice(1), u3, l3]), j2;
               }
-              return [].concat(y3).reduce(function reducer(t4, r4) {
-                return hasConstructorOf(t4, e) ? t4.then(function(e2) {
+              return [].concat(y3).reduce((function reducer(t4, r4) {
+                return hasConstructorOf(t4, e) ? t4.then((function(e2) {
                   return reducer(e2, r4);
-                }) : executeReviver(r4, t4);
-              }, r3);
+                })) : executeReviver(r4, t4);
+              }), r3);
             }
-          }("", t2, null), p2.length && (y2 = e.resolve(y2).then(function(t3) {
+          })("", t2, null), p2.length && (y2 = e.resolve(y2).then((function(t3) {
             return e.all([t3].concat(p2));
-          }).then(function(e2) {
+          })).then((function(e2) {
             return _slicedToArray(e2, 1)[0];
-          }))), isThenable(y2) ? i2 && r2.throwOnBadSyncType ? function() {
+          })))), isThenable(y2) ? i2 && r2.throwOnBadSyncType ? (function() {
             throw new TypeError("Sync method requested but async result obtained");
-          }() : hasConstructorOf(y2, e) ? y2.p.then(checkUndefined) : y2 : !i2 && r2.throwOnBadSyncType ? function() {
+          })() : hasConstructorOf(y2, e) ? y2.p.then(checkUndefined) : y2 : !i2 && r2.throwOnBadSyncType ? (function() {
             throw new TypeError("Async method requested but sync result obtained");
-          }() : i2 ? checkUndefined(y2) : Promise.resolve(checkUndefined(y2));
+          })() : i2 ? checkUndefined(y2) : Promise.resolve(checkUndefined(y2));
         } }, { key: "reviveSync", value: function reviveSync(e2, t2) {
           return this.revive(e2, _objectSpread2(_objectSpread2({ throwOnBadSyncType: true }, t2), {}, { sync: true }));
         } }, { key: "reviveAsync", value: function reviveAsync(e2, t2) {
           return this.revive(e2, _objectSpread2(_objectSpread2({ throwOnBadSyncType: true }, t2), {}, { sync: false }));
         } }, { key: "register", value: function register(e2, t2) {
-          return t2 = t2 || {}, [].concat(e2).forEach(function R(e3) {
+          return t2 = t2 || {}, [].concat(e2).forEach((function R(e3) {
             var r2 = this;
-            if (a(e3)) return e3.map(function(e4) {
+            if (a(e3)) return e3.map((function(e4) {
               return R.call(r2, e4);
-            });
-            e3 && o(e3).forEach(function(r3) {
+            }));
+            e3 && o(e3).forEach((function(r3) {
               if ("#" === r3) throw new TypeError("# cannot be used as a type name as it is reserved for cyclic objects");
               if (Typeson.JSON_TYPES.includes(r3)) throw new TypeError("Plain JSON object types are reserved as type names");
-              var n2 = e3[r3], i2 = n2 && n2.testPlainObjects ? this.plainObjectReplacers : this.nonplainObjectReplacers, o2 = i2.filter(function(e4) {
+              var n2 = e3[r3], i2 = n2 && n2.testPlainObjects ? this.plainObjectReplacers : this.nonplainObjectReplacers, o2 = i2.filter((function(e4) {
                 return e4.type === r3;
-              });
+              }));
               if (o2.length && (i2.splice(i2.indexOf(o2[0]), 1), delete this.revivers[r3], delete this.types[r3]), "function" == typeof n2) {
                 var c2 = n2;
                 n2 = { test: function test(e4) {
@@ -35940,10 +35937,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 }
                 this.types[r3] = n2;
               }
-            }, this);
-          }, this), this;
+            }), this);
+          }), this), this;
         } }]), Typeson;
-      }(), f = function Undefined() {
+      })(), f = function Undefined() {
         _classCallCheck(this, Undefined);
       };
       f.__typeson__type__ = "TypesonUndefined", s.Undefined = f, s.Promise = e, s.isThenable = isThenable, s.toStringTag = toStringTag, s.hasConstructorOf = hasConstructorOf, s.isObject = isObject, s.isPlainObject = isPlainObject, s.isUserObject = function isUserObject(e2) {
@@ -35956,32 +35953,32 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       for (var l = { userObject: { test: function test(e2, t2) {
         return s.isUserObject(e2);
       }, replace: function replace2(e2) {
-        return function _objectSpread2$1(e3) {
+        return (function _objectSpread2$1(e3) {
           for (var t2 = 1; t2 < arguments.length; t2++) {
             var r2 = null != arguments[t2] ? arguments[t2] : {};
-            t2 % 2 ? ownKeys$1(Object(r2), true).forEach(function(t3) {
+            t2 % 2 ? ownKeys$1(Object(r2), true).forEach((function(t3) {
               _defineProperty$1(e3, t3, r2[t3]);
-            }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e3, Object.getOwnPropertyDescriptors(r2)) : ownKeys$1(Object(r2)).forEach(function(t3) {
+            })) : Object.getOwnPropertyDescriptors ? Object.defineProperties(e3, Object.getOwnPropertyDescriptors(r2)) : ownKeys$1(Object(r2)).forEach((function(t3) {
               Object.defineProperty(e3, t3, Object.getOwnPropertyDescriptor(r2, t3));
-            });
+            }));
           }
           return e3;
-        }({}, e2);
+        })({}, e2);
       }, revive: function revive(e2) {
         return e2;
       } } }, p = [{ arrayNonindexKeys: { testPlainObjects: true, test: function test(e2, t2) {
-        return !!Array.isArray(e2) && (Object.keys(e2).some(function(e3) {
+        return !!Array.isArray(e2) && (Object.keys(e2).some((function(e3) {
           return String(Number.parseInt(e3)) !== e3;
-        }) && (t2.iterateIn = "object", t2.addLength = true), true);
+        })) && (t2.iterateIn = "object", t2.addLength = true), true);
       }, replace: function replace2(e2, t2) {
         return t2.iterateUnsetNumeric = true, e2;
       }, revive: function revive(e2) {
         if (Array.isArray(e2)) return e2;
         var t2 = [];
-        return Object.keys(e2).forEach(function(r2) {
+        return Object.keys(e2).forEach((function(r2) {
           var n2 = e2[r2];
           t2[r2] = n2;
-        }), t2;
+        })), t2;
       } } }, { sparseUndefined: { test: function test(e2, t2) {
         return void 0 === e2 && false === t2.ownKeys;
       }, replace: function replace2(e2) {
@@ -36076,7 +36073,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         var r2 = T(e2);
         return t2.buffers.push(r2), r2;
       } } }, A = "undefined" == typeof self ? commonjsGlobal : self, P = {};
-      ["Int8Array", "Uint8Array", "Uint8ClampedArray", "Int16Array", "Uint16Array", "Int32Array", "Uint32Array", "Float32Array", "Float64Array"].forEach(function(e2) {
+      ["Int8Array", "Uint8Array", "Uint8ClampedArray", "Int16Array", "Uint16Array", "Int32Array", "Uint32Array", "Float32Array", "Float64Array"].forEach((function(e2) {
         var t2 = e2, r2 = A[t2];
         r2 && (P[e2.toLowerCase()] = { test: function test(e3) {
           return s.toStringTag(e3) === t2;
@@ -36090,7 +36087,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           var n2, i2 = e3.byteOffset, o2 = e3.length, a2 = e3.encoded, c2 = e3.index;
           return "index" in e3 ? n2 = t3.buffers[c2] : (n2 = T(a2), t3.buffers.push(n2)), new r2(n2, i2, o2);
         } });
-      });
+      }));
       var I = { dataview: { test: function test(e2) {
         return "DataView" === s.toStringTag(e2);
       }, replace: function replace2(e2, t2) {
@@ -36135,14 +36132,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         var t2 = e2.name, r2 = e2.type, n2 = e2.stringContents, i2 = e2.lastModified;
         return new File([string2arraybuffer(n2)], t2, { type: r2, lastModified: i2 });
       }, replaceAsync: function replaceAsync(e2) {
-        return new s.Promise(function(t2, r2) {
+        return new s.Promise((function(t2, r2) {
           var n2 = new FileReader();
-          n2.addEventListener("load", function() {
+          n2.addEventListener("load", (function() {
             t2({ type: e2.type, stringContents: n2.result, name: e2.name, lastModified: e2.lastModified });
-          }), n2.addEventListener("error", function() {
+          })), n2.addEventListener("error", (function() {
             r2(n2.error);
-          }), n2.readAsBinaryString(e2);
-        });
+          })), n2.readAsBinaryString(e2);
+        }));
       } } }, k = { bigint: { test: function test(e2) {
         return "bigint" == typeof e2;
       }, replace: function replace2(e2) {
@@ -36158,13 +36155,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       } } }, B = { cryptokey: { test: function test(e2) {
         return "CryptoKey" === s.toStringTag(e2) && e2.extractable;
       }, replaceAsync: function replaceAsync(e2) {
-        return new s.Promise(function(t2, r2) {
-          crypto.subtle.exportKey("jwk", e2).catch(function(e3) {
+        return new s.Promise((function(t2, r2) {
+          crypto.subtle.exportKey("jwk", e2).catch((function(e3) {
             r2(e3);
-          }).then(function(r3) {
+          })).then((function(r3) {
             t2({ jwk: r3, algorithm: e2.algorithm, usages: e2.usages });
-          });
-        });
+          }));
+        }));
       }, revive: function revive(e2) {
         var t2 = e2.jwk, r2 = e2.algorithm, n2 = e2.usages;
         return crypto.subtle.importKey("jwk", t2, r2, true, n2);
@@ -36182,32 +36179,32 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         return t2.getContext("2d").drawImage(e2, 0, 0), t2.toDataURL();
       }, revive: function revive(e2) {
         var t2 = document.createElement("canvas"), r2 = t2.getContext("2d"), n2 = document.createElement("img");
-        return n2.addEventListener("load", function() {
+        return n2.addEventListener("load", (function() {
           r2.drawImage(n2, 0, 0);
-        }), n2.src = e2, t2;
+        })), n2.src = e2, t2;
       }, reviveAsync: function reviveAsync(e2) {
         var t2 = document.createElement("canvas"), r2 = t2.getContext("2d"), n2 = document.createElement("img");
-        return n2.addEventListener("load", function() {
+        return n2.addEventListener("load", (function() {
           r2.drawImage(n2, 0, 0);
-        }), n2.src = e2, createImageBitmap(t2);
+        })), n2.src = e2, createImageBitmap(t2);
       } } }, N, { file: N.file, filelist: { test: function test(e2) {
         return "FileList" === s.toStringTag(e2);
       }, replace: function replace2(e2) {
         for (var t2 = [], r2 = 0; r2 < e2.length; r2++) t2[r2] = e2.item(r2);
         return t2;
       }, revive: function revive(e2) {
-        return new (function() {
+        return new ((function() {
           function FileList() {
             _classCallCheck$1(this, FileList), this._files = arguments[0], this.length = this._files.length;
           }
-          return function _createClass$1(e3, t2, r2) {
+          return (function _createClass$1(e3, t2, r2) {
             return t2 && _defineProperties$1(e3.prototype, t2), r2 && _defineProperties$1(e3, r2), e3;
-          }(FileList, [{ key: "item", value: function item(e3) {
+          })(FileList, [{ key: "item", value: function item(e3) {
             return this._files[e3];
           } }, { key: Symbol.toStringTag, get: function get() {
             return "FileList";
           } }]), FileList;
-        }())(e2);
+        })())(e2);
       } } }, { blob: { test: function test(e2) {
         return "Blob" === s.toStringTag(e2);
       }, replace: function replace2(e2) {
@@ -36218,16 +36215,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         var t2 = e2.type, r2 = e2.stringContents;
         return new Blob([string2arraybuffer(r2)], { type: t2 });
       }, replaceAsync: function replaceAsync(e2) {
-        return new s.Promise(function(t2, r2) {
+        return new s.Promise((function(t2, r2) {
           var n2 = new FileReader();
-          n2.addEventListener("load", function() {
+          n2.addEventListener("load", (function() {
             t2({ type: e2.type, stringContents: n2.result });
-          }), n2.addEventListener("error", function() {
+          })), n2.addEventListener("error", (function() {
             r2(n2.error);
-          }), n2.readAsBinaryString(e2);
-        });
+          })), n2.readAsBinaryString(e2);
+        }));
       } } }].concat("function" == typeof Map ? g : [], "function" == typeof Set ? m : [], "function" == typeof ArrayBuffer ? w : [], "function" == typeof Uint8Array ? P : [], "function" == typeof DataView ? I : [], "undefined" != typeof Intl ? C : [], "undefined" != typeof crypto ? B : [], "undefined" != typeof BigInt ? [k, E] : []);
-    });
+    }));
   });
   var chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";
   var lookup = new Uint8Array(256);
@@ -39579,17 +39576,6 @@ dexie/dist/dexie.js:
   ***************************************************************************** *)
 
 react-router/dist/development/chunk-LFPYN7LY.mjs:
-  (**
-   * react-router v7.13.1
-   *
-   * Copyright (c) Remix Software Inc.
-   *
-   * This source code is licensed under the MIT license found in the
-   * LICENSE.md file in the root directory of this source tree.
-   *
-   * @license MIT
-   *)
-
 react-router/dist/development/index.mjs:
   (**
    * react-router v7.13.1
