@@ -27744,7 +27744,7 @@
   var import_react16 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
-  // node_modules/react-router/dist/development/chunk-EPOLDU6W.mjs
+  // node_modules/react-router/dist/development/chunk-LFPYN7LY.mjs
   init_react_shim();
   var React2 = __toESM(require_react(), 1);
   var React22 = __toESM(require_react(), 1);
@@ -27759,6 +27759,9 @@
   var React11 = __toESM(require_react(), 1);
   var import_meta = {};
   var PopStateEventType = "popstate";
+  function isLocation(obj) {
+    return typeof obj === "object" && obj != null && "pathname" in obj && "search" in obj && "hash" in obj && "state" in obj && "key" in obj;
+  }
   function createHashHistory(options = {}) {
     function createHashLocation(window2, globalHistory) {
       let {
@@ -27823,10 +27826,15 @@
     return {
       usr: location2.state,
       key: location2.key,
-      idx: index
+      idx: index,
+      masked: location2.unstable_mask ? {
+        pathname: location2.pathname,
+        search: location2.search,
+        hash: location2.hash
+      } : void 0
     };
   }
-  function createLocation(current, to, state = null, key) {
+  function createLocation(current, to, state = null, key, unstable_mask) {
     let location2 = {
       pathname: typeof current === "string" ? current : current.pathname,
       search: "",
@@ -27837,7 +27845,8 @@
       // full Locations now and avoid the need to run through this flow at all
       // But that's a pretty big refactor to the current test suite so going to
       // keep as is for the time being and just let any incoming keys take precedence
-      key: to && to.key || key || createKey()
+      key: to && to.key || key || createKey(),
+      unstable_mask
     };
     return location2;
   }
@@ -27896,11 +27905,11 @@
     }
     function push2(to, state) {
       action = "PUSH";
-      let location2 = createLocation(history.location, to, state);
+      let location2 = isLocation(to) ? to : createLocation(history.location, to, state);
       if (validateLocation) validateLocation(location2, to);
       index = getIndex() + 1;
       let historyState = getHistoryState(location2, index);
-      let url = history.createHref(location2);
+      let url = history.createHref(location2.unstable_mask || location2);
       try {
         globalHistory.pushState(historyState, "", url);
       } catch (error) {
@@ -27915,11 +27924,11 @@
     }
     function replace2(to, state) {
       action = "REPLACE";
-      let location2 = createLocation(history.location, to, state);
+      let location2 = isLocation(to) ? to : createLocation(history.location, to, state);
       if (validateLocation) validateLocation(location2, to);
       index = getIndex();
       let historyState = getHistoryState(location2, index);
-      let url = history.createHref(location2);
+      let url = history.createHref(location2.unstable_mask || location2);
       globalHistory.replaceState(historyState, "", url);
       if (v5Compat && listener) {
         listener({ action, location: history.location, delta: 0 });
@@ -28223,9 +28232,16 @@
     let params = [];
     let regexpSource = "^" + path.replace(/\/*\*?$/, "").replace(/^\/*/, "/").replace(/[\\.*+^${}|()[\]]/g, "\\$&").replace(
       /\/:([\w-]+)(\?)?/g,
-      (_, paramName, isOptional) => {
+      (match2, paramName, isOptional, index, str) => {
         params.push({ paramName, isOptional: isOptional != null });
-        return isOptional ? "/?([^\\/]+)?" : "/([^\\/]+)";
+        if (isOptional) {
+          let nextChar = str.charAt(index + match2.length);
+          if (nextChar && nextChar !== "/") {
+            return "/([^\\/]*)";
+          }
+          return "(?:/([^\\/]*))?";
+        }
+        return "/([^\\/]+)";
       }
     ).replace(/\/([\w-]+)\?(\/|$)/g, "(/$1)?$2");
     if (path.endsWith("*")) {
@@ -28264,7 +28280,6 @@
     return pathname.slice(startIndex) || "/";
   }
   var ABSOLUTE_URL_REGEX = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
-  var isAbsoluteUrl = (url) => ABSOLUTE_URL_REGEX.test(url);
   function resolvePath(to, fromPathname = "/") {
     let {
       pathname: toPathname,
@@ -28273,22 +28288,11 @@
     } = typeof to === "string" ? parsePath(to) : to;
     let pathname;
     if (toPathname) {
-      if (isAbsoluteUrl(toPathname)) {
-        pathname = toPathname;
+      toPathname = toPathname.replace(/\/\/+/g, "/");
+      if (toPathname.startsWith("/")) {
+        pathname = resolvePathname(toPathname.substring(1), "/");
       } else {
-        if (toPathname.includes("//")) {
-          let oldPathname = toPathname;
-          toPathname = toPathname.replace(/\/\/+/g, "/");
-          warning(
-            false,
-            `Pathnames cannot have embedded double slashes - normalizing ${oldPathname} -> ${toPathname}`
-          );
-        }
-        if (toPathname.startsWith("/")) {
-          pathname = resolvePathname(toPathname.substring(1), "/");
-        } else {
-          pathname = resolvePathname(toPathname, fromPathname);
-        }
+        pathname = resolvePathname(toPathname, fromPathname);
       }
     } else {
       pathname = fromPathname;
@@ -28632,7 +28636,7 @@
   function useRoutes(routes, locationArg) {
     return useRoutesImpl(routes, locationArg);
   }
-  function useRoutesImpl(routes, locationArg, dataRouterState, onError, future) {
+  function useRoutesImpl(routes, locationArg, dataRouterOpts) {
     invariant(
       useInRouterContext(),
       // TODO: This error is probably because they somehow have 2 versions of the
@@ -28713,9 +28717,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         })
       ),
       parentMatches,
-      dataRouterState,
-      onError,
-      future
+      dataRouterOpts
     );
     if (locationArg && renderedMatches) {
       return /* @__PURE__ */ React22.createElement(
@@ -28728,6 +28730,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               hash: "",
               state: null,
               key: "default",
+              unstable_mask: void 0,
               ...location2
             },
             navigationType: "POP"
@@ -28856,7 +28859,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     return /* @__PURE__ */ React22.createElement(RouteContext.Provider, { value: routeContext }, children);
   }
-  function _renderMatches(matches, parentMatches = [], dataRouterState = null, onErrorHandler = null, future = null) {
+  function _renderMatches(matches, parentMatches = [], dataRouterOpts) {
+    let dataRouterState = dataRouterOpts?.state;
     if (matches == null) {
       if (!dataRouterState) {
         return null;
@@ -28888,7 +28892,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     }
     let renderFallback = false;
     let fallbackIndex = -1;
-    if (dataRouterState) {
+    if (dataRouterOpts && dataRouterState) {
+      renderFallback = dataRouterState.renderFallback;
       for (let i = 0; i < renderedMatches.length; i++) {
         let match2 = renderedMatches[i];
         if (match2.route.HydrateFallback || match2.route.hydrateFallbackElement) {
@@ -28898,7 +28903,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           let { loaderData, errors: errors2 } = dataRouterState;
           let needsToRunLoader = match2.route.loader && !loaderData.hasOwnProperty(match2.route.id) && (!errors2 || errors2[match2.route.id] === void 0);
           if (match2.route.lazy || needsToRunLoader) {
-            renderFallback = true;
+            if (dataRouterOpts.isStatic) {
+              renderFallback = true;
+            }
             if (fallbackIndex >= 0) {
               renderedMatches = renderedMatches.slice(0, fallbackIndex + 1);
             } else {
@@ -28909,6 +28916,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       }
     }
+    let onErrorHandler = dataRouterOpts?.onError;
     let onError = dataRouterState && onErrorHandler ? (error, errorInfo) => {
       onErrorHandler(error, {
         location: dataRouterState.location,
@@ -29090,9 +29098,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     routes,
     future,
     state,
+    isStatic,
     onError
   }) {
-    return useRoutesImpl(routes, void 0, state, onError, future);
+    return useRoutesImpl(routes, void 0, { state, isStatic, onError, future });
   }
   function Route(props) {
     invariant(
@@ -29132,7 +29141,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       search = "",
       hash = "",
       state = null,
-      key = "default"
+      key = "default",
+      unstable_mask
     } = locationProp;
     let locationContext = React3.useMemo(() => {
       let trailingPathname = stripBasename(pathname, basename);
@@ -29145,11 +29155,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           search,
           hash,
           state,
-          key
+          key,
+          unstable_mask
         },
         navigationType
       };
-    }, [basename, pathname, search, hash, state, key, navigationType]);
+    }, [
+      basename,
+      pathname,
+      search,
+      hash,
+      state,
+      key,
+      navigationType,
+      unstable_mask
+    ]);
     warning(
       locationContext != null,
       `<Router basename="${basename}"> is not able to match the URL "${pathname}${search}${hash}" because it does not start with the basename, so the <Router> won't render anything.`
@@ -29718,7 +29738,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return /* @__PURE__ */ React8.createElement(React8.Fragment, null, dataHrefs.map((href) => /* @__PURE__ */ React8.createElement("link", { key: href, rel: "prefetch", as: "fetch", href, ...linkProps })), moduleHrefs.map((href) => /* @__PURE__ */ React8.createElement("link", { key: href, rel: "modulepreload", href, ...linkProps })), keyedPrefetchLinks.map(({ key, link }) => (
       // these don't spread `linkProps` because they are full link descriptors
       // already with their own props
-      /* @__PURE__ */ React8.createElement("link", { key, nonce: linkProps.nonce, ...link })
+      /* @__PURE__ */ React8.createElement(
+        "link",
+        {
+          key,
+          nonce: linkProps.nonce,
+          ...link,
+          crossOrigin: link.crossOrigin ?? linkProps.crossOrigin
+        }
+      )
     )));
   }
   function mergeRefs(...refs) {
@@ -29736,7 +29764,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   try {
     if (isBrowser2) {
       window.__reactRouterVersion = // @ts-expect-error
-      "7.12.0";
+      "7.13.1";
     }
   } catch (e) {
   }
@@ -29821,6 +29849,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       relative,
       reloadDocument,
       replace: replace2,
+      unstable_mask,
       state,
       target,
       to,
@@ -29829,17 +29858,32 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       unstable_defaultShouldRevalidate,
       ...rest
     }, forwardedRef) {
-      let { basename, unstable_useTransitions } = React10.useContext(NavigationContext);
+      let { basename, navigator: navigator2, unstable_useTransitions } = React10.useContext(NavigationContext);
       let isAbsolute = typeof to === "string" && ABSOLUTE_URL_REGEX2.test(to);
       let parsed = parseToInfo(to, basename);
       to = parsed.to;
       let href = useHref(to, { relative });
+      let location2 = useLocation();
+      let maskedHref = null;
+      if (unstable_mask) {
+        let resolved = resolveTo(
+          unstable_mask,
+          [],
+          location2.unstable_mask ? location2.unstable_mask.pathname : "/",
+          true
+        );
+        if (basename !== "/") {
+          resolved.pathname = resolved.pathname === "/" ? basename : joinPaths([basename, resolved.pathname]);
+        }
+        maskedHref = navigator2.createHref(resolved);
+      }
       let [shouldPrefetch, prefetchRef, prefetchHandlers] = usePrefetchBehavior(
         prefetch,
         rest
       );
       let internalOnClick = useLinkClickHandler(to, {
         replace: replace2,
+        unstable_mask,
         state,
         target,
         preventScrollReset,
@@ -29854,6 +29898,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           internalOnClick(event);
         }
       }
+      let isSpaLink = !(parsed.isExternal || reloadDocument);
       let link = (
         // eslint-disable-next-line jsx-a11y/anchor-has-content
         /* @__PURE__ */ React10.createElement(
@@ -29861,8 +29906,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           {
             ...rest,
             ...prefetchHandlers,
-            href: parsed.absoluteURL || href,
-            onClick: parsed.isExternal || reloadDocument ? onClick : handleClick,
+            href: (isSpaLink ? maskedHref : void 0) || parsed.absoluteURL || href,
+            onClick: isSpaLink ? handleClick : onClick,
             ref: mergeRefs(forwardedRef, prefetchRef),
             target,
             "data-discover": !isAbsolute && discover === "render" ? "true" : void 0
@@ -30073,6 +30118,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function useLinkClickHandler(to, {
     target,
     replace: replaceProp,
+    unstable_mask,
     state,
     preventScrollReset,
     relative,
@@ -30090,6 +30136,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           let replace2 = replaceProp !== void 0 ? replaceProp : createPath(location2) === createPath(path);
           let doNavigate = () => navigate(to, {
             replace: replace2,
+            unstable_mask,
             state,
             preventScrollReset,
             relative,
@@ -30108,6 +30155,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         navigate,
         path,
         replaceProp,
+        unstable_mask,
         state,
         target,
         to,
@@ -39530,9 +39578,9 @@ dexie/dist/dexie.js:
   PERFORMANCE OF THIS SOFTWARE.
   ***************************************************************************** *)
 
-react-router/dist/development/chunk-EPOLDU6W.mjs:
+react-router/dist/development/chunk-LFPYN7LY.mjs:
   (**
-   * react-router v7.12.0
+   * react-router v7.13.1
    *
    * Copyright (c) Remix Software Inc.
    *
@@ -39544,7 +39592,7 @@ react-router/dist/development/chunk-EPOLDU6W.mjs:
 
 react-router/dist/development/index.mjs:
   (**
-   * react-router v7.12.0
+   * react-router v7.13.1
    *
    * Copyright (c) Remix Software Inc.
    *
