@@ -6,6 +6,7 @@
   right: 0;
   background-color: var(--md-sys-color-surface);
   opacity: 0.7;
+  z-index: 100;
 }
 
 .c-modal {
@@ -21,6 +22,7 @@
   background-color: var(--md-sys-color-surface-variant);
   color: var(--md-sys-color-on-surface-variant);
   box-shadow: var(--md-sys-elevation-3);
+  z-index: 101;
 }
 
 .c-modal__title {
