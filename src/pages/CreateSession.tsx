@@ -69,14 +69,14 @@ const CreateSession = () => {
 
     db.sessions.add({
       _id,
-      title,
+      title: title !== "" ? title : (game?.name ?? "New session"),
       start: start.toISOString(),
       gameId: game?._id,
       scoreMode,
       playerIds: [],
     });
 
-    navigate(`/sessions/${_id}`);
+    navigate(`/sessions/${_id}/scores`);
   };
 
   return (
@@ -85,7 +85,6 @@ const CreateSession = () => {
       <Page>
         <form onSubmit={handleSubmit}>
           <TextField
-            required
             label="Title"
             value={title}
             onChange={(e: ChangeEvent<HTMLInputElement>) =>
