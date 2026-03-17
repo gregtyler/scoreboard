@@ -4,6 +4,7 @@
   border-radius: var(--table-radius);
   margin-top: 16px;
   margin-bottom: 16px;
+  overflow-x: auto;
 }
 
 .c-table {
@@ -40,7 +41,11 @@
 }
 
 .c-table tbody th {
+  /* background-color: var(--md-sys-color-surface); */
   text-align: left;
+  /* position: sticky;
+  left: 0;
+  box-shadow: inset -1px 0 var(--md-sys-color-surface-variant); */
 }
 
 thead:first-child tr:first-child th,

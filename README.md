@@ -10,7 +10,6 @@
   - Maybe atproto?
 - Transition animations
 - Show an error message when fields are missing (e.g. board name)
-- Needs to side-scroll when you have more than a couple of players
 - Adding rounds to a game template defaults them to white?
 
 ### Ideas
