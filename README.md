@@ -8,9 +8,7 @@
 - Players should have stats
 - Need an import/export tool at least, if not full sync
   - Maybe atproto?
-- The alignment of scores doesn't feel great when you're entering them
 - Transition animations
-- Auto completing names should be obvious, so you know you're not adding someone new (change "Add" button to an icon?)
 - Show an error message when fields are missing (e.g. board name)
 - Needs to side-scroll when you have more than a couple of players
 - Adding rounds to a game template defaults them to white?

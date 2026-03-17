@@ -35,9 +35,11 @@ const ScoreTableCell = ({ round, playerId, editable }: Props) => {
 
   return editable ? (
     <TableCellInput
-      type="number"
+      type="text"
+      inputMode="numeric"
       value={score?.value}
       onChange={handleScoreChange}
+      pattern="[0-9]*"
     />
   ) : (
     <td>{score?.value ?? ""}</td>
