@@ -30416,6 +30416,329 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // node_modules/react-router/dist/development/index.mjs
   init_react_shim();
 
+  // node_modules/datalist-polyfill/datalist-polyfill.js
+  init_react_shim();
+  (function() {
+    "use strict";
+    var dcmnt = window.document, ua = window.navigator.userAgent, datalistSupported = "list" in dcmnt.createElement("input") && Boolean(dcmnt.createElement("datalist") && window.HTMLDataListElement), isGteIE10 = Boolean(/MSIE\s1[01]./.test(ua) || /rv:11./.test(ua)), isEDGE = Boolean(ua.indexOf("Edge/") !== -1);
+    if (datalistSupported && !isGteIE10 && !isEDGE) {
+      return false;
+    }
+    if (!Element.prototype.matches) {
+      Element.prototype.matches = Element.prototype.msMatchesSelector;
+    }
+    var touched = false, keyENTER = 13, keyESC = 27, keyUP = 38, keyDOWN = 40, textValueSeperator = " / ", supportedTypes = ["text", "email", "number", "search", "tel", "url"], classNameInput = "polyfilled", classNamePolyfillingSelect = ".polyfilling", uniquePolyfillString = "###[P0LYFlLLed]###";
+    window.addEventListener("touchstart", function onFirstTouch() {
+      touched = true;
+      window.removeEventListener("touchstart", onFirstTouch);
+    });
+    var MutationObserver2 = window.MutationObserver || window.WebKitMutationObserver, obs;
+    if (typeof MutationObserver2 !== "undefined") {
+      obs = new MutationObserver2(function(mutations) {
+        var datalistNeedsAnUpdate = false;
+        mutations.forEach(function(mutation) {
+          if (mutation.target instanceof HTMLElement && mutation.target.tagName.toLowerCase() === "datalist" && mutation.addedNodes.length > 1) {
+            datalistNeedsAnUpdate = mutation.target;
+          }
+        });
+        if (datalistNeedsAnUpdate) {
+          var input = dcmnt.querySelector(
+            // eslint-disable-next-line prettier/prettier
+            'input[list="' + datalistNeedsAnUpdate.id + '"]'
+          );
+          if (getInputValue(input) !== "") {
+            toggleVisibility(
+              prepOptions(datalistNeedsAnUpdate, input).length,
+              // eslint-disable-next-line prettier/prettier
+              datalistNeedsAnUpdate.querySelector(classNamePolyfillingSelect)
+            );
+          }
+        }
+      });
+    }
+    var inputInputList = function(event) {
+      var input = event.target, datalist = input.list, keyOpen = event.keyCode === keyUP || event.keyCode === keyDOWN;
+      if (input.tagName.toLowerCase() !== "input" || datalist === null) {
+        return;
+      }
+      if (isGteIE10 || isEDGE) {
+        if (getInputValue(input) !== "" && !keyOpen && event.keyCode !== keyENTER && event.keyCode !== keyESC && // As only EDGE doesn't trigger the input event after selecting an item via mouse, we need to differentiate here
+        (isGteIE10 || input.type === "text")) {
+          updateIEOptions(input, datalist);
+          input.focus();
+        }
+        return;
+      }
+      var visible = false, datalistSelect = datalist.querySelector(classNamePolyfillingSelect) || setUpPolyfillingSelect(input, datalist);
+      if (event.keyCode !== keyESC && event.keyCode !== keyENTER && (getInputValue(input) !== "" || keyOpen) && datalistSelect !== void 0) {
+        if (prepOptions(datalist, input).length > 0) {
+          visible = true;
+        }
+        var firstEntry = 0, lastEntry = datalistSelect.options.length - 1;
+        if (touched) {
+          datalistSelect.selectedIndex = firstEntry;
+        } else if (keyOpen && input.getAttribute("type") !== "number") {
+          datalistSelect.selectedIndex = event.keyCode === keyUP ? lastEntry : firstEntry;
+          datalistSelect.focus();
+        }
+      }
+      toggleVisibility(visible, datalistSelect);
+    };
+    var updateIEOptions = function(input, datalist) {
+      var inputValue = getInputValue(input);
+      Array.prototype.slice.call(datalist.options, 0).forEach(function(option) {
+        var dataOriginalvalue = option.getAttribute("data-originalvalue"), originalValue = dataOriginalvalue || option.value;
+        if (!dataOriginalvalue) {
+          option.setAttribute("data-originalvalue", originalValue);
+        }
+        if (!option.label && !option.text) {
+          option.label = originalValue;
+        }
+        option.value = isValidSuggestion(option, inputValue) ? inputValue + uniquePolyfillString + originalValue.toLowerCase() : originalValue;
+      });
+    };
+    var inputInputListIE = function(event) {
+      var input = event.target, datalist = input.list;
+      if (!input.matches("input[list]") || !input.matches("." + classNameInput) || !datalist) {
+        return;
+      }
+      var option = datalist.querySelector(
+        'option[value="' + getInputValue(input).replace(/\\([\s\S])|(")/g, "\\$1$2") + // eslint-disable-next-line prettier/prettier
+        '"]'
+      );
+      if (option && option.getAttribute("data-originalvalue")) {
+        setInputValue(input, option.getAttribute("data-originalvalue"));
+      }
+    };
+    var isValidSuggestion = function(option, inputValue) {
+      var optValue = option.value.toLowerCase(), inptValue = inputValue.toLowerCase(), label = option.getAttribute("label"), text = option.text.toLowerCase();
+      return Boolean(
+        option.disabled === false && (optValue !== "" && optValue.indexOf(inptValue) !== -1 || label && label.toLowerCase().indexOf(inptValue) !== -1 || // eslint-disable-next-line prettier/prettier
+        text !== "" && text.indexOf(inptValue) !== -1)
+      );
+    };
+    var changesInputList = function(event) {
+      if (!event.target.matches("input[list]")) {
+        return;
+      }
+      var input = event.target, datalist = input.list;
+      if (input.tagName.toLowerCase() !== "input" || datalist === null) {
+        return;
+      }
+      if (!input.matches("." + classNameInput)) {
+        prepareInput(input, event.type);
+      }
+      if (isEDGE && event.type === "focusin") {
+        var firstOption = input.list.options[0];
+        firstOption.value = firstOption.value;
+      }
+      if (isGteIE10 || isEDGE) {
+        return;
+      }
+      var datalistSelect = datalist.querySelector(classNamePolyfillingSelect) || setUpPolyfillingSelect(input, datalist), visible = datalistSelect && datalistSelect.querySelector("option:not(:disabled)") && (event.type === "focusin" && getInputValue(input) !== "" || event.relatedTarget && event.relatedTarget === datalistSelect);
+      toggleVisibility(visible, datalistSelect);
+    };
+    var prepareInput = function(input, eventType) {
+      input.setAttribute("autocomplete", "off");
+      input.setAttribute("role", "textbox");
+      input.setAttribute("aria-haspopup", "true");
+      input.setAttribute("aria-autocomplete", "list");
+      input.setAttribute("aria-owns", input.getAttribute("list"));
+      if (eventType === "focusin") {
+        input.addEventListener("keyup", inputInputList);
+        input.addEventListener("focusout", changesInputList, true);
+        if (isGteIE10 || isEDGE && input.type === "text") {
+          input.addEventListener("input", inputInputListIE);
+        }
+      } else if (eventType === "blur") {
+        input.removeEventListener("keyup", inputInputList);
+        input.removeEventListener("focusout", changesInputList, true);
+        if (isGteIE10 || isEDGE && input.type === "text") {
+          input.removeEventListener("input", inputInputListIE);
+        }
+      }
+      input.className += " " + classNameInput;
+    };
+    var getInputValue = function(input) {
+      return input.getAttribute("type") === "email" && input.getAttribute("multiple") !== null ? input.value.slice(Math.max(0, input.value.lastIndexOf(",") + 1)) : input.value;
+    };
+    var setInputValue = function(input, datalistSelectValue) {
+      var lastSeperator;
+      input.value = // Using .getAttribute here for IE9 purpose - elsewhere it wouldn't return the newer HTML5 values correctly
+      input.getAttribute("type") === "email" && input.getAttribute("multiple") !== null && (lastSeperator = input.value.lastIndexOf(",")) > -1 ? input.value.slice(0, lastSeperator) + "," + datalistSelectValue : datalistSelectValue;
+    };
+    dcmnt.addEventListener("focusin", changesInputList, true);
+    if (isGteIE10 || isEDGE) {
+      return;
+    }
+    var prepOptions = function(datalist, input) {
+      if (typeof obs !== "undefined") {
+        obs.disconnect();
+      }
+      var datalistSelect = datalist.querySelector(classNamePolyfillingSelect) || setUpPolyfillingSelect(input, datalist), inputValue = getInputValue(input), newSelectValues = dcmnt.createDocumentFragment(), disabledValues = dcmnt.createDocumentFragment();
+      Array.prototype.slice.call(datalist.querySelectorAll("option:not(:disabled)")).sort(function(a, b) {
+        var aValue = a.value, bValue = b.value;
+        if (input.getAttribute("type") === "url") {
+          aValue = aValue.replace(/(^\w+:|^)\/\//, "");
+          bValue = bValue.replace(/(^\w+:|^)\/\//, "");
+        }
+        return aValue.localeCompare(bValue);
+      }).forEach(function(opt) {
+        var optionValue = opt.value, label = opt.getAttribute("label"), text = opt.text;
+        if (isValidSuggestion(opt, inputValue)) {
+          var textOptionPart = text.slice(
+            0,
+            // eslint-disable-next-line prettier/prettier
+            optionValue.length + textValueSeperator.length
+          ), optionPart = optionValue + textValueSeperator;
+          if (text && !label && text !== optionValue && textOptionPart !== optionPart) {
+            opt.textContent = optionValue + textValueSeperator + text;
+          } else if (!opt.text) {
+            opt.textContent = label || optionValue;
+          }
+          newSelectValues.appendChild(opt);
+        } else {
+          disabledValues.appendChild(opt);
+        }
+      });
+      datalistSelect.appendChild(newSelectValues);
+      var datalistSelectOptionsLength = datalistSelect.options.length;
+      datalistSelect.size = datalistSelectOptionsLength > 10 ? 10 : datalistSelectOptionsLength;
+      datalistSelect.multiple = !touched && datalistSelectOptionsLength < 2;
+      (datalist.querySelectorAll(".ie9_fix")[0] || datalist).appendChild(
+        // eslint-disable-next-line prettier/prettier
+        disabledValues
+      );
+      if (typeof obs !== "undefined") {
+        obs.observe(datalist, {
+          childList: true
+        });
+      }
+      return datalistSelect.options;
+    };
+    var setUpPolyfillingSelect = function(input, datalist) {
+      if (input.getAttribute("type") && supportedTypes.indexOf(input.getAttribute("type")) === -1 || datalist === null) {
+        return;
+      }
+      var rects = input.getClientRects(), inputStyles = window.getComputedStyle(input), datalistSelect = dcmnt.createElement("select");
+      datalistSelect.setAttribute("class", classNamePolyfillingSelect.slice(1));
+      datalistSelect.style.position = "absolute";
+      toggleVisibility(false, datalistSelect);
+      datalistSelect.setAttribute("tabindex", "-1");
+      datalistSelect.setAttribute("aria-live", "polite");
+      datalistSelect.setAttribute("role", "listbox");
+      if (!touched) {
+        datalistSelect.setAttribute("aria-multiselectable", "false");
+      }
+      if (inputStyles.getPropertyValue("display") === "block") {
+        datalistSelect.style.marginTop = "-" + inputStyles.getPropertyValue("margin-bottom");
+      } else {
+        var direction = inputStyles.getPropertyValue("direction") === "rtl" ? "right" : "left";
+        datalistSelect.style.setProperty(
+          "margin-" + direction,
+          "-" + (rects[0].width + parseFloat(inputStyles.getPropertyValue("margin-" + direction))) + // eslint-disable-next-line prettier/prettier
+          "px"
+        );
+        datalistSelect.style.marginTop = parseInt(rects[0].height + (input.offsetTop - datalist.offsetTop), 10) + "px";
+      }
+      datalistSelect.style.borderRadius = inputStyles.getPropertyValue("border-radius");
+      datalistSelect.style.minWidth = rects[0].width + "px";
+      if (touched) {
+        var messageElement = dcmnt.createElement("option");
+        messageElement.textContent = datalist.title;
+        messageElement.disabled = true;
+        messageElement.setAttribute("class", "message");
+        datalistSelect.appendChild(messageElement);
+      }
+      datalist.appendChild(datalistSelect);
+      if (touched) {
+        datalistSelect.addEventListener("change", changeDataListSelect);
+      } else {
+        datalistSelect.addEventListener("click", changeDataListSelect);
+      }
+      datalistSelect.addEventListener("blur", changeDataListSelect);
+      datalistSelect.addEventListener("keydown", changeDataListSelect);
+      datalistSelect.addEventListener("keypress", datalistSelectKeyPress);
+      return datalistSelect;
+    };
+    var datalistSelectKeyPress = function(event) {
+      var datalistSelect = event.target, datalist = datalistSelect.parentNode, input = dcmnt.querySelector('input[list="' + datalist.id + '"]');
+      if (datalistSelect.tagName.toLowerCase() !== "select" || input === null) {
+        return;
+      }
+      if (event.key && (event.key === "Backspace" || event.key.length === 1)) {
+        input.focus();
+        if (event.key === "Backspace") {
+          input.value = input.value.slice(0, -1);
+          dispatchInputEvent(input);
+        } else {
+          input.value += event.key;
+        }
+        prepOptions(datalist, input);
+      }
+    };
+    var changeDataListSelect = function(event) {
+      var datalistSelect = event.currentTarget, datalist = datalistSelect.parentNode, input = dcmnt.querySelector('input[list="' + datalist.id + '"]');
+      if (datalistSelect.tagName.toLowerCase() !== "select" || input === null) {
+        return;
+      }
+      var eventType = event.type, visible = eventType === "keydown" && event.keyCode !== keyENTER && event.keyCode !== keyESC;
+      if ((eventType === "change" || eventType === "click" || eventType === "keydown" && (event.keyCode === keyENTER || event.key === "Tab")) && datalistSelect.value.length > 0 && datalistSelect.value !== datalist.title) {
+        setInputValue(input, datalistSelect.value);
+        dispatchInputEvent(input);
+        if (event.key !== "Tab") {
+          input.focus();
+        }
+        if (event.keyCode === keyENTER) {
+          event.preventDefault();
+        }
+        visible = false;
+      } else if (eventType === "keydown" && event.keyCode === keyESC) {
+        input.focus();
+      }
+      toggleVisibility(visible, datalistSelect);
+    };
+    var dispatchInputEvent = function(input) {
+      var evt;
+      if (typeof Event === "function") {
+        evt = new Event("input", {
+          bubbles: true
+        });
+      } else {
+        evt = dcmnt.createEvent("Event");
+        evt.initEvent("input", true, false);
+      }
+      input.dispatchEvent(evt);
+    };
+    var toggleVisibility = function(visible, datalistSelect) {
+      if (visible) {
+        datalistSelect.removeAttribute("hidden");
+      } else {
+        datalistSelect.setAttributeNode(dcmnt.createAttribute("hidden"));
+      }
+      datalistSelect.setAttribute("aria-hidden", (!visible).toString());
+    };
+    (function(constructor) {
+      if (constructor && constructor.prototype && constructor.prototype.list === void 0) {
+        Object.defineProperty(constructor.prototype, "list", {
+          get: function() {
+            var element = dcmnt.querySelector("#" + this.getAttribute("list"));
+            return typeof this === "object" && this instanceof constructor && element && element.matches("datalist") ? element : null;
+          }
+        });
+      }
+    })(window.HTMLInputElement);
+    (function(constructor) {
+      if (constructor && constructor.prototype && constructor.prototype.options === void 0) {
+        Object.defineProperty(constructor.prototype, "options", {
+          get: function() {
+            return typeof this === "object" && this instanceof constructor ? this.querySelectorAll("option") : null;
+          }
+        });
+      }
+    })(window.HTMLElement);
+  })();
+
   // src/components/App.tsx
   init_react_shim();
 
@@ -38072,13 +38395,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       }
       db.sessions.add({
         _id,
-        title,
+        title: title !== "" ? title : game?.name ?? "New session",
         start: start.toISOString(),
         gameId: game?._id,
         scoreMode,
         playerIds: []
       });
-      navigate(`/sessions/${_id}`);
+      navigate(`/sessions/${_id}/scores`);
     };
     return /* @__PURE__ */ (0, import_jsx_runtime9.jsxs)("div", { children: [
       /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(AppBar_default, { variant: "small", title: "New session", backTo: "/" }),
@@ -38086,7 +38409,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         /* @__PURE__ */ (0, import_jsx_runtime9.jsx)(
           TextField_default,
           {
-            required: true,
             label: "Title",
             value: title,
             onChange: (e) => setTitle(e.target.value)
@@ -38728,16 +39050,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       onSave(ids);
       onClose();
     };
+    const newPlayerId = (0, import_react10.useMemo)(() => {
+      return allPlayers.find((x) => x.name === name.trim())?._id;
+    }, [name, allPlayers]);
     const addPlayer = async () => {
       if (!name) {
         return;
       }
-      let id = allPlayers.find((x) => x.name === name)?._id;
+      let id = newPlayerId;
       if (!id) {
         id = v4_default();
         await db.players.add({
           _id: id,
-          name
+          name: name.trim()
         });
       }
       if (ids.includes(id)) {
@@ -38781,7 +39106,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               list: "all-players",
               onChange: (e) => setName(e.target.value),
               className: "o-player-modal-inline__name",
-              suffix: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Button_default, { icon: "add", variant: "filled", onClick: addPlayer, children: "Add" })
+              suffix: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
+                Button_default,
+                {
+                  icon: newPlayerId ? "person" : "add",
+                  variant: "filled",
+                  onClick: addPlayer,
+                  children: "Add"
+                }
+              )
             }
           ),
           /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("datalist", { id: "all-players", children: allPlayers.filter((p) => !ids.includes(p._id)).map((player) => /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("option", { value: player.name, children: player.name }, player.name)) })
@@ -39601,6 +39934,13 @@ react-router/dist/development/index.mjs:
    * LICENSE.md file in the root directory of this source tree.
    *
    * @license MIT
+   *)
+
+datalist-polyfill/datalist-polyfill.js:
+  (*
+   * Datalist polyfill - https://github.com/mfranzke/datalist-polyfill
+   * @license Copyright(c) 2017 by Maximilian Franzke
+   * Supported by Christian, Johannes, @mitchhentges, @mertenhanisch, @ailintom, @Kravimir, @mischah, @hryamzik, @ottoville, @IceCreamYou, @wlekin, @eddr, @beebee1987, @mricherzhagen, @acespace90, @damien-git, @nexces, @Sora2455, @jscho13, @alexirion and @vinyfc93 - many thanks for that !
    *)
 
 dexie-export-import/dist/dexie-export-import.mjs:
