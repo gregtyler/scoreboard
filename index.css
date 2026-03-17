@@ -859,6 +859,7 @@ option {
   border-radius: var(--table-radius);
   margin-top: 16px;
   margin-bottom: 16px;
+  overflow-x: auto;
 }
 .c-table {
   width: 100%;

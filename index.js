@@ -38715,7 +38715,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const [name, setName] = (0, import_react7.useState)("");
     const [image, setImage] = (0, import_react7.useState)("");
     const [scoreMode, setScoreMode] = (0, import_react7.useState)("CUSTOM" /* Custom */);
-    const [rounds, setRounds] = (0, import_react7.useState)([]);
+    const [rounds, setRounds] = (0, import_react7.useState)(
+      []
+    );
     const [editRoundActive, setEditRoundActive] = (0, import_react7.useState)(-1);
     const [game, setGame] = useGame(id);
     (0, import_react7.useEffect)(() => {
@@ -38744,7 +38746,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           lastRound = Math.max(lastRound, parseInt(match2[1], 10));
         }
       });
-      setRounds([...rounds, { label: `#${lastRound + 1}`, colour: "#ffffff" }]);
+      setRounds([...rounds, { label: `#${lastRound + 1}` }]);
     };
     const removeRound = (index) => {
       setRounds([...rounds.slice(0, index), ...rounds.slice(index + 1)]);
@@ -39198,7 +39200,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     {
       ...props,
       className: "c-text-field__input",
-      style: { padding: "0 12px", textAlign: "right" },
+      style: { padding: "0 12px", textAlign: "center" },
       value
     }
   ) });
@@ -39229,9 +39231,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return editable ? /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
       TableCellInput_default,
       {
-        type: "number",
+        type: "text",
+        inputMode: "numeric",
         value: score?.value,
-        onChange: handleScoreChange
+        onChange: handleScoreChange,
+        pattern: "[0-9]*"
       }
     ) : /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("td", { children: score?.value ?? "" });
   };
