@@ -4,6 +4,8 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import { HashRouter } from "react-router-dom";
 
+import "datalist-polyfill";
+
 import App from "./components/App";
 
 const rootElement = document.getElementById("root");
@@ -14,7 +16,7 @@ createRoot(rootElement).render(
     <HashRouter>
       <App></App>
     </HashRouter>
-  </StrictMode>
+  </StrictMode>,
 );
 
 /** Service worker **/
@@ -22,7 +24,7 @@ if ("serviceWorker" in navigator) {
   navigator.serviceWorker.register("./sw.js").then((reg) => {
     reg.addEventListener("updatefound", function () {
       console.log(
-        "A new version of this application is available. Refresh to update."
+        "A new version of this application is available. Refresh to update.",
       );
     });
   });

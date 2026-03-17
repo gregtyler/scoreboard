@@ -19,6 +19,7 @@
     "esbuild": "^0.27.3"
   },
   "dependencies": {
+    "datalist-polyfill": "^1.25.1",
     "date-fns": "^4.1.0",
     "dexie": "^4.0.11",
     "dexie-export-import": "^4.1.1",

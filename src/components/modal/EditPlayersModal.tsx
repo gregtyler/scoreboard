@@ -28,17 +28,21 @@ const EditPlayersModal = ({ playerIds, onSave, onClose, ...props }: Props) => {
     onClose();
   };
 
+  const newPlayerId = useMemo(() => {
+    return allPlayers.find((x) => x.name === name.trim())?._id;
+  }, [name, allPlayers]);
+
   const addPlayer = async () => {
     if (!name) {
       return;
     }
 
-    let id = allPlayers.find((x) => x.name === name)?._id;
+    let id = newPlayerId;
     if (!id) {
       id = uuidv4();
       await db.players.add({
         _id: id,
-        name,
+        name: name.trim(),
       });
     }
 
@@ -89,7 +93,11 @@ const EditPlayersModal = ({ playerIds, onSave, onClose, ...props }: Props) => {
         onChange={(e: ChangeEvent<HTMLInputElement>) => setName(e.target.value)}
         className="o-player-modal-inline__name"
         suffix={
-          <Button icon="add" variant="filled" onClick={addPlayer}>
+          <Button
+            icon={newPlayerId ? "person" : "add"}
+            variant="filled"
+            onClick={addPlayer}
+          >
             Add
           </Button>
         }
