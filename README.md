@@ -10,7 +10,6 @@
   - Maybe atproto?
 - Transition animations
 - Show an error message when fields are missing (e.g. board name)
-- Adding rounds to a game template defaults them to white?
 
 ### Ideas
 

@@ -29,7 +29,7 @@ export type Game = {
   image?: string;
   scoreMode: ScoreMode;
   template?: {
-    rounds: { label: string; colour: string }[];
+    rounds: { label: string; colour?: string }[];
   };
 };
 

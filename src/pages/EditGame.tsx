@@ -32,7 +32,9 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
   const [name, setName] = useState("");
   const [image, setImage] = useState("");
   const [scoreMode, setScoreMode] = useState<ScoreMode>(ScoreMode.Custom);
-  const [rounds, setRounds] = useState<{ label: string; colour: string }[]>([]);
+  const [rounds, setRounds] = useState<{ label: string; colour?: string }[]>(
+    [],
+  );
 
   const [editRoundActive, setEditRoundActive] = useState(-1);
 
@@ -51,7 +53,7 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
 
   if (!game) return null;
 
-  const setRound = (index: number, label: string, colour: string) => {
+  const setRound = (index: number, label: string, colour?: string) => {
     setRounds(
       rounds.map((round, i) =>
         i === index ? { ...round, label, colour } : round,
@@ -68,7 +70,7 @@ const EditGame = ({ ...props }: FormHTMLAttributes<HTMLDivElement>) => {
       }
     });
 
-    setRounds([...rounds, { label: `#${lastRound + 1}`, colour: "#ffffff" }]);
+    setRounds([...rounds, { label: `#${lastRound + 1}` }]);
   };
 
   const removeRound = (index: number) => {
