@@ -38287,10 +38287,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // node_modules/dexie-react-hooks/dist/dexie-react-hooks.mjs
   init_react_shim();
+  var React12 = __toESM(require_react(), 1);
   var import_react = __toESM(require_react(), 1);
   function useObservable(observableFactory, arg2, arg3) {
-    var deps;
-    var defaultResult;
+    let deps;
+    let defaultResult;
     if (typeof observableFactory === "function") {
       deps = arg2 || [];
       defaultResult = arg3;
@@ -38298,23 +38299,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       deps = [];
       defaultResult = arg2;
     }
-    var monitor = import_react.default.useRef({
+    const monitor = import_react.default.useRef({
       hasResult: false,
       result: defaultResult,
       error: null
     });
-    var _a = import_react.default.useReducer(function(x) {
-      return x + 1;
-    }, 0);
-    _a[0];
-    var triggerUpdate = _a[1];
-    var observable = import_react.default.useMemo(function() {
-      var observable2 = typeof observableFactory === "function" ? observableFactory() : observableFactory;
+    const [_, triggerUpdate] = import_react.default.useReducer((x) => x + 1, 0);
+    const observable = import_react.default.useMemo(() => {
+      const observable2 = typeof observableFactory === "function" ? observableFactory() : observableFactory;
       if (!observable2 || typeof observable2.subscribe !== "function") {
         if (observableFactory === observable2) {
-          throw new TypeError("Given argument to useObservable() was neither a valid observable nor a function.");
+          throw new TypeError(`Given argument to useObservable() was neither a valid observable nor a function.`);
         } else {
-          throw new TypeError("Observable factory given to useObservable() did not return a valid observable.");
+          throw new TypeError(`Observable factory given to useObservable() did not return a valid observable.`);
         }
       }
       if (!monitor.current.hasResult && typeof window !== "undefined") {
@@ -38323,7 +38320,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             monitor.current.result = observable2.getValue();
             monitor.current.hasResult = true;
           } else {
-            var subscription = observable2.subscribe(function(val) {
+            const subscription = observable2.subscribe((val) => {
               monitor.current.result = val;
               monitor.current.hasResult = true;
             });
@@ -38338,17 +38335,17 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       return observable2;
     }, deps);
     import_react.default.useDebugValue(monitor.current.result);
-    import_react.default.useEffect(function() {
-      var subscription = observable.subscribe(function(val) {
-        var current = monitor.current;
+    import_react.default.useEffect(() => {
+      const subscription = observable.subscribe((val) => {
+        const { current } = monitor;
         if (current.error !== null || current.result !== val) {
           current.error = null;
           current.result = val;
           current.hasResult = true;
           triggerUpdate();
         }
-      }, function(err) {
-        var current = monitor.current;
+      }, (err) => {
+        const { current } = monitor;
         if (current.error !== err) {
           current.error = err;
           triggerUpdate();
@@ -38361,15 +38358,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     return monitor.current.result;
   }
   function useLiveQuery(querier, deps, defaultResult) {
-    return useObservable(function() {
-      return Dexie.liveQuery(querier);
-    }, deps || [], defaultResult);
+    return useObservable(() => Dexie.liveQuery(querier), deps || [], defaultResult);
   }
-  var fr = typeof FinalizationRegistry !== "undefined" && new FinalizationRegistry(function(doc) {
-    var DexieYProvider2 = Dexie["DexieYProvider"];
+  var fr = typeof FinalizationRegistry !== "undefined" && new FinalizationRegistry((doc) => {
+    const DexieYProvider2 = Dexie["DexieYProvider"];
     if (DexieYProvider2)
       DexieYProvider2.release(doc);
   });
+  var reactUse = Reflect.get(React12, "use");
 
   // src/data/db.ts
   var import_react2 = __toESM(require_react());
