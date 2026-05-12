@@ -21817,7 +21817,11 @@
         }
         var defineProperty = Object.defineProperty;
         function setProp(obj, prop, functionOrGetSet, options) {
-          defineProperty(obj, prop, extend(functionOrGetSet && hasOwn(functionOrGetSet, "get") && typeof functionOrGetSet.get === "function" ? { get: functionOrGetSet.get, set: functionOrGetSet.set, configurable: true } : { value: functionOrGetSet, configurable: true, writable: true }, options));
+          defineProperty(obj, prop, extend(functionOrGetSet && hasOwn(functionOrGetSet, "get") && typeof functionOrGetSet.get === "function" ? {
+            get: functionOrGetSet.get,
+            set: functionOrGetSet.set,
+            configurable: true
+          } : { value: functionOrGetSet, configurable: true, writable: true }, options));
         }
         function derive(Child) {
           return {
@@ -21959,12 +21963,6 @@
               rv[k] = !v || typeof v !== "object" || intrinsicTypes.has(v.constructor) ? v : cloneSimpleObjectTree(v);
             }
           return rv;
-        }
-        function objectIsEmpty(o) {
-          for (var k in o)
-            if (hasOwn(o, k))
-              return false;
-          return true;
         }
         var circularRefs = null;
         function deepClone(any) {
@@ -22161,9 +22159,11 @@
             return domError;
           var rv = new exceptionMap[domError.name](message2 || domError.message, domError);
           if ("stack" in domError) {
-            setProp(rv, "stack", { get: function() {
-              return this.inner.stack;
-            } });
+            setProp(rv, "stack", {
+              get: function() {
+                return this.inner.stack;
+              }
+            });
           }
           return rv;
         }
@@ -22277,11 +22277,7 @@
           if (typeof crypto === "undefined" || !crypto.subtle)
             return [globalP, getProto(globalP), globalP];
           var nativeP = crypto.subtle.digest("SHA-512", new Uint8Array([0]));
-          return [
-            nativeP,
-            getProto(nativeP),
-            globalP
-          ];
+          return [nativeP, getProto(nativeP), globalP];
         })(), resolvedNativePromise = _a$1[0], nativePromiseProto = _a$1[1], resolvedGlobalPromise = _a$1[2], nativePromiseThen = nativePromiseProto && nativePromiseProto.then;
         var NativePromise = resolvedNativePromise && resolvedNativePromise.constructor;
         var patchGlobalPromise = !!resolvedGlobalPromise;
@@ -22709,7 +22705,11 @@
           globalPSD.env;
           psd.env = patchGlobalPromise ? {
             Promise: DexiePromise,
-            PromiseProp: { value: DexiePromise, configurable: true, writable: true },
+            PromiseProp: {
+              value: DexiePromise,
+              configurable: true,
+              writable: true
+            },
             all: DexiePromise.all,
             race: DexiePromise.race,
             allSettled: DexiePromise.allSettled,
@@ -22848,7 +22848,7 @@
         }
         var rejection = DexiePromise.reject;
         function tempTransaction(db2, mode, storeNames, fn) {
-          if (!db2.idbdb || !db2._state.openComplete && (!PSD.letThrough && !db2._vip)) {
+          if (!db2.idbdb || !db2._state.openComplete && !PSD.letThrough && !db2._vip) {
             if (db2._state.openComplete) {
               return rejection(new exceptions.DatabaseClosed(db2._state.dbOpenError));
             }
@@ -22892,12 +22892,12 @@
             });
           }
         }
-        var DEXIE_VERSION = "4.3.0";
+        var DEXIE_VERSION = "4.4.2";
         var maxString = String.fromCharCode(65535);
         var minKey = -Infinity;
         var INVALID_KEY_ARGUMENT = "Invalid key provided. Keys must be of type string, number, Date or Array<string | number | Date>.";
         var STRING_EXPECTED = "String expected.";
-        var connections = [];
+        var DEFAULT_MAX_CONNECTIONS = 1e3;
         var DBNAMES_DB = "__dbnames";
         var READONLY = "readonly";
         var READWRITE = "readwrite";
@@ -23266,7 +23266,12 @@
               objToAdd = workaroundForUndefinedPrimKey(keyPath)(obj);
             }
             return this._trans("readwrite", function(trans) {
-              return _this.core.mutate({ trans, type: "add", keys: key != null ? [key] : null, values: [objToAdd] });
+              return _this.core.mutate({
+                trans,
+                type: "add",
+                keys: key != null ? [key] : null,
+                values: [objToAdd]
+              });
             }).then(function(res) {
               return res.numFailures ? DexiePromise.reject(res.failures[0]) : res.lastResult;
             }).then(function(lastResult) {
@@ -23319,7 +23324,12 @@
               objToAdd = workaroundForUndefinedPrimKey(keyPath)(obj);
             }
             return this._trans("readwrite", function(trans) {
-              return _this.core.mutate({ trans, type: "put", values: [objToAdd], keys: key != null ? [key] : null });
+              return _this.core.mutate({
+                trans,
+                type: "put",
+                values: [objToAdd],
+                keys: key != null ? [key] : null
+              });
             }).then(function(res) {
               return res.numFailures ? DexiePromise.reject(res.failures[0]) : res.lastResult;
             }).then(function(lastResult) {
@@ -23378,7 +23388,13 @@
                 throw new exceptions.InvalidArgument("Arguments objects and keys must have the same length");
               var numObjects = objects.length;
               var objectsToAdd = keyPath && auto ? objects.map(workaroundForUndefinedPrimKey(keyPath)) : objects;
-              return _this.core.mutate({ trans, type: "add", keys: keys2, values: objectsToAdd, wantResults }).then(function(_a3) {
+              return _this.core.mutate({
+                trans,
+                type: "add",
+                keys: keys2,
+                values: objectsToAdd,
+                wantResults
+              }).then(function(_a3) {
                 var numFailures = _a3.numFailures, results = _a3.results, lastResult = _a3.lastResult, failures = _a3.failures;
                 var result = wantResults ? results : lastResult;
                 if (numFailures === 0)
@@ -23400,7 +23416,13 @@
                 throw new exceptions.InvalidArgument("Arguments objects and keys must have the same length");
               var numObjects = objects.length;
               var objectsToPut = keyPath && auto ? objects.map(workaroundForUndefinedPrimKey(keyPath)) : objects;
-              return _this.core.mutate({ trans, type: "put", keys: keys2, values: objectsToPut, wantResults }).then(function(_a3) {
+              return _this.core.mutate({
+                trans,
+                type: "put",
+                keys: keys2,
+                values: objectsToPut,
+                wantResults
+              }).then(function(_a3) {
                 var numFailures = _a3.numFailures, results = _a3.results, lastResult = _a3.lastResult, failures = _a3.failures;
                 var result = wantResults ? results : lastResult;
                 if (numFailures === 0)
@@ -23563,10 +23585,10 @@
             this.name = name;
             this.schema = tableSchema;
             this.hook = db2._allTables[name] ? db2._allTables[name].hook : Events(null, {
-              "creating": [hookCreatingChain, nop],
-              "reading": [pureFunctionChain, mirror],
-              "updating": [hookUpdatingChain, nop],
-              "deleting": [hookDeletingChain, nop]
+              creating: [hookCreatingChain, nop],
+              reading: [pureFunctionChain, mirror],
+              updating: [hookUpdatingChain, nop],
+              deleting: [hookDeletingChain, nop]
             });
           });
         }
@@ -23744,13 +23766,14 @@
             var _this = this;
             return this._read(function(trans) {
               var ctx = _this._ctx;
-              if (ctx.dir === "next" && isPlainKeyRange(ctx, true) && ctx.limit > 0) {
+              if (isPlainKeyRange(ctx, true) && ctx.limit > 0) {
                 var valueMapper_1 = ctx.valueMapper;
                 var index = getIndexOrStore(ctx, ctx.table.core.schema);
                 return ctx.table.core.query({
                   trans,
                   limit: ctx.limit,
                   values: true,
+                  direction: ctx.dir === "prev" ? "prev" : void 0,
                   query: {
                     index,
                     range: ctx.range
@@ -23884,13 +23907,14 @@
           };
           Collection2.prototype.primaryKeys = function(cb) {
             var ctx = this._ctx;
-            if (ctx.dir === "next" && isPlainKeyRange(ctx, true) && ctx.limit > 0) {
+            if (isPlainKeyRange(ctx, true) && ctx.limit > 0) {
               return this._read(function(trans) {
                 var index = getIndexOrStore(ctx, ctx.table.core.schema);
                 return ctx.table.core.query({
                   trans,
                   values: false,
                   limit: ctx.limit,
+                  direction: ctx.dir === "prev" ? "prev" : void 0,
                   query: {
                     index,
                     range: ctx.range
@@ -24371,7 +24395,10 @@
             return c;
           };
           WhereClause2.prototype.notEqual = function(value) {
-            return this.inAnyRange([[minKey, value], [value, this.db._maxKey]], { includeLowers: false, includeUppers: false });
+            return this.inAnyRange([
+              [minKey, value],
+              [value, this.db._maxKey]
+            ], { includeLowers: false, includeUppers: false });
           };
           WhereClause2.prototype.noneOf = function() {
             var set = getArrayOf.apply(NO_CHAR_ARRAY, arguments);
@@ -24386,7 +24413,10 @@
               return res ? res.concat([[res[res.length - 1][1], val]]) : [[minKey, val]];
             }, null);
             ranges.push([set[set.length - 1], this.db._maxKey]);
-            return this.inAnyRange(ranges, { includeLowers: false, includeUppers: false });
+            return this.inAnyRange(ranges, {
+              includeLowers: false,
+              includeUppers: false
+            });
           };
           WhereClause2.prototype.inAnyRange = function(ranges, options) {
             var _this = this;
@@ -24580,7 +24610,9 @@
             if (!this.active)
               throw new exceptions.TransactionInactive();
             assert(this._completion._state === null);
-            idbtrans = this.idbtrans = idbtrans || (this.db.core ? this.db.core.transaction(this.storeNames, this.mode, { durability: this.chromeTransactionDurability }) : idbdb.transaction(this.storeNames, this.mode, { durability: this.chromeTransactionDurability }));
+            idbtrans = this.idbtrans = idbtrans || (this.db.core ? this.db.core.transaction(this.storeNames, this.mode, { durability: this.chromeTransactionDurability }) : idbdb.transaction(this.storeNames, this.mode, {
+              durability: this.chromeTransactionDurability
+            }));
             idbtrans.onerror = wrap(function(ev) {
               preventDefault(ev);
               _this._reject(idbtrans.error);
@@ -24608,9 +24640,12 @@
               return rejection(new exceptions.TransactionInactive());
             if (this._locked()) {
               return new DexiePromise(function(resolve, reject) {
-                _this._blockedFuncs.push([function() {
-                  _this._promise(mode, fn, bWriteLock).then(resolve, reject);
-                }, PSD]);
+                _this._blockedFuncs.push([
+                  function() {
+                    _this._promise(mode, fn, bWriteLock).then(resolve, reject);
+                  },
+                  PSD
+                ]);
               });
             } else if (bWriteLock) {
               return newScope(function() {
@@ -24816,6 +24851,7 @@
         function createDBCore(db2, IdbKeyRange, tmpTrans) {
           function extractSchema(db3, trans) {
             var tables2 = arrayify(db3.objectStoreNames);
+            var tempStore = tables2.length > 0 ? trans.objectStore(tables2[0]) : {};
             return {
               schema: {
                 name: db3.name,
@@ -24865,7 +24901,8 @@
                   return result;
                 })
               },
-              hasGetAll: tables2.length > 0 && "getAll" in trans.objectStore(tables2[0]) && !(typeof navigator !== "undefined" && /Safari/.test(navigator.userAgent) && !/(Chrome\/|Edge\/)/.test(navigator.userAgent) && [].concat(navigator.userAgent.match(/Safari\/(\d*)/))[1] < 604)
+              hasGetAll: tables2.length > 0 && "getAll" in tempStore && !(typeof navigator !== "undefined" && /Safari/.test(navigator.userAgent) && !/(Chrome\/|Edge\/)/.test(navigator.userAgent) && [].concat(navigator.userAgent.match(/Safari\/(\d*)/))[1] < 604),
+              hasIdb3Features: "getAllRecords" in tempStore
             };
           }
           function makeIDBKeyRange(range) {
@@ -24893,7 +24930,12 @@
                   throw new Error("Given keys array must have same length as given values array.");
                 }
                 if (length === 0)
-                  return resolve({ numFailures: 0, failures: {}, results: [], lastResult: void 0 });
+                  return resolve({
+                    numFailures: 0,
+                    failures: {},
+                    results: [],
+                    lastResult: void 0
+                  });
                 var req;
                 var reqs = [];
                 var failures = [];
@@ -24904,7 +24946,12 @@
                 };
                 if (type2 === "deleteRange") {
                   if (range.type === 4)
-                    return resolve({ numFailures, failures, results: [], lastResult: void 0 });
+                    return resolve({
+                      numFailures,
+                      failures,
+                      results: [],
+                      lastResult: void 0
+                    });
                   if (range.type === 3)
                     reqs.push(req = store.clear());
                   else
@@ -25024,11 +25071,13 @@
                 }, reject);
               });
             }
-            function query(hasGetAll2) {
+            function query(hasGetAll2, hasIdb3Features2) {
               return function(request) {
                 return new Promise(function(resolve, reject) {
+                  var _a3;
                   resolve = wrap(resolve);
                   var trans = request.trans, values = request.values, limit = request.limit, query2 = request.query;
+                  var direction = (_a3 = request.direction) !== null && _a3 !== void 0 ? _a3 : "next";
                   var nonInfinitLimit = limit === Infinity ? void 0 : limit;
                   var index = query2.index, range = query2.range;
                   var store = trans.objectStore(tableName);
@@ -25036,7 +25085,18 @@
                   var idbKeyRange = makeIDBKeyRange(range);
                   if (limit === 0)
                     return resolve({ result: [] });
-                  if (hasGetAll2) {
+                  if (hasIdb3Features2) {
+                    var options = {
+                      query: idbKeyRange,
+                      count: nonInfinitLimit,
+                      direction
+                    };
+                    var req = values ? source.getAll(options) : source.getAllKeys(options);
+                    req.onsuccess = function(event) {
+                      return resolve({ result: event.target.result });
+                    };
+                    req.onerror = eventRejectHandler(reject);
+                  } else if (hasGetAll2 && direction === "next") {
                     var req = values ? source.getAll(idbKeyRange, nonInfinitLimit) : source.getAllKeys(idbKeyRange, nonInfinitLimit);
                     req.onsuccess = function(event) {
                       return resolve({ result: event.target.result });
@@ -25044,9 +25104,9 @@
                     req.onerror = eventRejectHandler(reject);
                   } else {
                     var count_1 = 0;
-                    var req_1 = values || !("openKeyCursor" in source) ? source.openCursor(idbKeyRange) : source.openKeyCursor(idbKeyRange);
+                    var req_1 = values || !("openKeyCursor" in source) ? source.openCursor(idbKeyRange, direction) : source.openKeyCursor(idbKeyRange, direction);
                     var result_1 = [];
-                    req_1.onsuccess = function(event) {
+                    req_1.onsuccess = function() {
                       var cursor = req_1.result;
                       if (!cursor)
                         return resolve({ result: result_1 });
@@ -25108,7 +25168,7 @@
                   req.onerror = eventRejectHandler(reject);
                 });
               },
-              query: query(hasGetAll),
+              query: query(hasGetAll, hasIdb3Features),
               openCursor: openCursor2,
               count: function(_a3) {
                 var query2 = _a3.query, trans = _a3.trans;
@@ -25126,7 +25186,7 @@
               }
             };
           }
-          var _a2 = extractSchema(db2, tmpTrans), schema = _a2.schema, hasGetAll = _a2.hasGetAll;
+          var _a2 = extractSchema(db2, tmpTrans), schema = _a2.schema, hasGetAll = _a2.hasGetAll, hasIdb3Features = _a2.hasIdb3Features;
           var tables = schema.tables.map(function(tableSchema) {
             return createDbCoreTable(tableSchema);
           });
@@ -25190,7 +25250,12 @@
                       return this.table(tableName);
                     },
                     set: function(value) {
-                      defineProperty(this, tableName, { value, writable: true, configurable: true, enumerable: true });
+                      defineProperty(this, tableName, {
+                        value,
+                        writable: true,
+                        configurable: true,
+                        enumerable: true
+                      });
                     }
                   });
                 } else {
@@ -25445,7 +25510,10 @@
           });
         }
         function addIndex(store, idx) {
-          store.createIndex(idx.name, idx.keyPath, { unique: idx.unique, multiEntry: idx.multi });
+          store.createIndex(idx.name, idx.keyPath, {
+            unique: idx.unique,
+            multiEntry: idx.multi
+          });
         }
         function buildGlobalSchema(db2, idbdb, tmpTrans) {
           var globalSchema = {};
@@ -25579,6 +25647,65 @@
               contentUpgrade: null
             };
           });
+        }
+        var connections = createConnectionsManager();
+        function createConnectionsManager() {
+          if (typeof FinalizationRegistry !== "undefined" && typeof WeakRef !== "undefined") {
+            var _refs_1 = /* @__PURE__ */ new Set();
+            var _registry_1 = new FinalizationRegistry(function(ref) {
+              _refs_1.delete(ref);
+            });
+            var toArray = function() {
+              return Array.from(_refs_1).map(function(ref) {
+                return ref.deref();
+              }).filter(function(db2) {
+                return db2 !== void 0;
+              });
+            };
+            var add3 = function(db2) {
+              var ref = new WeakRef(db2._novip);
+              _refs_1.add(ref);
+              _registry_1.register(db2._novip, ref, ref);
+              if (_refs_1.size > db2._options.maxConnections) {
+                var oldestRef = _refs_1.values().next().value;
+                _refs_1.delete(oldestRef);
+                _registry_1.unregister(oldestRef);
+              }
+            };
+            var remove3 = function(db2) {
+              if (!db2)
+                return;
+              var iterator = _refs_1.values();
+              var result = iterator.next();
+              while (!result.done) {
+                var ref = result.value;
+                if (ref.deref() === db2._novip) {
+                  _refs_1.delete(ref);
+                  _registry_1.unregister(ref);
+                  return;
+                }
+                result = iterator.next();
+              }
+            };
+            return { toArray, add: add3, remove: remove3 };
+          } else {
+            var connections_1 = [];
+            var toArray = function() {
+              return connections_1;
+            };
+            var add3 = function(db2) {
+              connections_1.push(db2._novip);
+            };
+            var remove3 = function(db2) {
+              if (!db2)
+                return;
+              var index = connections_1.indexOf(db2._novip);
+              if (index !== -1) {
+                connections_1.splice(index, 1);
+              }
+            };
+            return { toArray, add: add3, remove: remove3 };
+          }
         }
         function getDbNamesTable(indexedDB2, IDBKeyRange) {
           var dbNamesDB = indexedDB2["_dbNamesDB"];
@@ -25942,7 +26069,7 @@
                     generateMiddlewareStacks(db2, tmpTrans);
                   } catch (e) {
                   }
-                connections.push(db2);
+                connections.add(db2);
                 idbdb.onversionchange = wrap(function(ev) {
                   state.vcFired = true;
                   db2.on("versionchange").fire(ev);
@@ -26355,13 +26482,26 @@
                   return deleteNextChunk(req2.trans, req2.range, 1e4);
                 }
                 function deleteNextChunk(trans, range, limit) {
-                  return downTable.query({ trans, values: false, query: { index: primaryKey, range }, limit }).then(function(_a3) {
+                  return downTable.query({
+                    trans,
+                    values: false,
+                    query: { index: primaryKey, range },
+                    limit
+                  }).then(function(_a3) {
                     var result = _a3.result;
-                    return addPutOrDelete({ type: "delete", keys: result, trans }).then(function(res) {
+                    return addPutOrDelete({
+                      type: "delete",
+                      keys: result,
+                      trans
+                    }).then(function(res) {
                       if (res.numFailures > 0)
                         return Promise.reject(res.failures[0]);
                       if (result.length < limit) {
-                        return { failures: [], numFailures: 0, lastResult: void 0 };
+                        return {
+                          failures: [],
+                          numFailures: 0,
+                          lastResult: void 0
+                        };
                       } else {
                         return deleteNextChunk(trans, __assign(__assign({}, range), { lower: result[result.length - 1], lowerOpen: true }), limit);
                       }
@@ -26374,7 +26514,11 @@
           }
         };
         function getExistingValues(table, req, effectiveKeys) {
-          return req.type === "add" ? Promise.resolve([]) : table.getMany({ trans: req.trans, keys: effectiveKeys, cache: "immutable" });
+          return req.type === "add" ? Promise.resolve([]) : table.getMany({
+            trans: req.trans,
+            keys: effectiveKeys,
+            cache: "immutable"
+          });
         }
         function getFromTransactionCache(keys2, cache2, clone) {
           try {
@@ -26473,9 +26617,12 @@
                 var pkRangeSet = getRangeSet("");
                 var delsRangeSet = getRangeSet(":dels");
                 var type2 = req.type;
-                var _c = req.type === "deleteRange" ? [req.range] : req.type === "delete" ? [req.keys] : req.values.length < 50 ? [getEffectiveKeys(primaryKey, req).filter(function(id) {
-                  return id;
-                }), req.values] : [], keys2 = _c[0], newObjs = _c[1];
+                var _c = req.type === "deleteRange" ? [req.range] : req.type === "delete" ? [req.keys] : req.values.length < 50 ? [
+                  getEffectiveKeys(primaryKey, req).filter(function(id) {
+                    return id;
+                  }),
+                  req.values
+                ] : [], keys2 = _c[0], newObjs = _c[1];
                 var oldCache = req.trans["_cache"];
                 if (isArray(keys2)) {
                   pkRangeSet.addKeys(keys2);
@@ -26755,9 +26902,12 @@
           }, result);
           if (finalResult === result)
             return result;
-          finalResult.sort(function(a, b) {
+          var sorter = function(a, b) {
             return cmp2(extractLowLevelIndex(a), extractLowLevelIndex(b)) || cmp2(extractPrimKey(a), extractPrimKey(b));
-          });
+          };
+          finalResult.sort(req.direction === "prev" || req.direction === "prevunique" ? function(a, b) {
+            return sorter(b, a);
+          } : sorter);
           if (req.limit && req.limit < Infinity) {
             if (finalResult.length > req.limit) {
               finalResult.length = req.limit;
@@ -26806,6 +26956,7 @@
           return compareLowers(r1.lower, r2.lower, r1.lowerOpen, r2.lowerOpen) <= 0 && compareUppers(r1.upper, r2.upper, r1.upperOpen, r2.upperOpen) >= 0;
         }
         function findCompatibleQuery(dbName, tableName, type2, req) {
+          var _a2;
           var tblCache = cache["idb://".concat(dbName, "/").concat(tableName)];
           if (!tblCache)
             return [];
@@ -26818,8 +26969,10 @@
             return [null, false, tblCache, null];
           switch (type2) {
             case "query":
+              var reqDirection_1 = (_a2 = req.direction) !== null && _a2 !== void 0 ? _a2 : "next";
               var equalEntry = entries.find(function(entry) {
-                return entry.req.limit === req.limit && entry.req.values === req.values && areRangesEqual(entry.req.query.range, req.query.range);
+                var _a3;
+                return entry.req.limit === req.limit && entry.req.values === req.values && ((_a3 = entry.req.direction) !== null && _a3 !== void 0 ? _a3 : "next") === reqDirection_1 && areRangesEqual(entry.req.query.range, req.query.range);
               });
               if (equalEntry)
                 return [
@@ -26829,8 +26982,9 @@
                   entries
                 ];
               var superEntry = entries.find(function(entry) {
+                var _a3;
                 var limit = "limit" in entry.req ? entry.req.limit : Infinity;
-                return limit >= req.limit && (req.values ? entry.req.values : true) && isSuperRange(entry.req.query.range, req.query.range);
+                return limit >= req.limit && ((_a3 = entry.req.direction) !== null && _a3 !== void 0 ? _a3 : "next") === reqDirection_1 && (req.values ? entry.req.values : true) && isSuperRange(entry.req.query.range, req.query.range);
               });
               return [superEntry, false, tblCache, entries];
             case "count":
@@ -26912,7 +27066,9 @@
                                       });
                                     } else if (modRes !== entry.res) {
                                       entry.res = modRes;
-                                      entry.promise = DexiePromise.resolve({ result: modRes });
+                                      entry.promise = DexiePromise.resolve({
+                                        result: modRes
+                                      });
                                     }
                                   } else {
                                     if (entry.dirty) {
@@ -27080,7 +27236,8 @@
               autoOpen: true,
               indexedDB: deps.indexedDB,
               IDBKeyRange: deps.IDBKeyRange,
-              cache: "cloned"
+              cache: "cloned",
+              maxConnections: DEFAULT_MAX_CONNECTIONS
             }, options);
             this._deps = {
               indexedDB: options.indexedDB,
@@ -27114,7 +27271,9 @@
             });
             this._state = state;
             this.name = name;
-            this.on = Events(this, "populate", "blocked", "versionchange", "close", { ready: [promisableChain, nop] });
+            this.on = Events(this, "populate", "blocked", "versionchange", "close", {
+              ready: [promisableChain, nop]
+            });
             this.once = function(event, callback) {
               var fn = function() {
                 var args = [];
@@ -27175,7 +27334,7 @@
             };
             this._fireOnBlocked = function(ev) {
               _this.on("blocked").fire(ev);
-              connections.filter(function(c) {
+              connections.toArray().filter(function(c) {
                 return c.name === _this.name && c !== _this && !c._state.vcFired;
               }).map(function(c) {
                 return c.on("versionchange").fire(ev);
@@ -27255,7 +27414,12 @@
             if (name)
               this.unuse({ stack, name });
             var middlewares = this._middlewares[stack] || (this._middlewares[stack] = []);
-            middlewares.push({ stack, create, level: level == null ? 10 : level, name });
+            middlewares.push({
+              stack,
+              create,
+              level: level == null ? 10 : level,
+              name
+            });
             middlewares.sort(function(a, b) {
               return a.level - b.level;
             });
@@ -27282,9 +27446,7 @@
           Dexie3.prototype._close = function() {
             this.on.close.fire(new CustomEvent("close"));
             var state = this._state;
-            var idx = connections.indexOf(this);
-            if (idx >= 0)
-              connections.splice(idx, 1);
+            connections.remove(this);
             if (this.idbdb) {
               try {
                 this.idbdb.close();
@@ -27526,21 +27688,29 @@
                 trans: null
               };
               var ret = execute(ctx);
+              if (!startedListening) {
+                globalEvents(DEXIE_STORAGE_MUTATED_EVENT_NAME, mutationListener);
+                startedListening = true;
+              }
               Promise.resolve(ret).then(function(result) {
                 hasValue = true;
                 currentValue = result;
                 if (closed || ctx.signal.aborted) {
                   return;
                 }
-                accumMuts = {};
-                currentObs = subscr;
-                if (!objectIsEmpty(currentObs) && !startedListening) {
-                  globalEvents(DEXIE_STORAGE_MUTATED_EVENT_NAME, mutationListener);
-                  startedListening = true;
+                if (shouldNotify()) {
+                  doQuery();
+                } else {
+                  currentObs = subscr;
+                  if (shouldNotify()) {
+                    doQuery();
+                  } else {
+                    accumMuts = {};
+                    execInGlobalContext(function() {
+                      return !closed && observer.next && observer.next(result);
+                    });
+                  }
                 }
-                execInGlobalContext(function() {
-                  return !closed && observer.next && observer.next(result);
-                });
               }, function(err) {
                 hasValue = false;
                 if (!["DatabaseClosedError", "AbortError"].includes(err === null || err === void 0 ? void 0 : err.name)) {
@@ -27592,7 +27762,7 @@
             return Class;
           },
           ignoreTransaction: function(scopeFunc) {
-            return PSD.trans ? usePSD(PSD.transless, scopeFunc) : scopeFunc();
+            return PSD.trans ? usePSD(PSD.transless || globalPSD, scopeFunc) : scopeFunc();
           },
           vip,
           async: function(generatorFn) {
@@ -27653,7 +27823,9 @@
           asap: asap$1,
           minKey,
           addons: [],
-          connections,
+          connections: {
+            get: connections.toArray
+          },
           errnames,
           dependencies: domDeps,
           cache,
@@ -27721,8 +27893,8 @@
               if (debug)
                 console.debug("Dexie: handling persisted pagehide");
               bc === null || bc === void 0 ? void 0 : bc.close();
-              for (var _i = 0, connections_1 = connections; _i < connections_1.length; _i++) {
-                var db2 = connections_1[_i];
+              for (var _i = 0, _a2 = connections.toArray(); _i < _a2.length; _i++) {
+                var db2 = _a2[_i];
                 db2.close({ disableAutoOpen: false });
               }
             }
@@ -27749,6 +27921,7 @@
         setDebug(debug);
         var namedExports = /* @__PURE__ */ Object.freeze({
           __proto__: null,
+          DEFAULT_MAX_CONNECTIONS,
           Dexie: Dexie$1,
           Entity: Entity2,
           PropModification: PropModification2,
