@@ -27773,7 +27773,7 @@
   var import_react16 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
-  // node_modules/react-router/dist/development/chunk-LFPYN7LY.mjs
+  // node_modules/react-router/dist/development/chunk-QFMPRPBF.mjs
   init_react_shim();
   var React2 = __toESM(require_react(), 1);
   var React22 = __toESM(require_react(), 1);
@@ -28482,6 +28482,9 @@
   var DataRouterStateContext = React2.createContext(null);
   DataRouterStateContext.displayName = "DataRouterState";
   var RSCRouterContext = React2.createContext(false);
+  function useIsRSCRouterContext() {
+    return React2.useContext(RSCRouterContext);
+  }
   var ViewTransitionContext = React2.createContext({
     isTransitioning: false
   });
@@ -28724,21 +28727,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           pathname: joinPaths([
             parentPathnameBase,
             // Re-encode pathnames that were decoded inside matchRoutes.
-            // Pre-encode `?` and `#` ahead of `encodeLocation` because it uses
+            // Pre-encode `%`, `?` and `#` ahead of `encodeLocation` because it uses
             // `new URL()` internally and we need to prevent it from treating
             // them as separators
             navigator2.encodeLocation ? navigator2.encodeLocation(
-              match2.pathname.replace(/\?/g, "%3F").replace(/#/g, "%23")
+              match2.pathname.replace(/%/g, "%25").replace(/\?/g, "%3F").replace(/#/g, "%23")
             ).pathname : match2.pathname
           ]),
           pathnameBase: match2.pathnameBase === "/" ? parentPathnameBase : joinPaths([
             parentPathnameBase,
             // Re-encode pathnames that were decoded inside matchRoutes
-            // Pre-encode `?` and `#` ahead of `encodeLocation` because it uses
+            // Pre-encode `%`, `?` and `#` ahead of `encodeLocation` because it uses
             // `new URL()` internally and we need to prevent it from treating
             // them as separators
             navigator2.encodeLocation ? navigator2.encodeLocation(
-              match2.pathnameBase.replace(/\?/g, "%3F").replace(/#/g, "%23")
+              match2.pathnameBase.replace(/%/g, "%25").replace(/\?/g, "%3F").replace(/#/g, "%23")
             ).pathname : match2.pathnameBase
           ])
         })
@@ -29651,6 +29654,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     };
   }
   function PrefetchPageLinks({ page, ...linkProps }) {
+    let rsc = useIsRSCRouterContext();
     let { router } = useDataRouterContext2();
     let matches = React8.useMemo(
       () => matchRoutes(router.routes, page, router.basename),
@@ -29658,6 +29662,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     );
     if (!matches) {
       return null;
+    }
+    if (rsc) {
+      return /* @__PURE__ */ React8.createElement(RSCPrefetchPageLinksImpl, { page, matches, ...linkProps });
     }
     return /* @__PURE__ */ React8.createElement(PrefetchPageLinksImpl, { page, matches, ...linkProps });
   }
@@ -29678,6 +29685,46 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       };
     }, [matches, manifest, routeModules]);
     return keyedPrefetchLinks;
+  }
+  function RSCPrefetchPageLinksImpl({
+    page,
+    matches: nextMatches,
+    ...linkProps
+  }) {
+    let location2 = useLocation();
+    let { future } = useFrameworkContext();
+    let { basename } = useDataRouterContext2();
+    let dataHrefs = React8.useMemo(() => {
+      if (page === location2.pathname + location2.search + location2.hash) {
+        return [];
+      }
+      let url = singleFetchUrl(
+        page,
+        basename,
+        future.unstable_trailingSlashAwareDataRequests,
+        "rsc"
+      );
+      let hasSomeRoutesWithShouldRevalidate = false;
+      let targetRoutes = [];
+      for (let match2 of nextMatches) {
+        if (typeof match2.route.shouldRevalidate === "function") {
+          hasSomeRoutesWithShouldRevalidate = true;
+        } else {
+          targetRoutes.push(match2.route.id);
+        }
+      }
+      if (hasSomeRoutesWithShouldRevalidate && targetRoutes.length > 0) {
+        url.searchParams.set("_routes", targetRoutes.join(","));
+      }
+      return [url.pathname + url.search];
+    }, [
+      basename,
+      future.unstable_trailingSlashAwareDataRequests,
+      page,
+      location2,
+      nextMatches
+    ]);
+    return /* @__PURE__ */ React8.createElement(React8.Fragment, null, dataHrefs.map((href) => /* @__PURE__ */ React8.createElement("link", { key: href, rel: "prefetch", as: "fetch", href, ...linkProps })));
   }
   function PrefetchPageLinksImpl({
     page,
@@ -29790,7 +29837,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   try {
     if (isBrowser2) {
       window.__reactRouterVersion = // @ts-expect-error
-      "7.13.1";
+      "7.14.0";
     }
   } catch (e) {
   }
@@ -39927,10 +39974,10 @@ react/cjs/react-jsx-runtime.development.js:
    * LICENSE file in the root directory of this source tree.
    *)
 
-react-router/dist/development/chunk-LFPYN7LY.mjs:
+react-router/dist/development/chunk-QFMPRPBF.mjs:
 react-router/dist/development/index.mjs:
   (**
-   * react-router v7.13.1
+   * react-router v7.14.0
    *
    * Copyright (c) Remix Software Inc.
    *
