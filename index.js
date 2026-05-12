@@ -30808,27 +30808,19 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // node_modules/uuid/dist/rng.js
   init_react_shim();
-  var getRandomValues;
   var rnds8 = new Uint8Array(16);
   function rng() {
-    if (!getRandomValues) {
-      if (typeof crypto === "undefined" || !crypto.getRandomValues) {
-        throw new Error("crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported");
-      }
-      getRandomValues = crypto.getRandomValues.bind(crypto);
-    }
-    return getRandomValues(rnds8);
+    return crypto.getRandomValues(rnds8);
   }
 
   // node_modules/uuid/dist/v4.js
   init_react_shim();
-
-  // node_modules/uuid/dist/native.js
-  init_react_shim();
-  var randomUUID = typeof crypto !== "undefined" && crypto.randomUUID && crypto.randomUUID.bind(crypto);
-  var native_default = { randomUUID };
-
-  // node_modules/uuid/dist/v4.js
+  function v4(options, buf, offset) {
+    if (!buf && !options && crypto.randomUUID) {
+      return crypto.randomUUID();
+    }
+    return _v4(options, buf, offset);
+  }
   function _v4(options, buf, offset) {
     options = options || {};
     const rnds = options.random ?? options.rng?.() ?? rng();
@@ -30848,12 +30840,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       return buf;
     }
     return unsafeStringify(rnds);
-  }
-  function v4(options, buf, offset) {
-    if (native_default.randomUUID && !buf && !options) {
-      return native_default.randomUUID();
-    }
-    return _v4(options, buf, offset);
   }
   var v4_default = v4;
 
