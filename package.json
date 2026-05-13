@@ -16,7 +16,7 @@
     "@types/react": "^19.1.8",
     "@types/react-dom": "^19.1.6",
     "@types/uuid": "^11.0.0",
-    "esbuild": "^0.27.3"
+    "esbuild": "^0.28.0"
   },
   "dependencies": {
     "datalist-polyfill": "^1.25.1",
