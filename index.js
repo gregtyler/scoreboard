@@ -27946,7 +27946,7 @@
   var import_react16 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
-  // node_modules/react-router/dist/development/chunk-QFMPRPBF.mjs
+  // node_modules/react-router/dist/development/chunk-QUQL4437.mjs
   init_react_shim();
   var React2 = __toESM(require_react(), 1);
   var React22 = __toESM(require_react(), 1);
@@ -28029,14 +28029,14 @@
       usr: location2.state,
       key: location2.key,
       idx: index,
-      masked: location2.unstable_mask ? {
+      masked: location2.mask ? {
         pathname: location2.pathname,
         search: location2.search,
         hash: location2.hash
       } : void 0
     };
   }
-  function createLocation(current, to, state = null, key, unstable_mask) {
+  function createLocation(current, to, state = null, key, mask) {
     let location2 = {
       pathname: typeof current === "string" ? current : current.pathname,
       search: "",
@@ -28048,7 +28048,7 @@
       // But that's a pretty big refactor to the current test suite so going to
       // keep as is for the time being and just let any incoming keys take precedence
       key: to && to.key || key || createKey(),
-      unstable_mask
+      mask
     };
     return location2;
   }
@@ -28111,7 +28111,7 @@
       if (validateLocation) validateLocation(location2, to);
       index = getIndex() + 1;
       let historyState = getHistoryState(location2, index);
-      let url = history.createHref(location2.unstable_mask || location2);
+      let url = history.createHref(location2.mask || location2);
       try {
         globalHistory.pushState(historyState, "", url);
       } catch (error) {
@@ -28130,14 +28130,14 @@
       if (validateLocation) validateLocation(location2, to);
       index = getIndex();
       let historyState = getHistoryState(location2, index);
-      let url = history.createHref(location2.unstable_mask || location2);
+      let url = history.createHref(location2.mask || location2);
       globalHistory.replaceState(historyState, "", url);
       if (v5Compat && listener) {
         listener({ action, location: history.location, delta: 0 });
       }
     }
     function createURL(to) {
-      return createBrowserURLImpl(to);
+      return createBrowserURLImpl(window2, to);
     }
     let history = {
       get action() {
@@ -28177,10 +28177,10 @@
     };
     return history;
   }
-  function createBrowserURLImpl(to, isAbsolute = false) {
+  function createBrowserURLImpl(windowImpl, to, isAbsolute = false) {
     let base = "http://localhost";
-    if (typeof window !== "undefined") {
-      base = window.location.origin !== "null" ? window.location.origin : window.location.href;
+    if (windowImpl) {
+      base = windowImpl.location.origin !== "null" ? windowImpl.location.origin : windowImpl.location.href;
     }
     invariant(base, "No window.location.(origin|href) available to create URL");
     let href = typeof to === "string" ? to : createPath(to);
@@ -28195,17 +28195,16 @@
   function matchRoutes(routes, locationArg, basename = "/") {
     return matchRoutesImpl(routes, locationArg, basename, false);
   }
-  function matchRoutesImpl(routes, locationArg, basename, allowPartial) {
+  function matchRoutesImpl(routes, locationArg, basename, allowPartial, precomputedBranches) {
     let location2 = typeof locationArg === "string" ? parsePath(locationArg) : locationArg;
     let pathname = stripBasename(location2.pathname || "/", basename);
     if (pathname == null) {
       return null;
     }
-    let branches = flattenRoutes(routes);
-    rankRouteBranches(branches);
+    let branches = precomputedBranches ?? flattenAndRankRoutes(routes);
     let matches = null;
+    let decoded = decodePath(pathname);
     for (let i = 0; matches == null && i < branches.length; ++i) {
-      let decoded = decodePath(pathname);
       matches = matchRouteBranch(
         branches[i],
         decoded,
@@ -28224,6 +28223,11 @@
       loaderData: loaderData[route.id],
       handle: route.handle
     };
+  }
+  function flattenAndRankRoutes(routes) {
+    let branches = flattenRoutes(routes);
+    rankRouteBranches(branches);
+    return branches;
   }
   function flattenRoutes(routes, branches = [], parentsMeta = [], parentPath = "", _hasParentOptionalSegments = false) {
     let flattenRoute = (route, index, hasParentOptionalSegments = _hasParentOptionalSegments, relativePath) => {
@@ -28490,7 +28494,7 @@
     } = typeof to === "string" ? parsePath(to) : to;
     let pathname;
     if (toPathname) {
-      toPathname = toPathname.replace(/\/\/+/g, "/");
+      toPathname = removeDoubleSlashes(toPathname);
       if (toPathname.startsWith("/")) {
         pathname = resolvePathname(toPathname.substring(1), "/");
       } else {
@@ -28506,7 +28510,7 @@
     };
   }
   function resolvePathname(relativePath, fromPathname) {
-    let segments = fromPathname.replace(/\/+$/, "").split("/");
+    let segments = removeTrailingSlash(fromPathname).split("/");
     let relativeSegments = relativePath.split("/");
     relativeSegments.forEach((segment) => {
       if (segment === "..") {
@@ -28577,8 +28581,10 @@
     }
     return path;
   }
-  var joinPaths = (paths) => paths.join("/").replace(/\/\/+/g, "/");
-  var normalizePathname = (pathname) => pathname.replace(/\/+$/, "").replace(/^\/*/, "/");
+  var removeDoubleSlashes = (path) => path.replace(/\/\/+/g, "/");
+  var joinPaths = (paths) => removeDoubleSlashes(paths.join("/"));
+  var removeTrailingSlash = (path) => path.replace(/\/+$/, "");
+  var normalizePathname = (pathname) => removeTrailingSlash(pathname).replace(/^\/*/, "/");
   var normalizeSearch = (search) => !search || search === "?" ? "" : search.startsWith("?") ? search : "?" + search;
   var normalizeHash = (hash) => !hash || hash === "#" ? "" : hash.startsWith("#") ? hash : "#" + hash;
   var ErrorResponseImpl = class {
@@ -28598,7 +28604,8 @@
     return error != null && typeof error.status === "number" && typeof error.statusText === "string" && typeof error.internal === "boolean" && "data" in error;
   }
   function getRoutePattern(matches) {
-    return matches.map((m) => m.route.path).filter(Boolean).join("/").replace(/\/\/*/g, "/") || "/";
+    let parts = matches.map((m) => m.route.path).filter(Boolean);
+    return joinPaths(parts) || "/";
   }
   var isBrowser = typeof window !== "undefined" && typeof window.document !== "undefined" && typeof window.document.createElement !== "undefined";
   function parseToInfo(_to, basename) {
@@ -28650,6 +28657,14 @@
     ...validMutationMethodsArr
   ];
   var validRequestMethods = new Set(validRequestMethodsArr);
+  var _routes;
+  var _branches;
+  var _hmrRoutes;
+  var _hmrBranches;
+  _routes = /* @__PURE__ */ new WeakMap();
+  _branches = /* @__PURE__ */ new WeakMap();
+  _hmrRoutes = /* @__PURE__ */ new WeakMap();
+  _hmrBranches = /* @__PURE__ */ new WeakMap();
   var DataRouterContext = React2.createContext(null);
   DataRouterContext.displayName = "DataRouter";
   var DataRouterStateContext = React2.createContext(null);
@@ -28820,7 +28835,7 @@
   function useParams() {
     let { matches } = React22.useContext(RouteContext);
     let routeMatch = matches[matches.length - 1];
-    return routeMatch ? routeMatch.params : {};
+    return routeMatch?.params ?? {};
   }
   function useResolvedPath(to, { relative } = {}) {
     let { matches } = React22.useContext(RouteContext);
@@ -28882,7 +28897,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       let segments = pathname.replace(/^\//, "").split("/");
       remainingPathname = "/" + segments.slice(parentSegments.length).join("/");
     }
-    let matches = matchRoutes(routes, { pathname: remainingPathname });
+    let matches = dataRouterOpts && dataRouterOpts.state.matches.length ? (
+      // If we're in a data router, use the matches we've already identified but ensure
+      // we have the latest route instances from the manifest in case elements have changed
+      dataRouterOpts.state.matches.map(
+        (m) => Object.assign(m, {
+          route: dataRouterOpts.manifest[m.route.id] || m.route
+        })
+      )
+    ) : matchRoutes(routes, { pathname: remainingPathname });
     if (ENABLE_DEV_WARNINGS) {
       warning(
         parentRoute || matches != null,
@@ -28933,7 +28956,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               hash: "",
               state: null,
               key: "default",
-              unstable_mask: void 0,
+              mask: void 0,
               ...location2
             },
             navigationType: "POP"
@@ -29124,7 +29147,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       onErrorHandler(error, {
         location: dataRouterState.location,
         params: dataRouterState.matches?.[0]?.params ?? {},
-        unstable_pattern: getRoutePattern(dataRouterState.matches),
+        pattern: getRoutePattern(dataRouterState.matches),
         errorInfo
       });
     } : void 0;
@@ -29233,7 +29256,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       "useNavigation"
       /* UseNavigation */
     );
-    return state.navigation;
+    return React22.useMemo(() => {
+      let { matches, historyAction, ...rest } = state.navigation;
+      return rest;
+    }, [state.navigation]);
   }
   function useMatches() {
     let { matches, loaderData } = useDataRouterState(
@@ -29296,15 +29322,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   var USE_OPTIMISTIC = "useOptimistic";
   var useOptimisticImpl = React3[USE_OPTIMISTIC];
-  var MemoizedDataRoutes = React3.memo(DataRoutes);
-  function DataRoutes({
+  var MemoizedDataRoutes = React3.memo(DataRoutes2);
+  function DataRoutes2({
     routes,
+    manifest,
     future,
     state,
     isStatic,
     onError
   }) {
-    return useRoutesImpl(routes, void 0, { state, isStatic, onError, future });
+    return useRoutesImpl(routes, void 0, {
+      manifest,
+      state,
+      isStatic,
+      onError,
+      future
+    });
   }
   function Route(props) {
     invariant(
@@ -29319,7 +29352,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     navigationType = "POP",
     navigator: navigator2,
     static: staticProp = false,
-    unstable_useTransitions
+    useTransitions
   }) {
     invariant(
       !useInRouterContext(),
@@ -29331,10 +29364,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         basename,
         navigator: navigator2,
         static: staticProp,
-        unstable_useTransitions,
+        useTransitions,
         future: {}
       }),
-      [basename, navigator2, staticProp, unstable_useTransitions]
+      [basename, navigator2, staticProp, useTransitions]
     );
     if (typeof locationProp === "string") {
       locationProp = parsePath(locationProp);
@@ -29345,7 +29378,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       hash = "",
       state = null,
       key = "default",
-      unstable_mask
+      mask
     } = locationProp;
     let locationContext = React3.useMemo(() => {
       let trailingPathname = stripBasename(pathname, basename);
@@ -29359,20 +29392,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           hash,
           state,
           key,
-          unstable_mask
+          mask
         },
         navigationType
       };
-    }, [
-      basename,
-      pathname,
-      search,
-      hash,
-      state,
-      key,
-      navigationType,
-      unstable_mask
-    ]);
+    }, [basename, pathname, search, hash, state, key, navigationType, mask]);
     warning(
       locationContext != null,
       `<Router basename="${basename}"> is not able to match the URL "${pathname}${search}${hash}" because it does not start with the basename, so the <Router> won't render anything.`
@@ -29576,9 +29600,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       if (url.pathname === "/") {
         url.pathname = `_root.${extension}`;
       } else if (basename && stripBasename(url.pathname, basename) === "/") {
-        url.pathname = `${basename.replace(/\/$/, "")}/_root.${extension}`;
+        url.pathname = `${removeTrailingSlash(basename)}/_root.${extension}`;
       } else {
-        url.pathname = `${url.pathname.replace(/\/$/, "")}.${extension}`;
+        url.pathname = `${removeTrailingSlash(url.pathname)}.${extension}`;
       }
     }
     return url;
@@ -29874,7 +29898,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       let url = singleFetchUrl(
         page,
         basename,
-        future.unstable_trailingSlashAwareDataRequests,
+        future.v8_trailingSlashAwareDataRequests,
         "rsc"
       );
       let hasSomeRoutesWithShouldRevalidate = false;
@@ -29892,7 +29916,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       return [url.pathname + url.search];
     }, [
       basename,
-      future.unstable_trailingSlashAwareDataRequests,
+      future.v8_trailingSlashAwareDataRequests,
       page,
       location2,
       nextMatches
@@ -29955,7 +29979,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       let url = singleFetchUrl(
         page,
         basename,
-        future.unstable_trailingSlashAwareDataRequests,
+        future.v8_trailingSlashAwareDataRequests,
         "data"
       );
       if (foundOptOutRoute && routesParams.size > 0) {
@@ -29967,7 +29991,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       return [url.pathname + url.search];
     }, [
       basename,
-      future.unstable_trailingSlashAwareDataRequests,
+      future.v8_trailingSlashAwareDataRequests,
       loaderData,
       location2,
       manifest,
@@ -30010,14 +30034,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   try {
     if (isBrowser2) {
       window.__reactRouterVersion = // @ts-expect-error
-      "7.14.0";
+      "7.16.0";
     }
   } catch (e) {
   }
   function HashRouter({
     basename,
     children,
-    unstable_useTransitions,
+    useTransitions,
     window: window2
   }) {
     let historyRef = React10.useRef();
@@ -30031,13 +30055,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     });
     let setState = React10.useCallback(
       (newState) => {
-        if (unstable_useTransitions === false) {
+        if (useTransitions === false) {
           setStateImpl(newState);
         } else {
           React10.startTransition(() => setStateImpl(newState));
         }
       },
-      [unstable_useTransitions]
+      [useTransitions]
     );
     React10.useLayoutEffect(() => history.listen(setState), [history, setState]);
     return /* @__PURE__ */ React10.createElement(
@@ -30048,7 +30072,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         location: state.location,
         navigationType: state.action,
         navigator: history,
-        unstable_useTransitions
+        useTransitions
       }
     );
   }
@@ -30056,7 +30080,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     basename,
     children,
     history,
-    unstable_useTransitions
+    useTransitions
   }) {
     let [state, setStateImpl] = React10.useState({
       action: history.action,
@@ -30064,13 +30088,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     });
     let setState = React10.useCallback(
       (newState) => {
-        if (unstable_useTransitions === false) {
+        if (useTransitions === false) {
           setStateImpl(newState);
         } else {
           React10.startTransition(() => setStateImpl(newState));
         }
       },
-      [unstable_useTransitions]
+      [useTransitions]
     );
     React10.useLayoutEffect(() => history.listen(setState), [history, setState]);
     return /* @__PURE__ */ React10.createElement(
@@ -30081,7 +30105,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         location: state.location,
         navigationType: state.action,
         navigator: history,
-        unstable_useTransitions
+        useTransitions
       }
     );
   }
@@ -30095,27 +30119,27 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       relative,
       reloadDocument,
       replace: replace2,
-      unstable_mask,
+      mask,
       state,
       target,
       to,
       preventScrollReset,
       viewTransition,
-      unstable_defaultShouldRevalidate,
+      defaultShouldRevalidate,
       ...rest
     }, forwardedRef) {
-      let { basename, navigator: navigator2, unstable_useTransitions } = React10.useContext(NavigationContext);
+      let { basename, navigator: navigator2, useTransitions } = React10.useContext(NavigationContext);
       let isAbsolute = typeof to === "string" && ABSOLUTE_URL_REGEX2.test(to);
       let parsed = parseToInfo(to, basename);
       to = parsed.to;
       let href = useHref(to, { relative });
       let location2 = useLocation();
       let maskedHref = null;
-      if (unstable_mask) {
+      if (mask) {
         let resolved = resolveTo(
-          unstable_mask,
+          mask,
           [],
-          location2.unstable_mask ? location2.unstable_mask.pathname : "/",
+          location2.mask ? location2.mask.pathname : "/",
           true
         );
         if (basename !== "/") {
@@ -30129,14 +30153,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       );
       let internalOnClick = useLinkClickHandler(to, {
         replace: replace2,
-        unstable_mask,
+        mask,
         state,
         target,
         preventScrollReset,
         relative,
         viewTransition,
-        unstable_defaultShouldRevalidate,
-        unstable_useTransitions
+        defaultShouldRevalidate,
+        useTransitions
       });
       function handleClick(event) {
         if (onClick) onClick(event);
@@ -30245,10 +30269,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       relative,
       preventScrollReset,
       viewTransition,
-      unstable_defaultShouldRevalidate,
+      defaultShouldRevalidate,
       ...props
     }, forwardedRef) => {
-      let { unstable_useTransitions } = React10.useContext(NavigationContext);
+      let { useTransitions } = React10.useContext(NavigationContext);
       let submit = useSubmit();
       let formAction = useFormAction(action, { relative });
       let formMethod = method.toLowerCase() === "get" ? "get" : "post";
@@ -30268,9 +30292,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           relative,
           preventScrollReset,
           viewTransition,
-          unstable_defaultShouldRevalidate
+          defaultShouldRevalidate
         });
-        if (unstable_useTransitions && navigate !== false) {
+        if (useTransitions && navigate !== false) {
           React10.startTransition(() => doSubmit());
         } else {
           doSubmit();
@@ -30364,13 +30388,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   function useLinkClickHandler(to, {
     target,
     replace: replaceProp,
-    unstable_mask,
+    mask,
     state,
     preventScrollReset,
     relative,
     viewTransition,
-    unstable_defaultShouldRevalidate,
-    unstable_useTransitions
+    defaultShouldRevalidate,
+    useTransitions
   } = {}) {
     let navigate = useNavigate();
     let location2 = useLocation();
@@ -30382,14 +30406,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           let replace2 = replaceProp !== void 0 ? replaceProp : createPath(location2) === createPath(path);
           let doNavigate = () => navigate(to, {
             replace: replace2,
-            unstable_mask,
+            mask,
             state,
             preventScrollReset,
             relative,
             viewTransition,
-            unstable_defaultShouldRevalidate
+            defaultShouldRevalidate
           });
-          if (unstable_useTransitions) {
+          if (useTransitions) {
             React10.startTransition(() => doNavigate());
           } else {
             doNavigate();
@@ -30401,15 +30425,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         navigate,
         path,
         replaceProp,
-        unstable_mask,
+        mask,
         state,
         target,
         to,
         preventScrollReset,
         relative,
         viewTransition,
-        unstable_defaultShouldRevalidate,
-        unstable_useTransitions
+        defaultShouldRevalidate,
+        useTransitions
       ]
     );
   }
@@ -30433,7 +30457,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         if (options.navigate === false) {
           let key = options.fetcherKey || getUniqueFetcherId();
           await routerFetch(key, currentRouteId, options.action || action, {
-            unstable_defaultShouldRevalidate: options.unstable_defaultShouldRevalidate,
+            defaultShouldRevalidate: options.defaultShouldRevalidate,
             preventScrollReset: options.preventScrollReset,
             formData,
             body,
@@ -30443,7 +30467,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           });
         } else {
           await routerNavigate(options.action || action, {
-            unstable_defaultShouldRevalidate: options.unstable_defaultShouldRevalidate,
+            defaultShouldRevalidate: options.defaultShouldRevalidate,
             preventScrollReset: options.preventScrollReset,
             formData,
             body,
@@ -40178,10 +40202,10 @@ react/cjs/react-jsx-runtime.development.js:
    * LICENSE file in the root directory of this source tree.
    *)
 
-react-router/dist/development/chunk-QFMPRPBF.mjs:
+react-router/dist/development/chunk-QUQL4437.mjs:
 react-router/dist/development/index.mjs:
   (**
-   * react-router v7.14.0
+   * react-router v7.16.0
    *
    * Copyright (c) Remix Software Inc.
    *
