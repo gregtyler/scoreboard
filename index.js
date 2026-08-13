@@ -27955,7 +27955,7 @@
   var import_react16 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
-  // node_modules/react-router/dist/development/chunk-QUQL4437.mjs
+  // node_modules/react-router/dist/development/chunk-62JRHF6Z.mjs
   init_react_shim();
   var React2 = __toESM(require_react(), 1);
   var React22 = __toESM(require_react(), 1);
@@ -27969,6 +27969,11 @@
   var React10 = __toESM(require_react(), 1);
   var React11 = __toESM(require_react(), 1);
   var import_meta = {};
+  var ABSOLUTE_URL_REGEX = /^(?:[a-z][a-z0-9+.-]*:|[\\/]{2})/i;
+  var PROTOCOL_RELATIVE_URL_REGEX = /^[\\/]{2}/;
+  function normalizeProtocolRelativeUrl(url, protocol) {
+    return protocol + url.replace(/\\/g, "/");
+  }
   var PopStateEventType = "popstate";
   function isLocation(obj) {
     return typeof obj === "object" && obj != null && "pathname" in obj && "search" in obj && "hash" in obj && "state" in obj && "key" in obj;
@@ -28194,7 +28199,7 @@
     invariant(base, "No window.location.(origin|href) available to create URL");
     let href = typeof to === "string" ? to : createPath(to);
     href = href.replace(/ $/, "%20");
-    if (!isAbsolute && href.startsWith("//")) {
+    if (!isAbsolute && PROTOCOL_RELATIVE_URL_REGEX.test(href)) {
       href = base + href;
     }
     return new URL(href, base);
@@ -28279,7 +28284,18 @@
       branches.push({
         path,
         score: computeScore(path, route.index),
-        routesMeta
+        routesMeta: routesMeta.map((meta2, i2) => {
+          let [matcher, params] = compilePath(
+            meta2.relativePath,
+            meta2.caseSensitive,
+            i2 === routesMeta.length - 1
+          );
+          return {
+            ...meta2,
+            matcher,
+            compiledParams: params
+          };
+        })
       });
     };
     routes.forEach((route, index) => {
@@ -28368,9 +28384,19 @@
       let meta = routesMeta[i2];
       let end = i2 === routesMeta.length - 1;
       let remainingPathname = matchedPathname === "/" ? pathname : pathname.slice(matchedPathname.length) || "/";
-      let match2 = matchPath(
-        { path: meta.relativePath, caseSensitive: meta.caseSensitive, end },
-        remainingPathname
+      let pattern = {
+        path: meta.relativePath,
+        caseSensitive: meta.caseSensitive,
+        end
+      };
+      let match2 = (
+        // Use precomputed matcher if it exists
+        meta.matcher && meta.compiledParams ? matchPathImpl(
+          pattern,
+          remainingPathname,
+          meta.matcher,
+          meta.compiledParams
+        ) : matchPath(pattern, remainingPathname)
       );
       let route = meta.route;
       if (!match2 && end && allowPartial && !routesMeta[routesMeta.length - 1].route.index) {
@@ -28411,6 +28437,9 @@
       pattern.caseSensitive,
       pattern.end
     );
+    return matchPathImpl(pattern, pathname, matcher, compiledParams);
+  }
+  function matchPathImpl(pattern, pathname, matcher, compiledParams) {
     let match2 = pathname.match(matcher);
     if (!match2) return null;
     let matchedPathname = match2[0];
@@ -28494,7 +28523,6 @@
     }
     return pathname.slice(startIndex) || "/";
   }
-  var ABSOLUTE_URL_REGEX = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
   function resolvePath(to, fromPathname = "/") {
     let {
       pathname: toPathname,
@@ -28590,7 +28618,7 @@
     }
     return path;
   }
-  var removeDoubleSlashes = (path) => path.replace(/\/\/+/g, "/");
+  var removeDoubleSlashes = (path) => path.replace(/[\\/]{2,}/g, "/");
   var joinPaths = (paths) => removeDoubleSlashes(paths.join("/"));
   var removeTrailingSlash = (path) => path.replace(/\/+$/, "");
   var normalizePathname = (pathname) => removeTrailingSlash(pathname).replace(/^\/*/, "/");
@@ -28631,7 +28659,7 @@
     if (isBrowser) {
       try {
         let currentUrl = new URL(window.location.href);
-        let targetUrl = to.startsWith("//") ? new URL(currentUrl.protocol + to) : new URL(to);
+        let targetUrl = PROTOCOL_RELATIVE_URL_REGEX.test(to) ? new URL(normalizeProtocolRelativeUrl(to, currentUrl.protocol)) : new URL(to);
         let path = stripBasename(targetUrl.pathname, basename);
         if (targetUrl.origin === currentUrl.origin && path != null) {
           to = path + targetUrl.search + targetUrl.hash;
@@ -28674,6 +28702,26 @@
   _branches = /* @__PURE__ */ new WeakMap();
   _hmrRoutes = /* @__PURE__ */ new WeakMap();
   _hmrBranches = /* @__PURE__ */ new WeakMap();
+  var invalidProtocols = [
+    "about:",
+    "blob:",
+    "chrome:",
+    "chrome-untrusted:",
+    "content:",
+    "data:",
+    "devtools:",
+    "file:",
+    "filesystem:",
+    // eslint-disable-next-line no-script-url
+    "javascript:"
+  ];
+  function hasInvalidProtocol(location2) {
+    try {
+      return invalidProtocols.includes(new URL(location2).protocol);
+    } catch {
+      return false;
+    }
+  }
   var DataRouterContext = React2.createContext(null);
   DataRouterContext.displayName = "DataRouter";
   var DataRouterStateContext = React2.createContext(null);
@@ -29063,9 +29111,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         let existingRedirect = errorRedirectHandledMap.get(error);
         if (existingRedirect) throw existingRedirect;
         let parsed = parseToInfo(redirect2.location, basename);
+        let target = parsed.absoluteURL || parsed.to;
+        if (hasInvalidProtocol(target)) {
+          throw new Error("Invalid redirect location");
+        }
         if (isBrowser && !errorRedirectHandledMap.get(error)) {
           if (parsed.isExternal || redirect2.reloadDocument) {
-            window.location.href = parsed.absoluteURL || parsed.to;
+            window.location.href = target;
           } else {
             const redirectPromise = Promise.resolve().then(
               () => window.__reactRouterDataRouter.navigate(parsed.to, {
@@ -29076,13 +29128,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             throw redirectPromise;
           }
         }
-        return /* @__PURE__ */ React22.createElement(
-          "meta",
-          {
-            httpEquiv: "refresh",
-            content: `0;url=${parsed.absoluteURL || parsed.to}`
-          }
-        );
+        return /* @__PURE__ */ React22.createElement("meta", { httpEquiv: "refresh", content: `0;url=${target}` });
       }
     }
     return children;
@@ -29861,6 +29907,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }
   function PrefetchPageLinks({ page, ...linkProps }) {
     let rsc = useIsRSCRouterContext();
+    let { nonce: contextNonce } = useFrameworkContext();
     let { router } = useDataRouterContext2();
     let matches = React8.useMemo(
       () => matchRoutes(router.routes, page, router.basename),
@@ -29868,6 +29915,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     );
     if (!matches) {
       return null;
+    }
+    if (linkProps.nonce == null && contextNonce) {
+      linkProps = { ...linkProps, nonce: contextNonce };
     }
     if (rsc) {
       return /* @__PURE__ */ React8.createElement(RSCPrefetchPageLinksImpl, { page, matches, ...linkProps });
@@ -30043,7 +30093,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   try {
     if (isBrowser2) {
       window.__reactRouterVersion = // @ts-expect-error
-      "7.16.0";
+      "7.18.2";
     }
   } catch (e) {
   }
@@ -30119,7 +30169,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     );
   }
   HistoryRouter.displayName = "unstable_HistoryRouter";
-  var ABSOLUTE_URL_REGEX2 = /^(?:[a-z][a-z0-9+.-]*:|\/\/)/i;
   var Link = React10.forwardRef(
     function LinkWithRef({
       onClick,
@@ -30138,7 +30187,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       ...rest
     }, forwardedRef) {
       let { basename, navigator: navigator2, useTransitions } = React10.useContext(NavigationContext);
-      let isAbsolute = typeof to === "string" && ABSOLUTE_URL_REGEX2.test(to);
+      let isAbsolute = typeof to === "string" && ABSOLUTE_URL_REGEX.test(to);
       let parsed = parseToInfo(to, basename);
       to = parsed.to;
       let href = useHref(to, { relative });
@@ -30285,7 +30334,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       let submit = useSubmit();
       let formAction = useFormAction(action, { relative });
       let formMethod = method.toLowerCase() === "get" ? "get" : "post";
-      let isAbsolute = typeof action === "string" && ABSOLUTE_URL_REGEX2.test(action);
+      let isAbsolute = typeof action === "string" && ABSOLUTE_URL_REGEX.test(action);
       let submitHandler = (event) => {
         onSubmit && onSubmit(event);
         if (event.defaultPrevented) return;
@@ -30367,6 +30416,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         sessionStorage.removeItem(storageKey2);
       }
     }).toString();
+    if (props.nonce == null && remixContext?.nonce) {
+      props.nonce = remixContext.nonce;
+    }
     return /* @__PURE__ */ React10.createElement(
       "script",
       {
@@ -40211,10 +40263,10 @@ react/cjs/react-jsx-runtime.development.js:
    * LICENSE file in the root directory of this source tree.
    *)
 
-react-router/dist/development/chunk-QUQL4437.mjs:
+react-router/dist/development/chunk-62JRHF6Z.mjs:
 react-router/dist/development/index.mjs:
   (**
-   * react-router v7.16.0
+   * react-router v7.18.2
    *
    * Copyright (c) Remix Software Inc.
    *
