@@ -6,11 +6,20 @@
   var __getOwnPropNames = Object.getOwnPropertyNames;
   var __getProtoOf = Object.getPrototypeOf;
   var __hasOwnProp = Object.prototype.hasOwnProperty;
-  var __esm = (fn, res) => function __init() {
-    return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+  var __esm = (fn, res, err) => function __init() {
+    if (err) throw err[0];
+    try {
+      return fn && (res = (0, fn[__getOwnPropNames(fn)[0]])(fn = 0)), res;
+    } catch (e) {
+      throw err = [e], e;
+    }
   };
   var __commonJS = (cb, mod) => function __require() {
-    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    try {
+      return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+    } catch (e) {
+      throw mod = 0, e;
+    }
   };
   var __copyProps = (to, from, except, desc) => {
     if (from && typeof from === "object" || typeof from === "function") {
@@ -328,19 +337,19 @@
           invokeCallback = 0;
           childKey = "" === nameSoFar ? "." : nameSoFar + ":";
           if (isArrayImpl(children))
-            for (var i = 0; i < children.length; i++)
-              nameSoFar = children[i], type = childKey + getElementKey(nameSoFar, i), invokeCallback += mapIntoArray(
+            for (var i2 = 0; i2 < children.length; i2++)
+              nameSoFar = children[i2], type = childKey + getElementKey(nameSoFar, i2), invokeCallback += mapIntoArray(
                 nameSoFar,
                 array,
                 escapedPrefix,
                 type,
                 callback
               );
-          else if (i = getIteratorFn(children), "function" === typeof i)
-            for (i === children.entries && (didWarnAboutMaps || console.warn(
+          else if (i2 = getIteratorFn(children), "function" === typeof i2)
+            for (i2 === children.entries && (didWarnAboutMaps || console.warn(
               "Using Maps as children is not supported. Use an array of keyed ReactElements instead."
-            ), didWarnAboutMaps = true), children = i.call(children), i = 0; !(nameSoFar = children.next()).done; )
-              nameSoFar = nameSoFar.value, type = childKey + getElementKey(nameSoFar, i++), invokeCallback += mapIntoArray(
+            ), didWarnAboutMaps = true), children = i2.call(children), i2 = 0; !(nameSoFar = children.next()).done; )
+              nameSoFar = nameSoFar.value, type = childKey + getElementKey(nameSoFar, i2++), invokeCallback += mapIntoArray(
                 nameSoFar,
                 array,
                 escapedPrefix,
@@ -473,17 +482,17 @@
         function flushActQueue(queue) {
           if (!isFlushing) {
             isFlushing = true;
-            var i = 0;
+            var i2 = 0;
             try {
-              for (; i < queue.length; i++) {
-                var callback = queue[i];
+              for (; i2 < queue.length; i2++) {
+                var callback = queue[i2];
                 do {
                   ReactSharedInternals.didUsePromise = false;
                   var continuation = callback(false);
                   if (null !== continuation) {
                     if (ReactSharedInternals.didUsePromise) {
-                      queue[i] = callback;
-                      queue.splice(0, i);
+                      queue[i2] = callback;
+                      queue.splice(0, i2);
                       return;
                     }
                     callback = continuation;
@@ -492,7 +501,7 @@
               }
               queue.length = 0;
             } catch (error) {
-              queue.splice(0, i + 1), ReactSharedInternals.thrownErrors.push(error);
+              queue.splice(0, i2 + 1), ReactSharedInternals.thrownErrors.push(error);
             } finally {
               isFlushing = false;
             }
@@ -752,8 +761,8 @@
           if (1 === propName) props.children = children;
           else if (1 < propName) {
             JSCompiler_inline_result = Array(propName);
-            for (var i = 0; i < propName; i++)
-              JSCompiler_inline_result[i] = arguments[i + 2];
+            for (var i2 = 0; i2 < propName; i2++)
+              JSCompiler_inline_result[i2] = arguments[i2 + 2];
             props.children = JSCompiler_inline_result;
           }
           props = ReactElement(
@@ -787,35 +796,35 @@
           return defaultValue;
         };
         exports.createElement = function(type, config, children) {
-          for (var i = 2; i < arguments.length; i++)
-            validateChildKeys(arguments[i]);
-          i = {};
+          for (var i2 = 2; i2 < arguments.length; i2++)
+            validateChildKeys(arguments[i2]);
+          i2 = {};
           var key = null;
           if (null != config)
             for (propName in didWarnAboutOldJSXRuntime || !("__self" in config) || "key" in config || (didWarnAboutOldJSXRuntime = true, console.warn(
               "Your app (or one of its dependencies) is using an outdated JSX transform. Update to the modern JSX transform for faster performance: https://react.dev/link/new-jsx-transform"
             )), hasValidKey(config) && (checkKeyStringCoercion(config.key), key = "" + config.key), config)
-              hasOwnProperty.call(config, propName) && "key" !== propName && "__self" !== propName && "__source" !== propName && (i[propName] = config[propName]);
+              hasOwnProperty.call(config, propName) && "key" !== propName && "__self" !== propName && "__source" !== propName && (i2[propName] = config[propName]);
           var childrenLength = arguments.length - 2;
-          if (1 === childrenLength) i.children = children;
+          if (1 === childrenLength) i2.children = children;
           else if (1 < childrenLength) {
             for (var childArray = Array(childrenLength), _i = 0; _i < childrenLength; _i++)
               childArray[_i] = arguments[_i + 2];
             Object.freeze && Object.freeze(childArray);
-            i.children = childArray;
+            i2.children = childArray;
           }
           if (type && type.defaultProps)
             for (propName in childrenLength = type.defaultProps, childrenLength)
-              void 0 === i[propName] && (i[propName] = childrenLength[propName]);
+              void 0 === i2[propName] && (i2[propName] = childrenLength[propName]);
           key && defineKeyPropWarningGetter(
-            i,
+            i2,
             "function" === typeof type ? type.displayName || type.name || "Unknown" : type
           );
           var propName = 1e4 > ReactSharedInternals.recentlyCreatedOwnerStacks++;
           return ReactElement(
             type,
             key,
-            i,
+            i2,
             getOwner(),
             propName ? Error("react-stack-top-frame") : unknownOwnerDebugStack,
             propName ? createTask(getTaskName(type)) : unknownOwnerDebugTask
@@ -1577,8 +1586,8 @@
           if (oldPath.length !== newPath.length)
             console.warn("copyWithRename() expects paths of the same length");
           else {
-            for (var i = 0; i < newPath.length - 1; i++)
-              if (oldPath[i] !== newPath[i]) {
+            for (var i2 = 0; i2 < newPath.length - 1; i2++)
+              if (oldPath[i2] !== newPath[i2]) {
                 console.warn(
                   "copyWithRename() expects paths to be the same except for the deepest key"
                 );
@@ -1882,8 +1891,8 @@
             case 29:
               type = fiber._debugInfo;
               if (null != type) {
-                for (var i = type.length - 1; 0 <= i; i--)
-                  if ("string" === typeof type[i].name) return type[i].name;
+                for (var i2 = type.length - 1; 0 <= i2; i2--)
+                  if ("string" === typeof type[i2].name) return type[i2].name;
               }
               if (null !== fiber.return)
                 return getComponentNameFromFiber(fiber.return);
@@ -2179,8 +2188,8 @@
               info += describeFiber(workInProgress2, previous);
               var debugInfo = workInProgress2._debugInfo;
               if (debugInfo)
-                for (var i = debugInfo.length - 1; 0 <= i; i--) {
-                  var entry = debugInfo[i];
+                for (var i2 = debugInfo.length - 1; 0 <= i2; i2--) {
+                  var entry = debugInfo[i2];
                   if ("string" === typeof entry.name) {
                     var JSCompiler_temp_const = info;
                     a: {
@@ -2473,7 +2482,7 @@
           return lane;
         }
         function createLaneMap(initial) {
-          for (var laneMap = [], i = 0; 31 > i; i++) laneMap.push(initial);
+          for (var laneMap = [], i2 = 0; 31 > i2; i2++) laneMap.push(initial);
           return laneMap;
         }
         function markRootUpdated$1(root2, updateLane) {
@@ -2921,20 +2930,20 @@
           node = node.options;
           if (multiple) {
             multiple = {};
-            for (var i = 0; i < propValue.length; i++)
-              multiple["$" + propValue[i]] = true;
+            for (var i2 = 0; i2 < propValue.length; i2++)
+              multiple["$" + propValue[i2]] = true;
             for (propValue = 0; propValue < node.length; propValue++)
-              i = multiple.hasOwnProperty("$" + node[propValue].value), node[propValue].selected !== i && (node[propValue].selected = i), i && setDefaultSelected && (node[propValue].defaultSelected = true);
+              i2 = multiple.hasOwnProperty("$" + node[propValue].value), node[propValue].selected !== i2 && (node[propValue].selected = i2), i2 && setDefaultSelected && (node[propValue].defaultSelected = true);
           } else {
             propValue = "" + getToStringValue(propValue);
             multiple = null;
-            for (i = 0; i < node.length; i++) {
-              if (node[i].value === propValue) {
-                node[i].selected = true;
-                setDefaultSelected && (node[i].defaultSelected = true);
+            for (i2 = 0; i2 < node.length; i2++) {
+              if (node[i2].value === propValue) {
+                node[i2].selected = true;
+                setDefaultSelected && (node[i2].defaultSelected = true);
                 return;
               }
-              null !== multiple || node[i].disabled || (multiple = node[i]);
+              null !== multiple || node[i2].disabled || (multiple = node[i2]);
             }
             null !== multiple && (multiple.selected = true);
           }
@@ -3196,21 +3205,21 @@
           skipToNode = "";
           var debugInfo = node.fiber._debugInfo;
           if (debugInfo)
-            for (var i = 0; i < debugInfo.length; i++) {
-              var serverComponentName = debugInfo[i].name;
+            for (var i2 = 0; i2 < debugInfo.length; i2++) {
+              var serverComponentName = debugInfo[i2].name;
               "string" === typeof serverComponentName && (skipToNode += indentation(indent) + "<" + serverComponentName + ">\n", indent++);
             }
           debugInfo = "";
-          i = node.fiber.pendingProps;
+          i2 = node.fiber.pendingProps;
           if (6 === node.fiber.tag)
-            debugInfo = describeTextDiff(i, node.serverProps, indent), indent++;
+            debugInfo = describeTextDiff(i2, node.serverProps, indent), indent++;
           else if (serverComponentName = describeFiberType(node.fiber), null !== serverComponentName)
             if (void 0 === node.serverProps) {
               debugInfo = indent;
               var maxLength = 120 - 2 * debugInfo - serverComponentName.length - 2, content = "";
-              for (propName in i)
-                if (i.hasOwnProperty(propName) && "children" !== propName) {
-                  var propValue = describePropValue(i[propName], 15);
+              for (propName in i2)
+                if (i2.hasOwnProperty(propName) && "children" !== propName) {
+                  var propValue = describePropValue(i2[propName], 15);
                   maxLength -= propName.length + propValue.length + 2;
                   if (0 > maxLength) {
                     content += " ...";
@@ -3223,25 +3232,25 @@
             } else
               null === node.serverProps ? (debugInfo = describeExpandedElement(
                 serverComponentName,
-                i,
+                i2,
                 added(indent)
               ), indent++) : "string" === typeof node.serverProps ? console.error(
                 "Should not have matched a non HostText fiber to a Text node. This is a bug in React."
               ) : (debugInfo = describeElementDiff(
                 serverComponentName,
-                i,
+                i2,
                 node.serverProps,
                 indent
               ), indent++);
           var propName = "";
-          i = node.fiber.child;
-          for (serverComponentName = 0; i && serverComponentName < node.children.length; )
-            maxLength = node.children[serverComponentName], maxLength.fiber === i ? (propName += describeNode(maxLength, indent), serverComponentName++) : propName += describeSiblingFiber(i, indent), i = i.sibling;
-          i && 0 < node.children.length && (propName += indentation(indent) + "...\n");
-          i = node.serverTail;
+          i2 = node.fiber.child;
+          for (serverComponentName = 0; i2 && serverComponentName < node.children.length; )
+            maxLength = node.children[serverComponentName], maxLength.fiber === i2 ? (propName += describeNode(maxLength, indent), serverComponentName++) : propName += describeSiblingFiber(i2, indent), i2 = i2.sibling;
+          i2 && 0 < node.children.length && (propName += indentation(indent) + "...\n");
+          i2 = node.serverTail;
           null === node.serverProps && indent--;
-          for (node = 0; node < i.length; node++)
-            serverComponentName = i[node], propName = "string" === typeof serverComponentName ? propName + (removed(indent) + describeTextNode(serverComponentName, 120 - 2 * indent) + "\n") : propName + describeExpandedElement(
+          for (node = 0; node < i2.length; node++)
+            serverComponentName = i2[node], propName = "string" === typeof serverComponentName ? propName + (removed(indent) + describeTextNode(serverComponentName, 120 - 2 * indent) + "\n") : propName + describeExpandedElement(
               serverComponentName.type,
               serverComponentName.props,
               removed(indent)
@@ -3520,8 +3529,8 @@
               if (prevStyles) {
                 for (var key in prevStyles)
                   if (prevStyles.hasOwnProperty(key) && !styles.hasOwnProperty(key))
-                    for (var longhands = shorthandToLonghand[key] || [key], i = 0; i < longhands.length; i++)
-                      expandedUpdates[longhands[i]] = key;
+                    for (var longhands = shorthandToLonghand[key] || [key], i2 = 0; i2 < longhands.length; i2++)
+                      expandedUpdates[longhands[i2]] = key;
               }
               for (var _key in styles)
                 if (styles.hasOwnProperty(_key) && (!prevStyles || prevStyles[_key] !== styles[_key]))
@@ -3533,12 +3542,12 @@
                   _key[key[longhands]] = key$jscomp$0;
               key$jscomp$0 = {};
               for (var _key2 in expandedUpdates)
-                if (key = expandedUpdates[_key2], (longhands = _key[_key2]) && key !== longhands && (i = key + "," + longhands, !key$jscomp$0[i])) {
-                  key$jscomp$0[i] = true;
-                  i = console;
+                if (key = expandedUpdates[_key2], (longhands = _key[_key2]) && key !== longhands && (i2 = key + "," + longhands, !key$jscomp$0[i2])) {
+                  key$jscomp$0[i2] = true;
+                  i2 = console;
                   var value = styles[key];
-                  i.error.call(
-                    i,
+                  i2.error.call(
+                    i2,
                     "%s a style property during rerender (%s) when a conflicting property is set (%s) can lead to styling bugs. To avoid this, don't mix shorthand and non-shorthand properties for the same value; instead, replace the shorthand with separate values.",
                     null == value || "boolean" === typeof value || "" === value ? "Removing" : "Updating",
                     key,
@@ -4211,8 +4220,8 @@
           registerTwoPhaseEvent(reactName, [domEventName]);
         }
         function getArrayKind(array) {
-          for (var kind = EMPTY_ARRAY, i = 0; i < array.length; i++) {
-            var value = array[i];
+          for (var kind = EMPTY_ARRAY, i2 = 0; i2 < array.length; i2++) {
+            var value = array[i2];
             if ("object" === typeof value && null !== value)
               if (isArrayImpl(value) && 2 === value.length && "string" === typeof value[0]) {
                 if (kind !== EMPTY_ARRAY && kind !== ENTRIES_ARRAY)
@@ -4490,8 +4499,8 @@
           if (supportsUserTiming) {
             var name = getComponentNameFromFiber(fiber);
             if (null !== name) {
-              for (var debugTask = null, properties = [], i = 0; i < errors.length; i++) {
-                var capturedValue = errors[i];
+              for (var debugTask = null, properties = [], i2 = 0; i2 < errors.length; i2++) {
+                var capturedValue = errors[i2];
                 null == debugTask && null !== capturedValue.source && (debugTask = capturedValue.source._debugTask);
                 capturedValue = capturedValue.value;
                 properties.push([
@@ -4526,8 +4535,8 @@
               var name = getComponentNameFromFiber(fiber);
               if (null !== name) {
                 selfTime = [];
-                for (var i = 0; i < errors.length; i++) {
-                  var error = errors[i].value;
+                for (var i2 = 0; i2 < errors.length; i2++) {
+                  var error = errors[i2].value;
                   selfTime.push([
                     "Error",
                     "object" === typeof error && null !== error && "string" === typeof error.message ? String(error.message) : String(error)
@@ -4643,8 +4652,8 @@
         function logRecoveredRenderPhase(startTime, endTime, lanes, recoverableErrors, hydrationFailed, debugTask) {
           if (supportsUserTiming && !(endTime <= startTime)) {
             lanes = [];
-            for (var i = 0; i < recoverableErrors.length; i++) {
-              var error = recoverableErrors[i].value;
+            for (var i2 = 0; i2 < recoverableErrors.length; i2++) {
+              var error = recoverableErrors[i2].value;
               lanes.push([
                 "Recoverable Error",
                 "object" === typeof error && null !== error && "string" === typeof error.message ? String(error.message) : String(error)
@@ -4710,8 +4719,8 @@
         }
         function logCommitErrored(startTime, endTime, errors, passive, debugTask) {
           if (supportsUserTiming && !(endTime <= startTime)) {
-            for (var properties = [], i = 0; i < errors.length; i++) {
-              var error = errors[i].value;
+            for (var properties = [], i2 = 0; i2 < errors.length; i2++) {
+              var error = errors[i2].value;
               properties.push([
                 "Error",
                 "object" === typeof error && null !== error && "string" === typeof error.message ? String(error.message) : String(error)
@@ -4756,15 +4765,15 @@
           ));
         }
         function finishQueueingConcurrentUpdates() {
-          for (var endIndex = concurrentQueuesIndex, i = concurrentlyUpdatedLanes = concurrentQueuesIndex = 0; i < endIndex; ) {
-            var fiber = concurrentQueues[i];
-            concurrentQueues[i++] = null;
-            var queue = concurrentQueues[i];
-            concurrentQueues[i++] = null;
-            var update = concurrentQueues[i];
-            concurrentQueues[i++] = null;
-            var lane = concurrentQueues[i];
-            concurrentQueues[i++] = null;
+          for (var endIndex = concurrentQueuesIndex, i2 = concurrentlyUpdatedLanes = concurrentQueuesIndex = 0; i2 < endIndex; ) {
+            var fiber = concurrentQueues[i2];
+            concurrentQueues[i2++] = null;
+            var queue = concurrentQueues[i2];
+            concurrentQueues[i2++] = null;
+            var update = concurrentQueues[i2];
+            concurrentQueues[i2++] = null;
+            var lane = concurrentQueues[i2];
+            concurrentQueues[i2++] = null;
             if (null !== queue && null !== update) {
               var pending = queue.pending;
               null === pending ? update.next = update : (update.next = pending.next, pending.next = update);
@@ -5398,8 +5407,8 @@
               a: for (; null !== list; ) {
                 var dependency = list;
                 list = fiber;
-                for (var i = 0; i < contexts.length; i++)
-                  if (dependency.context === contexts[i]) {
+                for (var i2 = 0; i2 < contexts.length; i2++)
+                  if (dependency.context === contexts[i2]) {
                     list.lanes |= renderLanes2;
                     dependency = list.alternate;
                     null !== dependency && (dependency.lanes |= renderLanes2);
@@ -5687,7 +5696,7 @@
             currentEntangledListeners = null;
             currentEntangledLane = 0;
             currentEntangledActionThenable = null;
-            for (var i = 0; i < listeners.length; i++) (0, listeners[i])();
+            for (var i2 = 0; i2 < listeners.length; i2++) (0, listeners[i2])();
           }
         }
         function chainThenableValue(thenable, result) {
@@ -5703,7 +5712,7 @@
             function() {
               thenableWithOverride.status = "fulfilled";
               thenableWithOverride.value = result;
-              for (var i = 0; i < listeners.length; i++) (0, listeners[i])(result);
+              for (var i2 = 0; i2 < listeners.length; i2++) (0, listeners[i2])(result);
             },
             function(error) {
               thenableWithOverride.status = "rejected";
@@ -5830,17 +5839,17 @@
         function getCurrentDebugTask() {
           var debugInfo = currentDebugInfo;
           if (null != debugInfo) {
-            for (var i = debugInfo.length - 1; 0 <= i; i--)
-              if (null != debugInfo[i].name) {
-                var debugTask = debugInfo[i].debugTask;
+            for (var i2 = debugInfo.length - 1; 0 <= i2; i2--)
+              if (null != debugInfo[i2].name) {
+                var debugTask = debugInfo[i2].debugTask;
                 if (null != debugTask) return debugTask;
               }
           }
           return null;
         }
         function validateFragmentProps(element, fiber, returnFiber) {
-          for (var keys = Object.keys(element.props), i = 0; i < keys.length; i++) {
-            var key = keys[i];
+          for (var keys = Object.keys(element.props), i2 = 0; i2 < keys.length; i2++) {
+            var key = keys[i2];
             if ("children" !== key && "key" !== key) {
               null === fiber && (fiber = createFiberFromElement(element, returnFiber.mode, 0), fiber._debugInfo = currentDebugInfo, fiber.return = returnFiber);
               runWithFiberInDEV(
@@ -6529,10 +6538,10 @@
               fiber._debugOwner = returnFiber._debugOwner;
               fiber._debugTask = returnFiber._debugTask;
               if (null != debugInfo) {
-                for (var i = debugInfo.length - 1; 0 <= i; i--)
-                  if ("string" === typeof debugInfo[i].stack) {
-                    fiber._debugOwner = debugInfo[i];
-                    fiber._debugTask = debugInfo[i].debugTask;
+                for (var i2 = debugInfo.length - 1; 0 <= i2; i2--)
+                  if ("string" === typeof debugInfo[i2].stack) {
+                    fiber._debugOwner = debugInfo[i2];
+                    fiber._debugTask = debugInfo[i2].debugTask;
                     break;
                   }
               }
@@ -6862,9 +6871,9 @@
           if (null !== hookTypesDev && (hookTypesUpdateIndexDev++, hookTypesDev[hookTypesUpdateIndexDev] !== hookName)) {
             var componentName2 = getComponentNameFromFiber(currentlyRenderingFiber);
             if (!didWarnAboutMismatchedHooksForComponent.has(componentName2) && (didWarnAboutMismatchedHooksForComponent.add(componentName2), null !== hookTypesDev)) {
-              for (var table = "", i = 0; i <= hookTypesUpdateIndexDev; i++) {
-                var oldHookName = hookTypesDev[i], newHookName = i === hookTypesUpdateIndexDev ? hookName : oldHookName;
-                for (oldHookName = i + 1 + ". " + oldHookName; 30 > oldHookName.length; )
+              for (var table = "", i2 = 0; i2 <= hookTypesUpdateIndexDev; i2++) {
+                var oldHookName = hookTypesDev[i2], newHookName = i2 === hookTypesUpdateIndexDev ? hookName : oldHookName;
+                for (oldHookName = i2 + 1 + ". " + oldHookName; 30 > oldHookName.length; )
                   oldHookName += " ";
                 oldHookName += newHookName + "\n";
                 table += oldHookName;
@@ -6909,8 +6918,8 @@
             "[" + prevDeps.join(", ") + "]",
             "[" + nextDeps.join(", ") + "]"
           );
-          for (var i = 0; i < prevDeps.length && i < nextDeps.length; i++)
-            if (!objectIs(nextDeps[i], prevDeps[i])) return false;
+          for (var i2 = 0; i2 < prevDeps.length && i2 < nextDeps.length; i2++)
+            if (!objectIs(nextDeps[i2], prevDeps[i2])) return false;
           return true;
         }
         function renderWithHooks(current2, workInProgress2, Component4, props, secondArg, nextRenderLanes) {
@@ -7534,7 +7543,7 @@
         }
         function notifyActionListeners(actionNode) {
           actionNode = actionNode.listeners;
-          for (var i = 0; i < actionNode.length; i++) (0, actionNode[i])();
+          for (var i2 = 0; i2 < actionNode.length; i2++) (0, actionNode[i2])();
         }
         function actionStateReducer(oldState, newState) {
           return newState;
@@ -11627,8 +11636,8 @@
         function recursivelyTraverseMutationEffects(root$jscomp$0, parentFiber) {
           var deletions = parentFiber.deletions;
           if (null !== deletions)
-            for (var i = 0; i < deletions.length; i++) {
-              var root2 = root$jscomp$0, returnFiber = parentFiber, deletedFiber = deletions[i], prevEffectStart = pushComponentEffectStart(), parent = returnFiber;
+            for (var i2 = 0; i2 < deletions.length; i2++) {
+              var root2 = root$jscomp$0, returnFiber = parentFiber, deletedFiber = deletions[i2], prevEffectStart = pushComponentEffectStart(), parent = returnFiber;
               a: for (; null !== parent; ) {
                 switch (parent.tag) {
                   case 27:
@@ -11740,9 +11749,9 @@
                               existingHiddenCallbacks
                             ).get(flags + (current2.href || ""));
                             if (maybeNodes) {
-                              for (var i = 0; i < maybeNodes.length; i++)
-                                if (currentResource = maybeNodes[i], currentResource.getAttribute("href") === (null == current2.href || "" === current2.href ? null : current2.href) && currentResource.getAttribute("rel") === (null == current2.rel ? null : current2.rel) && currentResource.getAttribute("title") === (null == current2.title ? null : current2.title) && currentResource.getAttribute("crossorigin") === (null == current2.crossOrigin ? null : current2.crossOrigin)) {
-                                  maybeNodes.splice(i, 1);
+                              for (var i2 = 0; i2 < maybeNodes.length; i2++)
+                                if (currentResource = maybeNodes[i2], currentResource.getAttribute("href") === (null == current2.href || "" === current2.href ? null : current2.href) && currentResource.getAttribute("rel") === (null == current2.rel ? null : current2.rel) && currentResource.getAttribute("title") === (null == current2.title ? null : current2.title) && currentResource.getAttribute("crossorigin") === (null == current2.crossOrigin ? null : current2.crossOrigin)) {
+                                  maybeNodes.splice(i2, 1);
                                   break b;
                                 }
                             }
@@ -11758,12 +11767,12 @@
                               "content",
                               existingHiddenCallbacks
                             ).get(flags + (current2.content || ""))) {
-                              for (i = 0; i < maybeNodes.length; i++)
-                                if (currentResource = maybeNodes[i], checkAttributeStringCoercion(
+                              for (i2 = 0; i2 < maybeNodes.length; i2++)
+                                if (currentResource = maybeNodes[i2], checkAttributeStringCoercion(
                                   current2.content,
                                   "content"
                                 ), currentResource.getAttribute("content") === (null == current2.content ? null : "" + current2.content) && currentResource.getAttribute("name") === (null == current2.name ? null : current2.name) && currentResource.getAttribute("property") === (null == current2.property ? null : current2.property) && currentResource.getAttribute("http-equiv") === (null == current2.httpEquiv ? null : current2.httpEquiv) && currentResource.getAttribute("charset") === (null == current2.charSet ? null : current2.charSet)) {
-                                  maybeNodes.splice(i, 1);
+                                  maybeNodes.splice(i2, 1);
                                   break b;
                                 }
                             }
@@ -11980,10 +11989,10 @@
                     if (null === current2) {
                       wasHidden = root2;
                       try {
-                        i = wasHidden.stateNode, existingHiddenCallbacks ? runWithFiberInDEV(
+                        i2 = wasHidden.stateNode, existingHiddenCallbacks ? runWithFiberInDEV(
                           wasHidden,
                           hideDehydratedBoundary,
-                          i
+                          i2
                         ) : runWithFiberInDEV(
                           wasHidden,
                           unhideDehydratedBoundary,
@@ -12737,8 +12746,8 @@
           var deletions = parentFiber.deletions;
           if (0 !== (parentFiber.flags & 16)) {
             if (null !== deletions)
-              for (var i = 0; i < deletions.length; i++) {
-                var childToDelete = deletions[i], prevEffectStart = pushComponentEffectStart();
+              for (var i2 = 0; i2 < deletions.length; i2++) {
+                var childToDelete = deletions[i2], prevEffectStart = pushComponentEffectStart();
                 nextEffect = childToDelete;
                 commitPassiveUnmountEffectsInsideOfDeletedTree_begin(
                   childToDelete,
@@ -12809,8 +12818,8 @@
           var deletions = parentFiber.deletions;
           if (0 !== (parentFiber.flags & 16)) {
             if (null !== deletions)
-              for (var i = 0; i < deletions.length; i++) {
-                var childToDelete = deletions[i], prevEffectStart = pushComponentEffectStart();
+              for (var i2 = 0; i2 < deletions.length; i2++) {
+                var childToDelete = deletions[i2], prevEffectStart = pushComponentEffectStart();
                 nextEffect = childToDelete;
                 commitPassiveUnmountEffectsInsideOfDeletedTree_begin(
                   childToDelete,
@@ -13312,8 +13321,8 @@
           for (var node = finishedWork; ; ) {
             var tag = node.tag;
             if ((0 === tag || 11 === tag || 15 === tag) && node.flags & 16384 && (tag = node.updateQueue, null !== tag && (tag = tag.stores, null !== tag)))
-              for (var i = 0; i < tag.length; i++) {
-                var check = tag[i], getSnapshot = check.getSnapshot;
+              for (var i2 = 0; i2 < tag.length; i2++) {
+                var check = tag[i2], getSnapshot = check.getSnapshot;
                 check = check.value;
                 try {
                   if (!objectIs(getSnapshot(), check)) return false;
@@ -14905,8 +14914,8 @@
         }
         function processDispatchQueue(dispatchQueue, eventSystemFlags) {
           eventSystemFlags = 0 !== (eventSystemFlags & 4);
-          for (var i = 0; i < dispatchQueue.length; i++) {
-            var _dispatchQueue$i = dispatchQueue[i];
+          for (var i2 = 0; i2 < dispatchQueue.length; i2++) {
+            var _dispatchQueue$i = dispatchQueue[i2];
             a: {
               var previousInstance = void 0, event = _dispatchQueue$i.event;
               _dispatchQueue$i = _dispatchQueue$i.listeners;
@@ -16355,8 +16364,8 @@
         function getStylesObjectFromElement(domElement) {
           var serverValueInObjectForm = {};
           domElement = domElement.style;
-          for (var i = 0; i < domElement.length; i++) {
-            var styleName = domElement[i];
+          for (var i2 = 0; i2 < domElement.length; i2++) {
+            var styleName = domElement[i2];
             serverValueInObjectForm[styleName] = domElement.getPropertyValue(styleName);
           }
           return serverValueInObjectForm;
@@ -16492,8 +16501,8 @@
           warnForPropDifference(propKey, domElement, value, serverDifferences);
         }
         function diffHydratedProperties(domElement, tag, props, hostContext) {
-          for (var serverDifferences = {}, extraAttributes = /* @__PURE__ */ new Set(), attributes = domElement.attributes, i = 0; i < attributes.length; i++)
-            switch (attributes[i].name.toLowerCase()) {
+          for (var serverDifferences = {}, extraAttributes = /* @__PURE__ */ new Set(), attributes = domElement.attributes, i2 = 0; i2 < attributes.length; i2++)
+            switch (attributes[i2].name.toLowerCase()) {
               case "value":
                 break;
               case "checked":
@@ -16501,7 +16510,7 @@
               case "selected":
                 break;
               default:
-                extraAttributes.add(attributes[i].name);
+                extraAttributes.add(attributes[i2].name);
             }
           if (isCustomElement(tag))
             for (var propKey in props) {
@@ -16804,11 +16813,11 @@
                     case "capture":
                     case "download":
                       a: {
-                        i = domElement;
+                        i2 = domElement;
                         var attributeName = attributes = value, serverDifferences$jscomp$0 = serverDifferences;
                         extraAttributes.delete(attributeName);
-                        i = i.getAttribute(attributeName);
-                        if (null === i)
+                        i2 = i2.getAttribute(attributeName);
+                        if (null === i2)
                           switch (typeof propKey) {
                             case "undefined":
                             case "function":
@@ -16823,15 +16832,15 @@
                             case "symbol":
                               break;
                             case "boolean":
-                              if (true === propKey && "" === i) break a;
+                              if (true === propKey && "" === i2) break a;
                               break;
                             default:
-                              if (checkAttributeStringCoercion(propKey, attributes), i === "" + propKey)
+                              if (checkAttributeStringCoercion(propKey, attributes), i2 === "" + propKey)
                                 break a;
                           }
                         warnForPropDifference(
                           attributes,
-                          i,
+                          i2,
                           propKey,
                           serverDifferences$jscomp$0
                         );
@@ -16842,12 +16851,12 @@
                     case "size":
                     case "span":
                       a: {
-                        i = domElement;
+                        i2 = domElement;
                         attributeName = attributes = value;
                         serverDifferences$jscomp$0 = serverDifferences;
                         extraAttributes.delete(attributeName);
-                        i = i.getAttribute(attributeName);
-                        if (null === i)
+                        i2 = i2.getAttribute(attributeName);
+                        if (null === i2)
                           switch (typeof propKey) {
                             case "undefined":
                             case "function":
@@ -16864,12 +16873,12 @@
                             case "boolean":
                               break;
                             default:
-                              if (!(isNaN(propKey) || 1 > propKey) && (checkAttributeStringCoercion(propKey, attributes), i === "" + propKey))
+                              if (!(isNaN(propKey) || 1 > propKey) && (checkAttributeStringCoercion(propKey, attributes), i2 === "" + propKey))
                                 break a;
                           }
                         warnForPropDifference(
                           attributes,
-                          i,
+                          i2,
                           propKey,
                           serverDifferences$jscomp$0
                         );
@@ -17011,21 +17020,21 @@
                       continue;
                     default:
                       if (!(2 < value.length) || "o" !== value[0] && "O" !== value[0] || "n" !== value[1] && "N" !== value[1]) {
-                        i = getAttributeAlias(value);
+                        i2 = getAttributeAlias(value);
                         attributes = false;
-                        hostContext.context === HostContextNamespaceNone && "svg" !== tag && "math" !== tag ? extraAttributes.delete(i.toLowerCase()) : (attributeName = value.toLowerCase(), attributeName = possibleStandardNames.hasOwnProperty(
+                        hostContext.context === HostContextNamespaceNone && "svg" !== tag && "math" !== tag ? extraAttributes.delete(i2.toLowerCase()) : (attributeName = value.toLowerCase(), attributeName = possibleStandardNames.hasOwnProperty(
                           attributeName
-                        ) ? possibleStandardNames[attributeName] || null : null, null !== attributeName && attributeName !== value && (attributes = true, extraAttributes.delete(attributeName)), extraAttributes.delete(i));
-                        a: if (attributeName = domElement, serverDifferences$jscomp$0 = i, i = propKey, isAttributeNameSafe(serverDifferences$jscomp$0))
+                        ) ? possibleStandardNames[attributeName] || null : null, null !== attributeName && attributeName !== value && (attributes = true, extraAttributes.delete(attributeName)), extraAttributes.delete(i2));
+                        a: if (attributeName = domElement, serverDifferences$jscomp$0 = i2, i2 = propKey, isAttributeNameSafe(serverDifferences$jscomp$0))
                           if (attributeName.hasAttribute(serverDifferences$jscomp$0))
                             attributeName = attributeName.getAttribute(
                               serverDifferences$jscomp$0
                             ), checkAttributeStringCoercion(
-                              i,
+                              i2,
                               serverDifferences$jscomp$0
-                            ), i = attributeName === "" + i ? i : attributeName;
+                            ), i2 = attributeName === "" + i2 ? i2 : attributeName;
                           else {
-                            switch (typeof i) {
+                            switch (typeof i2) {
                               case "function":
                               case "symbol":
                                 break a;
@@ -17033,12 +17042,12 @@
                                 if (attributeName = serverDifferences$jscomp$0.toLowerCase().slice(0, 5), "data-" !== attributeName && "aria-" !== attributeName)
                                   break a;
                             }
-                            i = void 0 === i ? void 0 : null;
+                            i2 = void 0 === i2 ? void 0 : null;
                           }
-                        else i = void 0;
+                        else i2 = void 0;
                         attributes || warnForPropDifference(
                           value,
-                          i,
+                          i2,
                           propKey,
                           serverDifferences
                         );
@@ -17076,18 +17085,18 @@
         }
         function estimateBandwidth() {
           if ("function" === typeof performance.getEntriesByType) {
-            for (var count = 0, bits = 0, resourceEntries = performance.getEntriesByType("resource"), i = 0; i < resourceEntries.length; i++) {
-              var entry = resourceEntries[i], transferSize = entry.transferSize, initiatorType = entry.initiatorType, duration = entry.duration;
+            for (var count = 0, bits = 0, resourceEntries = performance.getEntriesByType("resource"), i2 = 0; i2 < resourceEntries.length; i2++) {
+              var entry = resourceEntries[i2], transferSize = entry.transferSize, initiatorType = entry.initiatorType, duration = entry.duration;
               if (transferSize && duration && isLikelyStaticResource(initiatorType)) {
                 initiatorType = 0;
                 duration = entry.responseEnd;
-                for (i += 1; i < resourceEntries.length; i++) {
-                  var overlapEntry = resourceEntries[i], overlapStartTime = overlapEntry.startTime;
+                for (i2 += 1; i2 < resourceEntries.length; i2++) {
+                  var overlapEntry = resourceEntries[i2], overlapStartTime = overlapEntry.startTime;
                   if (overlapStartTime > duration) break;
                   var overlapTransferSize = overlapEntry.transferSize, overlapInitiatorType = overlapEntry.initiatorType;
                   overlapTransferSize && isLikelyStaticResource(overlapInitiatorType) && (overlapEntry = overlapEntry.responseEnd, initiatorType += overlapTransferSize * (overlapEntry < duration ? 1 : (duration - overlapStartTime) / (overlapEntry - overlapStartTime)));
                 }
-                --i;
+                --i2;
                 bits += 8 * (transferSize + initiatorType) / (entry.duration / 1e3);
                 count++;
                 if (10 < count) break;
@@ -17386,8 +17395,8 @@
         }
         function describeHydratableInstanceForDevWarnings(instance) {
           if (1 === instance.nodeType) {
-            for (var JSCompiler_temp_const = instance.nodeName.toLowerCase(), serverDifferences = {}, attributes = instance.attributes, i = 0; i < attributes.length; i++) {
-              var attr = attributes[i];
+            for (var JSCompiler_temp_const = instance.nodeName.toLowerCase(), serverDifferences = {}, attributes = instance.attributes, i2 = 0; i2 < attributes.length; i2++) {
+              var attr = attributes[i2];
               serverDifferences[getPropNameFromAttributeName(attr.name)] = "style" === attr.name.toLowerCase() ? getStylesObjectFromElement(instance) : attr.value;
             }
             return { type: JSCompiler_temp_const, props: serverDifferences };
@@ -17687,8 +17696,8 @@
         function insertStylesheet(instance, precedence, root2) {
           for (var nodes = root2.querySelectorAll(
             'link[rel="stylesheet"][data-precedence],style[data-precedence]'
-          ), last = nodes.length ? nodes[nodes.length - 1] : null, prior = last, i = 0; i < nodes.length; i++) {
-            var node = nodes[i];
+          ), last = nodes.length ? nodes[nodes.length - 1] : null, prior = last, i2 = 0; i2 < nodes.length; i2++) {
+            var node = nodes[i2];
             if (node.dataset.precedence === precedence) prior = node;
             else if (prior !== last) break;
           }
@@ -17899,8 +17908,8 @@
               precedencesByRoot.set(root2, precedences);
               for (var nodes = root2.querySelectorAll(
                 "link[data-precedence],style[data-precedence]"
-              ), i = 0; i < nodes.length; i++) {
-                var node = nodes[i];
+              ), i2 = 0; i2 < nodes.length; i2++) {
+                var node = nodes[i2];
                 if ("LINK" === node.nodeName || "not all" !== node.getAttribute("media"))
                   precedences.set(node.dataset.precedence, node), last = node;
               }
@@ -17908,14 +17917,14 @@
             }
             nodes = resource.instance;
             node = nodes.getAttribute("data-precedence");
-            i = precedences.get(node) || last;
-            i === last && precedences.set(LAST_PRECEDENCE, nodes);
+            i2 = precedences.get(node) || last;
+            i2 === last && precedences.set(LAST_PRECEDENCE, nodes);
             precedences.set(node, nodes);
             this.count++;
             last = onUnsuspend.bind(this);
             nodes.addEventListener("load", last);
             nodes.addEventListener("error", last);
-            i ? i.parentNode.insertBefore(nodes, i.nextSibling) : (root2 = 9 === root2.nodeType ? root2.head : root2, root2.insertBefore(nodes, root2.firstChild));
+            i2 ? i2.parentNode.insertBefore(nodes, i2.nextSibling) : (root2 = 9 === root2.nodeType ? root2.head : root2, root2.insertBefore(nodes, root2.firstChild));
             resource.state.loading |= Inserted;
           }
         }
@@ -18416,14 +18425,14 @@
             Scheduler.unstable_NormalPriority,
             function() {
               lastScheduledReplayQueue === formReplayingQueue && (lastScheduledReplayQueue = null);
-              for (var i = 0; i < formReplayingQueue.length; i += 3) {
-                var form = formReplayingQueue[i], submitterOrAction = formReplayingQueue[i + 1], formData = formReplayingQueue[i + 2];
+              for (var i2 = 0; i2 < formReplayingQueue.length; i2 += 3) {
+                var form = formReplayingQueue[i2], submitterOrAction = formReplayingQueue[i2 + 1], formData = formReplayingQueue[i2 + 2];
                 if ("function" !== typeof submitterOrAction)
                   if (null === findInstanceBlockingTarget(submitterOrAction || form))
                     continue;
                   else break;
                 var formInst = getInstanceFromNode(form);
-                null !== formInst && (formReplayingQueue.splice(i, 3), i -= 3, form = {
+                null !== formInst && (formReplayingQueue.splice(i2, 3), i2 -= 3, form = {
                   pending: true,
                   data: formData,
                   method: form.method,
@@ -18447,18 +18456,18 @@
           null !== queuedMouse && scheduleCallbackIfUnblocked(queuedMouse, unblocked);
           queuedPointers.forEach(unblock);
           queuedPointerCaptures.forEach(unblock);
-          for (var i = 0; i < queuedExplicitHydrationTargets.length; i++) {
-            var queuedTarget = queuedExplicitHydrationTargets[i];
+          for (var i2 = 0; i2 < queuedExplicitHydrationTargets.length; i2++) {
+            var queuedTarget = queuedExplicitHydrationTargets[i2];
             queuedTarget.blockedOn === unblocked && (queuedTarget.blockedOn = null);
           }
-          for (; 0 < queuedExplicitHydrationTargets.length && (i = queuedExplicitHydrationTargets[0], null === i.blockedOn); )
-            attemptExplicitHydrationTarget(i), null === i.blockedOn && queuedExplicitHydrationTargets.shift();
-          i = (unblocked.ownerDocument || unblocked).$$reactFormReplay;
-          if (null != i)
-            for (queuedTarget = 0; queuedTarget < i.length; queuedTarget += 3) {
-              var form = i[queuedTarget], submitterOrAction = i[queuedTarget + 1], formProps = form[internalPropsKey] || null;
+          for (; 0 < queuedExplicitHydrationTargets.length && (i2 = queuedExplicitHydrationTargets[0], null === i2.blockedOn); )
+            attemptExplicitHydrationTarget(i2), null === i2.blockedOn && queuedExplicitHydrationTargets.shift();
+          i2 = (unblocked.ownerDocument || unblocked).$$reactFormReplay;
+          if (null != i2)
+            for (queuedTarget = 0; queuedTarget < i2.length; queuedTarget += 3) {
+              var form = i2[queuedTarget], submitterOrAction = i2[queuedTarget + 1], formProps = form[internalPropsKey] || null;
               if ("function" === typeof submitterOrAction)
-                formProps || scheduleReplayQueueIfNeeded(i);
+                formProps || scheduleReplayQueueIfNeeded(i2);
               else if (formProps) {
                 var action = null;
                 if (submitterOrAction && submitterOrAction.hasAttribute("formAction"))
@@ -18468,8 +18477,8 @@
                     if (null !== findInstanceBlockingTarget(form)) continue;
                   }
                 else action = formProps.action;
-                "function" === typeof action ? i[queuedTarget + 1] = action : (i.splice(queuedTarget, 3), queuedTarget -= 3);
-                scheduleReplayQueueIfNeeded(i);
+                "function" === typeof action ? i2[queuedTarget + 1] = action : (i2.splice(queuedTarget, 3), queuedTarget -= 3);
+                scheduleReplayQueueIfNeeded(i2);
               }
             }
         }
@@ -21008,8 +21017,8 @@
         var didWarnAboutUpdateInRenderForAnotherComponent = /* @__PURE__ */ new Set();
         var fakeActCallbackNode$1 = {}, firstScheduledRoot = null, lastScheduledRoot = null, didScheduleMicrotask = false, didScheduleMicrotask_act = false, mightHavePendingSyncWork = false, isFlushingWork = false, currentEventTransitionLane = 0, fakeActCallbackNode = {};
         (function() {
-          for (var i = 0; i < simpleEventPluginEvents.length; i++) {
-            var eventName = simpleEventPluginEvents[i], domEventName = eventName.toLowerCase();
+          for (var i2 = 0; i2 < simpleEventPluginEvents.length; i2++) {
+            var eventName = simpleEventPluginEvents[i2], domEventName = eventName.toLowerCase();
             eventName = eventName[0].toUpperCase() + eventName.slice(1);
             registerSimpleEvent(domEventName, "on" + eventName);
           }
@@ -21323,9 +21332,9 @@
           if (target) {
             var updatePriority = resolveUpdatePriority();
             target = { blockedOn: null, target, priority: updatePriority };
-            for (var i = 0; i < queuedExplicitHydrationTargets.length && 0 !== updatePriority && updatePriority < queuedExplicitHydrationTargets[i].priority; i++) ;
-            queuedExplicitHydrationTargets.splice(i, 0, target);
-            0 === i && attemptExplicitHydrationTarget(target);
+            for (var i2 = 0; i2 < queuedExplicitHydrationTargets.length && 0 !== updatePriority && updatePriority < queuedExplicitHydrationTargets[i2].priority; i2++) ;
+            queuedExplicitHydrationTargets.splice(i2, 0, target);
+            0 === i2 && attemptExplicitHydrationTarget(target);
           }
         };
         (function() {
@@ -21768,8 +21777,8 @@
         }
         var __assign2 = function() {
           __assign2 = Object.assign || function __assign3(t) {
-            for (var s, i = 1, n = arguments.length; i < n; i++) {
-              s = arguments[i];
+            for (var s, i2 = 1, n = arguments.length; i2 < n; i2++) {
+              s = arguments[i2];
               for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
             }
             return t;
@@ -21777,10 +21786,10 @@
           return __assign2.apply(this, arguments);
         };
         function __spreadArray(to, from, pack) {
-          if (pack || arguments.length === 2) for (var i = 0, l = from.length, ar; i < l; i++) {
-            if (ar || !(i in from)) {
-              if (!ar) ar = Array.prototype.slice.call(from, 0, i);
-              ar[i] = from[i];
+          if (pack || arguments.length === 2) for (var i2 = 0, l = from.length, ar; i2 < l; i2++) {
+            if (ar || !(i2 in from)) {
+              if (!ar) ar = Array.prototype.slice.call(from, 0, i2);
+              ar[i2] = from[i2];
             }
           }
           return to.concat(ar || Array.prototype.slice.call(from));
@@ -21858,8 +21867,8 @@
             setTimeout(fn, 0);
         }
         function arrayToObject(array, extractor) {
-          return array.reduce(function(result, item, i) {
-            var nameAndValue = extractor(item, i);
+          return array.reduce(function(result, item, i2) {
+            var nameAndValue = extractor(item, i2);
             if (nameAndValue)
               result[nameAndValue[0]] = nameAndValue[1];
             return result;
@@ -21872,8 +21881,8 @@
             return obj;
           if (typeof keyPath !== "string") {
             var rv = [];
-            for (var i = 0, l = keyPath.length; i < l; ++i) {
-              var val = getByKeyPath(obj, keyPath[i]);
+            for (var i2 = 0, l = keyPath.length; i2 < l; ++i2) {
+              var val = getByKeyPath(obj, keyPath[i2]);
               rv.push(val);
             }
             return rv;
@@ -21892,8 +21901,8 @@
             return;
           if (typeof keyPath !== "string" && "length" in keyPath) {
             assert(typeof value !== "string" && "length" in value);
-            for (var i = 0, l = keyPath.length; i < l; ++i) {
-              setByKeyPath(obj, keyPath[i], value[i]);
+            for (var i2 = 0, l = keyPath.length; i2 < l; ++i2) {
+              setByKeyPath(obj, keyPath[i2], value[i2]);
             }
           } else {
             var period = keyPath.indexOf(".");
@@ -21980,8 +21989,8 @@
           if (isArray(x)) {
             rv = [];
             circularRefs.set(x, rv);
-            for (var i = 0, l = x.length; i < l; ++i) {
-              rv.push(innerDeepClone(x[i]));
+            for (var i2 = 0, l = x.length; i2 < l; ++i2) {
+              rv.push(innerDeepClone(x[i2]));
             }
           } else if (intrinsicTypes.has(x.constructor)) {
             rv = x;
@@ -22003,20 +22012,20 @@
         }
         var iteratorSymbol = typeof Symbol !== "undefined" ? Symbol.iterator : "@@iterator";
         var getIteratorOf = typeof iteratorSymbol === "symbol" ? function(x) {
-          var i;
-          return x != null && (i = x[iteratorSymbol]) && i.apply(x);
+          var i2;
+          return x != null && (i2 = x[iteratorSymbol]) && i2.apply(x);
         } : function() {
           return null;
         };
         function delArrayItem(a, x) {
-          var i = a.indexOf(x);
-          if (i >= 0)
-            a.splice(i, 1);
-          return i >= 0;
+          var i2 = a.indexOf(x);
+          if (i2 >= 0)
+            a.splice(i2, 1);
+          return i2 >= 0;
         }
         var NO_CHAR_ARRAY = {};
         function getArrayOf(arrayLike) {
-          var i, a, x, it;
+          var i2, a, x, it;
           if (arguments.length === 1) {
             if (isArray(arrayLike))
               return arrayLike.slice();
@@ -22030,19 +22039,19 @@
             }
             if (arrayLike == null)
               return [arrayLike];
-            i = arrayLike.length;
-            if (typeof i === "number") {
-              a = new Array(i);
-              while (i--)
-                a[i] = arrayLike[i];
+            i2 = arrayLike.length;
+            if (typeof i2 === "number") {
+              a = new Array(i2);
+              while (i2--)
+                a[i2] = arrayLike[i2];
               return a;
             }
             return [arrayLike];
           }
-          i = arguments.length;
-          a = new Array(i);
-          while (i--)
-            a[i] = arguments[i];
+          i2 = arguments.length;
+          a = new Array(i2);
+          while (i2--)
+            a[i2] = arguments[i2];
           return a;
         }
         var isAsyncFunction = typeof Symbol !== "undefined" ? function(fn) {
@@ -22104,8 +22113,8 @@
         function getMultiErrorMessage(msg, failures) {
           return msg + ". Errors: " + Object.keys(failures).map(function(key) {
             return failures[key].toString();
-          }).filter(function(v, i, s) {
-            return s.indexOf(v) === i;
+          }).filter(function(v, i2, s) {
+            return s.indexOf(v) === i2;
           }).join("\n");
         }
         function ModifyError(msg, failures, successCount, failedKeys) {
@@ -22257,9 +22266,9 @@
           return function() {
             var res = f1.apply(this, arguments);
             if (res && typeof res.then === "function") {
-              var thiz = this, i = arguments.length, args = new Array(i);
-              while (i--)
-                args[i] = arguments[i];
+              var thiz = this, i2 = arguments.length, args = new Array(i2);
+              while (i2--)
+                args[i2] = arguments[i2];
               return res.then(function() {
                 return f2.apply(thiz, args);
               });
@@ -22405,9 +22414,9 @@
               if (values.length === 0)
                 resolve([]);
               var remaining = values.length;
-              values.forEach(function(a, i) {
+              values.forEach(function(a, i2) {
                 return DexiePromise.resolve(a).then(function(x) {
-                  values[i] = x;
+                  values[i2] = x;
                   if (!--remaining)
                     resolve(values);
                 }, reject);
@@ -22488,11 +22497,11 @@
                   resolve([]);
                 var remaining = possiblePromises.length;
                 var results = new Array(remaining);
-                possiblePromises.forEach(function(p, i) {
+                possiblePromises.forEach(function(p, i2) {
                   return DexiePromise.resolve(p).then(function(value) {
-                    return results[i] = { status: "fulfilled", value };
+                    return results[i2] = { status: "fulfilled", value };
                   }, function(reason) {
-                    return results[i] = { status: "rejected", reason };
+                    return results[i2] = { status: "rejected", reason };
                   }).then(function() {
                     return --remaining || resolve(results);
                   });
@@ -22507,11 +22516,11 @@
                   reject(new AggregateError([]));
                 var remaining = possiblePromises.length;
                 var failures = new Array(remaining);
-                possiblePromises.forEach(function(p, i) {
+                possiblePromises.forEach(function(p, i2) {
                   return DexiePromise.resolve(p).then(function(value) {
                     return resolve(value);
                   }, function(failure) {
-                    failures[i] = failure;
+                    failures[i2] = failure;
                     if (!--remaining)
                       reject(new AggregateError(failures));
                   });
@@ -22561,8 +22570,8 @@
         function propagateAllListeners(promise) {
           var listeners = promise._listeners;
           promise._listeners = [];
-          for (var i = 0, len = listeners.length; i < len; ++i) {
-            propagateToListener(promise, listeners[i]);
+          for (var i2 = 0, len = listeners.length; i2 < len; ++i2) {
+            propagateToListener(promise, listeners[i2]);
           }
           var psd = promise._PSD;
           --psd.ref || psd.finalize();
@@ -22619,14 +22628,14 @@
           return wasRootExec;
         }
         function endMicroTickScope() {
-          var callbacks, i, l;
+          var callbacks, i2, l;
           do {
             while (microtickQueue.length > 0) {
               callbacks = microtickQueue;
               microtickQueue = [];
               l = callbacks.length;
-              for (i = 0; i < l; ++i) {
-                var item = callbacks[i];
+              for (i2 = 0; i2 < l; ++i2) {
+                var item = callbacks[i2];
                 item[0].apply(null, item[1]);
               }
             }
@@ -22641,9 +22650,9 @@
             p._PSD.onunhandled.call(null, p._value, p);
           });
           var finalizers = tickFinalizers.slice(0);
-          var i = finalizers.length;
-          while (i)
-            finalizers[--i]();
+          var i2 = finalizers.length;
+          while (i2)
+            finalizers[--i2]();
         }
         function run_at_end_of_this_or_next_physical_tick(fn) {
           function finalizer() {
@@ -22664,10 +22673,10 @@
             unhandledErrors.push(promise);
         }
         function markErrorAsHandled(promise) {
-          var i = unhandledErrors.length;
-          while (i)
-            if (unhandledErrors[--i]._value === promise._value) {
-              unhandledErrors.splice(i, 1);
+          var i2 = unhandledErrors.length;
+          while (i2)
+            if (unhandledErrors[--i2]._value === promise._value) {
+              unhandledErrors.splice(i2, 1);
               return;
             }
         }
@@ -22969,8 +22978,8 @@
           var al = a.length;
           var bl = b.length;
           var l = al < bl ? al : bl;
-          for (var i = 0; i < l; ++i) {
-            var res = cmp2(a[i], b[i]);
+          for (var i2 = 0; i2 < l; ++i2) {
+            var res = cmp2(a[i2], b[i2]);
             if (res !== 0)
               return res;
           }
@@ -22980,9 +22989,9 @@
           var al = a.length;
           var bl = b.length;
           var l = al < bl ? al : bl;
-          for (var i = 0; i < l; ++i) {
-            if (a[i] !== b[i])
-              return a[i] < b[i] ? -1 : 1;
+          for (var i2 = 0; i2 < l; ++i2) {
+            if (a[i2] !== b[i2])
+              return a[i2] < b[i2] ? -1 : 1;
           }
           return al === bl ? 0 : al < bl ? -1 : 1;
         }
@@ -23007,8 +23016,8 @@
           if (!yProps)
             return res;
           if (keys2 && res.numFailures > 0)
-            keys2 = keys2.filter(function(_, i) {
-              return !res.failures[i];
+            keys2 = keys2.filter(function(_, i2) {
+              return !res.failures[i2];
             });
           return Promise.all(yProps.map(function(_a2) {
             var updatesTable = _a2.updatesTable;
@@ -23070,8 +23079,8 @@
           var keyPaths = keys(changes);
           var numKeys = keyPaths.length;
           var anythingModified = false;
-          for (var i = 0; i < numKeys; ++i) {
-            var keyPath = keyPaths[i];
+          for (var i2 = 0; i2 < numKeys; ++i2) {
+            var keyPath = keyPaths[i2];
             var value = changes[keyPath];
             var origValue = getByKeyPath(obj, keyPath);
             if (value instanceof PropModification2) {
@@ -23138,8 +23147,8 @@
               if (ix.compound && keyPaths.every(function(keyPath) {
                 return ix.keyPath.indexOf(keyPath) >= 0;
               })) {
-                for (var i = 0; i < keyPaths.length; ++i) {
-                  if (keyPaths.indexOf(ix.keyPath[i]) === -1)
+                for (var i2 = 0; i2 < keyPaths.length; ++i2) {
+                  if (keyPaths.indexOf(ix.keyPath[i2]) === -1)
                     return false;
                 }
                 return true;
@@ -23513,9 +23522,9 @@
           var evs = {};
           var rv = function(eventName, subscriber) {
             if (subscriber) {
-              var i2 = arguments.length, args = new Array(i2 - 1);
-              while (--i2)
-                args[i2 - 1] = arguments[i2];
+              var i3 = arguments.length, args = new Array(i3 - 1);
+              while (--i3)
+                args[i3 - 1] = arguments[i3];
               evs[eventName].subscribe.apply(null, args);
               return ctx;
             } else if (typeof eventName === "string") {
@@ -23523,8 +23532,8 @@
             }
           };
           rv.addEventType = add3;
-          for (var i = 1, l = arguments.length; i < l; ++i) {
-            add3(arguments[i]);
+          for (var i2 = 1, l = arguments.length; i2 < l; ++i2) {
+            add3(arguments[i2]);
           }
           return rv;
           function add3(eventName, chainFunction, defaultFunction) {
@@ -23560,9 +23569,9 @@
                 add3(eventName, cfg[eventName][0], cfg[eventName][1]);
               } else if (args === "asap") {
                 var context = add3(eventName, mirror, function fire() {
-                  var i2 = arguments.length, args2 = new Array(i2);
-                  while (i2--)
-                    args2[i2] = arguments[i2];
+                  var i3 = arguments.length, args2 = new Array(i3);
+                  while (i3--)
+                    args2[i3] = arguments[i3];
                   context.subscribers.forEach(function(fn) {
                     asap$1(function fireEvent() {
                       fn.apply(null, args2);
@@ -23748,9 +23757,9 @@
           };
           Collection2.prototype.sortBy = function(keyPath, cb) {
             var parts = keyPath.split(".").reverse(), lastPart = parts[0], lastIndex = parts.length - 1;
-            function getval(obj, i) {
-              if (i)
-                return getval(obj[parts[i]], i - 1);
+            function getval(obj, i2) {
+              if (i2)
+                return getval(obj[parts[i2]], i2 - 1);
               return obj[lastPart];
             }
             var order = this._ctx.dir === "next" ? 1 : -1;
@@ -24011,22 +24020,22 @@
                     var putKeys = outbound ? [] : null;
                     var deleteKeys = isUnconditionalDelete ? keysInChunk : [];
                     if (!isUnconditionalDelete)
-                      for (var i = 0; i < count; ++i) {
-                        var origValue = values[i];
+                      for (var i2 = 0; i2 < count; ++i2) {
+                        var origValue = values[i2];
                         var ctx_1 = {
                           value: deepClone(origValue),
-                          primKey: keys2[offset + i]
+                          primKey: keys2[offset + i2]
                         };
                         if (modifyer.call(ctx_1, ctx_1.value, ctx_1) !== false) {
                           if (ctx_1.value == null) {
-                            deleteKeys.push(keys2[offset + i]);
+                            deleteKeys.push(keys2[offset + i2]);
                           } else if (!outbound && cmp2(extractKey(origValue), extractKey(ctx_1.value)) !== 0) {
-                            deleteKeys.push(keys2[offset + i]);
+                            deleteKeys.push(keys2[offset + i2]);
                             addValues.push(ctx_1.value);
                           } else {
                             putValues.push(ctx_1.value);
                             if (outbound)
-                              putKeys.push(keys2[offset + i]);
+                              putKeys.push(keys2[offset + i2]);
                           }
                         }
                       }
@@ -24164,19 +24173,19 @@
         function nextCasing(key, lowerKey, upperNeedle, lowerNeedle, cmp3, dir) {
           var length = Math.min(key.length, lowerNeedle.length);
           var llp = -1;
-          for (var i = 0; i < length; ++i) {
-            var lwrKeyChar = lowerKey[i];
-            if (lwrKeyChar !== lowerNeedle[i]) {
-              if (cmp3(key[i], upperNeedle[i]) < 0)
-                return key.substr(0, i) + upperNeedle[i] + upperNeedle.substr(i + 1);
-              if (cmp3(key[i], lowerNeedle[i]) < 0)
-                return key.substr(0, i) + lowerNeedle[i] + upperNeedle.substr(i + 1);
+          for (var i2 = 0; i2 < length; ++i2) {
+            var lwrKeyChar = lowerKey[i2];
+            if (lwrKeyChar !== lowerNeedle[i2]) {
+              if (cmp3(key[i2], upperNeedle[i2]) < 0)
+                return key.substr(0, i2) + upperNeedle[i2] + upperNeedle.substr(i2 + 1);
+              if (cmp3(key[i2], lowerNeedle[i2]) < 0)
+                return key.substr(0, i2) + lowerNeedle[i2] + upperNeedle.substr(i2 + 1);
               if (llp >= 0)
                 return key.substr(0, llp) + lowerKey[llp] + upperNeedle.substr(llp + 1);
               return null;
             }
-            if (cmp3(key[i], lwrKeyChar) < 0)
-              llp = i;
+            if (cmp3(key[i2], lwrKeyChar) < 0)
+              llp = i2;
           }
           if (length < lowerNeedle.length && dir === "next")
             return key + upperNeedle.substr(key.length);
@@ -24226,10 +24235,10 @@
               return true;
             } else {
               var lowestPossibleCasing = null;
-              for (var i = firstPossibleNeedle; i < needlesLen; ++i) {
-                var casing = nextCasing(key, lowerKey, upperNeedles[i], lowerNeedles[i], compare, direction);
+              for (var i2 = firstPossibleNeedle; i2 < needlesLen; ++i2) {
+                var casing = nextCasing(key, lowerKey, upperNeedles[i2], lowerNeedles[i2], compare, direction);
                 if (casing === null && lowestPossibleCasing === null)
-                  firstPossibleNeedle = i + 1;
+                  firstPossibleNeedle = i2 + 1;
                 else if (lowestPossibleCasing === null || compare(lowestPossibleCasing, casing) > 0) {
                   lowestPossibleCasing = casing;
                 }
@@ -24373,21 +24382,21 @@
               compare = direction === "next" ? _this._ascending : _this._descending;
               set.sort(compare);
             };
-            var i = 0;
+            var i2 = 0;
             c._addAlgorithm(function(cursor, advance, resolve) {
               var key = cursor.key;
-              while (compare(key, set[i]) > 0) {
-                ++i;
-                if (i === set.length) {
+              while (compare(key, set[i2]) > 0) {
+                ++i2;
+                if (i2 === set.length) {
                   advance(resolve);
                   return false;
                 }
               }
-              if (compare(key, set[i]) === 0) {
+              if (compare(key, set[i2]) === 0) {
                 return true;
               } else {
                 advance(function() {
-                  cursor.continue(set[i]);
+                  cursor.continue(set[i2]);
                 });
                 return false;
               }
@@ -24431,16 +24440,16 @@
             var includeLowers = !options || options.includeLowers !== false;
             var includeUppers = options && options.includeUppers === true;
             function addRange2(ranges2, newRange) {
-              var i = 0, l = ranges2.length;
-              for (; i < l; ++i) {
-                var range = ranges2[i];
+              var i2 = 0, l = ranges2.length;
+              for (; i2 < l; ++i2) {
+                var range = ranges2[i2];
                 if (cmp3(newRange[0], range[1]) < 0 && cmp3(newRange[1], range[0]) > 0) {
                   range[0] = min(range[0], newRange[0]);
                   range[1] = max(range[1], newRange[1]);
                   break;
                 }
               }
-              if (i === l)
+              if (i2 === l)
                 ranges2.push(newRange);
               return ranges2;
             }
@@ -24959,21 +24968,21 @@
                 } else {
                   var _a4 = isAddOrPut ? outbound ? [values, keys2] : [values, null] : [keys2, null], args1 = _a4[0], args2 = _a4[1];
                   if (isAddOrPut) {
-                    for (var i = 0; i < length; ++i) {
-                      reqs.push(req = args2 && args2[i] !== void 0 ? store[type2](args1[i], args2[i]) : store[type2](args1[i]));
+                    for (var i2 = 0; i2 < length; ++i2) {
+                      reqs.push(req = args2 && args2[i2] !== void 0 ? store[type2](args1[i2], args2[i2]) : store[type2](args1[i2]));
                       req.onerror = errorHandler;
                     }
                   } else {
-                    for (var i = 0; i < length; ++i) {
-                      reqs.push(req = store[type2](args1[i]));
+                    for (var i2 = 0; i2 < length; ++i2) {
+                      reqs.push(req = store[type2](args1[i2]));
                       req.onerror = errorHandler;
                     }
                   }
                 }
                 var done = function(event) {
                   var lastResult = event.target.result;
-                  reqs.forEach(function(req2, i2) {
-                    return req2.error != null && (failures[i2] = req2.error);
+                  reqs.forEach(function(req2, i3) {
+                    return req2.error != null && (failures[i3] = req2.error);
                   });
                   resolve({
                     numFailures,
@@ -25142,11 +25151,11 @@
                       resolve(result);
                   };
                   var errorHandler = eventRejectHandler(reject);
-                  for (var i = 0; i < length; ++i) {
-                    var key = keys2[i];
+                  for (var i2 = 0; i2 < length; ++i2) {
+                    var key = keys2[i2];
                     if (key != null) {
-                      req = store.get(keys2[i]);
-                      req._pos = i;
+                      req = store.get(keys2[i2]);
+                      req._pos = i2;
                       req.onsuccess = successHandler;
                       req.onerror = errorHandler;
                       ++keyCount;
@@ -25548,8 +25557,8 @@
         }
         function adjustToExistingIndexNames(db2, schema, idbtrans) {
           var storeNames = idbtrans.db.objectStoreNames;
-          for (var i = 0; i < storeNames.length; ++i) {
-            var storeName = storeNames[i];
+          for (var i2 = 0; i2 < storeNames.length; ++i2) {
+            var storeName = storeNames[i2];
             var store = idbtrans.objectStore(storeName);
             db2._hasGetAll = "getAll" in store;
             for (var j = 0; j < store.indexNames.length; ++j) {
@@ -26166,12 +26175,12 @@
           return step(callNext)();
         }
         function extractTransactionArgs(mode, _tableArgs_, scopeFunc) {
-          var i = arguments.length;
-          if (i < 2)
+          var i2 = arguments.length;
+          if (i2 < 2)
             throw new exceptions.InvalidArgument("Too few arguments");
-          var args = new Array(i - 1);
-          while (--i)
-            args[i - 1] = arguments[i];
+          var args = new Array(i2 - 1);
+          while (--i2)
+            args[i2 - 1] = arguments[i2];
           scopeFunc = args.pop();
           var tables = flatten(args);
           return [mode, tables, scopeFunc];
@@ -26237,7 +26246,7 @@
         }
         function pad(a, value, count) {
           var result = isArray(a) ? a.slice() : [a];
-          for (var i = 0; i < count; ++i)
+          for (var i2 = 0; i2 < count; ++i2)
             result.push(value);
           return result;
         }
@@ -26426,25 +26435,25 @@
                   if (req2.keys)
                     req2.keys = __spreadArray([], req2.keys, true);
                   return getExistingValues(downTable, req2, keys2).then(function(existingValues) {
-                    var contexts = keys2.map(function(key, i) {
-                      var existingValue = existingValues[i];
+                    var contexts = keys2.map(function(key, i2) {
+                      var existingValue = existingValues[i2];
                       var ctx = { onerror: null, onsuccess: null };
                       if (req2.type === "delete") {
                         deleting.fire.call(ctx, key, existingValue, dxTrans2);
                       } else if (req2.type === "add" || existingValue === void 0) {
-                        var generatedPrimaryKey = creating.fire.call(ctx, key, req2.values[i], dxTrans2);
+                        var generatedPrimaryKey = creating.fire.call(ctx, key, req2.values[i2], dxTrans2);
                         if (key == null && generatedPrimaryKey != null) {
                           key = generatedPrimaryKey;
-                          req2.keys[i] = key;
+                          req2.keys[i2] = key;
                           if (!primaryKey.outbound) {
-                            setByKeyPath(req2.values[i], primaryKey.keyPath, key);
+                            setByKeyPath(req2.values[i2], primaryKey.keyPath, key);
                           }
                         }
                       } else {
-                        var objectDiff = getObjectDiff(existingValue, req2.values[i]);
+                        var objectDiff = getObjectDiff(existingValue, req2.values[i2]);
                         var additionalChanges_1 = updating.fire.call(ctx, objectDiff, key, existingValue, dxTrans2);
                         if (additionalChanges_1) {
-                          var requestedValue_1 = req2.values[i];
+                          var requestedValue_1 = req2.values[i2];
                           Object.keys(additionalChanges_1).forEach(function(keyPath) {
                             if (hasOwn(requestedValue_1, keyPath)) {
                               requestedValue_1[keyPath] = additionalChanges_1[keyPath];
@@ -26458,14 +26467,14 @@
                     });
                     return downTable.mutate(req2).then(function(_a3) {
                       var failures = _a3.failures, results = _a3.results, numFailures = _a3.numFailures, lastResult = _a3.lastResult;
-                      for (var i = 0; i < keys2.length; ++i) {
-                        var primKey = results ? results[i] : keys2[i];
-                        var ctx = contexts[i];
+                      for (var i2 = 0; i2 < keys2.length; ++i2) {
+                        var primKey = results ? results[i2] : keys2[i2];
+                        var ctx = contexts[i2];
                         if (primKey == null) {
-                          ctx.onerror && ctx.onerror(failures[i]);
+                          ctx.onerror && ctx.onerror(failures[i2]);
                         } else {
                           ctx.onsuccess && ctx.onsuccess(
-                            req2.type === "put" && existingValues[i] ? req2.values[i] : primKey
+                            req2.type === "put" && existingValues[i2] ? req2.values[i2] : primKey
                           );
                         }
                       }
@@ -26527,10 +26536,10 @@
             if (cache2.keys.length < keys2.length)
               return null;
             var result = [];
-            for (var i = 0, j = 0; i < cache2.keys.length && j < keys2.length; ++i) {
-              if (cmp2(cache2.keys[i], keys2[j]) !== 0)
+            for (var i2 = 0, j = 0; i2 < cache2.keys.length && j < keys2.length; ++i2) {
+              if (cmp2(cache2.keys[i2], keys2[j]) !== 0)
                 continue;
-              result.push(clone ? deepClone(cache2.values[i]) : cache2.values[i]);
+              result.push(clone ? deepClone(cache2.values[i2]) : cache2.values[i2]);
               ++j;
             }
             return result.length === keys2.length ? result : null;
@@ -26658,8 +26667,8 @@
                         var pkPos = idx.keyPath.findIndex(function(prop) {
                           return prop === primaryKey.keyPath;
                         });
-                        for (var i = 0, len = res.results.length; i < len; ++i) {
-                          idxVals[i][pkPos] = res.results[i];
+                        for (var i2 = 0, len = res.results.length; i2 < len; ++i2) {
+                          idxVals[i2][pkPos] = res.results[i2];
                         }
                         getRangeSet(idx.name).addKeys(idxVals);
                       });
@@ -26775,9 +26784,9 @@
                 return rangeSet.addKey(key2);
               }) : rangeSet.addKey(key);
             };
-            (oldObjs || newObjs).forEach(function(_, i) {
-              var oldKey = oldObjs && extractKey(oldObjs[i]);
-              var newKey = newObjs && extractKey(newObjs[i]);
+            (oldObjs || newObjs).forEach(function(_, i2) {
+              var oldKey = oldObjs && extractKey(oldObjs[i2]);
+              var newKey = newObjs && extractKey(newObjs[i2]);
               if (cmp2(oldKey, newKey) !== 0) {
                 if (oldKey != null)
                   addKeyOrKeys(oldKey);
@@ -26800,13 +26809,13 @@
           }
           var clone = __assign2({}, req);
           if (isArray(clone.keys)) {
-            clone.keys = clone.keys.filter(function(_, i) {
-              return !(i in res.failures);
+            clone.keys = clone.keys.filter(function(_, i2) {
+              return !(i2 in res.failures);
             });
           }
           if ("values" in clone && isArray(clone.values)) {
-            clone.values = clone.values.filter(function(_, i) {
-              return !(i in res.failures);
+            clone.values = clone.values.filter(function(_, i2) {
+              return !(i2 in res.failures);
             });
           }
           return clone;
@@ -26835,8 +26844,8 @@
             var includedValues = [];
             if (op.type === "add" || op.type === "put") {
               var includedPKs = new RangeSet2();
-              for (var i = op.values.length - 1; i >= 0; --i) {
-                var value = op.values[i];
+              for (var i2 = op.values.length - 1; i2 >= 0; --i2) {
+                var value = op.values[i2];
                 var pk = extractPrimKey(value);
                 if (includedPKs.hasKey(pk))
                   continue;
@@ -27117,12 +27126,12 @@
                   return key == null;
                 }))) {
                   promise.then(function(res) {
-                    var reqWithResolvedKeys = __assign2(__assign2({}, req), { values: req.values.map(function(value, i) {
+                    var reqWithResolvedKeys = __assign2(__assign2({}, req), { values: req.values.map(function(value, i2) {
                       var _a2;
-                      if (res.failures[i])
+                      if (res.failures[i2])
                         return value;
                       var valueWithKey = ((_a2 = primKey.keyPath) === null || _a2 === void 0 ? void 0 : _a2.includes(".")) ? deepClone(value) : __assign2({}, value);
-                      setByKeyPath(valueWithKey, primKey.keyPath, res.results[i]);
+                      setByKeyPath(valueWithKey, primKey.keyPath, res.results[i2]);
                       return valueWithKey;
                     }) });
                     var adjustedReq = adjustOptimisticFromFailures(tblCache, reqWithResolvedKeys, res);
@@ -27165,8 +27174,8 @@
                     if (cacheEntry)
                       cacheEntry.res = result;
                     if (freezeResults) {
-                      for (var i = 0, l = result.length; i < l; ++i) {
-                        Object.freeze(result[i]);
+                      for (var i2 = 0, l = result.length; i2 < l; ++i2) {
+                        Object.freeze(result[i2]);
                       }
                       Object.freeze(result);
                     } else {
@@ -27832,8 +27841,8 @@
           semVer: DEXIE_VERSION,
           version: DEXIE_VERSION.split(".").map(function(n) {
             return parseInt(n);
-          }).reduce(function(p, c, i) {
-            return p + c / Math.pow(10, i * 2);
+          }).reduce(function(p, c, i2) {
+            return p + c / Math.pow(10, i2 * 2);
           })
         }));
         Dexie2.maxKey = getMaxKey(Dexie2.dependencies.IDBKeyRange);
@@ -28204,9 +28213,9 @@
     let branches = precomputedBranches ?? flattenAndRankRoutes(routes);
     let matches = null;
     let decoded = decodePath(pathname);
-    for (let i = 0; matches == null && i < branches.length; ++i) {
+    for (let i2 = 0; matches == null && i2 < branches.length; ++i2) {
       matches = matchRouteBranch(
-        branches[i],
+        branches[i2],
         decoded,
         allowPartial
       );
@@ -28337,7 +28346,7 @@
     );
   }
   function compareIndexes(a, b) {
-    let siblings = a.length === b.length && a.slice(0, -1).every((n, i) => n === b[i]);
+    let siblings = a.length === b.length && a.slice(0, -1).every((n, i2) => n === b[i2]);
     return siblings ? (
       // If two routes are siblings, we should try to match the earlier sibling
       // first. This allows people to have fine-grained control over the matching
@@ -28355,9 +28364,9 @@
     let matchedParams = {};
     let matchedPathname = "/";
     let matches = [];
-    for (let i = 0; i < routesMeta.length; ++i) {
-      let meta = routesMeta[i];
-      let end = i === routesMeta.length - 1;
+    for (let i2 = 0; i2 < routesMeta.length; ++i2) {
+      let meta = routesMeta[i2];
+      let end = i2 === routesMeta.length - 1;
       let remainingPathname = matchedPathname === "/" ? pathname : pathname.slice(matchedPathname.length) || "/";
       let match2 = matchPath(
         { path: meta.relativePath, caseSensitive: meta.caseSensitive, end },
@@ -29120,10 +29129,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     let fallbackIndex = -1;
     if (dataRouterOpts && dataRouterState) {
       renderFallback = dataRouterState.renderFallback;
-      for (let i = 0; i < renderedMatches.length; i++) {
-        let match2 = renderedMatches[i];
+      for (let i2 = 0; i2 < renderedMatches.length; i2++) {
+        let match2 = renderedMatches[i2];
         if (match2.route.HydrateFallback || match2.route.hydrateFallbackElement) {
-          fallbackIndex = i;
+          fallbackIndex = i2;
         }
         if (match2.route.id) {
           let { loaderData, errors: errors2 } = dataRouterState;
@@ -30996,8 +31005,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   // node_modules/uuid/dist/stringify.js
   init_react_shim();
   var byteToHex = [];
-  for (let i = 0; i < 256; ++i) {
-    byteToHex.push((i + 256).toString(16).slice(1));
+  for (let i2 = 0; i2 < 256; ++i2) {
+    byteToHex.push((i2 + 256).toString(16).slice(1));
   }
   function unsafeStringify(arr, offset = 0) {
     return (byteToHex[arr[offset + 0]] + byteToHex[arr[offset + 1]] + byteToHex[arr[offset + 2]] + byteToHex[arr[offset + 3]] + "-" + byteToHex[arr[offset + 4]] + byteToHex[arr[offset + 5]] + "-" + byteToHex[arr[offset + 6]] + byteToHex[arr[offset + 7]] + "-" + byteToHex[arr[offset + 8]] + byteToHex[arr[offset + 9]] + "-" + byteToHex[arr[offset + 10]] + byteToHex[arr[offset + 11]] + byteToHex[arr[offset + 12]] + byteToHex[arr[offset + 13]] + byteToHex[arr[offset + 14]] + byteToHex[arr[offset + 15]]).toLowerCase();
@@ -31031,8 +31040,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       if (offset < 0 || offset + 16 > buf.length) {
         throw new RangeError(`UUID byte range ${offset}:${offset + 15} is out of buffer bounds`);
       }
-      for (let i = 0; i < 16; ++i) {
-        buf[offset + i] = rnds[i];
+      for (let i2 = 0; i2 < 16; ++i2) {
+        buf[offset + i2] = rnds[i2];
       }
       return buf;
     }
@@ -34743,8 +34752,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   init_react_shim();
   var __assign = function() {
     __assign = Object.assign || function __assign2(t) {
-      for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
+      for (var s, i2 = 1, n = arguments.length; i2 < n; i2++) {
+        s = arguments[i2];
         for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p)) t[p] = s[p];
       }
       return t;
@@ -34945,8 +34954,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           }
         }
         function _defineProperties(target, props) {
-          for (var i = 0; i < props.length; i++) {
-            var descriptor = props[i];
+          for (var i2 = 0; i2 < props.length; i2++) {
+            var descriptor = props[i2];
             descriptor.enumerable = descriptor.enumerable || false;
             descriptor.configurable = true;
             if ("value" in descriptor) descriptor.writable = true;
@@ -34982,9 +34991,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           return keys2;
         }
         function _objectSpread2(target) {
-          for (var i = 1; i < arguments.length; i++) {
-            var source = arguments[i] != null ? arguments[i] : {};
-            if (i % 2) {
+          for (var i2 = 1; i2 < arguments.length; i2++) {
+            var source = arguments[i2] != null ? arguments[i2] : {};
+            if (i2 % 2) {
               ownKeys(Object(source), true).forEach(function(key) {
                 _defineProperty(target, key, source[key]);
               });
@@ -34998,15 +35007,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           }
           return target;
         }
-        function _slicedToArray(arr, i) {
-          return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _nonIterableRest();
+        function _slicedToArray(arr, i2) {
+          return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i2) || _nonIterableRest();
         }
         function _toConsumableArray(arr) {
           return _arrayWithoutHoles(arr) || _iterableToArray(arr) || _nonIterableSpread();
         }
         function _arrayWithoutHoles(arr) {
           if (Array.isArray(arr)) {
-            for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) arr2[i] = arr[i];
+            for (var i2 = 0, arr2 = new Array(arr.length); i2 < arr.length; i2++) arr2[i2] = arr[i2];
             return arr2;
           }
         }
@@ -35016,7 +35025,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         function _iterableToArray(iter) {
           if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === "[object Arguments]") return Array.from(iter);
         }
-        function _iterableToArrayLimit(arr, i) {
+        function _iterableToArrayLimit(arr, i2) {
           if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === "[object Arguments]")) {
             return;
           }
@@ -35027,7 +35036,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           try {
             for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {
               _arr.push(_s.value);
-              if (i && _arr.length === i) break;
+              if (i2 && _arr.length === i2) break;
             }
           } catch (err) {
             _d = true;
@@ -35462,8 +35471,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   return tmp;
                 });
                 cb();
-                internalStateObjPropsToIgnore.forEach(function(prop, i) {
-                  stateObj2[prop] = vals[i];
+                internalStateObjPropsToIgnore.forEach(function(prop, i2) {
+                  stateObj2[prop] = vals[i2];
                 });
               }
               function _encapsulate(keypath, value, cyclic2, stateObj2, promisesData, resolvingTypesonPromise, detectedType) {
@@ -35622,24 +35631,24 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 }
                 if (stateObj2.iterateUnsetNumeric) {
                   var vl = value.length;
-                  var _loop2 = function _loop22(i2) {
-                    if (!(i2 in value)) {
-                      var kp = keypath + (keypath ? "." : "") + i2;
+                  var _loop2 = function _loop22(i3) {
+                    if (!(i3 in value)) {
+                      var kp = keypath + (keypath ? "." : "") + i3;
                       var ownKeysObj = {
                         ownKeys: false
                       };
                       _adaptBuiltinStateObjectProperties(stateObj2, ownKeysObj, function() {
                         var val = _encapsulate(kp, void 0, Boolean(cyclic2), stateObj2, promisesData, resolvingTypesonPromise);
                         if (hasConstructorOf(val, TypesonPromise)) {
-                          promisesData.push([kp, val, Boolean(cyclic2), stateObj2, clone, i2, stateObj2.type]);
+                          promisesData.push([kp, val, Boolean(cyclic2), stateObj2, clone, i3, stateObj2.type]);
                         } else if (val !== void 0) {
-                          clone[i2] = val;
+                          clone[i3] = val;
                         }
                       });
                     }
                   };
-                  for (var i = 0; i < vl; i++) {
-                    _loop2(i);
+                  for (var i2 = 0; i2 < vl; i2++) {
+                    _loop2(i2);
                   }
                   if (runObserver) {
                     runObserver({
@@ -35652,9 +35661,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               }
               function replace2(keypath, value, stateObj2, promisesData, plainObject, resolvingTypesonPromise, runObserver) {
                 var replacers = plainObject ? that.plainObjectReplacers : that.nonplainObjectReplacers;
-                var i = replacers.length;
-                while (i--) {
-                  var replacer = replacers[i];
+                var i2 = replacers.length;
+                while (i2--) {
+                  var replacer = replacers[i2];
                   if (replacer.test(value, stateObj2)) {
                     var type = replacer.type;
                     if (that.revivers[type]) {
@@ -36159,16 +36168,16 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             if (Array.isArray(e3)) return e3;
           })(e2) || (function _iterableToArrayLimit(e3, t3) {
             if ("undefined" == typeof Symbol || !(Symbol.iterator in Object(e3))) return;
-            var r2 = [], n2 = true, i2 = false, o2 = void 0;
+            var r2 = [], n2 = true, i3 = false, o2 = void 0;
             try {
               for (var a2, c2 = e3[Symbol.iterator](); !(n2 = (a2 = c2.next()).done) && (r2.push(a2.value), !t3 || r2.length !== t3); n2 = true) ;
             } catch (e4) {
-              i2 = true, o2 = e4;
+              i3 = true, o2 = e4;
             } finally {
               try {
                 n2 || null == c2.return || c2.return();
               } finally {
-                if (i2) throw o2;
+                if (i3) throw o2;
               }
             }
             return r2;
@@ -36202,12 +36211,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         };
         e.__typeson__type__ = "TypesonPromise", "undefined" != typeof Symbol && (e.prototype[Symbol.toStringTag] = "TypesonPromise"), e.prototype.then = function(t2, r2) {
           var n2 = this;
-          return new e((function(e2, i2) {
+          return new e((function(e2, i3) {
             n2.p.then((function(r3) {
               e2(t2 ? t2(r3) : r3);
             })).catch((function(e3) {
               return r2 ? r2(e3) : Promise.reject(e3);
-            })).then(e2, i2);
+            })).then(e2, i3);
           }));
         }, e.prototype.catch = function(e2) {
           return this.then(null, e2);
@@ -36228,7 +36237,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             }));
           };
         }));
-        var t = {}.toString, r = {}.hasOwnProperty, n = Object.getPrototypeOf, i = r.toString;
+        var t = {}.toString, r = {}.hasOwnProperty, n = Object.getPrototypeOf, i2 = r.toString;
         function isThenable(e2, t2) {
           return isObject(e2) && "function" == typeof e2.then && (!t2 || "function" == typeof e2.catch);
         }
@@ -36240,7 +36249,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           var o2 = n(e2);
           if (!o2) return null === t2;
           var a2 = r.call(o2, "constructor") && o2.constructor;
-          return "function" != typeof a2 ? null === t2 : t2 === a2 || (null !== t2 && i.call(a2) === i.call(t2) || "function" == typeof t2 && "string" == typeof a2.__typeson__type__ && a2.__typeson__type__ === t2.__typeson__type__);
+          return "function" != typeof a2 ? null === t2 : t2 === a2 || (null !== t2 && i2.call(a2) === i2.call(t2) || "function" == typeof t2 && "string" == typeof a2.__typeson__type__ && a2.__typeson__type__ === t2.__typeson__type__);
         }
         function isPlainObject(e2) {
           return !(!e2 || "Object" !== toStringTag(e2)) && (!n(e2) || hasConstructorOf(e2, Object));
@@ -36295,8 +36304,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             return t2 && _defineProperties(e2.prototype, t2), e2;
           })(Typeson2, [{ key: "stringify", value: function stringify(e2, t2, r2, n2) {
             n2 = _objectSpread2(_objectSpread2(_objectSpread2({}, this.options), n2), {}, { stringification: true });
-            var i2 = this.encapsulate(e2, null, n2);
-            return a(i2) ? JSON.stringify(i2[0], t2, r2) : i2.then((function(e3) {
+            var i3 = this.encapsulate(e2, null, n2);
+            return a(i3) ? JSON.stringify(i3[0], t2, r2) : i3.then((function(e3) {
               return JSON.stringify(e3, t2, r2);
             }));
           } }, { key: "stringifySync", value: function stringifySync(e2, t2, r2, n2) {
@@ -36316,7 +36325,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             var r2 = arguments.length > 2 && void 0 !== arguments[2] ? arguments[2] : {};
             return r2.iterateNone = true, this.encapsulate(e2, t2, r2);
           } }, { key: "encapsulate", value: function encapsulate(t2, r2, n2) {
-            var i2 = _async((function(t3, r3) {
+            var i3 = _async((function(t3, r3) {
               return _await(Promise.all(r3.map((function(e2) {
                 return e2[1].p;
               }))), (function(n3) {
@@ -36327,10 +36336,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                     return r4 && r4.then ? r4.then(t4) : t4(r4);
                   })((function() {
                     if (s3 && d3) return _await(b3.p, (function(e2) {
-                      return p3[y3] = e2, o2 = true, i2(t3, a2);
+                      return p3[y3] = e2, o2 = true, i3(t3, a2);
                     }));
                   }), (function(e2) {
-                    return o2 ? e2 : (s3 ? p3[y3] = b3 : t3 = d3 ? b3.p : b3, i2(t3, a2));
+                    return o2 ? e2 : (s3 ? p3[y3] = b3 : t3 = d3 ? b3.p : b3, i3(t3, a2));
                   }));
                 })))), (function() {
                   return t3;
@@ -36356,27 +36365,27 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 e2[t4] = n3[r4];
               }));
             }
-            function _encapsulate(t3, r3, i3, u2, s3, v3, b3) {
+            function _encapsulate(t3, r3, i4, u2, s3, v3, b3) {
               var h3, g2 = {}, m2 = _typeof(r3), O2 = d2 ? function(n3) {
                 var o2 = b3 || u2.type || Typeson2.getJSONType(r3);
-                d2(Object.assign(n3 || g2, { keypath: t3, value: r3, cyclic: i3, stateObj: u2, promisesData: s3, resolvingTypesonPromise: v3, awaitingTypesonPromise: hasConstructorOf(r3, e) }, { type: o2 }));
+                d2(Object.assign(n3 || g2, { keypath: t3, value: r3, cyclic: i4, stateObj: u2, promisesData: s3, resolvingTypesonPromise: v3, awaitingTypesonPromise: hasConstructorOf(r3, e) }, { type: o2 }));
               } : null;
               if (["string", "boolean", "number", "undefined"].includes(m2)) return void 0 === r3 || Number.isNaN(r3) || r3 === Number.NEGATIVE_INFINITY || r3 === Number.POSITIVE_INFINITY ? (h3 = u2.replaced ? r3 : replace2(t3, r3, u2, s3, false, v3, O2)) !== r3 && (g2 = { replaced: h3 }) : h3 = r3, O2 && O2(), h3;
               if (null === r3) return O2 && O2(), r3;
-              if (i3 && !u2.iterateIn && !u2.iterateUnsetNumeric && r3 && "object" === _typeof(r3)) {
+              if (i4 && !u2.iterateIn && !u2.iterateUnsetNumeric && r3 && "object" === _typeof(r3)) {
                 var _2 = p2.indexOf(r3);
                 if (!(_2 < 0)) return l2[t3] = "#", O2 && O2({ cyclicKeypath: y2[_2] }), "#" + y2[_2];
-                true === i3 && (p2.push(r3), y2.push(t3));
+                true === i4 && (p2.push(r3), y2.push(t3));
               }
               var j2, S2 = isPlainObject(r3), T2 = a(r3), w2 = (S2 || T2) && (!f2.plainObjectReplacers.length || u2.replaced) || u2.iterateIn ? r3 : replace2(t3, r3, u2, s3, S2 || T2, null, O2);
-              if (w2 !== r3 ? (h3 = w2, g2 = { replaced: w2 }) : "" === t3 && hasConstructorOf(r3, e) ? (s3.push([t3, r3, i3, u2, void 0, void 0, u2.type]), h3 = r3) : T2 && "object" !== u2.iterateIn || "array" === u2.iterateIn ? (j2 = new Array(r3.length), g2 = { clone: j2 }) : (["function", "symbol"].includes(_typeof(r3)) || "toJSON" in r3 || hasConstructorOf(r3, e) || hasConstructorOf(r3, Promise) || hasConstructorOf(r3, ArrayBuffer)) && !S2 && "object" !== u2.iterateIn ? h3 = r3 : (j2 = {}, u2.addLength && (j2.length = r3.length), g2 = { clone: j2 }), O2 && O2(), n2.iterateNone) return j2 || h3;
+              if (w2 !== r3 ? (h3 = w2, g2 = { replaced: w2 }) : "" === t3 && hasConstructorOf(r3, e) ? (s3.push([t3, r3, i4, u2, void 0, void 0, u2.type]), h3 = r3) : T2 && "object" !== u2.iterateIn || "array" === u2.iterateIn ? (j2 = new Array(r3.length), g2 = { clone: j2 }) : (["function", "symbol"].includes(_typeof(r3)) || "toJSON" in r3 || hasConstructorOf(r3, e) || hasConstructorOf(r3, Promise) || hasConstructorOf(r3, ArrayBuffer)) && !S2 && "object" !== u2.iterateIn ? h3 = r3 : (j2 = {}, u2.addLength && (j2.length = r3.length), g2 = { clone: j2 }), O2 && O2(), n2.iterateNone) return j2 || h3;
               if (!j2) return h3;
               if (u2.iterateIn) {
                 var A2 = function _loop(n3) {
                   var o2 = { ownKeys: c.call(r3, n3) };
                   _adaptBuiltinStateObjectProperties(u2, o2, (function() {
-                    var o3 = t3 + (t3 ? "." : "") + escapeKeyPathComponent(n3), a2 = _encapsulate(o3, r3[n3], Boolean(i3), u2, s3, v3);
-                    hasConstructorOf(a2, e) ? s3.push([o3, a2, Boolean(i3), u2, j2, n3, u2.type]) : void 0 !== a2 && (j2[n3] = a2);
+                    var o3 = t3 + (t3 ? "." : "") + escapeKeyPathComponent(n3), a2 = _encapsulate(o3, r3[n3], Boolean(i4), u2, s3, v3);
+                    hasConstructorOf(a2, e) ? s3.push([o3, a2, Boolean(i4), u2, j2, n3, u2.type]) : void 0 !== a2 && (j2[n3] = a2);
                   }));
                 };
                 for (var P2 in r3) A2(P2);
@@ -36384,8 +36393,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               } else o(r3).forEach((function(n3) {
                 var o2 = t3 + (t3 ? "." : "") + escapeKeyPathComponent(n3);
                 _adaptBuiltinStateObjectProperties(u2, { ownKeys: true }, (function() {
-                  var t4 = _encapsulate(o2, r3[n3], Boolean(i3), u2, s3, v3);
-                  hasConstructorOf(t4, e) ? s3.push([o2, t4, Boolean(i3), u2, j2, n3, u2.type]) : void 0 !== t4 && (j2[n3] = t4);
+                  var t4 = _encapsulate(o2, r3[n3], Boolean(i4), u2, s3, v3);
+                  hasConstructorOf(t4, e) ? s3.push([o2, t4, Boolean(i4), u2, j2, n3, u2.type]) : void 0 !== t4 && (j2[n3] = t4);
                 }));
               })), O2 && O2({ endIterateOwn: true, end: true });
               if (u2.iterateUnsetNumeric) {
@@ -36393,8 +36402,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   if (!(n3 in r3)) {
                     var o2 = t3 + (t3 ? "." : "") + n3;
                     _adaptBuiltinStateObjectProperties(u2, { ownKeys: false }, (function() {
-                      var t4 = _encapsulate(o2, void 0, Boolean(i3), u2, s3, v3);
-                      hasConstructorOf(t4, e) ? s3.push([o2, t4, Boolean(i3), u2, j2, n3, u2.type]) : void 0 !== t4 && (j2[n3] = t4);
+                      var t4 = _encapsulate(o2, void 0, Boolean(i4), u2, s3, v3);
+                      hasConstructorOf(t4, e) ? s3.push([o2, t4, Boolean(i4), u2, j2, n3, u2.type]) : void 0 !== t4 && (j2[n3] = t4);
                     }));
                   }
                 }, N2 = 0; N2 < I2; N2++) C2(N2);
@@ -36402,8 +36411,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               }
               return j2;
             }
-            function replace2(e2, t3, r3, n3, i3, o2, a2) {
-              for (var c2 = i3 ? f2.plainObjectReplacers : f2.nonplainObjectReplacers, u2 = c2.length; u2--; ) {
+            function replace2(e2, t3, r3, n3, i4, o2, a2) {
+              for (var c2 = i4 ? f2.plainObjectReplacers : f2.nonplainObjectReplacers, u2 = c2.length; u2--; ) {
                 var p3 = c2[u2];
                 if (p3.test(t3, r3)) {
                   var y3 = p3.type;
@@ -36418,7 +36427,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             }
             return v2.length ? s2 && n2.throwOnBadSyncType ? (function() {
               throw new TypeError("Sync method requested but async result obtained");
-            })() : Promise.resolve(i2(h2, v2)).then(finish) : !s2 && n2.throwOnBadSyncType ? (function() {
+            })() : Promise.resolve(i3(h2, v2)).then(finish) : !s2 && n2.throwOnBadSyncType ? (function() {
               throw new TypeError("Async method requested but sync result obtained");
             })() : n2.stringification && s2 ? [finish(h2)] : s2 ? finish(h2) : Promise.resolve(finish(h2));
           } }, { key: "encapsulateSync", value: function encapsulateSync(e2, t2, r2) {
@@ -36429,13 +36438,13 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             var n2 = t2 && t2.$types;
             if (!n2) return t2;
             if (true === n2) return t2.$;
-            var i2 = (r2 = _objectSpread2(_objectSpread2({ sync: true }, this.options), r2)).sync, c2 = [], u2 = {}, s2 = true;
+            var i3 = (r2 = _objectSpread2(_objectSpread2({ sync: true }, this.options), r2)).sync, c2 = [], u2 = {}, s2 = true;
             n2.$ && isPlainObject(n2.$) && (t2 = t2.$, n2 = n2.$, s2 = false);
             var l2 = this;
             function executeReviver(e2, t3) {
               var r3 = _slicedToArray(l2.revivers[e2] || [], 1)[0];
               if (!r3) throw new Error("Unregistered type: " + e2);
-              return i2 && !("revive" in r3) ? t3 : r3[i2 && r3.revive ? "revive" : !i2 && r3.reviveAsync ? "reviveAsync" : "revive"](t3, u2);
+              return i3 && !("revive" in r3) ? t3 : r3[i3 && r3.revive ? "revive" : !i3 && r3.reviveAsync ? "reviveAsync" : "revive"](t3, u2);
             }
             var p2 = [];
             function checkUndefined(e2) {
@@ -36444,33 +36453,33 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             var y2, v2 = (function revivePlainObjects() {
               var r3 = [];
               if (Object.entries(n2).forEach((function(e2) {
-                var t3 = _slicedToArray(e2, 2), i3 = t3[0], o2 = t3[1];
+                var t3 = _slicedToArray(e2, 2), i4 = t3[0], o2 = t3[1];
                 "#" !== o2 && [].concat(o2).forEach((function(e3) {
-                  _slicedToArray(l2.revivers[e3] || [null, {}], 2)[1].plain && (r3.push({ keypath: i3, type: e3 }), delete n2[i3]);
+                  _slicedToArray(l2.revivers[e3] || [null, {}], 2)[1].plain && (r3.push({ keypath: i4, type: e3 }), delete n2[i4]);
                 }));
               })), r3.length) return r3.sort(nestedPathsFirst).reduce((function reducer(r4, n3) {
-                var i3 = n3.keypath, o2 = n3.type;
+                var i4 = n3.keypath, o2 = n3.type;
                 if (isThenable(r4)) return r4.then((function(e2) {
-                  return reducer(e2, { keypath: i3, type: o2 });
+                  return reducer(e2, { keypath: i4, type: o2 });
                 }));
-                var a2 = getByKeyPath(t2, i3);
+                var a2 = getByKeyPath(t2, i4);
                 if (hasConstructorOf(a2 = executeReviver(o2, a2), e)) return a2.then((function(e2) {
-                  var r5 = setAtKeyPath(t2, i3, e2);
+                  var r5 = setAtKeyPath(t2, i4, e2);
                   r5 === e2 && (t2 = r5);
                 }));
-                var c3 = setAtKeyPath(t2, i3, a2);
+                var c3 = setAtKeyPath(t2, i4, a2);
                 c3 === a2 && (t2 = c3);
               }), void 0);
             })();
             return hasConstructorOf(v2, e) ? y2 = v2.then((function() {
               return t2;
-            })) : (y2 = (function _revive(t3, r3, i3, u3, l3) {
+            })) : (y2 = (function _revive(t3, r3, i4, u3, l3) {
               if (!s2 || "$types" !== t3) {
                 var y3 = n2[t3], v3 = a(r3);
                 if (v3 || isPlainObject(r3)) {
                   var b2 = v3 ? new Array(r3.length) : {};
                   for (o(r3).forEach((function(n3) {
-                    var o2 = _revive(t3 + (t3 ? "." : "") + escapeKeyPathComponent(n3), r3[n3], i3 || b2, b2, n3), a2 = function set(e2) {
+                    var o2 = _revive(t3 + (t3 ? "." : "") + escapeKeyPathComponent(n3), r3[n3], i4 || b2, b2, n3), a2 = function set(e2) {
                       return hasConstructorOf(e2, f) ? b2[n3] = void 0 : void 0 !== e2 && (b2[n3] = e2), e2;
                     };
                     hasConstructorOf(o2, e) ? p2.push(o2.then((function(e2) {
@@ -36484,8 +36493,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 }
                 if (!y3) return r3;
                 if ("#" === y3) {
-                  var j2 = getByKeyPath(i3, r3.slice(1));
-                  return void 0 === j2 && c2.push([i3, r3.slice(1), u3, l3]), j2;
+                  var j2 = getByKeyPath(i4, r3.slice(1));
+                  return void 0 === j2 && c2.push([i4, r3.slice(1), u3, l3]), j2;
                 }
                 return [].concat(y3).reduce((function reducer(t4, r4) {
                   return hasConstructorOf(t4, e) ? t4.then((function(e2) {
@@ -36497,11 +36506,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               return e.all([t3].concat(p2));
             })).then((function(e2) {
               return _slicedToArray(e2, 1)[0];
-            })))), isThenable(y2) ? i2 && r2.throwOnBadSyncType ? (function() {
+            })))), isThenable(y2) ? i3 && r2.throwOnBadSyncType ? (function() {
               throw new TypeError("Sync method requested but async result obtained");
-            })() : hasConstructorOf(y2, e) ? y2.p.then(checkUndefined) : y2 : !i2 && r2.throwOnBadSyncType ? (function() {
+            })() : hasConstructorOf(y2, e) ? y2.p.then(checkUndefined) : y2 : !i3 && r2.throwOnBadSyncType ? (function() {
               throw new TypeError("Async method requested but sync result obtained");
-            })() : i2 ? checkUndefined(y2) : Promise.resolve(checkUndefined(y2));
+            })() : i3 ? checkUndefined(y2) : Promise.resolve(checkUndefined(y2));
           } }, { key: "reviveSync", value: function reviveSync(e2, t2) {
             return this.revive(e2, _objectSpread2(_objectSpread2({ throwOnBadSyncType: true }, t2), {}, { sync: true }));
           } }, { key: "reviveAsync", value: function reviveAsync(e2, t2) {
@@ -36515,10 +36524,10 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               e3 && o(e3).forEach((function(r3) {
                 if ("#" === r3) throw new TypeError("# cannot be used as a type name as it is reserved for cyclic objects");
                 if (Typeson2.JSON_TYPES.includes(r3)) throw new TypeError("Plain JSON object types are reserved as type names");
-                var n2 = e3[r3], i2 = n2 && n2.testPlainObjects ? this.plainObjectReplacers : this.nonplainObjectReplacers, o2 = i2.filter((function(e4) {
+                var n2 = e3[r3], i3 = n2 && n2.testPlainObjects ? this.plainObjectReplacers : this.nonplainObjectReplacers, o2 = i3.filter((function(e4) {
                   return e4.type === r3;
                 }));
-                if (o2.length && (i2.splice(i2.indexOf(o2[0]), 1), delete this.revivers[r3], delete this.types[r3]), "function" == typeof n2) {
+                if (o2.length && (i3.splice(i3.indexOf(o2[0]), 1), delete this.revivers[r3], delete this.types[r3]), "function" == typeof n2) {
                   var c2 = n2;
                   n2 = { test: function test(e4) {
                     return e4 && e4.constructor === c2;
@@ -36659,12 +36668,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         } } }, O = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/", _ = new Uint8Array(256), j = 0; j < O.length; j++) _[O.charCodeAt(j)] = j;
         var S = function encode3(e2, t2, r2) {
           null == r2 && (r2 = e2.byteLength);
-          for (var n2 = new Uint8Array(e2, 0, r2), i2 = n2.length, o2 = "", a2 = 0; a2 < i2; a2 += 3) o2 += O[n2[a2] >> 2], o2 += O[(3 & n2[a2]) << 4 | n2[a2 + 1] >> 4], o2 += O[(15 & n2[a2 + 1]) << 2 | n2[a2 + 2] >> 6], o2 += O[63 & n2[a2 + 2]];
-          return i2 % 3 == 2 ? o2 = o2.slice(0, -1) + "=" : i2 % 3 == 1 && (o2 = o2.slice(0, -2) + "=="), o2;
+          for (var n2 = new Uint8Array(e2, 0, r2), i3 = n2.length, o2 = "", a2 = 0; a2 < i3; a2 += 3) o2 += O[n2[a2] >> 2], o2 += O[(3 & n2[a2]) << 4 | n2[a2 + 1] >> 4], o2 += O[(15 & n2[a2 + 1]) << 2 | n2[a2 + 2] >> 6], o2 += O[63 & n2[a2 + 2]];
+          return i3 % 3 == 2 ? o2 = o2.slice(0, -1) + "=" : i3 % 3 == 1 && (o2 = o2.slice(0, -2) + "=="), o2;
         }, T = function decode3(e2) {
-          var t2, r2, n2, i2, o2 = e2.length, a2 = 0.75 * e2.length, c2 = 0;
+          var t2, r2, n2, i3, o2 = e2.length, a2 = 0.75 * e2.length, c2 = 0;
           "=" === e2[e2.length - 1] && (a2--, "=" === e2[e2.length - 2] && a2--);
-          for (var u2 = new ArrayBuffer(a2), s2 = new Uint8Array(u2), f2 = 0; f2 < o2; f2 += 4) t2 = _[e2.charCodeAt(f2)], r2 = _[e2.charCodeAt(f2 + 1)], n2 = _[e2.charCodeAt(f2 + 2)], i2 = _[e2.charCodeAt(f2 + 3)], s2[c2++] = t2 << 2 | r2 >> 4, s2[c2++] = (15 & r2) << 4 | n2 >> 2, s2[c2++] = (3 & n2) << 6 | 63 & i2;
+          for (var u2 = new ArrayBuffer(a2), s2 = new Uint8Array(u2), f2 = 0; f2 < o2; f2 += 4) t2 = _[e2.charCodeAt(f2)], r2 = _[e2.charCodeAt(f2 + 1)], n2 = _[e2.charCodeAt(f2 + 2)], i3 = _[e2.charCodeAt(f2 + 3)], s2[c2++] = t2 << 2 | r2 >> 4, s2[c2++] = (15 & r2) << 4 | n2 >> 2, s2[c2++] = (3 & n2) << 6 | 63 & i3;
           return u2;
         }, w = { arraybuffer: { test: function test(e2) {
           return "ArrayBuffer" === s.toStringTag(e2);
@@ -36682,27 +36691,27 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           r2 && (P[e2.toLowerCase()] = { test: function test(e3) {
             return s.toStringTag(e3) === t2;
           }, replace: function replace2(e3, t3) {
-            var r3 = e3.buffer, n2 = e3.byteOffset, i2 = e3.length;
+            var r3 = e3.buffer, n2 = e3.byteOffset, i3 = e3.length;
             t3.buffers || (t3.buffers = []);
             var o2 = t3.buffers.indexOf(r3);
-            return o2 > -1 ? { index: o2, byteOffset: n2, length: i2 } : (t3.buffers.push(r3), { encoded: S(r3), byteOffset: n2, length: i2 });
+            return o2 > -1 ? { index: o2, byteOffset: n2, length: i3 } : (t3.buffers.push(r3), { encoded: S(r3), byteOffset: n2, length: i3 });
           }, revive: function revive(e3, t3) {
             t3.buffers || (t3.buffers = []);
-            var n2, i2 = e3.byteOffset, o2 = e3.length, a2 = e3.encoded, c2 = e3.index;
-            return "index" in e3 ? n2 = t3.buffers[c2] : (n2 = T(a2), t3.buffers.push(n2)), new r2(n2, i2, o2);
+            var n2, i3 = e3.byteOffset, o2 = e3.length, a2 = e3.encoded, c2 = e3.index;
+            return "index" in e3 ? n2 = t3.buffers[c2] : (n2 = T(a2), t3.buffers.push(n2)), new r2(n2, i3, o2);
           } });
         }));
         var I = { dataview: { test: function test(e2) {
           return "DataView" === s.toStringTag(e2);
         }, replace: function replace2(e2, t2) {
-          var r2 = e2.buffer, n2 = e2.byteOffset, i2 = e2.byteLength;
+          var r2 = e2.buffer, n2 = e2.byteOffset, i3 = e2.byteLength;
           t2.buffers || (t2.buffers = []);
           var o2 = t2.buffers.indexOf(r2);
-          return o2 > -1 ? { index: o2, byteOffset: n2, byteLength: i2 } : (t2.buffers.push(r2), { encoded: S(r2), byteOffset: n2, byteLength: i2 });
+          return o2 > -1 ? { index: o2, byteOffset: n2, byteLength: i3 } : (t2.buffers.push(r2), { encoded: S(r2), byteOffset: n2, byteLength: i3 });
         }, revive: function revive(e2, t2) {
           t2.buffers || (t2.buffers = []);
-          var r2, n2 = e2.byteOffset, i2 = e2.byteLength, o2 = e2.encoded, a2 = e2.index;
-          return "index" in e2 ? r2 = t2.buffers[a2] : (r2 = T(o2), t2.buffers.push(r2)), new DataView(r2, n2, i2);
+          var r2, n2 = e2.byteOffset, i3 = e2.byteLength, o2 = e2.encoded, a2 = e2.index;
+          return "index" in e2 ? r2 = t2.buffers[a2] : (r2 = T(o2), t2.buffers.push(r2)), new DataView(r2, n2, i3);
         } } }, C = { IntlCollator: { test: function test(e2) {
           return s.hasConstructorOf(e2, Intl.Collator);
         }, replace: function replace2(e2) {
@@ -36733,8 +36742,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           if (t2.overrideMimeType("text/plain; charset=x-user-defined"), t2.open("GET", URL.createObjectURL(e2), false), t2.send(), 200 !== t2.status && 0 !== t2.status) throw new Error("Bad File access: " + t2.status);
           return { type: e2.type, stringContents: t2.responseText, name: e2.name, lastModified: e2.lastModified };
         }, revive: function revive(e2) {
-          var t2 = e2.name, r2 = e2.type, n2 = e2.stringContents, i2 = e2.lastModified;
-          return new File([string2arraybuffer(n2)], t2, { type: r2, lastModified: i2 });
+          var t2 = e2.name, r2 = e2.type, n2 = e2.stringContents, i3 = e2.lastModified;
+          return new File([string2arraybuffer(n2)], t2, { type: r2, lastModified: i3 });
         }, replaceAsync: function replaceAsync(e2) {
           return new s.Promise((function(t2, r2) {
             var n2 = new FileReader();
@@ -37054,8 +37063,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 }))];
               case 1:
                 tablesRowCounts = _a.sent();
-                tablesRowCounts.forEach(function(rowCount, i) {
-                  return tables[i].rowCount = rowCount;
+                tablesRowCounts.forEach(function(rowCount, i2) {
+                  return tables[i2].rowCount = rowCount;
                 });
                 progress.totalRows = tablesRowCounts.reduce(function(p, c) {
                   return p + c;
@@ -37143,8 +37152,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                                 return [4, chunkedCollection.primaryKeys()];
                               case 5:
                                 keys = _c.sent();
-                                keyvals = keys.map(function(key, i) {
-                                  return [key, values[i]];
+                                keyvals = keys.map(function(key, i2) {
+                                  return [key, values[i2]];
                                 });
                                 if (filter)
                                   keyvals = keyvals.filter(function(_a2) {
@@ -37444,7 +37453,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         if (!Object.keys) {
           Object.keys = function(o) {
             var a = [];
-            for (var i in o) if (o.hasOwnProperty(i)) a.push(i);
+            for (var i2 in o) if (o.hasOwnProperty(i2)) a.push(i2);
             return a;
           };
         }
@@ -37558,15 +37567,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         );
         CStream.prototype.write = function(data2) {
           data2 = new Buffer(data2);
-          for (var i = 0; i < data2.length; i++) {
-            var n = data2[i];
+          for (var i2 = 0; i2 < data2.length; i2++) {
+            var n = data2[i2];
             if (this.bytes_remaining > 0) {
               for (var j = 0; j < this.bytes_remaining; j++) {
                 this.temp_buffs[this.bytes_in_sequence][this.bytes_in_sequence - this.bytes_remaining + j] = data2[j];
               }
               this.string = this.temp_buffs[this.bytes_in_sequence].toString();
               this.bytes_in_sequence = this.bytes_remaining = 0;
-              i = i + j - 1;
+              i2 = i2 + j - 1;
               this._parser.write(this.string);
               this.emit("data", this.string);
               continue;
@@ -37575,27 +37584,27 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               if (n >= 194 && n <= 223) this.bytes_in_sequence = 2;
               if (n >= 224 && n <= 239) this.bytes_in_sequence = 3;
               if (n >= 240 && n <= 244) this.bytes_in_sequence = 4;
-              if (this.bytes_in_sequence + i > data2.length) {
-                for (var k = 0; k <= data2.length - 1 - i; k++) {
-                  this.temp_buffs[this.bytes_in_sequence][k] = data2[i + k];
+              if (this.bytes_in_sequence + i2 > data2.length) {
+                for (var k = 0; k <= data2.length - 1 - i2; k++) {
+                  this.temp_buffs[this.bytes_in_sequence][k] = data2[i2 + k];
                 }
-                this.bytes_remaining = i + this.bytes_in_sequence - data2.length;
+                this.bytes_remaining = i2 + this.bytes_in_sequence - data2.length;
                 return true;
               } else {
-                this.string = data2.slice(i, i + this.bytes_in_sequence).toString();
-                i = i + this.bytes_in_sequence - 1;
+                this.string = data2.slice(i2, i2 + this.bytes_in_sequence).toString();
+                i2 = i2 + this.bytes_in_sequence - 1;
                 this._parser.write(this.string);
                 this.emit("data", this.string);
                 continue;
               }
             }
-            for (var p = i; p < data2.length; p++) {
+            for (var p = i2; p < data2.length; p++) {
               if (data2[p] >= 128) break;
             }
-            this.string = data2.slice(i, p).toString();
+            this.string = data2.slice(i2, p).toString();
             this._parser.write(this.string);
             this.emit("data", this.string);
-            i = p - 1;
+            i2 = p - 1;
             continue;
           }
         };
@@ -37676,15 +37685,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             "Cannot write after close. Assign an onready handler."
           );
           if (chunk === null) return end(parser);
-          var i = 0, c = chunk.charCodeAt(0), p = parser.p;
+          var i2 = 0, c = chunk.charCodeAt(0), p = parser.p;
           if (clarinet2.DEBUG) console.log("write -> [" + chunk + "]");
           while (c) {
             p = c;
-            parser.c = c = chunk.charCodeAt(i++);
+            parser.c = c = chunk.charCodeAt(i2++);
             if (p !== c) parser.p = p;
             else p = parser.p;
             if (!c) break;
-            if (clarinet2.DEBUG) console.log(i, c, clarinet2.STATE[parser.state]);
+            if (clarinet2.DEBUG) console.log(i2, c, clarinet2.STATE[parser.state]);
             parser.position++;
             if (c === Char.lineFeed) {
               parser.line++;
@@ -37783,23 +37792,23 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 if (parser.textNode === void 0) {
                   parser.textNode = "";
                 }
-                var starti = i - 1, slashed = parser.slashed, unicodeI = parser.unicodeI;
+                var starti = i2 - 1, slashed = parser.slashed, unicodeI = parser.unicodeI;
                 STRING_BIGLOOP: while (true) {
                   if (clarinet2.DEBUG)
                     console.log(
-                      i,
+                      i2,
                       c,
                       clarinet2.STATE[parser.state],
                       slashed
                     );
                   while (unicodeI > 0) {
                     parser.unicodeS += String.fromCharCode(c);
-                    c = chunk.charCodeAt(i++);
+                    c = chunk.charCodeAt(i2++);
                     parser.position++;
                     if (unicodeI === 4) {
                       parser.textNode += String.fromCharCode(parseInt(parser.unicodeS, 16));
                       unicodeI = 0;
-                      starti = i - 1;
+                      starti = i2 - 1;
                     } else {
                       unicodeI++;
                     }
@@ -37807,15 +37816,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   }
                   if (c === Char.doubleQuote && !slashed) {
                     parser.state = parser.stack.pop() || S.VALUE;
-                    parser.textNode += chunk.substring(starti, i - 1);
-                    parser.position += i - 1 - starti;
+                    parser.textNode += chunk.substring(starti, i2 - 1);
+                    parser.position += i2 - 1 - starti;
                     break;
                   }
                   if (c === Char.backslash && !slashed) {
                     slashed = true;
-                    parser.textNode += chunk.substring(starti, i - 1);
-                    parser.position += i - 1 - starti;
-                    c = chunk.charCodeAt(i++);
+                    parser.textNode += chunk.substring(starti, i2 - 1);
+                    parser.position += i2 - 1 - starti;
+                    c = chunk.charCodeAt(i2++);
                     parser.position++;
                     if (!c) break;
                   }
@@ -37837,25 +37846,25 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                     } else {
                       parser.textNode += String.fromCharCode(c);
                     }
-                    c = chunk.charCodeAt(i++);
+                    c = chunk.charCodeAt(i2++);
                     parser.position++;
-                    starti = i - 1;
+                    starti = i2 - 1;
                     if (!c) break;
                     else continue;
                   }
-                  stringTokenPattern.lastIndex = i;
+                  stringTokenPattern.lastIndex = i2;
                   var reResult = stringTokenPattern.exec(chunk);
                   if (reResult === null) {
-                    i = chunk.length + 1;
-                    parser.textNode += chunk.substring(starti, i - 1);
-                    parser.position += i - 1 - starti;
+                    i2 = chunk.length + 1;
+                    parser.textNode += chunk.substring(starti, i2 - 1);
+                    parser.position += i2 - 1 - starti;
                     break;
                   }
-                  i = reResult.index + 1;
+                  i2 = reResult.index + 1;
                   c = chunk.charCodeAt(reResult.index);
                   if (!c) {
-                    parser.textNode += chunk.substring(starti, i - 1);
-                    parser.position += i - 1 - starti;
+                    parser.textNode += chunk.substring(starti, i2 - 1);
+                    parser.position += i2 - 1 - starti;
                     break;
                   }
                 }
@@ -37930,7 +37939,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                   parser.numberNode += String.fromCharCode(c);
                 } else {
                   closeNumber(parser);
-                  i--;
+                  i2--;
                   parser.state = parser.stack.pop() || S.VALUE;
                 }
                 continue;
@@ -38108,7 +38117,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             switch (_b.label) {
               case 0:
                 _loop_1 = function(tableExport2) {
-                  var tableName, table2, tableSchemaStr, sourceRows, rows, i, obj, filter, transform, filteredRows, _c, keys, values;
+                  var tableName, table2, tableSchemaStr, sourceRows, rows, i2, obj, filter, transform, filteredRows, _c, keys, values;
                   return __generator(this, function(_d) {
                     switch (_d.label) {
                       case 0:
@@ -38139,8 +38148,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                         }
                         sourceRows = tableExport2.rows;
                         rows = [];
-                        for (i = 0; i < sourceRows.length; i++) {
-                          obj = sourceRows[i];
+                        for (i2 = 0; i2 < sourceRows.length; i2++) {
+                          obj = sourceRows[i2];
                           if (!obj.incomplete) {
                             rows.push(TSON.revive(obj));
                           } else {
@@ -39009,7 +39018,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     const setRound = (index, label, colour) => {
       setRounds(
         rounds.map(
-          (round, i) => i === index ? { ...round, label, colour } : round
+          (round, i2) => i2 === index ? { ...round, label, colour } : round
         )
       );
     };
