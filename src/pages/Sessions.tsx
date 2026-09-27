@@ -39,12 +39,6 @@ const Sessions = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
                 key={session._id}
                 image={game?.image}
                 linkTo={`/sessions/${session._id}`}
-                buttons={
-                  <IconButton
-                    icon="edit"
-                    to={`/sessions/${session._id}/edit`}
-                  ></IconButton>
-                }
               >
                 <div className="body-large">{session.title}</div>
                 <div className="body-medium c-card__meta">
