@@ -1,5 +1,5 @@
 import { useLiveQuery } from "dexie-react-hooks";
-import { ChangeEvent } from "react";
+import { ChangeEvent, useEffect, useState } from "react";
 
 import { db } from "../../data/db";
 import { Round } from "../../data/types";
@@ -12,6 +12,8 @@ interface Props {
 }
 
 const ScoreTableCell = ({ round, playerId, editable }: Props) => {
+  const [draft, setDraft] = useState<string | null>(null);
+
   const score = useLiveQuery(() =>
     db.scores.get({
       sessionId: round.sessionId,
@@ -20,8 +22,14 @@ const ScoreTableCell = ({ round, playerId, editable }: Props) => {
     }),
   );
 
+  useEffect(() => {
+    setDraft(null);
+  }, [score?.value]);
+
   const handleScoreChange = (e: ChangeEvent<HTMLInputElement>) => {
-    if (e.target.value) {
+    setDraft(e.target.value);
+
+    if (e.target.value && !isNaN(parseFloat(e.target.value))) {
       db.scores.put({
         sessionId: round.sessionId,
         roundIndex: round.index,
@@ -37,7 +45,7 @@ const ScoreTableCell = ({ round, playerId, editable }: Props) => {
     <TableCellInput
       type="text"
       inputMode="numeric"
-      value={score?.value}
+      value={draft ?? score?.value ?? ""}
       onChange={handleScoreChange}
       pattern="[0-9]*"
     />

@@ -41,7 +41,7 @@ const ScoreTable = ({ session, editable = false, ...props }: Props) => {
 
   let winners: string[] = [];
   if (scoreMode === ScoreMode.Highest) {
-    let highScore = 0;
+    let highScore = -Infinity;
     Object.entries(totalScores).forEach(([playerId, score]) => {
       if (score > highScore) {
         winners = [playerId];
