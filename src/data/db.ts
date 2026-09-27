@@ -13,6 +13,7 @@ import {
   SessionWithRelations,
 } from "./types";
 import { pull, push } from "./sync";
+import { exportDB, importDB, importInto } from "dexie-export-import";
 
 export class MySubClassedDexie extends Dexie {
   games!: Table<Game>;
@@ -236,4 +237,31 @@ export function useDBInit() {
   });
 
   return ready;
+}
+
+export async function downloadData() {
+  const blob = await exportDB(db);
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement("a");
+  a.href = url;
+  a.download = "scoreboard-export.json";
+  a.click();
+  URL.revokeObjectURL(url);
+}
+
+export async function uploadData() {
+  return new Promise((resolve, reject) => {
+    const input = document.createElement("input");
+    input.type = "file";
+    input.accept = "application/json";
+    input.onchange = async (event) => {
+      const file = (event.target as HTMLInputElement).files?.[0];
+      if (!file) return reject(undefined);
+
+      const arrayBuffer = await file.arrayBuffer();
+      await importInto(db, new Blob([arrayBuffer]), { overwriteValues: true });
+      resolve(undefined);
+    };
+    input.click();
+  });
 }

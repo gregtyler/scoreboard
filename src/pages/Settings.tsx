@@ -1,5 +1,6 @@
-import { HTMLAttributes } from "react";
+import { HTMLAttributes, useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { downloadData, uploadData } from "../data/db";
 import { v4 as uuidv4 } from "uuid";
 
 import Button from "../components/button/Button";
@@ -11,8 +12,15 @@ import Tab from "../components/tabs/Tab";
 import Tabs from "../components/tabs/Tabs";
 import { db, usePlayers, useSessions } from "../data/db";
 import Page from "./Page";
+import Modal from "../components/modal/Modal";
+
+const STATE_IMPORT_WAIT = 0;
+const STATE_IMPORT_IN_PROGRESS = 1;
+const STATE_IMPORT_COMPLETE = 2;
+const STATE_IMPORT_FAILURE = 3;
 
 const Settings = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
+  const [importState, setImportState] = useState(STATE_IMPORT_WAIT);
   const players = usePlayers();
   const sessions = useSessions();
 
@@ -25,6 +33,16 @@ const Settings = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
       name: "",
     });
     navigate(`/players/${id}`);
+  }
+
+  async function doUpload() {
+    setImportState(STATE_IMPORT_IN_PROGRESS);
+    try {
+      await uploadData();
+      setImportState(STATE_IMPORT_COMPLETE);
+    } catch (error) {
+      setImportState(STATE_IMPORT_FAILURE);
+    }
   }
 
   return (
@@ -58,10 +76,29 @@ const Settings = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
             </div>
           </Tab>
           <Tab>
-            <div style={{ textAlign: "center" }}>Settings go here...</div>
+            <div style={{ textAlign: "center" }}>
+              <Button icon="upload" variant="tonal" onClick={doUpload}>
+                Import data
+              </Button>{" "}
+              <Button icon="download" variant="tonal" onClick={downloadData}>
+                Export data
+              </Button>
+            </div>
           </Tab>
         </Tabs>
       </Page>
+
+      {importState !== STATE_IMPORT_WAIT ? (
+        <Modal
+          title="Importing data"
+          open={importState !== STATE_IMPORT_WAIT}
+          onClose={() => setImportState(STATE_IMPORT_WAIT)}
+        >
+          {importState === STATE_IMPORT_IN_PROGRESS && "Please wait whilst data is imported."}
+          {importState === STATE_IMPORT_COMPLETE && "Data import complete."}
+          {importState === STATE_IMPORT_FAILURE && "⚠️ Data import failed. Please try again."}
+        </Modal>
+      ) : null}
     </div>
   );
 };
