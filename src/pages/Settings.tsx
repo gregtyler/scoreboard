@@ -13,6 +13,7 @@ import Tabs from "../components/tabs/Tabs";
 import { db, usePlayers, useSessions } from "../data/db";
 import Page from "./Page";
 import Modal from "../components/modal/Modal";
+import ButtonStrip from "../components/form/ButtonStrip";
 
 const STATE_IMPORT_WAIT = 0;
 const STATE_IMPORT_IN_PROGRESS = 1;
@@ -76,14 +77,14 @@ const Settings = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
             </div>
           </Tab>
           <Tab>
-            <div style={{ textAlign: "center" }}>
+            <ButtonStrip className="c-button-strip--align-centre">
               <Button icon="upload" variant="tonal" onClick={doUpload}>
                 Import data
-              </Button>{" "}
+              </Button>
               <Button icon="download" variant="tonal" onClick={downloadData}>
                 Export data
               </Button>
-            </div>
+            </ButtonStrip>
           </Tab>
         </Tabs>
       </Page>
