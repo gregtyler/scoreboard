@@ -358,13 +358,11 @@
 @font-face {
   font-family: Roboto;
   src: url(./fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf) format("truetype");
-  font-weight: normal;
   font-style: normal;
 }
 @font-face {
   font-family: "Material Symbols Outlined";
-  src: url(./fonts/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].ttf) format("truetype");
-  font-weight: normal;
+  src: url(./fonts/MaterialSymbolsOutlined-VariableFont_FILL,GRAD,opsz,wght.ttf) format("truetype");
   font-style: normal;
 }
 .material-theme {
@@ -640,6 +638,9 @@ option {
 .c-button-strip--align-left {
   justify-content: flex-start;
 }
+.c-button-strip--align-centre {
+  justify-content: center;
+}
 .c-radio__container {
   display: block;
   padding: 16px 8px 16px 24px;
@@ -763,7 +764,7 @@ option {
   align-items: center;
   padding-bottom: 8px;
   padding-top: 8px;
-  border-bottom: 1px solid var(--md-sys-color-outline);
+  border-bottom: 1px solid var(--md-sys-color-secondary-container);
 }
 .c-list__item-body {
   flex: 1;
@@ -796,14 +797,13 @@ option {
   min-width: 90px;
   max-width: 360px;
   padding: 12px 16px;
-  border-radius: 100px;
+  border-bottom: 1px solid var(--md-sys-color-secondary-container);
   font-size: var(--md-sys-typescale-button-size);
   text-align: center;
-  text-transform: uppercase;
   cursor: pointer;
 }
 .c-tabs__item--active {
-  background-color: var(--md-sys-color-secondary-container);
+  border-bottom: 3px solid var(--md-sys-color-secondary-container);
   color: var(--md-sys-color-on-secondary-container);
   font-weight: bold;
 }
@@ -887,6 +887,9 @@ option {
 }
 .c-table .c-table__cell--no-padding {
   padding: 0;
+}
+.c-table__cell--error:focus {
+  outline: 5px solid var(--md-sys-color-error-container);
 }
 .c-table tbody th {
   text-align: left;

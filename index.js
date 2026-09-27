@@ -27952,7 +27952,7 @@
 
   // src/index.tsx
   init_react_shim();
-  var import_react16 = __toESM(require_react());
+  var import_react18 = __toESM(require_react());
   var import_client = __toESM(require_client());
 
   // node_modules/react-router/dist/development/chunk-62JRHF6Z.mjs
@@ -29106,22 +29106,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   }) {
     let { basename } = React22.useContext(NavigationContext);
     if (typeof error === "object" && error && "digest" in error && typeof error.digest === "string") {
-      let redirect2 = decodeRedirectErrorDigest(error.digest);
-      if (redirect2) {
+      let redirect22 = decodeRedirectErrorDigest(error.digest);
+      if (redirect22) {
         let existingRedirect = errorRedirectHandledMap.get(error);
         if (existingRedirect) throw existingRedirect;
-        let parsed = parseToInfo(redirect2.location, basename);
+        let parsed = parseToInfo(redirect22.location, basename);
         let target = parsed.absoluteURL || parsed.to;
         if (hasInvalidProtocol(target)) {
           throw new Error("Invalid redirect location");
         }
         if (isBrowser && !errorRedirectHandledMap.get(error)) {
-          if (parsed.isExternal || redirect2.reloadDocument) {
+          if (parsed.isExternal || redirect22.reloadDocument) {
             window.location.href = target;
           } else {
             const redirectPromise = Promise.resolve().then(
               () => window.__reactRouterDataRouter.navigate(parsed.to, {
-                replace: redirect2.replace
+                replace: redirect22.replace
               })
             );
             errorRedirectHandledMap.set(error, redirectPromise);
@@ -38639,7 +38639,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         gameId: newSession.gameId,
         scoreMode: newSession.scoreMode,
         playerIds: newSession.playerIds,
-        customWinner: newSession.customWinner
+        customWinner: newSession.customWinner,
+        locked: false
       };
       if (newSession.labels) data2.labels = newSession.labels;
       db.sessions.put(data2, id);
@@ -38677,6 +38678,30 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       [scores]
     );
     return totals ?? {};
+  }
+  async function downloadData() {
+    const blob = await exportDB(db);
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement("a");
+    a.href = url;
+    a.download = "scoreboard-export.json";
+    a.click();
+    URL.revokeObjectURL(url);
+  }
+  async function uploadData() {
+    return new Promise((resolve, reject) => {
+      const input = document.createElement("input");
+      input.type = "file";
+      input.accept = "application/json";
+      input.onchange = async (event) => {
+        const file = event.target.files?.[0];
+        if (!file) return reject(void 0);
+        const arrayBuffer2 = await file.arrayBuffer();
+        await importInto(db, new Blob([arrayBuffer2]), { overwriteValues: true });
+        resolve(void 0);
+      };
+      input.click();
+    });
   }
 
   // src/pages/Page.tsx
@@ -38794,6 +38819,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/pages/Settings.tsx
   init_react_shim();
+  var import_react6 = __toESM(require_react());
 
   // src/components/list/List.tsx
   init_react_shim();
@@ -38846,7 +38872,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       /* @__PURE__ */ (0, import_jsx_runtime14.jsx)("div", { className: "c-tabs__container", children: tabs.map((label, index) => /* @__PURE__ */ (0, import_jsx_runtime14.jsx)(
         "div",
         {
-          className: `c-tabs__item o-interactive ${index === currentTab ? "o-interactive--active" : ""}`,
+          className: `c-tabs__item o-interactive ${index === currentTab ? "c-tabs__item--active" : ""}`,
           onClick: () => setCurrentTab(index),
           children: label
         },
@@ -38865,69 +38891,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   var Tabs_default = Tabs;
 
-  // src/pages/Settings.tsx
-  var import_jsx_runtime15 = __toESM(require_jsx_runtime());
-  var Settings = ({ ...props }) => {
-    const players = usePlayers();
-    const navigate = useNavigate();
-    async function addPlayer() {
-      const id = v4_default();
-      await db.players.add({
-        _id: id,
-        name: ""
-      });
-      navigate(`/players/${id}`);
-    }
-    return /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { ...props, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(AppBar_default, { variant: "center", title: "Settings" }),
-      /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Page_default, { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(Tabs_default, { tabs: ["Players", "Settings"], children: [
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(Tab_default, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(List_default, { children: players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
-            ListItem_default,
-            {
-              avatar: player.name.substring(0, 1),
-              action: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(IconButton_default, { icon: "edit", to: `/players/${player._id}` }),
-              children: player.name
-            },
-            player._id
-          )) }),
-          /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Button_default, { icon: "add", onClick: addPlayer, children: "Add new player" }) })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Tab_default, { children: /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { style: { textAlign: "center" }, children: "Settings go here..." }) })
-      ] }) })
-    ] });
-  };
-  var Settings_default = Settings;
-
-  // src/pages/EditGame.tsx
-  init_react_shim();
-  var import_react7 = __toESM(require_react());
-
-  // src/components/FullPageError.tsx
-  init_react_shim();
-  var import_jsx_runtime16 = __toESM(require_jsx_runtime());
-  var FullPageError = ({ title, children, backTo, ...props }) => /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { ...props, children: [
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(
-      AppBar_default,
-      {
-        variant: "center",
-        title: title || "An error occurred",
-        backTo
-      }
-    ),
-    /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Page_default, { children })
-  ] });
-  var FullPageError_default = FullPageError;
-
-  // src/components/modal/EditRoundModal.tsx
-  init_react_shim();
-  var import_react6 = __toESM(require_react());
-
   // src/components/modal/Modal.tsx
   init_react_shim();
   var import_react5 = __toESM(require_react());
   var import_react_dom = __toESM(require_react_dom());
-  var import_jsx_runtime17 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime15 = __toESM(require_jsx_runtime());
   var Modal = ({
     buttons,
     title,
@@ -38945,21 +38913,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       };
     }, []);
     return (0, import_react_dom.createPortal)(
-      open ? /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)(import_jsx_runtime17.Fragment, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "c-modal__backdrop", onClick: onClose }),
-        /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+      open ? /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)(import_jsx_runtime15.Fragment, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "c-modal__backdrop", onClick: onClose }),
+        /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(
           "dialog",
           {
             className: "c-modal",
             "aria-describedby": `${id}-label`,
             open: true,
             ...props,
-            children: /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("form", { children: [
-              /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { className: "c-modal__content", children: [
-                /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("h2", { className: "c-modal__title headline-small", id: `${id}-label`, children: title }),
+            children: /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("form", { children: [
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsxs)("div", { className: "c-modal__content", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("h2", { className: "c-modal__title headline-small", id: `${id}-label`, children: title }),
                 children
               ] }),
-              /* @__PURE__ */ (0, import_jsx_runtime17.jsx)("div", { className: "c-modal__buttons", children: buttons || /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Button_default, { onClick: onClose, children: "Close" }) })
+              /* @__PURE__ */ (0, import_jsx_runtime15.jsx)("div", { className: "c-modal__buttons", children: buttons || /* @__PURE__ */ (0, import_jsx_runtime15.jsx)(Button_default, { onClick: onClose, children: "Close" }) })
             ] })
           }
         )
@@ -38969,7 +38937,105 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   var Modal_default = Modal;
 
+  // src/pages/Settings.tsx
+  var import_jsx_runtime16 = __toESM(require_jsx_runtime());
+  var STATE_IMPORT_WAIT = 0;
+  var STATE_IMPORT_IN_PROGRESS = 1;
+  var STATE_IMPORT_COMPLETE = 2;
+  var STATE_IMPORT_FAILURE = 3;
+  var Settings = ({ ...props }) => {
+    const [importState, setImportState] = (0, import_react6.useState)(STATE_IMPORT_WAIT);
+    const players = usePlayers();
+    const sessions = useSessions();
+    const navigate = useNavigate();
+    async function addPlayer() {
+      const id = v4_default();
+      await db.players.add({
+        _id: id,
+        name: ""
+      });
+      navigate(`/players/${id}`);
+    }
+    async function doUpload() {
+      setImportState(STATE_IMPORT_IN_PROGRESS);
+      try {
+        await uploadData();
+        setImportState(STATE_IMPORT_COMPLETE);
+      } catch (error) {
+        setImportState(STATE_IMPORT_FAILURE);
+      }
+    }
+    return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)("div", { ...props, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(AppBar_default, { variant: "center", title: "Settings" }),
+      /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Page_default, { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Tabs_default, { tabs: ["Players", "Settings"], children: [
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(Tab_default, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(List_default, { children: players.map((player) => {
+            const gameCount = sessions.filter(
+              (x) => x.players.find((p) => p._id === player._id)
+            ).length;
+            return /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
+              ListItem_default,
+              {
+                avatar: player.name.substring(0, 1),
+                action: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(IconButton_default, { icon: "edit", to: `/players/${player._id}` }),
+                children: [
+                  player.name,
+                  " \u2014 ",
+                  gameCount,
+                  " game",
+                  gameCount === 1 ? "" : "s"
+                ]
+              },
+              player._id
+            );
+          }) }),
+          /* @__PURE__ */ (0, import_jsx_runtime16.jsx)("div", { style: { textAlign: "center" }, children: /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Button_default, { icon: "add", variant: "tonal", onClick: addPlayer, children: "Add new player" }) })
+        ] }),
+        /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Tab_default, { children: /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(ButtonStrip_default, { className: "c-button-strip--align-centre", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Button_default, { icon: "upload", variant: "tonal", onClick: doUpload, children: "Import data" }),
+          /* @__PURE__ */ (0, import_jsx_runtime16.jsx)(Button_default, { icon: "download", variant: "tonal", onClick: downloadData, children: "Export data" })
+        ] }) })
+      ] }) }),
+      importState !== STATE_IMPORT_WAIT ? /* @__PURE__ */ (0, import_jsx_runtime16.jsxs)(
+        Modal_default,
+        {
+          title: "Importing data",
+          open: importState !== STATE_IMPORT_WAIT,
+          onClose: () => setImportState(STATE_IMPORT_WAIT),
+          children: [
+            importState === STATE_IMPORT_IN_PROGRESS && "Please wait whilst data is imported.",
+            importState === STATE_IMPORT_COMPLETE && "Data import complete.",
+            importState === STATE_IMPORT_FAILURE && "\u26A0\uFE0F Data import failed. Please try again."
+          ]
+        }
+      ) : null
+    ] });
+  };
+  var Settings_default = Settings;
+
+  // src/pages/EditGame.tsx
+  init_react_shim();
+  var import_react8 = __toESM(require_react());
+
+  // src/components/FullPageError.tsx
+  init_react_shim();
+  var import_jsx_runtime17 = __toESM(require_jsx_runtime());
+  var FullPageError = ({ title, children, backTo, ...props }) => /* @__PURE__ */ (0, import_jsx_runtime17.jsxs)("div", { ...props, children: [
+    /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(
+      AppBar_default,
+      {
+        variant: "center",
+        title: title || "An error occurred",
+        backTo
+      }
+    ),
+    /* @__PURE__ */ (0, import_jsx_runtime17.jsx)(Page_default, { children })
+  ] });
+  var FullPageError_default = FullPageError;
+
   // src/components/modal/EditRoundModal.tsx
+  init_react_shim();
+  var import_react7 = __toESM(require_react());
   var import_jsx_runtime18 = __toESM(require_jsx_runtime());
   var EditRoundModal = ({
     onSave,
@@ -38979,8 +39045,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     colour: initialColour,
     ...props
   }) => {
-    const [name, setName] = (0, import_react6.useState)(initialLabel);
-    const [colour, setColour] = (0, import_react6.useState)(initialColour);
+    const [name, setName] = (0, import_react7.useState)(initialLabel);
+    const [colour, setColour] = (0, import_react7.useState)(initialColour);
     const handleSave = () => {
       if (name) onSave(name, colour);
       onClose();
@@ -39048,15 +39114,15 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     if (typeof id !== "string") {
       return /* @__PURE__ */ (0, import_jsx_runtime19.jsx)(FullPageError_default, { title: "Game not found" });
     }
-    const [name, setName] = (0, import_react7.useState)("");
-    const [image, setImage] = (0, import_react7.useState)("");
-    const [scoreMode, setScoreMode] = (0, import_react7.useState)("CUSTOM" /* Custom */);
-    const [rounds, setRounds] = (0, import_react7.useState)(
+    const [name, setName] = (0, import_react8.useState)("");
+    const [image, setImage] = (0, import_react8.useState)("");
+    const [scoreMode, setScoreMode] = (0, import_react8.useState)("CUSTOM" /* Custom */);
+    const [rounds, setRounds] = (0, import_react8.useState)(
       []
     );
-    const [editRoundActive, setEditRoundActive] = (0, import_react7.useState)(-1);
+    const [editRoundActive, setEditRoundActive] = (0, import_react8.useState)(-1);
     const [game, setGame] = useGame(id);
-    (0, import_react7.useEffect)(() => {
+    (0, import_react8.useEffect)(() => {
       if (game) {
         setName(game.name);
         setImage(game.image ?? "");
@@ -39200,7 +39266,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/pages/EditPlayer.tsx
   init_react_shim();
-  var import_react8 = __toESM(require_react());
+  var import_react9 = __toESM(require_react());
   var import_jsx_runtime20 = __toESM(require_jsx_runtime());
   var EditPlayer = ({ ...props }) => {
     const { id } = useParams();
@@ -39208,9 +39274,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     if (typeof id !== "string") {
       return /* @__PURE__ */ (0, import_jsx_runtime20.jsx)(FullPageError_default, { backTo: "/settings", children: /* @__PURE__ */ (0, import_jsx_runtime20.jsx)("p", { children: "Player not found" }) });
     }
-    const [name, setName] = (0, import_react8.useState)("");
+    const [name, setName] = (0, import_react9.useState)("");
     const [player, setPlayer] = usePlayer(id);
-    (0, import_react8.useEffect)(() => {
+    (0, import_react9.useEffect)(() => {
       if (player) {
         setName(player.name);
       }
@@ -39258,7 +39324,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/pages/EditSession.tsx
   init_react_shim();
-  var import_react9 = __toESM(require_react());
+  var import_react10 = __toESM(require_react());
   var import_jsx_runtime21 = __toESM(require_jsx_runtime());
   var EditSession = () => {
     const { id } = useParams();
@@ -39267,11 +39333,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       return /* @__PURE__ */ (0, import_jsx_runtime21.jsx)(FullPageError_default, { title: "Session not found" });
     }
     const games = useGames();
-    const [title, setTitle] = (0, import_react9.useState)("");
-    const [start, setStart] = (0, import_react9.useState)(/* @__PURE__ */ new Date());
-    const [boardType, setBoardType] = (0, import_react9.useState)("");
+    const [title, setTitle] = (0, import_react10.useState)("");
+    const [start, setStart] = (0, import_react10.useState)(/* @__PURE__ */ new Date());
+    const [boardType, setBoardType] = (0, import_react10.useState)("");
     const [session, setSession, deleteSession] = useSession(id);
-    (0, import_react9.useEffect)(() => {
+    (0, import_react10.useEffect)(() => {
       if (session) {
         setTitle(session.title);
         setStart(new Date(session.start));
@@ -39371,140 +39437,6 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/pages/EditSessionScores.tsx
   init_react_shim();
-  var import_react13 = __toESM(require_react());
-
-  // src/components/modal/EditPlayersModal.tsx
-  init_react_shim();
-  var import_react10 = __toESM(require_react());
-  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
-  var EditPlayersModal = ({ playerIds, onSave, onClose, ...props }) => {
-    const [ids, setIds] = (0, import_react10.useState)(playerIds);
-    const [name, setName] = (0, import_react10.useState)("");
-    const allPlayers = usePlayers();
-    const players = (0, import_react10.useMemo)(() => {
-      return allPlayers.filter((x) => ids.includes(x._id));
-    }, [ids, allPlayers]);
-    const handleSave = () => {
-      onSave(ids);
-      onClose();
-    };
-    const newPlayerId = (0, import_react10.useMemo)(() => {
-      return allPlayers.find((x) => x.name === name.trim())?._id;
-    }, [name, allPlayers]);
-    const addPlayer = async () => {
-      if (!name) {
-        return;
-      }
-      let id = newPlayerId;
-      if (!id) {
-        id = v4_default();
-        await db.players.add({
-          _id: id,
-          name: name.trim()
-        });
-      }
-      if (ids.includes(id)) {
-        setName("");
-        return;
-      }
-      setIds([...ids, id]);
-      setName("");
-    };
-    return /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(
-      Modal_default,
-      {
-        title: "Edit players",
-        buttons: /* @__PURE__ */ (0, import_jsx_runtime22.jsxs)(import_jsx_runtime22.Fragment, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Button_default, { onClick: onClose, children: "Cancel" }),
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(Button_default, { onClick: handleSave, disabled: players.length === 0, children: "Save" })
-        ] }),
-        onClose,
-        ...props,
-        children: [
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(List_default, { children: players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
-            ListItem_default,
-            {
-              avatar: player.name.substring(0, 1),
-              action: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
-                IconButton_default,
-                {
-                  onClick: () => setIds(ids.filter((x) => x !== player._id)),
-                  icon: "delete"
-                }
-              ),
-              children: player.name
-            },
-            player._id
-          )) }),
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
-            TextField_default,
-            {
-              label: "Add player",
-              value: name,
-              list: "all-players",
-              onChange: (e) => setName(e.target.value),
-              className: "o-player-modal-inline__name",
-              suffix: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)(
-                Button_default,
-                {
-                  icon: newPlayerId ? "person" : "add",
-                  variant: "filled",
-                  onClick: addPlayer,
-                  children: "Add"
-                }
-              )
-            }
-          ),
-          /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("datalist", { id: "all-players", children: allPlayers.filter((p) => !ids.includes(p._id)).map((player) => /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("option", { value: player.name, children: player.name }, player.name)) })
-        ]
-      }
-    );
-  };
-  var EditPlayersModal_default = EditPlayersModal;
-
-  // src/components/modal/WinnerModal.tsx
-  init_react_shim();
-  var import_react11 = __toESM(require_react());
-  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
-  var WinnerModal = ({ playerIds, onSave, onClose, ...props }) => {
-    const [ids] = (0, import_react11.useState)(playerIds);
-    const allPlayers = usePlayers();
-    const players = (0, import_react11.useMemo)(() => {
-      return allPlayers.filter((x) => ids.includes(x._id));
-    }, [ids, allPlayers]);
-    const handleSave = (playerId) => {
-      onSave(playerId);
-      onClose();
-    };
-    return /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
-      Modal_default,
-      {
-        title: "Select winner",
-        buttons: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(import_jsx_runtime23.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(Button_default, { onClick: onClose, children: "Cancel" }) }),
-        onClose,
-        ...props,
-        children: /* @__PURE__ */ (0, import_jsx_runtime23.jsxs)(List_default, { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
-            ListItem_default,
-            {
-              action: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(IconButton_default, { onClick: () => handleSave(null), icon: "check" }),
-              children: "No winner"
-            }
-          ),
-          players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
-            ListItem_default,
-            {
-              avatar: player.name.substring(0, 1),
-              action: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(IconButton_default, { onClick: () => handleSave(player._id), icon: "check" }),
-              children: player.name
-            },
-            player._id
-          ))
-        ] })
-      }
-    );
-  };
-  var WinnerModal_default = WinnerModal;
 
   // src/components/score-table/ScoreTable.tsx
   init_react_shim();
@@ -39512,30 +39444,31 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/components/table/Table.tsx
   init_react_shim();
-  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime22 = __toESM(require_jsx_runtime());
   var Table2 = ({
     className,
     children,
     ...props
   }) => {
-    return /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("div", { className: "c-table__wrapper", children: /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("table", { className: `c-table ${className ?? ""}`, ...props, children }) });
+    return /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("div", { className: "c-table__wrapper", children: /* @__PURE__ */ (0, import_jsx_runtime22.jsx)("table", { className: `c-table ${className ?? ""}`, ...props, children }) });
   };
   var Table_default = Table2;
 
   // src/components/score-table/ScoreTableCell.tsx
   init_react_shim();
+  var import_react11 = __toESM(require_react());
 
   // src/components/table/TableCellInput.tsx
   init_react_shim();
-  var import_jsx_runtime25 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime23 = __toESM(require_jsx_runtime());
   var TableCellInput = ({
     value,
     ...props
-  }) => /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("td", { className: "c-table__cell--no-padding", children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
+  }) => /* @__PURE__ */ (0, import_jsx_runtime23.jsx)("td", { className: "c-table__cell--no-padding", children: /* @__PURE__ */ (0, import_jsx_runtime23.jsx)(
     "input",
     {
       ...props,
-      className: "c-text-field__input",
+      className: `c-text-field__input ${props.className ?? ""}`,
       style: { padding: "0 12px", textAlign: "center" },
       value
     }
@@ -39543,8 +39476,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var TableCellInput_default = TableCellInput;
 
   // src/components/score-table/ScoreTableCell.tsx
-  var import_jsx_runtime26 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime24 = __toESM(require_jsx_runtime());
   var ScoreTableCell = ({ round, playerId, editable }) => {
+    const [draft, setDraft] = (0, import_react11.useState)(null);
     const score = useLiveQuery(
       () => db.scores.get({
         sessionId: round.sessionId,
@@ -39552,8 +39486,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         playerId
       })
     );
+    (0, import_react11.useEffect)(() => {
+      setDraft(null);
+    }, [score?.value]);
     const handleScoreChange = (e) => {
-      if (e.target.value) {
+      setDraft(e.target.value);
+      if (e.target.value && !isNaN(parseFloat(e.target.value))) {
         db.scores.put({
           sessionId: round.sessionId,
           roundIndex: round.index,
@@ -39564,21 +39502,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         db.scores.delete([round.sessionId, round.index, playerId]);
       }
     };
-    return editable ? /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+    return editable ? /* @__PURE__ */ (0, import_jsx_runtime24.jsx)(
       TableCellInput_default,
       {
         type: "text",
         inputMode: "numeric",
-        value: score?.value,
+        value: draft ?? score?.value ?? "",
         onChange: handleScoreChange,
-        pattern: "[0-9]*"
+        pattern: "[0-9]*",
+        className: draft !== null && draft !== "" && score?.value === void 0 ? "c-table__cell--error" : ""
       }
-    ) : /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("td", { children: score?.value ?? "" });
+    ) : /* @__PURE__ */ (0, import_jsx_runtime24.jsx)("td", { children: score?.value ?? "" });
   };
   var ScoreTableCell_default = ScoreTableCell;
 
   // src/components/score-table/ScoreTable.tsx
-  var import_jsx_runtime27 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime25 = __toESM(require_jsx_runtime());
   var ScoreTable = ({ session, editable = false, ...props }) => {
     const totalScores = useTotalScores(session._id);
     const [editRoundActive, setEditRoundActive] = (0, import_react12.useState)(-1);
@@ -39601,7 +39540,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     });
     let winners = [];
     if (scoreMode === "HIGHEST" /* Highest */) {
-      let highScore = 0;
+      let highScore = -Infinity;
       Object.entries(totalScores).forEach(([playerId, score]) => {
         if (score > highScore) {
           winners = [playerId];
@@ -39657,24 +39596,24 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       });
       await db.rounds.delete([session._id, index]);
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(import_jsx_runtime27.Fragment, { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(Table_default, { ...props, children: [
-        /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("thead", { className: "c-table__thead--sticky", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("tr", { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("th", {}),
-            session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("th", { children: [
+    return /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(import_jsx_runtime25.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(Table_default, { ...props, children: [
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("thead", { className: "c-table__thead--sticky", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("tr", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("th", {}),
+            session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("th", { children: [
               winners.includes(player._id) && "\u{1F451}",
               " ",
               player.name
             ] }, player._id))
           ] }),
-          scoreMode && ["HIGHEST" /* Highest */, "LOWEST" /* Lowest */].includes(scoreMode) && /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("tr", { children: [
-            /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("th", { scope: "row", children: "Total" }),
-            session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("th", { children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("strong", { children: totalScores[player._id] }) }, player._id))
+          scoreMode && ["HIGHEST" /* Highest */, "LOWEST" /* Lowest */].includes(scoreMode) && /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("tr", { children: [
+            /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("th", { scope: "row", children: "Total" }),
+            session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("th", { children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("strong", { children: totalScores[player._id] }) }, player._id))
           ] })
         ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("tbody", { children: session.rounds.filter((round) => !round.deleted).map((round) => /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("tr", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("tbody", { children: session.rounds.filter((round) => !round.deleted).map((round) => /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("tr", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
             "th",
             {
               onContextMenu: (e) => {
@@ -39682,14 +39621,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
                 e.preventDefault();
                 setEditRoundActive(round.index);
               },
-              children: /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(
+              children: /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)(
                 "div",
                 {
                   style: {
                     fontSize: "var(--md-sys-typescale-caption-size)"
                   },
                   children: [
-                    round.colour && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Avatar_default, { colour: round.colour }),
+                    round.colour && /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(Avatar_default, { colour: round.colour }),
                     " ",
                     round.label ?? ""
                   ]
@@ -39697,7 +39636,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               )
             }
           ),
-          session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+          session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
             ScoreTableCell_default,
             {
               round,
@@ -39707,12 +39646,12 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             `${round.index}-${player._id}`
           ))
         ] }, round.index)) }),
-        scoreMode && ["HIGHEST" /* Highest */, "LOWEST" /* Lowest */].includes(scoreMode) && /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("tfoot", { children: /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)("tr", { children: [
-          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("th", { children: "Total" }),
-          session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)("strong", { children: totalScores[player._id] }) }, player._id))
+        scoreMode && ["HIGHEST" /* Highest */, "LOWEST" /* Lowest */].includes(scoreMode) && /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("tfoot", { children: /* @__PURE__ */ (0, import_jsx_runtime25.jsxs)("tr", { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("th", { children: "Total" }),
+          session.players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("td", { children: /* @__PURE__ */ (0, import_jsx_runtime25.jsx)("strong", { children: totalScores[player._id] }) }, player._id))
         ] }) })
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+      /* @__PURE__ */ (0, import_jsx_runtime25.jsx)(
         EditRoundModal_default,
         {
           label: session.rounds.find((r) => r.index === editRoundActive)?.label ?? "",
@@ -39728,25 +39667,161 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   };
   var ScoreTable_default = ScoreTable;
 
-  // src/pages/EditSessionScores.tsx
+  // src/components/score-table/ScoreTableActions.tsx
+  init_react_shim();
+  var import_react15 = __toESM(require_react());
+
+  // src/components/modal/EditPlayersModal.tsx
+  init_react_shim();
+  var import_react13 = __toESM(require_react());
+  var import_jsx_runtime26 = __toESM(require_jsx_runtime());
+  var EditPlayersModal = ({ playerIds, onSave, onClose, ...props }) => {
+    const [ids, setIds] = (0, import_react13.useState)(playerIds);
+    const [name, setName] = (0, import_react13.useState)("");
+    const allPlayers = usePlayers();
+    const players = (0, import_react13.useMemo)(() => {
+      return allPlayers.filter((x) => ids.includes(x._id));
+    }, [ids, allPlayers]);
+    const handleSave = () => {
+      onSave(ids);
+      onClose();
+    };
+    const newPlayerId = (0, import_react13.useMemo)(() => {
+      return allPlayers.find(
+        (x) => x.name.localeCompare(name, void 0, {
+          usage: "search",
+          sensitivity: "base"
+        }) === 0
+      )?._id;
+    }, [name, allPlayers]);
+    const addPlayer = async () => {
+      if (!name) {
+        return;
+      }
+      let id = newPlayerId;
+      if (!id) {
+        id = v4_default();
+        await db.players.add({
+          _id: id,
+          name: name.trim()
+        });
+      }
+      if (ids.includes(id)) {
+        setName("");
+        return;
+      }
+      setIds([...ids, id]);
+      setName("");
+    };
+    return /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(
+      Modal_default,
+      {
+        title: "Edit players",
+        buttons: /* @__PURE__ */ (0, import_jsx_runtime26.jsxs)(import_jsx_runtime26.Fragment, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Button_default, { onClick: onClose, children: "Cancel" }),
+          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(Button_default, { onClick: handleSave, disabled: players.length === 0, children: "Save" })
+        ] }),
+        onClose,
+        ...props,
+        children: [
+          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(List_default, { children: players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+            ListItem_default,
+            {
+              avatar: player.name.substring(0, 1),
+              action: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+                IconButton_default,
+                {
+                  onClick: () => setIds(ids.filter((x) => x !== player._id)),
+                  icon: "delete"
+                }
+              ),
+              children: player.name
+            },
+            player._id
+          )) }),
+          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+            TextField_default,
+            {
+              label: "Add player",
+              value: name,
+              list: "all-players",
+              onChange: (e) => setName(e.target.value),
+              className: "o-player-modal-inline__name",
+              suffix: /* @__PURE__ */ (0, import_jsx_runtime26.jsx)(
+                Button_default,
+                {
+                  icon: newPlayerId ? "person" : "add",
+                  variant: "filled",
+                  onClick: addPlayer,
+                  children: "Add"
+                }
+              )
+            }
+          ),
+          /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("datalist", { id: "all-players", children: allPlayers.filter((p) => !ids.includes(p._id)).map((player) => /* @__PURE__ */ (0, import_jsx_runtime26.jsx)("option", { value: player.name, children: player.name }, player.name)) })
+        ]
+      }
+    );
+  };
+  var EditPlayersModal_default = EditPlayersModal;
+
+  // src/components/modal/WinnerModal.tsx
+  init_react_shim();
+  var import_react14 = __toESM(require_react());
+  var import_jsx_runtime27 = __toESM(require_jsx_runtime());
+  var WinnerModal = ({ playerIds, onSave, onClose, ...props }) => {
+    const [ids] = (0, import_react14.useState)(playerIds);
+    const allPlayers = usePlayers();
+    const players = (0, import_react14.useMemo)(() => {
+      return allPlayers.filter((x) => ids.includes(x._id));
+    }, [ids, allPlayers]);
+    const handleSave = (playerId) => {
+      onSave(playerId);
+      onClose();
+    };
+    return /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+      Modal_default,
+      {
+        title: "Select winner",
+        buttons: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(import_jsx_runtime27.Fragment, { children: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(Button_default, { onClick: onClose, children: "Cancel" }) }),
+        onClose,
+        ...props,
+        children: /* @__PURE__ */ (0, import_jsx_runtime27.jsxs)(List_default, { children: [
+          /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+            ListItem_default,
+            {
+              action: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(IconButton_default, { onClick: () => handleSave(null), icon: "check" }),
+              children: "No winner"
+            }
+          ),
+          players.map((player) => /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(
+            ListItem_default,
+            {
+              avatar: player.name.substring(0, 1),
+              action: /* @__PURE__ */ (0, import_jsx_runtime27.jsx)(IconButton_default, { onClick: () => handleSave(player._id), icon: "check" }),
+              children: player.name
+            },
+            player._id
+          ))
+        ] })
+      }
+    );
+  };
+  var WinnerModal_default = WinnerModal;
+
+  // src/components/score-table/ScoreTableActions.tsx
   var import_jsx_runtime28 = __toESM(require_jsx_runtime());
-  var EditSessionScores = () => {
-    const { id } = useParams();
-    if (typeof id !== "string") {
-      return /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(FullPageError_default, { title: "Game not found" });
-    }
-    const [session, setSession] = useSession(id);
-    const [editPlayersModalOpen, setEditPlayersModalOpen] = (0, import_react13.useState)(false);
-    const [winnerModalOpen, setWinnerModalOpen] = (0, import_react13.useState)(false);
-    if (!session) return null;
+  var ScoreTableActions = ({ session }) => {
+    const [editPlayersModalOpen, setEditPlayersModalOpen] = (0, import_react15.useState)(false);
+    const [winnerModalOpen, setWinnerModalOpen] = (0, import_react15.useState)(false);
     const handleEditPlayers = (playerIds) => {
-      setSession({
+      db.sessions.update(session._id, {
         ...session,
         playerIds
       });
     };
     const handleSetWinner = (playerId) => {
-      setSession({
+      db.sessions.update(session._id, {
         ...session,
         customWinner: playerId ?? void 0
       });
@@ -39760,13 +39835,89 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         }
       });
       db.rounds.add({
-        sessionId: id,
+        sessionId: session._id,
         index: session.rounds.length,
         label: `#${lastRound + 1}`
       });
     };
-    return /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)("div", { children: [
+    const navigate = useNavigate();
+    return /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(import_jsx_runtime28.Fragment, { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(ButtonStrip_default, { className: "c-button-strip--align-left", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(Button_default, { variant: "tonal", onClick: () => addRound(), icon: "add", children: "Add round" }),
+        /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+          Button_default,
+          {
+            variant: "tonal",
+            onClick: () => setEditPlayersModalOpen(true),
+            icon: "person",
+            children: "Edit players"
+          }
+        ),
+        session.scoreMode === "CUSTOM" /* Custom */ && /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+          Button_default,
+          {
+            variant: "tonal",
+            onClick: () => setWinnerModalOpen(true),
+            icon: "groups",
+            children: "Set winner"
+          }
+        ),
+        session.locked ? /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+          Button_default,
+          {
+            variant: "tonal",
+            onClick: () => {
+              db.sessions.update(session._id, { locked: false });
+              navigate(`/sessions/${session._id}`, { replace: true });
+            },
+            icon: "lock_open_right",
+            children: "Unlock"
+          }
+        ) : /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+          Button_default,
+          {
+            variant: "tonal",
+            onClick: () => db.sessions.update(session._id, { locked: true }),
+            icon: "lock",
+            children: "Lock"
+          }
+        )
+      ] }),
       /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+        EditPlayersModal_default,
+        {
+          open: editPlayersModalOpen,
+          onClose: () => setEditPlayersModalOpen(false),
+          playerIds: session.playerIds,
+          onSave: handleEditPlayers
+        },
+        `edit-players-${editPlayersModalOpen}`
+      ),
+      /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
+        WinnerModal_default,
+        {
+          open: winnerModalOpen,
+          onClose: () => setWinnerModalOpen(false),
+          playerIds: session.playerIds,
+          onSave: handleSetWinner
+        },
+        `winner-${winnerModalOpen}`
+      )
+    ] });
+  };
+  var ScoreTableActions_default = ScoreTableActions;
+
+  // src/pages/EditSessionScores.tsx
+  var import_jsx_runtime29 = __toESM(require_jsx_runtime());
+  var EditSessionScores = () => {
+    const { id } = useParams();
+    if (typeof id !== "string") {
+      return /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(FullPageError_default, { title: "Game not found" });
+    }
+    const [session] = useSession(id);
+    if (!session) return null;
+    return /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
         AppBar_default,
         {
           variant: "small",
@@ -39774,49 +39925,9 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
           backTo: `/sessions/${session._id}`
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(Page_default, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime28.jsxs)(ButtonStrip_default, { className: "c-button-strip--align-left", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(Button_default, { variant: "tonal", onClick: () => addRound(), icon: "add", children: "Add round" }),
-          /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
-            Button_default,
-            {
-              variant: "tonal",
-              onClick: () => setEditPlayersModalOpen(true),
-              icon: "person",
-              children: "Edit players"
-            }
-          ),
-          session.scoreMode === "CUSTOM" /* Custom */ && /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
-            Button_default,
-            {
-              variant: "tonal",
-              onClick: () => setWinnerModalOpen(true),
-              icon: "groups",
-              children: "Set winner"
-            }
-          )
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(ScoreTable_default, { session, editable: true }),
-        /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
-          EditPlayersModal_default,
-          {
-            open: editPlayersModalOpen,
-            onClose: () => setEditPlayersModalOpen(false),
-            playerIds: session.playerIds,
-            onSave: handleEditPlayers
-          },
-          `edit-players-${editPlayersModalOpen}`
-        ),
-        /* @__PURE__ */ (0, import_jsx_runtime28.jsx)(
-          WinnerModal_default,
-          {
-            open: winnerModalOpen,
-            onClose: () => setWinnerModalOpen(false),
-            playerIds: session.playerIds,
-            onSave: handleSetWinner
-          },
-          `winner-${winnerModalOpen}`
-        )
+      /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(Page_default, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(ScoreTableActions_default, { session }),
+        /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(ScoreTable_default, { session, editable: true })
       ] })
     ] });
   };
@@ -39824,11 +39935,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/pages/Games.tsx
   init_react_shim();
-  var import_react14 = __toESM(require_react());
+  var import_react16 = __toESM(require_react());
 
   // src/components/card/Card.tsx
   init_react_shim();
-  var import_jsx_runtime29 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime30 = __toESM(require_jsx_runtime());
   var Card = ({
     buttons,
     children,
@@ -39837,22 +39948,22 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
     linkTo,
     orientation = "horizontal",
     ...props
-  }) => /* @__PURE__ */ (0, import_jsx_runtime29.jsxs)(
+  }) => /* @__PURE__ */ (0, import_jsx_runtime30.jsxs)(
     "div",
     {
       className: `c-card c-card--${orientation} c-card--filled ${className ?? ""}`,
       ...props,
       children: [
-        image && /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(
+        image && /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(
           "div",
           {
             style: { backgroundImage: `url(${image})` },
             className: "c-card__image"
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("div", { className: "c-card__content", children }),
-        linkTo && /* @__PURE__ */ (0, import_jsx_runtime29.jsx)(Link, { to: linkTo, className: "c-card__cover" }),
-        buttons && /* @__PURE__ */ (0, import_jsx_runtime29.jsx)("div", { className: "c-card__buttons", children: buttons })
+        /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("div", { className: "c-card__content", children }),
+        linkTo && /* @__PURE__ */ (0, import_jsx_runtime30.jsx)(Link, { to: linkTo, className: "c-card__cover" }),
+        buttons && /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("div", { className: "c-card__buttons", children: buttons })
       ]
     }
   );
@@ -39860,21 +39971,21 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/components/card/CardGrid.tsx
   init_react_shim();
-  var import_jsx_runtime30 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime31 = __toESM(require_jsx_runtime());
   var CardGrid = ({
     children,
     className,
     ...props
-  }) => /* @__PURE__ */ (0, import_jsx_runtime30.jsx)("div", { className: `c-card-grid ${className || ""}`, ...props, children });
+  }) => /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("div", { className: `c-card-grid ${className || ""}`, ...props, children });
   var CardGrid_default = CardGrid;
 
   // src/pages/Games.tsx
-  var import_jsx_runtime31 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime32 = __toESM(require_jsx_runtime());
   var Games = ({ ...props }) => {
     const navigate = useNavigate();
     const games = useGames();
     const sessions = useSessions();
-    const [plays, setPlays] = (0, import_react14.useState)({});
+    const [plays, setPlays] = (0, import_react16.useState)({});
     async function addGame() {
       const id = v4_default();
       await db.games.add({
@@ -39884,7 +39995,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       });
       navigate(`/games/${id}`);
     }
-    (0, import_react14.useEffect)(() => {
+    (0, import_react16.useEffect)(() => {
       const newPlays = games?.reduce(
         (obj, game) => ({
           ...obj,
@@ -39896,23 +40007,23 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
         setPlays(newPlays);
       }
     }, [games, sessions]);
-    return /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)("div", { ...props, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)("div", { ...props, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
         AppBar_default,
         {
           variant: "center",
           title: "Games",
-          actions: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(IconButton_default, { icon: "add", onClick: addGame })
+          actions: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(IconButton_default, { icon: "add", onClick: addGame })
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(Page_default, { children: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(CardGrid_default, { children: games.map((game) => /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)(
+      /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(Page_default, { children: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(CardGrid_default, { children: games.map((game) => /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)(
         Card_default,
         {
           image: game.image,
-          buttons: /* @__PURE__ */ (0, import_jsx_runtime31.jsx)(IconButton_default, { icon: "edit", to: `/games/${game._id}` }),
+          buttons: /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(IconButton_default, { icon: "edit", to: `/games/${game._id}` }),
           children: [
-            /* @__PURE__ */ (0, import_jsx_runtime31.jsx)("div", { className: "body-large", children: game.name }),
-            /* @__PURE__ */ (0, import_jsx_runtime31.jsxs)("div", { className: "body-medium c-card__meta", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime32.jsx)("div", { className: "body-large", children: game.name }),
+            /* @__PURE__ */ (0, import_jsx_runtime32.jsxs)("div", { className: "body-medium c-card__meta", children: [
               plays[game._id],
               " play",
               plays[game._id] === 1 ? "" : "s"
@@ -39930,8 +40041,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/components/button/FAB.tsx
   init_react_shim();
-  var import_jsx_runtime32 = __toESM(require_jsx_runtime());
-  var FAB = ({ icon, onClick, ...props }) => /* @__PURE__ */ (0, import_jsx_runtime32.jsx)(
+  var import_jsx_runtime33 = __toESM(require_jsx_runtime());
+  var FAB = ({ icon, onClick, ...props }) => /* @__PURE__ */ (0, import_jsx_runtime33.jsx)(
     IconButton_default,
     {
       className: "c-button--fab",
@@ -39944,18 +40055,18 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/components/DateTime.tsx
   init_react_shim();
-  var import_jsx_runtime33 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime34 = __toESM(require_jsx_runtime());
   var DateTime = ({ dateTime, dateStyle, timeStyle, ...props }) => {
     const dateFormatter = new Intl.DateTimeFormat("en-GB", {
       dateStyle,
       timeStyle
     });
-    return /* @__PURE__ */ (0, import_jsx_runtime33.jsx)("span", { ...props, children: dateFormatter.format(new Date(dateTime || "")) });
+    return /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("span", { ...props, children: dateFormatter.format(new Date(dateTime || "")) });
   };
   var DateTime_default = DateTime;
 
   // src/pages/Sessions.tsx
-  var import_jsx_runtime34 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime35 = __toESM(require_jsx_runtime());
   var Sessions = ({ ...props }) => {
     const games = useGames();
     const sessions = useSessions();
@@ -39963,38 +40074,31 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
       return new Date(b.start).getTime() - new Date(a.start).getTime();
     };
     const sortedSessions = sessions.slice().sort(sortByDate);
-    return /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)("div", { ...props, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)("div", { ...props, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
         AppBar_default,
         {
           variant: "center",
           title: "Sessions",
-          actions: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(IconButton_default, { icon: "add", to: "/sessions/new" })
+          actions: /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(IconButton_default, { icon: "add", to: "/sessions/new" })
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(Page_default, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(CardGrid_default, { children: sortedSessions.map((session) => {
+      /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)(Page_default, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(CardGrid_default, { children: sortedSessions.map((session) => {
           const game = session.game ? games.find((x) => x._id === session.game?._id) ?? null : null;
-          return /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)(
+          return /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)(
             Card_default,
             {
               image: game?.image,
               linkTo: `/sessions/${session._id}`,
-              buttons: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
-                IconButton_default,
-                {
-                  icon: "edit",
-                  to: `/sessions/${session._id}/edit`
-                }
-              ),
               children: [
-                /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("div", { className: "body-large", children: session.title }),
-                /* @__PURE__ */ (0, import_jsx_runtime34.jsxs)("div", { className: "body-medium c-card__meta", children: [
+                /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("div", { className: "body-large", children: session.title }),
+                /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)("div", { className: "body-medium c-card__meta", children: [
                   game ? game.name : translateScoreMode(session.scoreMode),
                   " \u2022 ",
                   session.playerIds.length,
                   " players",
-                  /* @__PURE__ */ (0, import_jsx_runtime34.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(
+                  /* @__PURE__ */ (0, import_jsx_runtime35.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(
                     DateTime_default,
                     {
                       dateStyle: "short",
@@ -40008,7 +40112,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
             session._id
           );
         }) }),
-        /* @__PURE__ */ (0, import_jsx_runtime34.jsx)(FAB_default, { icon: "group_add", to: "/sessions/new" })
+        /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(FAB_default, { icon: "group_add", to: "/sessions/new" })
       ] })
     ] });
   };
@@ -40019,14 +40123,14 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/components/chip/Chip.tsx
   init_react_shim();
-  var import_jsx_runtime35 = __toESM(require_jsx_runtime());
-  var Chip = ({ children, icon, className, ...props }) => /* @__PURE__ */ (0, import_jsx_runtime35.jsxs)(
+  var import_jsx_runtime36 = __toESM(require_jsx_runtime());
+  var Chip = ({ children, icon, className, ...props }) => /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(
     "button",
     {
       className: `c-chip o-interactive ${icon ? "c-chip--with-icon" : ""} ${className ?? ""}`,
       ...props,
       children: [
-        icon && /* @__PURE__ */ (0, import_jsx_runtime35.jsx)(Icon_default, { className: "c-chip__icon", children: icon }),
+        icon && /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(Icon_default, { className: "c-chip__icon", children: icon }),
         children
       ]
     }
@@ -40034,32 +40138,33 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var Chip_default = Chip;
 
   // src/pages/ViewSession.tsx
-  var import_jsx_runtime36 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime37 = __toESM(require_jsx_runtime());
   var ViewSession = () => {
     const navigate = useNavigate();
     const { id } = useParams();
     if (typeof id !== "string") {
-      return /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(FullPageError_default, { title: "Game not found" });
+      return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(FullPageError_default, { title: "Game not found" });
     }
     const [session] = useSession(id);
     if (!session) return null;
-    return /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)("div", { children: [
-      /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
+    const locked = session.locked;
+    return /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)("div", { children: [
+      /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
         AppBar_default,
         {
           variant: "small",
           title: session.title,
           backTo: "/",
-          actions: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(IconButton_default, { icon: "edit", to: `/sessions/${session._id}/edit` })
+          actions: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(IconButton_default, { icon: "edit", to: `/sessions/${session._id}/edit` })
         }
       ),
-      /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(Page_default, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)(Card_default, { image: session.game?.image, orientation: "vertical", children: [
-          /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("div", { className: "headline-small", children: session.title }),
-          /* @__PURE__ */ (0, import_jsx_runtime36.jsxs)("div", { className: "c-card__body", children: [
-            /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("span", { style: { opacity: 0.6 }, children: "Played on" }),
+      /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)(Page_default, { children: [
+        locked ? /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)(Card_default, { image: session.game?.image, orientation: "vertical", children: [
+          /* @__PURE__ */ (0, import_jsx_runtime37.jsx)("div", { className: "headline-small", children: session.title }),
+          /* @__PURE__ */ (0, import_jsx_runtime37.jsxs)("div", { className: "c-card__body", children: [
+            /* @__PURE__ */ (0, import_jsx_runtime37.jsx)("span", { style: { opacity: 0.6 }, children: "Played on" }),
             " ",
-            /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
+            /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
               DateTime_default,
               {
                 dateStyle: "long",
@@ -40068,7 +40173,7 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               }
             )
           ] }),
-          /* @__PURE__ */ (0, import_jsx_runtime36.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(
+          /* @__PURE__ */ (0, import_jsx_runtime37.jsx)("div", { children: /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
             Chip_default,
             {
               onClick: () => navigate(`/sessions/${session._id}/scores`),
@@ -40076,8 +40181,8 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
               children: "Edit scores"
             }
           ) })
-        ] }),
-        /* @__PURE__ */ (0, import_jsx_runtime36.jsx)(ScoreTable_default, { session })
+        ] }) : /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(ScoreTableActions_default, { session }),
+        /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(ScoreTable_default, { session, editable: !locked })
       ] })
     ] });
   };
@@ -40088,11 +40193,11 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/components/navigation/NavigationTrayLink.tsx
   init_react_shim();
-  var import_jsx_runtime37 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime38 = __toESM(require_jsx_runtime());
   var NavigationTrayLink = ({ children, to, ...props }) => {
     let resolved = useResolvedPath(to);
     let match2 = useMatch({ path: resolved.pathname, end: true });
-    return /* @__PURE__ */ (0, import_jsx_runtime37.jsx)(
+    return /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(
       Link,
       {
         className: `c-navigation-tray__item ${match2 ? "o-interactive--active" : ""}`,
@@ -40105,32 +40210,32 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
   var NavigationTrayLink_default = NavigationTrayLink;
 
   // src/components/navigation/NavigationTray.tsx
-  var import_react15 = __toESM(require_react());
-  var import_jsx_runtime38 = __toESM(require_jsx_runtime());
+  var import_react17 = __toESM(require_react());
+  var import_jsx_runtime39 = __toESM(require_jsx_runtime());
   var NavigationTray = () => {
-    const [isHide, setHide] = (0, import_react15.useState)(false);
+    const [isHide, setHide] = (0, import_react17.useState)(false);
     let prev = 0;
     const hideBar = () => {
       setHide(window.scrollY > prev);
       prev = window.scrollY;
     };
-    (0, import_react15.useEffect)(() => {
+    (0, import_react17.useEffect)(() => {
       window.addEventListener("scroll", hideBar);
       return () => {
         window.removeEventListener("scroll", hideBar);
       };
     }, []);
-    return /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)("nav", { className: "c-navigation-tray", hidden: isHide, children: [
-      /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)(NavigationTrayLink_default, { to: "/", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("span", { className: "c-navigation-tray__icon o-interactive", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(Icon_default, { children: "group" }) }),
+    return /* @__PURE__ */ (0, import_jsx_runtime39.jsxs)("nav", { className: "c-navigation-tray", hidden: isHide, children: [
+      /* @__PURE__ */ (0, import_jsx_runtime39.jsxs)(NavigationTrayLink_default, { to: "/", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime39.jsx)("span", { className: "c-navigation-tray__icon o-interactive", children: /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(Icon_default, { children: "group" }) }),
         "Sessions"
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)(NavigationTrayLink_default, { to: "/games", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("span", { className: "c-navigation-tray__icon o-interactive", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(Icon_default, { children: "casino" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime39.jsxs)(NavigationTrayLink_default, { to: "/games", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime39.jsx)("span", { className: "c-navigation-tray__icon o-interactive", children: /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(Icon_default, { children: "casino" }) }),
         "Games"
       ] }),
-      /* @__PURE__ */ (0, import_jsx_runtime38.jsxs)(NavigationTrayLink_default, { to: "/settings", children: [
-        /* @__PURE__ */ (0, import_jsx_runtime38.jsx)("span", { className: "c-navigation-tray__icon o-interactive", children: /* @__PURE__ */ (0, import_jsx_runtime38.jsx)(Icon_default, { children: "settings" }) }),
+      /* @__PURE__ */ (0, import_jsx_runtime39.jsxs)(NavigationTrayLink_default, { to: "/settings", children: [
+        /* @__PURE__ */ (0, import_jsx_runtime39.jsx)("span", { className: "c-navigation-tray__icon o-interactive", children: /* @__PURE__ */ (0, import_jsx_runtime39.jsx)(Icon_default, { children: "settings" }) }),
         "Settings"
       ] })
     ] });
@@ -40139,62 +40244,62 @@ Please change the parent <Route path="${parentPath}"> to <Route path="${parentPa
 
   // src/components/Loading.tsx
   init_react_shim();
-  var import_jsx_runtime39 = __toESM(require_jsx_runtime());
-  var Loading = ({}) => /* @__PURE__ */ (0, import_jsx_runtime39.jsx)("div", { className: "c-loading", children: "Synchronising data..." });
+  var import_jsx_runtime40 = __toESM(require_jsx_runtime());
+  var Loading = ({}) => /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("div", { className: "c-loading", children: "Synchronising data..." });
   var Loading_default = Loading;
 
   // src/components/App.tsx
-  var import_jsx_runtime40 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime41 = __toESM(require_jsx_runtime());
   var App = () => {
     const ready = true;
-    return ready ? /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)("div", { className: "o-app-flex-container", children: [
-      /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("div", { className: "o-app-flex-content", children: /* @__PURE__ */ (0, import_jsx_runtime40.jsxs)(Routes, { children: [
-        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Route, { path: "/", element: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Sessions_default, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Route, { path: "/games", element: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Games_default, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Route, { path: "/games/:id", element: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(EditGame_default, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Route, { path: "/settings", element: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Settings_default, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Route, { path: "/players/:id", element: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(EditPlayer_default, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+    return ready ? /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)("div", { className: "o-app-flex-container", children: [
+      /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("div", { className: "o-app-flex-content", children: /* @__PURE__ */ (0, import_jsx_runtime41.jsxs)(Routes, { children: [
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Route, { path: "/", element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Sessions_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Route, { path: "/games", element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Games_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Route, { path: "/games/:id", element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(EditGame_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Route, { path: "/settings", element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Settings_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Route, { path: "/players/:id", element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(EditPlayer_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
           Route,
           {
             path: "/sessions/new",
-            element: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(CreateSession_default, {})
+            element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(CreateSession_default, {})
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Route, { path: "/sessions/:id", element: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(ViewSession_default, {}) }),
-        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Route, { path: "/sessions/:id", element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(ViewSession_default, {}) }),
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
           Route,
           {
             path: "/sessions/:id/edit",
-            element: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(EditSession_default, {})
+            element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(EditSession_default, {})
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
           Route,
           {
             path: "/sessions/:id/scores",
-            element: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(EditSessionScores_default, {})
+            element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(EditSessionScores_default, {})
           }
         ),
-        /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(
+        /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(
           Route,
           {
             path: "*",
-            element: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(FullPageError_default, { children: /* @__PURE__ */ (0, import_jsx_runtime40.jsx)("p", { children: "Page not found" }) })
+            element: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(FullPageError_default, { children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)("p", { children: "Page not found" }) })
           }
         )
       ] }) }),
-      /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(NavigationTray_default, {})
-    ] }) : /* @__PURE__ */ (0, import_jsx_runtime40.jsx)(Loading_default, {});
+      /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(NavigationTray_default, {})
+    ] }) : /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(Loading_default, {});
   };
   var App_default = App;
 
   // src/index.tsx
-  var import_jsx_runtime41 = __toESM(require_jsx_runtime());
+  var import_jsx_runtime42 = __toESM(require_jsx_runtime());
   var rootElement = document.getElementById("root");
   if (rootElement === null) throw new Error("Cannot find #root to bind to");
   (0, import_client.createRoot)(rootElement).render(
-    /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(import_react16.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(HashRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime41.jsx)(App_default, {}) }) })
+    /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(import_react18.StrictMode, { children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(HashRouter, { children: /* @__PURE__ */ (0, import_jsx_runtime42.jsx)(App_default, {}) }) })
   );
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").then((reg) => {
