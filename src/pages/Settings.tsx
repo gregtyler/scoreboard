@@ -9,11 +9,12 @@ import ListItem from "../components/list/ListItem";
 import AppBar from "../components/navigation/AppBar";
 import Tab from "../components/tabs/Tab";
 import Tabs from "../components/tabs/Tabs";
-import { db, usePlayers } from "../data/db";
+import { db, usePlayers, useSessions } from "../data/db";
 import Page from "./Page";
 
 const Settings = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
   const players = usePlayers();
+  const sessions = useSessions();
 
   const navigate = useNavigate();
 
@@ -33,20 +34,25 @@ const Settings = ({ ...props }: HTMLAttributes<HTMLDivElement>) => {
         <Tabs tabs={["Players", "Settings"]}>
           <Tab>
             <List>
-              {players.map((player) => (
-                <ListItem
-                  key={player._id}
-                  avatar={player.name.substring(0, 1)}
-                  action={
-                    <IconButton icon="edit" to={`/players/${player._id}`} />
-                  }
-                >
-                  {player.name}
-                </ListItem>
-              ))}
+              {players.map((player) => {
+                const gameCount = sessions.filter((x) =>
+                  x.players.find((p) => p._id === player._id),
+                ).length;
+                return (
+                  <ListItem
+                    key={player._id}
+                    avatar={player.name.substring(0, 1)}
+                    action={
+                      <IconButton icon="edit" to={`/players/${player._id}`} />
+                    }
+                  >
+                    {player.name} — {gameCount} game{gameCount === 1 ? "" : "s"}
+                  </ListItem>
+                );
+              })}
             </List>
             <div style={{ textAlign: "center" }}>
-              <Button icon="add" onClick={addPlayer}>
+              <Button icon="add" variant="tonal" onClick={addPlayer}>
                 Add new player
               </Button>
             </div>
