@@ -29,7 +29,13 @@ const EditPlayersModal = ({ playerIds, onSave, onClose, ...props }: Props) => {
   };
 
   const newPlayerId = useMemo(() => {
-    return allPlayers.find((x) => x.name === name.trim())?._id;
+    return allPlayers.find(
+      (x) =>
+        x.name.localeCompare(name, undefined, {
+          usage: "search",
+          sensitivity: "base",
+        }) === 0,
+    )?._id;
   }, [name, allPlayers]);
 
   const addPlayer = async () => {
