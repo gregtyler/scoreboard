@@ -47,6 +47,7 @@ export type Session = {
   scoreMode: ScoreMode;
   playerIds: string[];
   customWinner?: string;
+  locked: boolean;
 };
 
 export interface SessionWithRelations extends Session {

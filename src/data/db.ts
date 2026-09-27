@@ -160,6 +160,7 @@ export function useSession(
       scoreMode: newSession.scoreMode,
       playerIds: newSession.playerIds,
       customWinner: newSession.customWinner,
+      locked: false,
     };
 
     if (newSession.labels) data.labels = newSession.labels;

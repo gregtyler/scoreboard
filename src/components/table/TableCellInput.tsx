@@ -7,7 +7,7 @@ const TableCellInput = ({
   <td className="c-table__cell--no-padding">
     <input
       {...props}
-      className="c-text-field__input"
+      className={`c-text-field__input ${props.className ?? ""}`}
       style={{ padding: "0 12px", textAlign: "center" }}
       value={value}
     />

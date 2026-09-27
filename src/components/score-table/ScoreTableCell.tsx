@@ -48,6 +48,11 @@ const ScoreTableCell = ({ round, playerId, editable }: Props) => {
       value={draft ?? score?.value ?? ""}
       onChange={handleScoreChange}
       pattern="[0-9]*"
+      className={
+        draft !== null && draft !== "" && score?.value === undefined
+          ? "c-table__cell--error"
+          : ""
+      }
     />
   ) : (
     <td>{score?.value ?? ""}</td>

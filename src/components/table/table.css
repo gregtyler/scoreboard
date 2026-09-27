@@ -40,6 +40,10 @@
   padding: 0;
 }
 
+.c-table__cell--error:focus {
+  outline: 5px solid var(--md-sys-color-error-container);
+}
+
 .c-table tbody th {
   /* background-color: var(--md-sys-color-surface); */
   text-align: left;

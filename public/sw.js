@@ -12,7 +12,7 @@ self.addEventListener("install", function (e) {
         "/images/favicon-144.png",
         "/images/favicon-192.png",
         "/images/favicon-512.png",
-        "/fonts/MaterialSymbolsOutlined[FILL,GRAD,opsz,wght].ttf",
+        "/fonts/MaterialSymbolsOutlined-VariableFont_FILL,GRAD,opsz,wght.ttf",
         "/fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf",
       ]);
     })
